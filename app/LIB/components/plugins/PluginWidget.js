@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Typography } from "sud-ui";
-import { TbMinus, TbPlus, TbRefresh } from "react-icons/tb";
+import { Button, Typography, toast } from "sud-ui";
+import { TbKey, TbMinus, TbPlus, TbRefresh } from "react-icons/tb";
 import WidgetCard from "../panel/WidgetCard";
 import SmallButton from "../common/SmallButton";
 import { useSetting } from "../../context/SettingContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { localBridge } from "../../utils/localBridge";
 import { getPluginIcon } from "./PluginIcon";
+import { PluginCredentialDialog, PluginImageDialog } from './PluginDialogs';
 
 const CHANNEL = 'dockit-plugin-v1';
-const actionIcons = { plus: TbPlus, minus: TbMinus, refresh: TbRefresh };
+const actionIcons = { plus: TbPlus, minus: TbMinus, refresh: TbRefresh, key: TbKey };
 const post = (frame, value) => frame?.contentWindow?.postMessage({ channel: CHANNEL, ...value }, '*');
 
 export default function PluginWidget({ id, widget, dragHandleProps, preview = false }) {
@@ -23,6 +24,15 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const [credentialPrompt, setCredentialPrompt] = useState(null);
+  const credentialReply = useRef(null);
+  const credentialBusy = useRef(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const closeCredentials = status => {
+    credentialReply.current?.(status);
+    credentialReply.current = null;
+    setCredentialPrompt(null);
+  };
   const theme = useMemo(() => ({ name: setting.theme, isDarkMode, colors: currentColors, fontFamily: setting.fontFamily || 'Pretendard' }), [setting.theme, setting.fontFamily, isDarkMode, currentColors]);
   const themeRef = useRef(theme);
   themeRef.current = theme;
@@ -33,6 +43,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
     let opened;
     const bridge = localBridge().plugins;
     setError(""); setReady(false); setActions([]); setFooter(""); setSession(null);
+    setCredentialPrompt(null); setImagePreview(null);
     bridge.open(widget.pluginId, widget.id).then(result => {
       opened = result;
       if (disposed) bridge.close(result.sessionId).catch(() => {});
@@ -76,6 +87,22 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
           const payload = message.payload;
           if (!payload || JSON.stringify(payload).length > 8 * 1024 * 1024) throw new Error('잘못된 플러그인 데이터입니다.');
           value = await localBridge().plugins.storage(session.sessionId, message.method.split('.')[1], payload.key, payload.value);
+        } else if (message.method === 'credentials.configure') {
+          if (credentialBusy.current) throw new Error('열려 있는 API Key 창을 먼저 닫아주세요.');
+          credentialBusy.current = true;
+          try {
+            const prompt = await localBridge().plugins.request(session.sessionId, 'credentials.status', message.payload);
+            if (disposed) return;
+            value = await new Promise(resolve => { credentialReply.current = resolve; setCredentialPrompt(prompt); });
+          } finally { credentialBusy.current = false; }
+        } else if (['credentials.status', 'network.get', 'images.load', 'images.download', 'external.open', 'images.preview'].includes(message.method)) {
+          if (JSON.stringify(message.payload || {}).length > 65536) throw new Error('플러그인 요청이 너무 큽니다.');
+          value = await localBridge().plugins.request(session.sessionId, message.method, message.payload);
+          if (message.method === 'images.preview') { if (!disposed) setImagePreview(value); value = true; }
+        } else if (message.method === 'notify') {
+          const { message: text, type = 'danger' } = message.payload || {};
+          if (typeof text !== 'string' || text.length > 1000 || !['danger', 'warning', 'info'].includes(type)) throw new Error('잘못된 알림입니다.');
+          toast[type](text);
         } else if (message.method === 'actions') {
           if (!Array.isArray(message.payload) || message.payload.length > 5 || message.payload.some(action => !action || typeof action.id !== 'string' || action.id.length > 64 || typeof action.label !== 'string' || action.label.length > 60)) throw new Error('잘못된 툴킷 버튼입니다.');
           setActions(message.payload.map(action => ({ id: action.id, label: action.label, icon: action.icon, disabled: action.disabled === true })));
@@ -88,7 +115,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
       finally { inFlight--; }
     };
     window.addEventListener('message', listener);
-    return () => { disposed = true; clearTimeout(timer); unsubscribe(); window.removeEventListener('message', listener); };
+    return () => { disposed = true; credentialReply.current?.(null); credentialReply.current = null; clearTimeout(timer); unsubscribe(); window.removeEventListener('message', listener); };
   }, [session]);
 
   useEffect(() => { post(frameRef.current, { type: 'theme', theme }); }, [theme, ready]);
@@ -106,6 +133,8 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
         {error && <div role="alert" className="flex flex-col items-start gap-2"><Typography size="sm">{error}</Typography><SmallButton onClick={() => setAttempt(value => value + 1)}>다시 시도</SmallButton></div>}
         {!ready && !error && <Typography size="sm">불러오는 중…</Typography>}
         {session && <iframe ref={frameRef} title={`${widget.title} 플러그인`} src={session.url} sandbox="allow-scripts" referrerPolicy="no-referrer" onLoad={() => post(frameRef.current, { type: 'init', theme: themeRef.current })} className="block w-full border-0" style={{ height, display: error ? 'none' : undefined }} />}
+        {session && credentialPrompt && <PluginCredentialDialog key={`${session.sessionId}/${credentialPrompt.id}`} prompt={credentialPrompt} sessionId={session.sessionId} theme={setting.theme} onClose={closeCredentials} />}
+        {session && imagePreview && <PluginImageDialog key={imagePreview.url} image={imagePreview} sessionId={session.sessionId} theme={setting.theme} isDarkMode={isDarkMode} onClose={() => setImagePreview(null)} />}
       </>}
     </WidgetCard>
   );

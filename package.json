@@ -26,7 +26,7 @@
     "test:chatgpt": "node scripts/chatgpt-smoke.cjs",
     "test:codex": "node scripts/codex-smoke.cjs",
     "plugin:example": "node scripts/build-example-plugin.mjs",
-    "test:plugins": "node --test tests/local/plugins.test.cjs tests/local/plugin-github.test.cjs && node scripts/build-example-plugin.mjs && node scripts/plugin-smoke.cjs"
+    "test:plugins": "node --test tests/local/plugins.test.cjs tests/local/plugin-github.test.cjs tests/local/plugin-services.test.cjs && node scripts/build-example-plugin.mjs && node scripts/plugin-smoke.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

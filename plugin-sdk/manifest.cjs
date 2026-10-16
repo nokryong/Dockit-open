@@ -1,7 +1,8 @@
 const { unzipSync } = require('fflate');
 const { validateIcon, isSvgIcon, svgIcon } = require('./icons.cjs');
+const { PERMISSIONS, validateCapabilities } = require('./capabilities.cjs');
 
-const SDK_VERSION = 1;
+const SDK_VERSION = 2;
 const LIMITS = { archive: 32 * 1024 * 1024, unpacked: 128 * 1024 * 1024, file: 16 * 1024 * 1024, files: 4096, data: 8 * 1024 * 1024 };
 const ID = /^[a-z][a-z0-9-]*(?:\.[a-z][a-z0-9-]*)+$/;
 const WIDGET_ID = /^[a-z][a-z0-9-]{0,63}$/;
@@ -17,7 +18,7 @@ function safePath(value) {
 }
 
 function validateManifest(value) {
-  if (!object(value) || value.manifestVersion !== 1 || value.sdkVersion !== SDK_VERSION) throw fail('지원하지 않는 플러그인 규격입니다.');
+  if (!object(value) || value.manifestVersion !== 1 || ![1, SDK_VERSION].includes(value.sdkVersion)) throw fail('지원하지 않는 플러그인 규격입니다.');
   if (typeof value.id !== 'string' || value.id.length > 100 || !ID.test(value.id)) throw fail('플러그인 ID를 확인해주세요.');
   for (const field of ['name', 'publisher', 'version']) {
     if (typeof value[field] !== 'string' || !value[field].trim() || value[field].length > 120) throw fail(`플러그인 ${field} 항목을 확인해주세요.`);
@@ -25,7 +26,7 @@ function validateManifest(value) {
   if (!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(value.version)) throw fail('플러그인 버전 형식을 확인해주세요.');
   if (value.description !== undefined && (typeof value.description !== 'string' || value.description.length > 500)) throw fail('플러그인 설명을 확인해주세요.');
   const permissions = value.permissions ?? [];
-  if (!Array.isArray(permissions) || permissions.some(permission => permission !== 'storage')) throw fail('이 버전에서 지원하지 않는 플러그인 권한입니다.');
+  if (!Array.isArray(permissions) || permissions.some(permission => !(value.sdkVersion === 1 ? ['storage'] : PERMISSIONS).includes(permission))) throw fail('이 버전에서 지원하지 않는 플러그인 권한입니다.');
   if (!Array.isArray(value.widgets) || !value.widgets.length || value.widgets.length > 20) throw fail('플러그인 툴킷 목록을 확인해주세요.');
   const icon = validateIcon(value.icon ?? value.widgets[0]?.icon, safePath);
   const ids = new Set();
@@ -36,7 +37,7 @@ function validateManifest(value) {
     if (!entry.endsWith('.html')) throw fail('툴킷의 시작 파일은 HTML이어야 합니다.');
     return { id: widget.id, title: widget.title, entry, icon: widget.icon === undefined ? icon : validateIcon(widget.icon, safePath) };
   });
-  return { manifestVersion: 1, sdkVersion: SDK_VERSION, id: value.id, name: value.name, publisher: value.publisher, version: value.version, description: value.description || '', icon, permissions: [...new Set(permissions)], widgets };
+  return { manifestVersion: 1, sdkVersion: value.sdkVersion, id: value.id, name: value.name, publisher: value.publisher, version: value.version, description: value.description || '', icon, permissions: [...new Set(permissions)], widgets, ...validateCapabilities(value) };
 }
 
 function readPackage(bytes) {

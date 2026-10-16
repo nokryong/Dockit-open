@@ -11,7 +11,7 @@
   const send = message => window.parent.postMessage({ channel, ...message }, '*');
   const request = (method, payload) => ready.then(() => new Promise((resolve, reject) => {
     const requestId = String(++serial);
-    const timer = setTimeout(() => { pending.delete(requestId); reject(new Error('Dockit 응답 시간이 초과되었습니다.')); }, 10000);
+    const timer = ['credentials.configure', 'images.download'].includes(method) ? null : setTimeout(() => { pending.delete(requestId); reject(new Error('Dockit 응답 시간이 초과되었습니다.')); }, 45000);
     pending.set(requestId, { resolve, reject, timer });
     send({ type: 'request', requestId, method, payload });
   }));
@@ -38,13 +38,25 @@
     }
   });
   window.Dockit = Object.freeze({
-    version: 1,
+    version: 2,
     ready,
     get theme() { return theme; },
     onThemeChange: callback => subscribe(themeListeners, callback),
     onAction: callback => subscribe(actionListeners, callback),
     setActions: actions => request('actions', actions),
     setFooter: text => request('footer', text),
+    notify: (message, type = 'danger') => request('notify', { message, type }),
+    openExternal: url => request('external.open', { url }),
+    credentials: Object.freeze({
+      status: service => request('credentials.status', { service }),
+      configure: service => request('credentials.configure', { service }),
+    }),
+    network: Object.freeze({ get: (service, params) => request('network.get', { service, params }) }),
+    images: Object.freeze({
+      load: url => request('images.load', { url }),
+      preview: details => request('images.preview', details),
+      download: (url, filename) => request('images.download', { url, filename }),
+    }),
     storage: Object.freeze({
       get: key => request('storage.get', { key }),
       set: (key, value) => request('storage.set', { key, value }),

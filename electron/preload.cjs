@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('dockitLocal', {
     open: (id, widgetId) => invoke('plugins:open', id, widgetId),
     close: sessionId => invoke('plugins:close', sessionId),
     storage: (sessionId, operation, key, value) => invoke('plugins:storage', sessionId, operation, key, value),
+    request: (sessionId, method, payload) => invoke('plugins:request', sessionId, method, payload),
     onChanged: callback => {
       const listener = (_event, value) => callback(value);
       ipcRenderer.on('plugins:changed', listener);

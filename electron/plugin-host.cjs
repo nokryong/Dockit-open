@@ -2,10 +2,12 @@ const { PluginStore } = require('./plugin-store.cjs');
 const { pluginProtocol } = require('./plugin-protocol.cjs');
 const { randomUUID } = require('node:crypto');
 const { inspectGitHubPlugins, downloadGitHubPlugin } = require('./plugin-github.cjs');
+const { PluginServices } = require('./plugin-services.cjs');
 
-async function registerPluginHost({ root, handle, protocol, shell, getWindow }) {
+async function registerPluginHost({ root, handle, protocol, shell, getWindow, encryption, dialog, downloads }) {
   const plugins = new PluginStore({ root, trash: file => shell.trashItem(file) });
   await plugins.init();
+  const services = new PluginServices({ store: plugins, encryption, dialog, shell, getWindow, downloads });
   const changed = () => getWindow()?.webContents.send('plugins:changed', plugins.list());
   handle('plugins:list', () => plugins.list());
   const previews = new Map();
@@ -31,6 +33,7 @@ async function registerPluginHost({ root, handle, protocol, shell, getWindow }) 
   handle('plugins:open', (id, widgetId) => plugins.open(id, widgetId));
   handle('plugins:close', sessionId => plugins.close(sessionId));
   handle('plugins:storage', (sessionId, operation, key, value) => plugins.storage(sessionId, operation, key, value));
+  handle('plugins:request', (sessionId, method, payload) => services.request(sessionId, method, payload));
   protocol.handle('dockit-plugin', pluginProtocol(plugins));
   return plugins;
 }

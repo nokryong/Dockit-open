@@ -50,7 +50,7 @@ else app.whenReady().then(async () => {
     trash: file => shell.trashItem(file)
   });
   await store.init();
-  const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: () => mainWindow });
+  const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: () => mainWindow, encryption: safeStorage, downloads: app.getPath('downloads') });
   chatgpt = new ChatGPTClient({
     root: store.root, encryption: safeStorage,
     openExternal: url => shell.openExternal(url),
