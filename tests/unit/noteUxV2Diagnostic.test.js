@@ -8,8 +8,8 @@ import { installNoteInteraction } from "../../app/LIB/extensions/NoteInteraction
 import { executeOrderedNoteOperation } from "../../app/LIB/extensions/orderedNoteExecutor";
 import { captureNotePersistenceSnapshot } from "../../app/LIB/utils/notePersistenceGate";
 
-vi.mock("@excalidraw/excalidraw/index.css", () => ({}));
-vi.mock("@excalidraw/excalidraw", () => ({ Excalidraw: () => null }));
+
+
 vi.mock("../../app/LIB/extensions/DiagramBlockView.js", () => ({
   default: () => null
 }));

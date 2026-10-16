@@ -2,13 +2,11 @@ import Template from "./DrawerTemplate";
 import { Div, Input, Typography } from "sud-ui";
 
 import { MdKeyboardCommandKey, MdStyle } from "react-icons/md";
-import { HiDocumentSearch } from "react-icons/hi";
 import { usePanels } from "@/app/LIB/context/PanelContext";
 import { useSetting } from "@/app/LIB/context/SettingContext";
-import { TbApps, TbChartDotsFilled, TbCalculator, TbDice, TbFileSpreadsheet, TbEdit, TbMath, TbMathSymbols, TbNote, TbSearch, TbTool, TbChevronDown } from "react-icons/tb";
+import { TbApps, TbChartDotsFilled, TbCalculator, TbFileSpreadsheet, TbEdit, TbMath, TbMathSymbols, TbNote, TbTool, TbChevronDown } from "react-icons/tb";
 import { PiListNumbersFill } from "react-icons/pi";
-import { CalendarOutline, TimerOutline } from "sud-icons";
-import { BsMusicPlayerFill } from "react-icons/bs";
+import { TimerOutline } from "sud-icons";
 import { RiAiGenerate2, RiFilePaper2Line } from "react-icons/ri";
 import { VscOpenai } from "react-icons/vsc";
 import { useEffect, useMemo, useState } from "react";
@@ -22,20 +20,15 @@ const WIDGET_ICON_COMPONENTS = {
   aiChat: VscOpenai,
   apps: TbApps,
   calculator: TbCalculator,
-  calendar: CalendarOutline,
   chartDots: TbChartDotsFilled,
   command: MdKeyboardCommandKey,
-  dice: TbDice,
-  documentSearch: HiDocumentSearch,
   edit: TbEdit,
   filePaper: RiFilePaper2Line,
   hanja: Hanja,
   listNumbers: PiListNumbersFill,
   math: TbMath,
   mathSymbols: TbMathSymbols,
-  music: BsMusicPlayerFill,
   note: TbNote,
-  search: TbSearch,
   spreadsheet: TbFileSpreadsheet,
   style: MdStyle,
   timer: TimerOutline,

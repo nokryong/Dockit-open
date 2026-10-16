@@ -23,6 +23,7 @@ let fixtureUrl;
 
 test.beforeAll(async () => {
   vite = await createServer({
+    cacheDir: ".cache/vite-tests/pdf-output-preflight",
     configFile: false,
     root: process.cwd(),
     logLevel: "error",

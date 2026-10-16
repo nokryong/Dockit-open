@@ -1,5 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useSetting } from './SettingContext';
+import { useDocument } from './DocumentContext';
+import { useEditor } from './EditorContext';
+import { validateCodexDocument } from '../utils/codexDocumentValidation';
 
 const CodexContext = createContext(null);
 const bridge = () => window.dockitLocal?.codex;
@@ -16,11 +19,19 @@ export function CodexProvider({ children }) {
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const { setSetting } = useSetting();
+  const { prepareCodexDocument, applyCodexDocument, finishCodexDocument, restoreCodexDocumentLock, codexDocumentLock } = useDocument();
+  const { editor } = useEditor();
+  const schemaRef = useRef(null);
+  if (editor?.schema) schemaRef.current = editor.schema;
+  const sending = useRef(false);
+  const cancelRequested = useRef(false);
   const generation = useRef(0);
   const reload = useCallback(async () => {
     const result = bridge() ? await bridge().status() : empty;
+    if (result.editingDocumentId) restoreCodexDocumentLock(result.editingDocumentId);
+    else if (!sending.current) finishCodexDocument();
     setConnection(result); return result;
-  }, []);
+  }, [restoreCodexDocumentLock, finishCodexDocument]);
   const refreshModels = useCallback(async () => {
     const current = generation.current;
     try { const result = await bridge().models(); if (current === generation.current) setModels(result); await reload(); }
@@ -34,13 +45,22 @@ export function CodexProvider({ children }) {
   useEffect(() => {
     reload().catch(setError).finally(() => setLoading(false));
     return bridge()?.onEvent(event => {
+      if (event.type === 'document-lock') {
+        if (event.locked) restoreCodexDocumentLock(event.documentId);
+        else if (!sending.current) finishCodexDocument();
+      }
+      if (event.type === 'document-update') applyCodexDocument(event.document);
+      if (event.type === 'document-validate') {
+        const result = validateCodexDocument({ schema: schemaRef.current }, event.document);
+        bridge().validateDocument(event.requestId, result).catch(setError);
+      }
       if (event.type === 'state') reload().catch(setError);
       if (event.type === 'messages') {
         if (event.kind === 'chat') setMessages(event.messages);
         if (event.kind === 'image') setImages(event.messages);
       }
     });
-  }, [reload]);
+  }, [reload, applyCodexDocument, restoreCodexDocumentLock, finishCodexDocument]);
   useEffect(() => {
     const current = ++generation.current;
     setMessages([]); setImages([]); setModels([]); setError(null); setImageError(null); setUsageError(null);
@@ -56,16 +76,23 @@ export function CodexProvider({ children }) {
     finally { setBusy(false); }
   };
   const send = async (text, kind = 'chat', reference, attachments = []) => {
+    if (sending.current) return false;
+    sending.current = true;
+    cancelRequested.current = false;
     const report = kind === 'image' ? setImageError : setError;
     report(null);
     try {
-      const result = kind === 'image' ? await bridge().generateImage(text, reference) : await bridge().send(text, attachments);
+      const target = kind === 'chat' ? await prepareCodexDocument(editor) : null;
+      if (cancelRequested.current) return false;
+      const result = kind === 'image' ? await bridge().generateImage(text, reference) : await bridge().send(text, attachments, target);
+      if (result.document) applyCodexDocument(result.document);
       (kind === 'image' ? setImages : setMessages)(result.messages);
       if (result.error && result.error.code !== 'cancelled') report(result.error);
       return !result.error;
     } catch (failure) { report(failure); return false; }
+    finally { if (kind === 'chat') finishCodexDocument(); sending.current = false; }
   };
-  return <CodexContext.Provider value={{ connection, models, messages, images, error, imageError, usageError, busy, loading,
+  return <CodexContext.Provider value={{ connection: { ...connection, streaming: connection.streaming || Boolean(codexDocumentLock) }, models, messages, images, error, imageError, usageError, busy, loading,
     reload: () => run(reload), refreshModels, refreshUsage,
     signIn: () => run(async () => { const result = await bridge().signIn(); if (result.connected) setSetting(previous => ({ ...previous, aiProvider: 'codex' })); return result; }),
     cancelSignIn: () => bridge().cancelSignIn().catch(setError),
@@ -75,7 +102,7 @@ export function CodexProvider({ children }) {
     selectServiceTier: tier => run(() => bridge().selectServiceTier(tier)),
     clearHistory: (kind = 'chat') => run(async () => { await bridge().clearHistory(kind); (kind === 'image' ? setImages : setMessages)([]); }),
     send: (text, attachments) => send(text, 'chat', undefined, attachments), generateImage: (text, reference) => send(text, 'image', reference),
-    cancelResponse: (kind = 'chat') => bridge().cancelResponse(kind).catch(kind === 'image' ? setImageError : setError),
+    cancelResponse: (kind = 'chat') => { cancelRequested.current = true; return bridge().cancelResponse(kind).catch(kind === 'image' ? setImageError : setError); },
     copyImage: id => bridge().copyImage(id).catch(setImageError),
     saveImage: id => bridge().saveImage(id).catch(setImageError)
   }}>{children}</CodexContext.Provider>;

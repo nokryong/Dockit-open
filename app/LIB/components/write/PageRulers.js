@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const PX_PER_MM = 96 / 25.4;
 const RULER_GUTTER = 34;
 
@@ -40,6 +42,54 @@ export default function PageRulers({
   pageMetrics,
   paginationModel
 }) {
+  const horizontalLayerRef = useRef(null);
+  const hasPageMetrics = Boolean(pageMetrics?.width && pageMetrics?.pageHeightPx);
+
+  useEffect(() => {
+    const layer = horizontalLayerRef.current;
+    if (!layer) return;
+
+    const editor = layer.parentElement;
+    const ruler = layer.firstElementChild;
+    let scrollport = editor.parentElement;
+    while (scrollport && !/(auto|scroll|overlay)/.test(getComputedStyle(scrollport).overflowY)) {
+      scrollport = scrollport.parentElement;
+    }
+    if (!scrollport) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      // Sticky offsets are calculated before the canvas's zoom transform.
+      // Convert the visible scrollport position back into document coordinates.
+      const scale = ruler.getBoundingClientRect().height / ruler.offsetHeight;
+      if (!scale) return;
+      const top = scrollport.getBoundingClientRect().top + scrollport.clientTop;
+      const offset = Math.max(0, (top + 4 - editor.getBoundingClientRect().top) / scale - ruler.offsetTop);
+      layer.style.transform = `translateY(${offset}px)`;
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    const resizeObserver = new ResizeObserver(schedule);
+    resizeObserver.observe(editor);
+    resizeObserver.observe(scrollport);
+    const zoom = editor.closest(".zoom-container");
+    const zoomObserver = new MutationObserver(schedule);
+    if (zoom) zoomObserver.observe(zoom, { attributes: true, attributeFilter: ["style"] });
+    document.addEventListener("scroll", schedule, { capture: true, passive: true });
+    window.addEventListener("resize", schedule);
+    update();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      zoomObserver.disconnect();
+      document.removeEventListener("scroll", schedule, true);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [hasPageMetrics]);
+
   if (!pageMetrics?.width || !pageMetrics?.pageHeightPx) {
     return null;
   }
@@ -62,7 +112,7 @@ export default function PageRulers({
 
   return (
     <>
-      <div className="dockit-ruler-horizontal-layer" aria-hidden="true">
+      <div ref={horizontalLayerRef} className="dockit-ruler-horizontal-layer" aria-hidden="true">
         <div
           className="dockit-ruler dockit-ruler--horizontal"
           style={{
@@ -150,3 +200,4 @@ export default function PageRulers({
     </>
   );
 }
+

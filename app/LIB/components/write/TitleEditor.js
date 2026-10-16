@@ -11,6 +11,7 @@ export default function TitleEditor({
   placeholder,
   className,
   truncateAt,
+  editable = true,
   isInformation = false
 }) {
   const [isFocused, setIsFocused] = useState(false);
@@ -32,6 +33,7 @@ export default function TitleEditor({
       })
     ],
     content: value || "",
+    editable,
     immediatelyRender: false,
     editorProps: {
       attributes: {
@@ -41,6 +43,7 @@ export default function TitleEditor({
     onFocus: () => setIsFocused(true),
     onBlur: () => setIsFocused(false),
     onUpdate: ({ editor }) => {
+      if (!editable) return;
       try {
         if (isInformation) {
           onChange(editor.getHTML());
@@ -53,12 +56,14 @@ export default function TitleEditor({
     }
   });
 
+  useEffect(() => { if (editor && !editor.isDestroyed) editor.setEditable(editable, false); }, [editor, editable]);
+
   // 외부 값 ↔ 에디터 내용 동기화
   useEffect(() => {
     // 에디터의 현재 내용과 외부 value가 다를 때만 업데이트
     if (editor && !editor.isDestroyed && value !== editor.getText()) {
       // false를 추가하여 이 변경으로 인해 onUpdate가 다시 실행되는 것을 방지
-      editor.commands.setContent(value || "", false);
+      editor.commands.setContent(value || "", { emitUpdate: false });
     }
   }, [value, editor]);
 

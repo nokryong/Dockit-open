@@ -21,7 +21,6 @@ import { SettingProvider, useSetting } from "./LIB/context/SettingContext";
 import { EditorProvider } from "./LIB/context/EditorContext";
 import { MemoProvider } from "./LIB/context/MemoContext";
 import { DrawerProvider } from "./LIB/context/DrawerContext";
-import { MusicProvider } from "./LIB/context/MusicContext";
 import { CharProvider } from "./LIB/context/CharContext";
 import { LastFolderProvider } from "./LIB/context/LastFolderContext";
 import { FolderTreeProvider } from "./LIB/context/FolderTreeContext";
@@ -187,9 +186,9 @@ export default function ClientLayout({ children }) {
                                 <StylePresetProvider>
                                   <DrawerProvider>
                                     <>
-                                      <MusicProvider><ChatGPTProvider><CodexProvider>
+                                      <ChatGPTProvider><CodexProvider>
                                         <LayoutContent>{children}</LayoutContent>
-                                      </CodexProvider></ChatGPTProvider></MusicProvider>
+                                      </CodexProvider></ChatGPTProvider>
                                     </>
                                   </DrawerProvider>
                                 </StylePresetProvider>

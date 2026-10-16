@@ -24,12 +24,8 @@ import {
   NOTE_OPERATION_TYPES
 } from "../../app/LIB/utils/noteOperationAdapter";
 
-vi.mock("@excalidraw/excalidraw/index.css", () => ({}));
-vi.mock("@excalidraw/excalidraw", () => ({
-  Excalidraw: function MockExcalidraw() {
-    return null;
-  }
-}));
+
+
 vi.mock("../../app/LIB/extensions/DiagramBlockView.js", () => ({
   default: function MockDiagramBlockView() {
     return null;

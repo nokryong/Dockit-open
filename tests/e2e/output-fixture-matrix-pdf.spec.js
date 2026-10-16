@@ -43,6 +43,7 @@ let auditModuleUrl;
 
 test.beforeAll(async () => {
   vite = await createServer({
+    cacheDir: ".cache/vite-tests/output-fixture-matrix-pdf",
     configFile: false,
     root: process.cwd(),
     appType: "custom",

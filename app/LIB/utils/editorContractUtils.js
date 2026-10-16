@@ -28,8 +28,7 @@ const TOC_ENTRY_NODE_TYPE_SET = new Set(TOC_ENTRY_NODE_TYPES);
 export const READ_ONLY_INERT_OBJECT_SELECTORS = [
   ".lazy-image-container",
   ".chart-block-container",
-  ".diagram-frame-container",
-  ".diagram-excalidraw-root"
+  ".diagram-frame-container"
 ];
 
 export const READ_ONLY_INERT_OBJECT_SELECTOR =

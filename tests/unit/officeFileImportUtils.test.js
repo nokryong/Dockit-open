@@ -2,13 +2,9 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@excalidraw/excalidraw/index.css", () => ({}));
 
-vi.mock("@excalidraw/excalidraw", () => ({
-  Excalidraw: function MockExcalidraw() {
-    return null;
-  }
-}));
+
+
 
 vi.mock("../../app/LIB/extensions/DiagramBlockView.js", () => ({
   default: function MockDiagramBlockView() {

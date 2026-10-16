@@ -55,8 +55,7 @@ describe("editorContractUtils", () => {
     expect(READ_ONLY_INERT_OBJECT_SELECTORS).toEqual([
       ".lazy-image-container",
       ".chart-block-container",
-      ".diagram-frame-container",
-      ".diagram-excalidraw-root"
+      ".diagram-frame-container"
     ]);
     expect(READ_ONLY_INERT_OBJECT_SELECTOR).toBe(
       READ_ONLY_INERT_OBJECT_SELECTORS.join(", ")

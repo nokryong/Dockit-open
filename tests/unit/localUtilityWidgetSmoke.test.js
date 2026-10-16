@@ -203,14 +203,6 @@ describe("local utility widget smoke coverage", () => {
     expect(container.textContent).toContain("z");
   });
 
-  it("keeps the dice utility renderable with at least one roll button", async () => {
-    const container = await renderComponent(
-      "../../app/LIB/components/panel/Dice.js"
-    );
-
-    expect(container.querySelectorAll("button").length).toBeGreaterThan(0);
-  });
-
   it("keeps the sheet panel behind the dynamic workbook wrapper", () => {
     const source = readFileSync(
       resolve(repoRoot, "app/LIB/components/panel/SheetPanel.js"),

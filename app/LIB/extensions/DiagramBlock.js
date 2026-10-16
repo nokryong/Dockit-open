@@ -10,10 +10,30 @@ const DiagramBlock = Node.create({
 
   addAttributes() {
     return {
-      sceneData: {
-        default: "{}",
-        parseHTML: (el) => el.getAttribute("data-scene") || "{}",
-        renderHTML: (attrs) => ({ "data-scene": attrs.sceneData })
+      code: {
+        default: "flowchart LR\n  A[시작] --> B[끝]",
+        parseHTML: (el) => el.getAttribute("data-mermaid-code") ?? "",
+        renderHTML: (attrs) => ({ "data-mermaid-code": attrs.code })
+      },
+      previewSvg: {
+        default: "",
+        parseHTML: (el) => el.getAttribute("data-preview-svg") || "",
+        renderHTML: (attrs) => ({ "data-preview-svg": attrs.previewSvg })
+      },
+      previewCode: {
+        default: "",
+        parseHTML: (el) => el.getAttribute("data-preview-code") || "",
+        renderHTML: (attrs) => ({ "data-preview-code": attrs.previewCode })
+      },
+      fontFamily: {
+        default: "",
+        parseHTML: (el) => el.getAttribute("data-mermaid-font") || "",
+        renderHTML: (attrs) => attrs.fontFamily ? { "data-mermaid-font": attrs.fontFamily } : {}
+      },
+      previewFontFamily: {
+        default: "",
+        parseHTML: (el) => el.getAttribute("data-preview-font") || "",
+        renderHTML: (attrs) => attrs.previewFontFamily ? { "data-preview-font": attrs.previewFontFamily } : {}
       },
       width: {
         default: 100,
@@ -53,6 +73,10 @@ const DiagramBlock = Node.create({
 
   addCommands() {
     return {
+      setDiagramFontFamily: (fontFamily) => ({ state, commands }) => {
+        if (state.selection.node?.type.name !== "diagramBlock" || typeof fontFamily !== "string") return false;
+        return commands.updateAttributes("diagramBlock", { fontFamily });
+      },
       insertDiagramBlock: () => ({ commands }) => {
         return commands.insertContent({ type: "diagramBlock", attrs: {} });
       },

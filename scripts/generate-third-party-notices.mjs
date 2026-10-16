@@ -51,13 +51,6 @@ const licenseOverrides = new Map([
     }
   ],
   [
-    "fuzzy@0.1.3",
-    {
-      license: "MIT",
-      evidence: "https://github.com/mattyork/fuzzy/blob/master/LICENSE-MIT"
-    }
-  ],
-  [
     "jstat@1.9.6",
     {
       license: "MIT",
@@ -453,24 +446,6 @@ function notices(manifest, packs) {
   ];
   for (const [key, selection] of licenseSelections) {
     lines.push(`- ${key}: ${selection}`);
-  }
-
-  const elkjs = publicPackages.find(
-    (record) => record.name === "elkjs" && record.version === "0.9.3"
-  );
-  if (elkjs) {
-    lines.push(
-      "",
-      "SPECIAL SOURCE AVAILABILITY NOTICE - ELKJS",
-      "=".repeat(80),
-      "",
-      "Component: elkjs@0.9.3",
-      "License: Eclipse Public License 2.0 (EPL-2.0)",
-      "Dependency path: @excalidraw/excalidraw -> @excalidraw/mermaid-to-excalidraw -> mermaid -> elkjs",
-      "Source Code for the EPL-covered component is available under EPL-2.0 at:",
-      "https://github.com/kieler/elkjs/tree/a8304cf79fde75bc2ab1a89d28320f53f8637436",
-      "The complete EPL-2.0 text distributed with elkjs is reproduced in the license-text catalog below."
-    );
   }
 
   lines.push(

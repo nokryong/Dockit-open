@@ -9,17 +9,11 @@ import ShapeEditor from "./EditorComponent/ShapeEditor";
 import { NodeSelection } from "@tiptap/pm/state";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { useSetting } from "../../context/SettingContext";
-import SemanticAttributesEditor from "../common/semantic/SemanticAttributesEditor";
-import { getObjectSemanticEditorTarget } from "../../utils/semanticEditorUtils";
 
 export default function ObjectEditor({ dragHandleProps }) {
   const { selectedObject, editor } = useEditor();
   const { isDarkMode } = useDarkMode();
   const { setting } = useSetting();
-  const semanticTarget = React.useMemo(
-    () => getObjectSemanticEditorTarget(editor?.state, selectedObject),
-    [editor, selectedObject]
-  );
 
   // 이미지 속성값을 실시간으로 추적하는 상태
   const [imageAttrs, setImageAttrs] = React.useState(null);
@@ -361,14 +355,6 @@ export default function ObjectEditor({ dragHandleProps }) {
                 />
               )}
 
-              {semanticTarget && (
-                <div className="w-full pt-2">
-                  <SemanticAttributesEditor
-                    editor={editor}
-                    target={semanticTarget}
-                  />
-                </div>
-              )}
             </div>
           ) : (
             <Typography color={"cool-gray-7"} size="sm">

@@ -204,7 +204,13 @@
     padding: 0 !important;
     box-sizing: border-box !important;
   }
-  .tiptap-page-break-structure--end .page-footer-spacer,
+  /* The forced break leaves the bottom margin blank. Filling it as well can
+     overflow onto an empty sheet before that break after fractional rounding. */
+  .tiptap-page-break-structure--end .page-footer-spacer {
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+  }
   .tiptap-page-break-structure--final .page-footer-spacer,
   .tiptap-final-page-filler .page-footer-spacer {
     height: var(--print-footer-height, 0) !important;

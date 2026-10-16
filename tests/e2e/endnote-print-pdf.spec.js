@@ -45,6 +45,7 @@ const generatePrintableFixture = async (content) => {
   });
   const restoreGlobals = preserveAndInstallGlobals(dom);
   const vite = await createServer({
+    cacheDir: ".cache/vite-tests/endnote-print-pdf",
     appType: "custom",
     logLevel: "error",
     optimizeDeps: { noDiscovery: true },

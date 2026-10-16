@@ -62,7 +62,7 @@ export default function Header({
   const { setting } = useSetting();
   const { currentColors } = useDarkMode();
   const { setHeaderHeight } = useLayout();
-  const { title, setTitle, isSaving, saveDocument } = useDocument();
+  const { title, setTitle, isSaving, saveDocument, codexDocumentLock } = useDocument();
   const { editor } = useEditor();
   const { exitBook } = useInBook();
   const { setOpenTreeDrawer, setOpenWidgetDrawer, setOpenSettingsDrawer } =
@@ -166,7 +166,7 @@ export default function Header({
 
   useEffect(() => {
     if (!currentDocument?._id) return;
-    if (!setting.autoSave || titleReadyDocumentIdRef.current !== currentDocument._id) return;
+    if (codexDocumentLock || !setting.autoSave || titleReadyDocumentIdRef.current !== currentDocument._id) return;
 
     const currentPersistedTitle = `${currentDocument.title || ""}`;
 
@@ -177,7 +177,7 @@ export default function Header({
       saveDocument(currentDocument._id, { title: debouncedTitle });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedTitle, title, setting.autoSave]);
+  }, [debouncedTitle, title, setting.autoSave, codexDocumentLock]);
 
   useEffect(() => {
     if (!isEditPage || !currentDocument?._id) return;
@@ -213,6 +213,7 @@ export default function Header({
   ]);
 
   const persistCurrentDocument = async () => {
+    if (codexDocumentLock) return;
     if (!currentDocument?._id || !editor || editor.isDestroyed) return;
 
     const currentTitle = `${title || currentDocument.title || "제목 없는 문서"}`;
@@ -482,6 +483,7 @@ export default function Header({
             <div className="relative min-w-0 tiptap-title">
               <Typography as="h1" pretendard="B" size="lg" color="white-1" className="min-w-0 text-center">
                 <TitleEditor
+                  editable={!codexDocumentLock}
                   className="[&_.tiptap]:truncate [&_.tiptap_p]:inline"
                   truncateAt={8}
                   value={title}
@@ -631,7 +633,7 @@ export default function Header({
           </div>
         </Div>
       )}
-      {isEditPage && currentDocument && <WriteHeader />}
+      {isEditPage && currentDocument && <div inert={Boolean(codexDocumentLock)} aria-disabled={Boolean(codexDocumentLock)}><WriteHeader /></div>}
     </Div>
   );
 }

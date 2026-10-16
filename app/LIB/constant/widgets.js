@@ -13,13 +13,9 @@ export const widgets = {
   memo: loadWidget(() => import("../components/panel/Memo")),
   specialChar: loadWidget(() => import("../components/panel/SpecialChar")),
   stylePreset: loadWidget(() => import("../components/panel/StylePreset")),
-  referenceDoc: loadWidget(() => import("../components/panel/ReferenceDoc")),
   madeChart: loadWidget(() => import("../components/panel/ChartPanel")),
   index: loadWidget(() => import("../components/panel/TableOfContentsPanel")),
-  calendar: loadWidget(() => import("../components/panel/CalendarWidget")),
   timer: loadWidget(() => import("../components/panel/Timer")),
-  dice: loadWidget(() => import("../components/panel/Dice")),
-  musicPlayer: loadWidget(() => import("../components/panel/MusicPlayer")),
   latex: loadWidget(() => import("../components/panel/LatexPanel")),
   findAndReplace: loadWidget(
     () => import("../components/panel/FindAndReplace")

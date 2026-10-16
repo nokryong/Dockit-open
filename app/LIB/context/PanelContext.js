@@ -3,6 +3,7 @@ import { createContext, useContext, useCallback, useMemo } from "react";
 import { useDataManagement } from "../hook/useDataManagement";
 
 const PanelContext = createContext(null);
+const removedWidgetIds = new Set(["aiImage", "referenceDoc", "calendar", "dice", "musicPlayer"]);
 
 const DEFAULT_PANELS = {
   panels: {
@@ -71,6 +72,7 @@ export function PanelProvider({ children }) {
   // 4. 유틸리티 함수들
   const exists = useCallback(
     (type) => {
+      if (removedWidgetIds.has(type)) return false;
       const currentLeft = data?.panels?.left || [];
       const currentRight = data?.panels?.right || [];
       return currentLeft.includes(type) || currentRight.includes(type);
@@ -96,6 +98,7 @@ export function PanelProvider({ children }) {
 
   const toggle = useCallback(
     (type) => {
+      if (removedWidgetIds.has(type)) return;
       setPanelsData((prev) => {
         const currentPanels = prev.panels || { left: [], right: [] };
         const currentLeft = currentPanels.left || [];
@@ -130,8 +133,8 @@ export function PanelProvider({ children }) {
 
   const value = useMemo(
     () => ({
-      left: (data?.panels?.left || []).filter(id => id !== "aiImage"),
-      right: (data?.panels?.right || []).filter(id => id !== "aiImage"),
+      left: (data?.panels?.left || []).filter(id => !removedWidgetIds.has(id)),
+      right: (data?.panels?.right || []).filter(id => !removedWidgetIds.has(id)),
       setLeft,
       setRight,
       toggle,

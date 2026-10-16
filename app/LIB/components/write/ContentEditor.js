@@ -24,7 +24,9 @@ import { useThrottle } from "../../hook/useThrottle";
 import { PaginationExtension } from "../../extensions/PaginationExtension";
 import DeleteBehaviorGuard from "../../extensions/DeleteBehaviorGuard";
 import TableRowOverflowGuard from "../../extensions/TableRowOverflowGuard";
+import CodexDocumentLock from '../../extensions/CodexDocumentLock';
 import { getEditorViewSafely } from "../../utils/editorViewUtils";
+import { getListMarkerStyles } from "../../utils/listMarkerStyleUtils";
 import { useSetting } from "../../context/SettingContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { buildPaginationPageSegmentModel } from "../../pagination/render/buildPaginationPageSegmentModel";
@@ -186,6 +188,7 @@ export default function ContentEditor({
   viewPage,
   pageNumber,
   editable = true,
+  codexLocked = false,
   showRulers = false,
   pagesId = "pages"
 }) {
@@ -206,6 +209,8 @@ export default function ContentEditor({
   const { currentColors } = useDarkMode();
   // editor 인스턴스를 ref로 저장하여 저장 시점에만 getHTML() 호출
   const editorRef = useRef(null);
+  const codexLockedRef = useRef(codexLocked);
+  codexLockedRef.current = codexLocked;
   // onChange debounce를 위한 ref
   const onChangeTimeoutRef = useRef(null);
   const lastContentRef = useRef("");
@@ -279,6 +284,7 @@ export default function ContentEditor({
       clearTimeout(onChangeTimeoutRef.current);
     }
     onChangeTimeoutRef.current = setTimeout(() => {
+      if (codexLockedRef.current || editorRef.current?.storage?.codexDocumentLock?.locked) return;
       if (editorRef.current && !editorRef.current.isDestroyed) {
         try {
           const snapshot = capturePersistenceSnapshot();
@@ -467,6 +473,7 @@ export default function ContentEditor({
   const editor = useTiptapEditor(
     {
       extensions: [
+        CodexDocumentLock.configure({ locked: codexLocked }),
         DeleteBehaviorGuard.configure({
           onDeleteBlockRequest: handleDeleteBlockRequest
         }),
@@ -519,7 +526,9 @@ export default function ContentEditor({
       },
       onCreate: ({ editor: currentEditor }) => {
         editorRef.current = currentEditor;
+        currentEditor.storage.codexDocumentLock.applying = true;
         const restored = restoreValidatedNotePersistenceHtml(currentEditor, value);
+        currentEditor.storage.codexDocumentLock.applying = false;
         if (!restored.ok) {
           onNotePersistenceRejected?.(restored.error);
           return;
@@ -539,6 +548,7 @@ export default function ContentEditor({
         setEditor(activeEditor => activeEditor === currentEditor ? null : activeEditor);
       },
       onUpdate: () => {
+        if (codexLockedRef.current || editorRef.current?.storage.codexDocumentLock?.applying) return;
         debouncedOnChange();
       }
     },
@@ -549,6 +559,17 @@ export default function ContentEditor({
     // loop.
     [viewPage, pageMetrics, pageNumber]
   );
+
+  useLayoutEffect(() => {
+    if (!editor || editor.isDestroyed) return;
+    editor.storage.codexDocumentLock.locked = codexLocked;
+    if (codexLocked) {
+      clearTimeout(onChangeTimeoutRef.current);
+      setPendingDeleteTarget(null);
+      setSelectedObject(null);
+      editor.setEditable(false, false);
+    }
+  }, [codexLocked, editor, setSelectedObject]);
 
   useEffect(() => {
     if (!editor || editor.isDestroyed || !isEditable) return undefined;
@@ -1032,7 +1053,7 @@ export default function ContentEditor({
       document.head.appendChild(styleElement);
     }
 
-    let allStyles = "";
+    let allStyles = getListMarkerStyles(editorElement);
 
     // 1. 헤딩 개별 처리
     ["h1", "h2", "h3", "h4", "h5", "h6"].forEach((tagName) => {
@@ -1328,6 +1349,8 @@ export default function ContentEditor({
     // transaction 핸들러
     const handleTransaction = ({ transaction }) => {
       if (transaction.docChanged) {
+        // External document restores can suppress the editor's update event.
+        throttledSyncHeadingStyles();
         mapRememberedTextSelection(transaction);
         handleSelectionUpdate();
       }
@@ -1496,13 +1519,13 @@ export default function ContentEditor({
 
     // 이미지 또는 도형이 선택된 상태일 때는 에디터를 비활성화 (isEditable도 고려)
     // queueMicrotask: setEditable 내부의 flushSync가 React 라이프사이클과 충돌하지 않도록 지연
-    const newEditable = isEditable && !shouldBlockTextEditingForSelection;
+    const newEditable = !codexLocked && isEditable && !shouldBlockTextEditingForSelection;
     queueMicrotask(() => {
       if (!editor.isDestroyed) {
         editor.setEditable(newEditable);
       }
     });
-  }, [editor, selectedObject, isEditable]);
+  }, [editor, selectedObject, isEditable, codexLocked]);
 
   useEffect(() => {
     if (!editor || editor.isDestroyed || isEditable) return;
@@ -1538,7 +1561,10 @@ export default function ContentEditor({
     if (value !== editorHTML && value !== lastContentRef.current) {
       const { from, to } = editor.state.selection; // 현재 커서 위치 저장
 
-      const restored = restoreValidatedNotePersistenceHtml(editor, value);
+      editor.storage.codexDocumentLock.applying = true;
+      let restored;
+      try { restored = restoreValidatedNotePersistenceHtml(editor, value); }
+      finally { editor.storage.codexDocumentLock.applying = false; }
       if (!restored.ok) {
         onNotePersistenceRejected?.(restored.error);
         return;
@@ -1547,7 +1573,8 @@ export default function ContentEditor({
       onNotePersistenceStatus?.({ source: "external-restore", status: "valid" });
 
       // 선택적으로 커서 위치 복구 (필요한 경우)
-      editor.commands.setTextSelection({ from, to });
+      const end = editor.state.doc.content.size;
+      editor.commands.setTextSelection({ from: Math.min(from, end), to: Math.min(to, end) });
     } else if (value === editorHTML && value !== lastContentRef.current) {
       lastContentRef.current = value;
     }

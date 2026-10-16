@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('dockitLocal', {
     usage: () => invoke('codex:usage'),
     history: kind => invoke('codex:history', kind),
     clearHistory: kind => invoke('codex:clear-history', kind),
-    send: (text, attachments) => invoke('codex:send', text, attachments),
+    send: (text, attachments, document) => invoke('codex:send', text, attachments, document),
+    validateDocument: (requestId, result) => invoke('codex:document-validation', requestId, result),
     generateImage: (text, reference) => invoke('codex:generate-image', text, reference),
     cancelResponse: kind => invoke('codex:cancel-response', kind),
     copyImage: id => invoke('codex:copy-image', id),
@@ -62,6 +63,8 @@ contextBridge.exposeInMainWorld('dockitLocal', {
     }
   },
   paths: () => invoke('local:paths'),
+  print: options => invoke('local:print', options),
+  readFontAsset: url => invoke('local:font-asset', url),
   data: (action, args) => invoke('local:data', action, args),
   chooseDocuments: () => invoke('local:choose-documents'),
   chooseChatAttachments: provider => invoke('local:choose-chat-attachments', provider),

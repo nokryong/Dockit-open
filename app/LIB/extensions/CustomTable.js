@@ -3,6 +3,7 @@ import { mergeAttributes } from "@tiptap/core";
 import { Plugin, PluginKey, Selection } from "@tiptap/pm/state";
 import { TableMap, cellAround, CellSelection } from "@tiptap/pm/tables";
 import { TableView } from "./TableView.js";
+import { boundedTableColumnResize, getTableResizeGeometry } from "./utils/tableColumnResize";
 import { px2mm } from "../utils/unitUtils";
 import {
   getNextTableCellPoint,
@@ -771,6 +772,13 @@ function adjustSelectedColumnWidths(view, tableContext, deltaPx, cellMinWidth) {
   const { tablePos, map } = tableContext;
   const tr = state.tr;
   const selectedColumns = getSelectedColumnIndexes(state, tablePos, map);
+  if (!selectedColumns.size) return false;
+  const geometry = getTableResizeGeometry(view, tablePos);
+  if (deltaPx > 0 && !geometry) return false;
+  const boundedDelta = deltaPx > 0
+    ? Math.min(deltaPx, Math.max(0, geometry.remainingWidth) / selectedColumns.size)
+    : deltaPx;
+  if (boundedDelta === 0) return false;
   const visited = new Set();
   let modified = false;
 
@@ -778,14 +786,15 @@ function adjustSelectedColumnWidths(view, tableContext, deltaPx, cellMinWidth) {
     for (let row = 0; row < map.height; row += 1) {
       const cellRelPos = map.map[row * map.width + col];
 
-      if (visited.has(cellRelPos)) {
+      const columnCellKey = `${cellRelPos}:${col}`;
+      if (visited.has(columnCellKey)) {
         continue;
       }
 
-      visited.add(cellRelPos);
+      visited.add(columnCellKey);
 
       const cellAbsPos = tablePos + 1 + cellRelPos;
-      const cellNode = state.doc.nodeAt(cellAbsPos);
+      const cellNode = tr.doc.nodeAt(cellAbsPos);
 
       if (!cellNode) {
         continue;
@@ -802,10 +811,11 @@ function adjustSelectedColumnWidths(view, tableContext, deltaPx, cellMinWidth) {
         currentWidths.push(null);
       }
 
-      const baseWidth = Number(currentWidths[colOffset]) || cellMinWidth;
+      const baseWidth = Number(currentWidths[colOffset]) || geometry?.widths[col] || cellMinWidth;
+      const requestedWidth = (baseWidth + boundedDelta) * 10;
       const nextWidth = Math.max(
         TABLE_KEYBOARD_MIN_COL_WIDTH_PX,
-        Math.round((baseWidth + deltaPx) * 10) / 10
+        (boundedDelta > 0 ? Math.floor(requestedWidth + 0.000001) : Math.round(requestedWidth)) / 10
       );
 
       if (nextWidth === baseWidth) {
@@ -1353,6 +1363,7 @@ const CustomTable = Table.extend({
 
     return [
       tableCellArrowNavigationPlugin,
+      boundedTableColumnResize(cellMinWidth),
       ...parentPlugins,
       new Plugin({
         key: new PluginKey("tableSelectionCycle"),

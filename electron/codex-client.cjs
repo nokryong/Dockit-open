@@ -6,12 +6,13 @@ const { randomUUID, createHash } = require('node:crypto');
 const { contained, atomicJson } = require('./local-store.cjs');
 const { ChatAttachments, metadata, textContent } = require('./chat-attachments.cjs');
 const { defaultCodexHome, readGlobalGuidance, sharedSkillRoots, skillReaderConfig } = require('./codex-guidance.cjs');
+const { DOCUMENT_TOOLS } = require('./codex-documents.cjs');
 
 const fail = (message, code = 'codex_failed') => Object.assign(new Error(message), { code, dockit: true });
 const safeFailure = error => error?.dockit
   ? { message: error.message, code: error.code }
   : { message: 'Codex 요청을 완료하지 못했습니다. 연결 상태를 확인하고 다시 시도해주세요.', code: 'codex_failed' };
-const fresh = () => ({ model: '', reasoningEffort: null, serviceTier: null, threads: {}, chat: [], image: [] });
+const fresh = () => ({ model: '', reasoningEffort: null, serviceTier: null, threads: {}, documentToolsVersion: 1, chat: [], image: [] });
 const MAX_IMAGE = 30 * 1024 * 1024;
 function imageExtension(bytes) {
   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return 'png';
@@ -50,9 +51,9 @@ function childEnvironment(home, workspace, source = process.env) {
 }
 
 class CodexTransport {
-  constructor({ command, home, workspace, notify, exited, spawnImpl = spawn }) {
+  constructor({ command, home, workspace, notify, exited, clientRequest, spawnImpl = spawn }) {
     this.pending = new Map(); this.sequence = 0; this.buffer = ''; this.closed = false;
-    this.notify = notify; this.exited = exited;
+    this.notify = notify; this.exited = exited; this.clientRequest = clientRequest;
     this.child = spawnImpl(command, ['app-server', '--listen', 'stdio://', '-c', 'cli_auth_credentials_store="file"', '-c', 'features.shell_tool=false', '-c', 'features.multi_agent=false'], {
       cwd: workspace, env: childEnvironment(home, workspace), windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'], shell: false
     });
@@ -79,6 +80,14 @@ class CodexTransport {
         if (message.error) pending.reject(fail('Codex 요청이 실패했습니다. CLI 연결과 사용 한도를 확인해주세요.', 'rpc_failed'));
         else pending.resolve(message.result);
       } else if (message.id !== undefined) {
+        if (message.method === 'item/tool/call' && this.clientRequest) {
+          Promise.resolve().then(() => this.clientRequest(message.params || {})).then(result => {
+            if (!this.closed) this.write({ id: message.id, result });
+          }).catch(() => {
+            if (!this.closed) this.write({ id: message.id, result: { success: false, contentItems: [{ type: 'inputText', text: '문서 작업을 완료하지 못했습니다.' }] } });
+          });
+          continue;
+        }
         // No implicit shell/file access or unattended approvals from the document UI.
         if (/requestApproval$/.test(message.method)) this.write({ id: message.id, result: { decision: 'decline' } });
         else this.write({ id: message.id, error: { code: -32601, message: 'Unsupported client request' } });
@@ -107,8 +116,9 @@ class CodexTransport {
 }
 
 class CodexClient {
-  constructor({ root, openExternal, emit = () => {}, resolveCommand = findCodex, createTransport = options => new CodexTransport(options), globalHome = defaultCodexHome() }) {
-    this.root = root; this.home = path.join(root, 'codex'); this.workspace = path.join(this.home, 'workspace');
+  constructor({ root, openExternal, emit = () => {}, resolveCommand = findCodex, createTransport = options => new CodexTransport(options), globalHome = defaultCodexHome(), documents }) {
+    this.root = root; this.home = path.join(root, 'codex'); this.workspace = root;
+    this.documents = documents;
     this.attachments = new ChatAttachments(root, 'codex');
     this.globalHome = globalHome; this.skillRoots = [];
     this.dataRoot = path.join(root, 'ai', 'codex'); this.openExternal = openExternal; this.emit = emit;
@@ -124,7 +134,7 @@ class CodexClient {
   }
   snapshot() {
     return { available: Boolean(this.command), connected: Boolean(this.account), account: this.account, signingIn: Boolean(this.login),
-      streaming: this.runs.has('chat'), generating: this.runs.has('image'), model: this.data.model, reasoningEffort: this.data.reasoningEffort ?? this.models.find(model => model.slug === this.data.model)?.defaultReasoningEffort ?? null, serviceTier: this.data.serviceTier, usage: this.usage };
+      streaming: this.runs.has('chat'), generating: this.runs.has('image'), editingDocumentId: this.documents?.active?.id || null, model: this.data.model, reasoningEffort: this.data.reasoningEffort ?? this.models.find(model => model.slug === this.data.model)?.defaultReasoningEffort ?? null, serviceTier: this.data.serviceTier, usage: this.usage };
   }
   changed() { this.emit({ type: 'state' }); }
   async status() {
@@ -145,6 +155,7 @@ class CodexClient {
       this.command = await this.resolveCommand();
       if (!this.command) throw fail('Codex CLI를 설치한 뒤 다시 시도해주세요. 설치 명령: npm install -g @openai/codex', 'cli_missing');
       const transport = this.createTransport({ command: this.command, home: this.home, workspace: this.workspace,
+        clientRequest: params => this.toolCall(params),
         notify: (method, params) => this.notification(method, params), exited: () => {
           this.transport = null; this.loaded.clear(); this.account = null; this.usage = null;
           this.login?.reject(fail('CLI 로그인 연결이 종료됐습니다. 다시 시도해주세요.', 'disconnected'));
@@ -154,7 +165,7 @@ class CodexClient {
       });
       this.transport = transport;
       try {
-        await transport.request('initialize', { clientInfo: { name: 'dockit_open', title: 'Dockit Open', version: '0.1.3' } });
+        await transport.request('initialize', { clientInfo: { name: 'dockit_open', title: 'Dockit Open', version: '0.1.3' }, capabilities: { experimentalApi: true } });
         transport.write({ method: 'initialized', params: {} });
         this.skillRoots = await sharedSkillRoots(this.globalHome);
         if (this.skillRoots.length) await transport.request('skills/extraRoots/set', { extraRoots: this.skillRoots });
@@ -181,6 +192,7 @@ class CodexClient {
             const file = await contained(this.dataRoot, path.join(this.dataRoot, `${key}.json`));
             const stored = JSON.parse(await fs.readFile(file, 'utf8'));
             this.data = { model: typeof stored.model === 'string' ? stored.model : '', reasoningEffort: typeof stored.reasoningEffort === 'string' ? stored.reasoningEffort : null, serviceTier: typeof stored.serviceTier === 'string' ? stored.serviceTier : null, threads: stored.threads || {},
+              documentToolsVersion: stored.documentToolsVersion || 0, previousChatThreads: stored.previousChatThreads || [],
               chat: Array.isArray(stored.chat) ? stored.chat : [], image: Array.isArray(stored.image) ? stored.image : [] };
             for (const kind of ['chat', 'image']) for (const message of this.data[kind]) if (message.status === 'streaming') message.status = 'cancelled';
           } catch (error) { if (error.code !== 'ENOENT') throw fail('CLI 대화 기록을 읽지 못했습니다.', 'history_failed'); }
@@ -326,7 +338,7 @@ class CodexClient {
     if (this.runs.size) throw fail('응답이 끝난 뒤 파일을 첨부해주세요.', 'busy');
     return this.attachments.add(this.key, paths);
   }
-  async send(text, kind = 'chat', reference, attachments = []) {
+  async send(text, kind = 'chat', reference, attachments = [], target = null) {
     this.validateKind(kind); this.requireAccount();
     if (typeof text !== 'string' || (!text.trim() && !attachments?.length) || text.length > 100_000) throw fail('보낼 내용을 입력하거나 파일을 첨부해주세요.', 'invalid_input');
     if (reference && (kind !== 'image' || typeof reference !== 'string' || !/^data:image\/(png|jpeg|webp);base64,/.test(reference))) throw fail('지원하지 않는 이미지 형식입니다.', 'invalid_image');
@@ -340,24 +352,38 @@ class CodexClient {
     let resolve;
     const completed = new Promise(ok => { resolve = ok; });
     const assistant = { id: randomUUID(), role: 'assistant', text: '', status: 'streaming', activity: '응답 준비 중' };
-    const run = { kind, threadId: null, turnId: null, tail: Promise.resolve(), parts: new Map(), activity: new ChatActivity(), assistant, cancelled: false };
+    const run = { kind, threadId: null, turnId: null, tail: Promise.resolve(), toolsTail: Promise.resolve(), parts: new Map(), activity: new ChatActivity(), assistant, cancelled: false };
     run.finish = (status, error) => {
       if (run.finishing) return;
       run.finishing = true;
       run.tail = run.tail.then(async () => {
         clearTimeout(run.timer);
+        clearTimeout(run.cancelTimer);
+        await run.preparing?.catch(() => {});
+        await run.toolsTail;
+        let document;
+        try { document = await this.documents?.end(run.document); }
+        catch (failure) { error = failure; }
         assistant.status = status;
         if (kind === 'image' && status === 'completed' && !run.hasImage) error = fail('이미지가 생성되지 않았습니다. 요청을 바꿔 다시 시도해주세요.', 'no_image');
         if (error) assistant.status = status === 'cancelled' ? 'cancelled' : 'failed';
         assistant.activity = run.activity.complete(error ? 'failed' : assistant.status);
         try { await this.save(); } catch { error = fail('CLI 대화 기록을 저장하지 못했습니다.', 'save_failed'); assistant.activity = run.activity.complete('failed'); }
         this.runs.delete(kind); this.messages(kind); this.changed();
-        resolve({ messages: this.data[kind], error: error ? safeFailure(error) : null });
+        resolve({ messages: this.data[kind], document, error: error ? safeFailure(error) : null });
         this.readUsage().catch(() => {});
       });
     };
     this.runs.set(kind, run); this.changed();
     try {
+      if (kind === 'chat' && target) {
+        if (!this.documents) throw fail('문서 연결을 사용할 수 없습니다.', 'document_access');
+        run.preparing = this.documents.begin(target).then(session => { run.document = session; });
+        await run.preparing;
+        this.changed();
+      }
+      if (run.finishing) return completed;
+      if (run.cancelled) { run.finish('cancelled'); return completed; }
       if (!this.models.length) await this.listModels();
       if (!this.data.model) throw fail('사용 가능한 CLI 모델이 없습니다.', 'no_model');
       const user = { id: randomUUID(), role: 'user', text: text.trim(), ...(files.length ? { attachments: files.map(metadata) } : {}) };
@@ -366,15 +392,30 @@ class CodexClient {
       const params = { model: this.data.model, cwd: this.workspace, sandbox: 'read-only', approvalPolicy: 'never',
         developerInstructions: kind === 'image'
           ? 'Generate or edit the image requested by the user using the built-in image generation tool. Do not use shell commands or edit documents. Return the generated image. Respond in the language of the user.'
-          : 'You are the chat assistant in Dockit Open. Answer the user in their language. Do not run shell commands or modify local files or documents.' };
+          : 'You are the assistant in Dockit Open. Answer in the user’s language. For document edits, use only dockit_read_document and dockit_edit_document on the document attached to this turn, following the project AGENTS.md. Do not execute shell commands or use other tools to access or change local files. Historical conversations are read-only via dockit_read_history. Never access credentials or change unrelated documents, settings, or folders. Preserve existing content and formatting unless asked to change them.' };
+      if (kind === 'chat' && this.documents) { params.dynamicTools = DOCUMENT_TOOLS; params.environments = []; }
       const guidance = await readGlobalGuidance(this.globalHome);
       if (this.skillRoots.length) {
         params.config = skillReaderConfig([...this.skillRoots, path.join(this.home, 'skills')]);
       }
       let threadId = this.data.threads[kind];
+      let previousContext = '';
+      const migrateChat = kind === 'chat' && this.documents && this.data.documentToolsVersion !== 1;
+      const previousThreadId = threadId;
+      if (migrateChat) {
+        // Old threads have a permanent chat-only instruction and no document tools.
+        // Keep their rollouts and UI history; carry the conversation into the new tool-enabled thread.
+        previousContext = this.data.chat.filter(message => message.id !== user.id && message.id !== assistant.id && message.text).map(message => `${message.role}: ${message.text}`).join('\n\n');
+        threadId = null;
+      }
       if (!threadId) {
         const result = await this.transport.request('thread/start', params);
-        threadId = result.thread.id; this.data.threads[kind] = threadId; this.loaded.add(threadId); await this.save();
+        threadId = result.thread.id; this.data.threads[kind] = threadId; this.loaded.add(threadId);
+        if (migrateChat) {
+          if (previousThreadId) this.data.previousChatThreads = [...(this.data.previousChatThreads || []), previousThreadId];
+          this.data.documentToolsVersion = 1;
+        }
+        await this.save();
       } else if (!this.loaded.has(threadId)) {
         await this.transport.request('thread/resume', { ...params, threadId }); this.loaded.add(threadId);
       }
@@ -382,13 +423,17 @@ class CodexClient {
       if (run.cancelled) { run.finish('cancelled'); return completed; }
       // Existing native threads can retain their original developer instructions on resume.
       // Supply current global guidance at user priority so both old and new threads receive it.
-      const context = [guidance, this.skillRoots.length ? 'Read local skill instructions and their text references with the dockit_skills read_skill tool before applying a skill. Scripts must not be executed.' : ''].filter(Boolean).join('\n\n');
+      const projectGuidance = this.documents && kind === 'chat' ? await fs.readFile(await contained(this.root, path.join(this.root, 'AGENTS.md')), 'utf8') : '';
+      const documentContext = !this.documents || kind !== 'chat' ? '' : run.document
+        ? `현재 문서 경로: ${JSON.stringify(run.document.file)}\n문서 ID: ${run.document.id}\n이번 요청에서는 이 파일만 편집할 수 있습니다. 수정 전에 dockit_read_document로 최신 내용을 읽으세요.`
+        : '현재 연결된 문서가 없습니다. 이전 요청에 연결됐던 문서를 수정하지 마세요.';
+      const context = [guidance, projectGuidance && `# 프로젝트 AGENTS.md\n${projectGuidance}`, documentContext, previousContext && `이전 대화 참고 자료(현재 요청 아님):\n${previousContext}`, this.skillRoots.length ? 'Read local skill instructions and their text references with the dockit_skills read_skill tool before applying a skill. Scripts must not be executed.' : ''].filter(Boolean).join('\n\n');
       const input = context ? [{ type: 'text', text: context }] : [];
       if (text.trim()) input.push({ type: 'text', text: text.trim() });
       for (const value of texts) input.push({ type: 'text', text: value });
       for (const file of files.filter(file => file.kind === 'image')) input.push({ type: 'localImage', path: file.path });
       if (reference) input.push({ type: 'localImage', path: await this.imagePath(user.imageId) });
-      const result = await this.transport.request('turn/start', { threadId, model: this.data.model, serviceTier: this.data.serviceTier ?? 'default', ...(this.snapshot().reasoningEffort ? { effort: this.snapshot().reasoningEffort } : {}), input });
+      const result = await this.transport.request('turn/start', { threadId, cwd: this.workspace, ...(kind === 'chat' && this.documents ? { environments: [] } : {}), sandboxPolicy: { type: 'readOnly', networkAccess: false }, approvalPolicy: 'never', model: this.data.model, serviceTier: this.data.serviceTier ?? 'default', ...(this.snapshot().reasoningEffort ? { effort: this.snapshot().reasoningEffort } : {}), input });
       run.turnId = result.turn.id;
       if (run.cancelled) await this.cancelResponse(kind);
       if (!run.finishing) run.timer = setTimeout(() => { this.cancelResponse(kind).catch(() => {}); run.finish('failed', fail('Codex 응답 시간이 지났습니다.', 'timeout')); }, 15 * 60_000);
@@ -399,7 +444,28 @@ class CodexClient {
     this.validateKind(kind); const run = this.runs.get(kind);
     if (!run) return;
     run.cancelled = true;
-    if (run.turnId) await this.transport.request('turn/interrupt', { threadId: run.threadId, turnId: run.turnId });
+    if (run.document) run.document.closing = true;
+    if (run.turnId) {
+      try { await this.transport.request('turn/interrupt', { threadId: run.threadId, turnId: run.turnId }); }
+      catch { run.finish('cancelled'); }
+      if (!run.finishing) run.cancelTimer = setTimeout(() => run.finish('cancelled'), 3000);
+    }
+  }
+  async toolCall(params) {
+    const run = [...this.runs.values()].find(candidate => candidate.threadId === params.threadId);
+    const respond = (value, success = true) => ({ success, contentItems: [{ type: 'inputText', text: JSON.stringify(value) }] });
+    if (!run || run.finishing || run.cancelled || (run.turnId && params.turnId !== run.turnId) || !this.documents) return respond({ error: '현재 작업에서 사용할 수 없는 도구입니다.' }, false);
+    const task = run.toolsTail.then(async () => {
+      if (run.cancelled || run.finishing) throw fail('작업이 종료됐습니다.');
+      if (params.tool === 'dockit_read_history') return this.documents.history(params.arguments);
+      if (!run.document) throw fail('현재 연결된 문서가 없습니다.');
+      if (params.tool === 'dockit_read_document') return this.documents.read(run.document);
+      if (params.tool === 'dockit_edit_document') return this.documents.edit(run.document, params.arguments);
+      throw fail('허용하지 않는 도구입니다.');
+    });
+    run.toolsTail = task.catch(() => {});
+    try { return respond(await task); }
+    catch (error) { return respond({ error: safeFailure(error).message }, false); }
   }
   updateActivity(run, label) {
     if (run.assistant.activity === label) return;

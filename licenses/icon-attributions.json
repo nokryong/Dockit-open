@@ -66,9 +66,21 @@
     "source": "https://github.com/Remix-Design/RemixIcon"
   },
   {
+    "code": "rx",
+    "name": "Radix Icons",
+    "license": "MIT",
+    "source": "https://github.com/radix-ui/icons"
+  },
+  {
     "code": "tb",
     "name": "Tabler Icons",
     "license": "MIT",
     "source": "https://github.com/tabler/tabler-icons"
+  },
+  {
+    "code": "vsc",
+    "name": "VS Code Icons",
+    "license": "CC-BY-4.0",
+    "source": "https://github.com/microsoft/vscode-codicons"
   }
 ]

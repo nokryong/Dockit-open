@@ -6,8 +6,8 @@ import { editorExtensions } from "../../app/LIB/constant/editorExtensions";
 import { calculatePaginationPlan } from "../../app/LIB/pagination/layout/calculatePaginationPlan";
 import { createSaveQueueController } from "../../app/LIB/hook/useSaveQueue";
 
-vi.mock("@excalidraw/excalidraw/index.css", () => ({}));
-vi.mock("@excalidraw/excalidraw", () => ({ Excalidraw: () => null }));
+
+
 vi.mock("../../app/LIB/extensions/DiagramBlockView.js", () => ({
   default: () => null
 }));

@@ -1,4 +1,4 @@
-import { TbArrowBackUp, TbArrowForwardUp, TbBlockquote, TbColumns, TbNumbers, TbPackageExport, TbPackageImport, TbPageBreak, TbSitemap, TbTag, TbTextCaption, TbTextWrap } from "react-icons/tb";
+import { TbArrowBackUp, TbArrowForwardUp, TbBlockquote, TbColumns, TbNumbers, TbPackageExport, TbPageBreak, TbSitemap, TbTag, TbTextCaption, TbTextWrap } from "react-icons/tb";
 import { Code, PhotoOutline, Print } from "sud-icons";
 import { AiFillSave } from "react-icons/ai";
 import { useEditor } from "@/app/LIB/context/EditorContext";
@@ -47,8 +47,6 @@ export default function WriteHeader() {
     saveAction,
     hwpxExportAction,
     docxExportAction,
-    hwpxImportAction,
-    docxImportAction,
     insertNoteAtRememberedSelection
   } = useEditor();
   const { setting } = useSetting();
@@ -88,8 +86,6 @@ export default function WriteHeader() {
     focus,
   } = useDocument();
   const params = useParams();
-  const docxImportInputRef = useRef(null);
-  const hwpxImportInputRef = useRef(null);
   const [font, setFont] = useState("Pretendard-Medium");
   const [currentFontSize, setCurrentFontSize] = useState(12);
 
@@ -308,7 +304,10 @@ export default function WriteHeader() {
       }
 
       // 3. 폰트 패밀리(글꼴) 상태를 업데이트합니다.
-      const fontFamily = attrs?.fontFamily;
+      const diagram = editor.state.selection.node;
+      const fontFamily = diagram?.type.name === "diagramBlock"
+        ? diagram.attrs.fontFamily || "sans-serif"
+        : attrs?.fontFamily;
       if (fontFamily) {
         setFont(fontFamily);
       } else {
@@ -829,56 +828,6 @@ export default function WriteHeader() {
     { key: "md", label: "MD", onClick: exportMd }
   ];
 
-  const openDocxImportFilePicker = () => {
-    if (!docxImportAction) {
-      toast.info("DOCX 불러오기를 준비하는 중입니다.");
-      return;
-    }
-
-    docxImportInputRef.current?.click();
-  };
-
-  const handleDocxImportFileChange = async (event) => {
-    const file = event.target.files?.[0] || null;
-    event.target.value = "";
-
-    if (!file) {
-      return;
-    }
-
-    if (!docxImportAction) {
-      toast.info("DOCX 불러오기를 준비하는 중입니다.");
-      return;
-    }
-
-    await docxImportAction(file);
-  };
-
-  const openHwpxImportFilePicker = () => {
-    if (!hwpxImportAction) {
-      toast.info("HWPX 불러오기를 준비하는 중입니다.");
-      return;
-    }
-
-    hwpxImportInputRef.current?.click();
-  };
-
-  const handleHwpxImportFileChange = async (event) => {
-    const file = event.target.files?.[0] || null;
-    event.target.value = "";
-
-    if (!file) {
-      return;
-    }
-
-    if (!hwpxImportAction) {
-      toast.info("HWPX 불러오기를 준비하는 중입니다.");
-      return;
-    }
-
-    await hwpxImportAction(file);
-  };
-
   return (
     <Div className="flex gap-2 items-center overflow-x-auto">
       {/* 취소 & 재실행 */}
@@ -947,6 +896,10 @@ export default function WriteHeader() {
           searchable
           onChange={(value) => {
             setFont(value);
+            if (editor?.state.selection.node?.type.name === "diagramBlock") {
+              editor.chain().focus().setDiagramFontFamily(value).run();
+              return;
+            }
             if (!applyTextStyleToSelection({ fontFamily: value })) {
               editor?.chain()?.focus()?.setFontFamily(value)?.run();
             }
@@ -1650,72 +1603,6 @@ export default function WriteHeader() {
               />
             )}
           </Popover>
-        </Tooltip>
-        <input
-          ref={docxImportInputRef}
-          data-testid="docx-import-file-input"
-          type="file"
-          accept=".docx"
-          onChange={handleDocxImportFileChange}
-          style={{ display: "none" }}
-        />
-        <Tooltip
-          content={
-            <Typography size="xs" pretendard="M">
-              DOCX 불러오기
-            </Typography>
-          }
-          placement="bottom"
-          background={`${setting.theme}-7`}
-          color={`${setting.theme}-1`}
-          border={false}
-          style={withOverlayShadow()}
-        >
-          {withToolbarTestId(
-            "docx-import-button",
-            <Button
-              colorType="text"
-              color={`${setting.theme}-9`}
-              className="hover-scale-8"
-              icon={<TbPackageImport size={16} />}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={openDocxImportFilePicker}
-              style={{ padding: "4px" }}
-            />
-          )}
-        </Tooltip>
-        <input
-          ref={hwpxImportInputRef}
-          data-testid="hwpx-import-file-input"
-          type="file"
-          accept=".hwpx,application/hwp+zip"
-          onChange={handleHwpxImportFileChange}
-          style={{ display: "none" }}
-        />
-        <Tooltip
-          content={
-            <Typography size="xs" pretendard="M">
-              HWPX 불러오기
-            </Typography>
-          }
-          placement="bottom"
-          background={`${setting.theme}-7`}
-          color={`${setting.theme}-1`}
-          border={false}
-          style={withOverlayShadow()}
-        >
-          {withToolbarTestId(
-            "hwpx-import-button",
-            <Button
-              colorType="text"
-              color={`${setting.theme}-9`}
-              className="hover-scale-8"
-              icon={<TbPackageImport size={16} />}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={openHwpxImportFilePicker}
-              style={{ padding: "4px" }}
-            />
-          )}
         </Tooltip>
         <Tooltip
           content={

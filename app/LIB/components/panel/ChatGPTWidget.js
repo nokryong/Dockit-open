@@ -1,7 +1,7 @@
 import { VscOpenai } from "react-icons/vsc";
 import WidgetCard from "./WidgetCard";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import ChatTranscript from "./ChatTranscript";
 import {
   Button,
   Card,
@@ -367,11 +367,6 @@ export default function ChatGPTWidget({ dragHandleProps }) {
       setAttaching(false);
     }
   };
-  const messageList = useRef(null);
-  useEffect(() => {
-    if (messageList.current)
-      messageList.current.scrollTop = messageList.current.scrollHeight;
-  }, [messages]);
   const submit = async () => {
     if (
       loading ||
@@ -482,103 +477,17 @@ export default function ChatGPTWidget({ dragHandleProps }) {
 
         <Divider style={{ margin: 0 }} />
 
-        {/* 채팅영역 전체 */}
-        <div
-          ref={messageList}
-          aria-label="AI 대화"
-          className="flex flex-col gap-5 overflow-y-auto max-h-[350px] w-full text-[16px] pt-3"
+        <ChatTranscript
+          key={[
+            setting.aiProvider,
+            attachmentAccount,
+            messages[0]?.id ?? "empty",
+          ].join(":")}
+          messages={messages}
+          theme={setting.theme}
+          dark={isDarkMode}
         >
-          {messages.map((msg, index) => {
-            const isUser = msg.role === "user";
-            return (
-              <div
-                key={index}
-                className="flex gap-2 justify-start items-start w-full"
-                style={{
-                  flexDirection: isUser ? "row-reverse" : "row",
-                }}
-              >
-                <Div
-                  className="rounded-2xl p-2.5 inline-block whitespace-pre-wrap break-words"
-                  background={isUser ? `${setting.theme}-1` : "transparent"}
-                  color={isUser ? "white-1" : "black-9"}
-                  style={{
-                    maxWidth: "90%",
-                  }}
-                >
-                  {msg.attachments?.length > 0 && (
-                    <div className="mb-2 flex flex-wrap gap-1">
-                      {msg.attachments.map((file) => (
-                        <span
-                          key={file.id}
-                          className="inline-flex max-w-full min-w-0 items-center gap-1 rounded-lg border border-current/15 px-2 py-1"
-                        >
-                          <TbPaperclip size={14} className="shrink-0" />
-                          <Typography
-                            size="xs"
-                            className="truncate"
-                            title={file.name}
-                          >
-                            {file.name}
-                          </Typography>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <ReactMarkdown
-                    components={{
-                      ol: ({ children }) => (
-                        <ol style={{ listStylePosition: "inside", margin: 0 }}>
-                          {children}
-                        </ol>
-                      ),
-                      li: ({ children }) => (
-                        <li
-                          style={{
-                            marginBottom: "0.3em",
-                            whiteSpace: "pre-wrap",
-                          }}
-                        >
-                          {children}
-                        </li>
-                      ),
-                      p: ({ children }) => (
-                        <p
-                          style={{
-                            margin: 0,
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
-                          }}
-                        >
-                          {children}
-                        </p>
-                      ),
-                    }}
-                  >
-                    {msg.text || ""}
-                  </ReactMarkdown>
-                  {msg.image && (
-                    <div className="flex flex-col gap-2">
-                      <img
-                        src={msg.image}
-                        alt="생성된 이미지"
-                        style={{ maxWidth: "100%", borderRadius: 8 }}
-                      />
-                    </div>
-                  )}
-                  {!isUser && ["failed", "cancelled"].includes(msg.status) && (
-                    <div className="chatgpt-message-status">
-                      {msg.status === "cancelled"
-                        ? "응답 중지됨"
-                        : "응답 미완료"}
-                    </div>
-                  )}
-                </Div>
-              </div>
-            );
-          })}
-
-          {!loading && messages.at(-1)?.text && (
+          {loading && !messages.at(-1)?.text && (
             <div className="flex justify-start items-center w-full gap-2">
               <Typography
                 color={`${setting.theme}`}
@@ -587,7 +496,10 @@ export default function ChatGPTWidget({ dragHandleProps }) {
               >
                 <RxPencil2 />
                 <span className="">{activity}</span>
-                <span className="activity-dots inline-flex shrink-0" aria-hidden="true">
+                <span
+                  className="activity-dots inline-flex shrink-0"
+                  aria-hidden="true"
+                >
                   {[0, 1, 2].map((dot) => (
                     <LuDot key={dot} className="shrink-0" />
                   ))}
@@ -595,7 +507,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
               </Typography>
             </div>
           )}
-        </div>
+        </ChatTranscript>
 
         <Div
           className="rounded-xl p-1"

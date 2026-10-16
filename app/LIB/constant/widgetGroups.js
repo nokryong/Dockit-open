@@ -24,6 +24,11 @@ export const WIDGET_DRAWER_GROUPS = [
         "id": "specialChar"
       },
       {
+        "iconKey": "hanja",
+        "title": "한자",
+        "id": "hanjaPanel"
+      },
+      {
         "iconKey": "math",
         "title": "LATEX",
         "id": "latex"
@@ -39,11 +44,6 @@ export const WIDGET_DRAWER_GROUPS = [
         "id": "stylePreset"
       },
       {
-        "iconKey": "documentSearch",
-        "title": "내 문서",
-        "id": "referenceDoc"
-      },
-      {
         "iconKey": "command",
         "title": "단축키",
         "id": "shortcut"
@@ -57,19 +57,6 @@ export const WIDGET_DRAWER_GROUPS = [
         "iconKey": "edit",
         "title": "편집기",
         "id": "objectEditor"
-      }
-    ]
-  },
-  {
-    "id": "research",
-    "title": "자료 탐색",
-    "iconKey": "search",
-    "defaultExpanded": false,
-    "items": [
-      {
-        "iconKey": "hanja",
-        "title": "한자",
-        "id": "hanjaPanel"
       }
     ]
   },
@@ -95,32 +82,9 @@ export const WIDGET_DRAWER_GROUPS = [
         "id": "calculator"
       },
       {
-        "iconKey": "calendar",
-        "title": "달력",
-        "id": "calendar"
-      },
-      {
         "iconKey": "timer",
         "title": "타이머",
         "id": "timer"
-      }
-    ]
-  },
-  {
-    "id": "etc",
-    "title": "기타",
-    "iconKey": "apps",
-    "defaultExpanded": false,
-    "items": [
-      {
-        "iconKey": "dice",
-        "title": "주사위",
-        "id": "dice"
-      },
-      {
-        "iconKey": "music",
-        "title": "음악 플레이어",
-        "id": "musicPlayer"
       }
     ]
   }

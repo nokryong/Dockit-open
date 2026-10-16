@@ -85,6 +85,7 @@ const generatePrintableFixture = async (content) => {
   });
   const restoreGlobals = preserveAndInstallGlobals(dom);
   const vite = await createServer({
+    cacheDir: ".cache/vite-tests/n6c-note-durability-pdf",
     appType: "custom",
     logLevel: "error",
     optimizeDeps: { noDiscovery: true },

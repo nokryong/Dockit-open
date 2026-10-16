@@ -3,9 +3,12 @@
 import { useDocument } from "@/app/LIB/context/DocumentContext";
 import { useUser } from "@/app/LIB/context/UserContext";
 import { useSetting } from "@/app/LIB/context/SettingContext";
-import { useCallback, useEffect, useState, useMemo, useRef } from "react";
-import { Div, toast } from "sud-ui";
+import { useCodex } from '@/app/LIB/context/CodexContext';
+import { useCallback, useEffect, useLayoutEffect, useState, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
+import { Div, Button, Typography, toast } from "sud-ui";
 import ContentEditor from "@/app/LIB/components/write/ContentEditor";
+import { ToolbarSurface } from "@/app/LIB/components/common/toolbar/ToolbarPrimitives";
 import HwpxWarningDetailModal, {
   HwpxWarningDetailTrigger
 } from "@/app/LIB/components/docs/HwpxWarningDetailModal";
@@ -100,6 +103,54 @@ const createImportReadinessWarnings = (preview) => {
   return [...warnings, getBlockedWarningEntry()];
 };
 
+function CodexDocumentWorkNotice({ theme }) {
+  const { cancelResponse } = useCodex();
+  const anchorRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const overlay = overlayRef.current;
+    let scrollport = anchorRef.current?.parentElement;
+    while (scrollport && !/(auto|scroll|overlay)/.test(getComputedStyle(scrollport).overflowY)) {
+      scrollport = scrollport.parentElement;
+    }
+    if (!overlay || !scrollport) return;
+
+    const position = () => {
+      const rect = scrollport.getBoundingClientRect();
+      const left = Math.max(0, rect.left + scrollport.clientLeft);
+      const right = Math.min(window.innerWidth, rect.left + scrollport.clientLeft + scrollport.clientWidth);
+      overlay.style.left = `${(left + right) / 2}px`;
+      overlay.style.top = `${Math.max(0, rect.top + scrollport.clientTop) + 48}px`;
+      overlay.style.width = `${Math.max(0, right - left)}px`;
+      overlay.style.visibility = right > left ? 'visible' : 'hidden';
+    };
+    const observer = new ResizeObserver(position);
+    observer.observe(scrollport);
+    window.addEventListener('resize', position);
+    document.addEventListener('scroll', position, { capture: true, passive: true });
+    position();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', position);
+      document.removeEventListener('scroll', position, true);
+    };
+  }, []);
+
+  return <>
+    <span ref={anchorRef} hidden aria-hidden="true" />
+    {createPortal(
+    <div ref={overlayRef} className="pointer-events-none fixed z-90 flex -translate-x-1/2 justify-center px-3 print:hidden" style={{ visibility: 'hidden' }}>
+      <ToolbarSurface background="white-10" className="pointer-events-auto flex max-w-full items-center gap-3 rounded-4xl py-2 pr-2 pl-4" role="status">
+        <Typography size="sm" color={`${theme}-9`} className="min-w-0 break-keep">Codex 작업 중 · 문서 편집이 잠겨 있어요</Typography>
+        <Button size="sm" background="transparent" border={false} className="shrink-0" onClick={() => cancelResponse()}><Typography size="xs" className="underline">중단</Typography></Button>
+      </ToolbarSurface>
+    </div>,
+    document.body
+    )}
+  </>;
+}
+
 export default function WritePage() {
   const {
     document: currentDocument,
@@ -113,7 +164,9 @@ export default function WritePage() {
     setFocus,
     viewPage,
     pageNumber,
-    error
+    error,
+    codexDocumentLock,
+    externalDocumentVersion
   } = useDocument();
   const {
     setSaveAction,
@@ -404,6 +457,7 @@ export default function WritePage() {
   );
 
   const handleSave = useCallback(async () => {
+    if (codexDocumentLock) return true;
     if (currentDocument && content !== null && editor) {
       if (notePersistenceBlockedRef.current || notePersistenceBlocked) return false;
       const snapshot = captureNotePersistenceSnapshot(editor, content);
@@ -471,7 +525,8 @@ export default function WritePage() {
     blockNotePersistence,
     notePersistenceBlocked,
     saveDocument,
-    setFocus
+    setFocus,
+    codexDocumentLock
   ]);
 
   useEffect(() => registerLocalFlusher(async () => {
@@ -497,16 +552,21 @@ export default function WritePage() {
     printInFlightRef.current = true;
 
     try {
-      window.print();
+      if (window.dockitLocal) {
+        if (!window.dockitLocal.print) throw new Error("인쇄 기능을 적용하려면 앱을 다시 실행해주세요.");
+        await window.dockitLocal.print({ title: currentDocument?.title || "Dockit Open" });
+      } else {
+        window.print();
+      }
       return true;
     } catch (error) {
       console.error("Print preview failed:", error);
-      toast.danger("인쇄 미리 보기를 열 수 없습니다.");
+      toast.danger(error.message || "인쇄 미리 보기를 열 수 없습니다.");
       return false;
     } finally {
       printInFlightRef.current = false;
     }
-  }, []);
+  }, [currentDocument?.title]);
 
   const handlePrint = useCallback(async () => {
     const report = inspectPdfOutputPreflight();
@@ -1008,9 +1068,13 @@ export default function WritePage() {
     lastSavedContent.current = documentContentRef.current ?? null;
   }, [documentId]);
 
+  useEffect(() => {
+    if (externalDocumentVersion) lastSavedContent.current = currentDocument?.content ?? null;
+  }, [externalDocumentVersion, currentDocument?.content]);
+
   const doSaveDoc = useCallback(
     async (nextContent, nextFocus) => {
-      if (!documentId) return false;
+      if (!documentId || codexDocumentLock) return false;
       if (notePersistenceBlockedRef.current || notePersistenceBlocked) return false;
       const snapshot = captureNotePersistenceSnapshot(editor, nextContent);
       if (!snapshot.ok) {
@@ -1067,13 +1131,14 @@ export default function WritePage() {
       finishContentSave,
       blockNotePersistence,
       notePersistenceBlocked,
-      saveDocument
+      saveDocument,
+      codexDocumentLock
     ]
   );
 
   useEffect(() => {
     if (
-      setting.autoSave && editor &&
+      !codexDocumentLock && setting.autoSave && editor &&
       documentId &&
       debouncedContent !== null &&
       debouncedContent === content &&
@@ -1093,7 +1158,7 @@ export default function WritePage() {
         isCurrentSave = false;
       };
     }
-  }, [content, debouncedContent, documentId, doSaveDoc, editor, setting.autoSave]);
+  }, [content, debouncedContent, documentId, doSaveDoc, editor, setting.autoSave, codexDocumentLock]);
 
   useEffect(() => {
     if (error) {
@@ -1281,6 +1346,7 @@ export default function WritePage() {
 
   return (
     <Div className="doc-print-page-root flex flex-col items-center justify-center gap-2 py-12">
+      {codexDocumentLock && <CodexDocumentWorkNotice theme={setting.theme} />}
       {loading || content === null || pageMetrics === null ? (
         <DocumentLoadingAnimation />
       ) : (
@@ -1300,7 +1366,8 @@ export default function WritePage() {
               pageMetrics={pageMetrics}
               viewPage={viewPage}
               pageNumber={pageNumber}
-              editable={true}
+              editable={!codexDocumentLock}
+              codexLocked={Boolean(codexDocumentLock)}
               showRulers={true}
             />
           </div>

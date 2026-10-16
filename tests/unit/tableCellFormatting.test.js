@@ -5,13 +5,9 @@ import { Editor } from "@tiptap/core";
 import { readFileSync } from "node:fs";
 import { editorExtensions } from "../../app/LIB/constant/editorExtensions";
 
-vi.mock("@excalidraw/excalidraw/index.css", () => ({}));
 
-vi.mock("@excalidraw/excalidraw", () => ({
-  Excalidraw: function MockExcalidraw() {
-    return null;
-  }
-}));
+
+
 
 vi.mock("../../app/LIB/extensions/DiagramBlockView.js", () => ({
   default: function MockDiagramBlockView() {

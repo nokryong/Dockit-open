@@ -47,12 +47,6 @@ import {
   createSemanticSelectionAnchor,
   resolveSemanticSelectionAnchor
 } from "../../utils/semanticSelectionUtils";
-import SemanticAttributesEditor from "../common/semantic/SemanticAttributesEditor";
-import {
-  getSemanticEditorTargetSignature,
-  getTextSemanticEditorTarget,
-  resolveSemanticEditorTarget
-} from "../../utils/semanticEditorUtils";
 
 const defaultPromptPosition = {
   top: 80,
@@ -93,10 +87,6 @@ export default function TypeBubble({
   const { layoutMode } = useLayout();
   const { user } = useUser();
   const [hasSelection, setHasSelection] = useState(false);
-  const [hasSemanticTarget, setHasSemanticTarget] = useState(false);
-  const [isSemanticPanelOpen, setIsSemanticPanelOpen] = useState(false);
-  const [semanticTarget, setSemanticTarget] = useState(null);
-  const [semanticSelection, setSemanticSelection] = useState(null);
   const editorRef = useRef(editor);
   const documentOperationEditorRef = useRef(null);
   const documentOperationExecutorRef = useRef(null);
@@ -215,23 +205,13 @@ export default function TypeBubble({
   const [linkPromptPosition, setLinkPromptPosition] = useState(
     defaultPromptPosition
   );
-  const [semanticPromptPosition, setSemanticPromptPosition] = useState(
-    defaultPromptPosition
-  );
   const linkPromptRef = useRef(null);
-  const semanticPromptRef = useRef(null);
 
   const closeLinkPrompt = useCallback(() => {
     setIsLinkPromptOpen(false);
     setLinkUrl("");
     setLinkSelection(null);
     setLinkHadActiveMark(false);
-  }, []);
-
-  const closeSemanticPanel = useCallback(() => {
-    setIsSemanticPanelOpen(false);
-    setSemanticTarget(null);
-    setSemanticSelection(null);
   }, []);
 
   const getPromptPosition = useCallback(
@@ -289,21 +269,6 @@ export default function TypeBubble({
     const update = () => {
       const { selection } = editor.state;
       setHasSelection(!selection.empty && !selection.node);
-      const nextSemanticTarget = getTextSemanticEditorTarget(editor.state);
-      setHasSemanticTarget(Boolean(nextSemanticTarget));
-
-      if (isSemanticPanelOpen && semanticTarget) {
-        const targetStillExists = resolveSemanticEditorTarget(
-          editor.state.doc,
-          semanticTarget
-        );
-        const selectionMatchesTarget =
-          getSemanticEditorTargetSignature(nextSemanticTarget) ===
-          getSemanticEditorTargetSignature(semanticTarget);
-        if (!targetStillExists || !selectionMatchesTarget) {
-          closeSemanticPanel();
-        }
-      }
     };
     update();
     editor.on("selectionUpdate", update);
@@ -312,7 +277,7 @@ export default function TypeBubble({
       editor.off("selectionUpdate", update);
       editor.off("transaction", update);
     };
-  }, [closeSemanticPanel, editor, isSemanticPanelOpen, semanticTarget]);
+  }, [editor]);
 
   useEffect(() => {
     if (!hasSelection && isLinkPromptOpen) closeLinkPrompt();
@@ -345,45 +310,8 @@ export default function TypeBubble({
     };
   }, [editor, getPromptPosition, isLinkPromptOpen, layoutMode, linkSelection]);
 
-  useEffect(() => {
-    if (
-      !isSemanticPanelOpen ||
-      layoutMode === "mobile" ||
-      !editor ||
-      !semanticSelection
-    ) {
-      return;
-    }
-
-    const updatePromptPosition = () => {
-      setSemanticPromptPosition(
-        getPromptPosition(semanticSelection, semanticPromptRef, 360)
-      );
-    };
-
-    updatePromptPosition();
-
-    window.addEventListener("resize", updatePromptPosition);
-    window.addEventListener("scroll", updatePromptPosition, true);
-
-    return () => {
-      window.removeEventListener("resize", updatePromptPosition);
-      window.removeEventListener("scroll", updatePromptPosition, true);
-    };
-  }, [
-    editor,
-    getPromptPosition,
-    isSemanticPanelOpen,
-    layoutMode,
-    semanticSelection
-  ]);
-
   const handleLinkButtonClick = () => {
     if (!editor) return;
-
-    if (isSemanticPanelOpen) {
-      closeSemanticPanel();
-    }
 
     if (isLinkPromptOpen) {
       closeLinkPrompt();
@@ -406,30 +334,6 @@ export default function TypeBubble({
     setLinkUrl(currentHref);
     setLinkHadActiveMark(Boolean(currentHref));
     setIsLinkPromptOpen(true);
-  };
-
-  const handleSemanticButtonClick = () => {
-    if (!editor) return;
-
-    if (isSemanticPanelOpen) {
-      closeSemanticPanel();
-      return;
-    }
-
-    if (isLinkPromptOpen) {
-      closeLinkPrompt();
-    }
-
-    const target = getTextSemanticEditorTarget(editor.state);
-    if (!target) {
-      toast.danger("한 문단이나 제목 안에 커서 또는 선택 영역을 놓아 주세요.");
-      return;
-    }
-
-    const { selection } = editor.state;
-    setSemanticTarget(target);
-    setSemanticSelection({ from: selection.from, to: selection.to });
-    setIsSemanticPanelOpen(true);
   };
 
   const handleSetLink = () => {
@@ -655,46 +559,8 @@ export default function TypeBubble({
     </Div>
   ) : null;
 
-  const semanticPromptPanel =
-    isSemanticPanelOpen && semanticTarget ? (
-      <Div
-        className="flex w-full flex-col"
-        style={{ width: layoutMode === "mobile" ? "100%" : "420px" }}
-      >
-        <SemanticAttributesEditor
-          editor={editor}
-          target={semanticTarget}
-          compact
-          onRequestClose={closeSemanticPanel}
-        />
-      </Div>
-    ) : null;
-
   const toolbarButtons = (
     <>
-      {hasSemanticTarget && hasSelection && (
-        <ToolbarIconButton
-          label={
-            <Typography size="xs" pretendard="B">
-              구조
-            </Typography>
-          }
-          onClick={handleSemanticButtonClick}
-          active={isSemanticPanelOpen}
-          theme={setting.theme}
-          tooltip="문서 구조"
-          skipEditorCheck
-          data-testid="semantic-structure-button"
-        />
-      )}
-      {hasSemanticTarget && hasSelection && (
-        <ToolbarDivider
-          height="20px"
-          margin="7px"
-          borderColor="white-7"
-          borderWeight={2}
-        />
-      )}
       {hasSelection &&
         btnConfigs.map((btn) => {
           const isDivider = btn.name.includes("divider");
@@ -751,11 +617,7 @@ export default function TypeBubble({
   }, [editor]);
 
   if (layoutMode === "mobile") {
-    if (
-      !hasSelection &&
-      !isLinkPromptOpen &&
-      !isSemanticPanelOpen
-    ) {
+    if (!hasSelection && !isLinkPromptOpen) {
       return null;
     }
     return createPortal(
@@ -782,11 +644,6 @@ export default function TypeBubble({
             {linkPromptPanel}
           </ToolbarSurface>
         )}
-        {isSemanticPanelOpen && (
-          <ToolbarSurface className="p-2 rounded-2xl" style={{}}>
-            {semanticPromptPanel}
-          </ToolbarSurface>
-        )}
       </ToolbarSurface>,
       document.body
     );
@@ -806,24 +663,6 @@ export default function TypeBubble({
         }}
       >
         {linkPromptPanel}
-      </ToolbarSurface>,
-      document.body
-    );
-
-  const semanticPromptOverlay =
-    isSemanticPanelOpen &&
-    createPortal(
-      <ToolbarSurface
-        ref={semanticPromptRef}
-        className="p-2 rounded-2xl"
-        style={{
-          position: "fixed",
-          top: semanticPromptPosition.top,
-          left: semanticPromptPosition.left,
-          zIndex: 1200
-        }}
-      >
-        {semanticPromptPanel}
       </ToolbarSurface>,
       document.body
     );
@@ -884,7 +723,6 @@ export default function TypeBubble({
         {bubbleContent}
       </BubbleMenu>
       {linkPromptOverlay}
-      {semanticPromptOverlay}
     </>
   );
 }

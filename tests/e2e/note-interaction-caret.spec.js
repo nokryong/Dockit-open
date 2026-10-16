@@ -11,6 +11,7 @@ test.beforeAll(async () => {
     return;
   }
   vite = await createServer({
+    cacheDir: ".cache/vite-tests/note-interaction-caret",
     configFile: false,
     root: process.cwd(),
     logLevel: "error",

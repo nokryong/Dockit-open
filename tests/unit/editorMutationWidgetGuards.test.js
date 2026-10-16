@@ -64,10 +64,6 @@ vi.mock("../../app/LIB/components/panel/EditorComponent/TableEditor", () => ({
   default: () => h("div", null, "table editor")
 }));
 
-vi.mock("../../app/LIB/components/common/semantic/SemanticAttributesEditor", () => ({
-  default: () => h("div", { "data-testid": "semantic-editor" }, "semantic editor")
-}));
-
 vi.mock("../../app/LIB/constant/uiProps", () => ({
   inputProps: {},
   newShadowDarkSm: {},

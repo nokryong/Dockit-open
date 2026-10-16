@@ -5,6 +5,7 @@ import { fetchData, fetchDocumentContent, updateData } from "../utils/dataUtils"
 
 import html2canvas from "html2canvas";
 import { useSaveQueue } from "../hook/useSaveQueue";
+import { captureNotePersistenceSnapshot } from '../utils/notePersistenceGate';
 
 const DocumentContext = createContext(null);
 const PX_PER_MM = 96 / 25.4;
@@ -38,6 +39,14 @@ export function DocumentProvider({ children }) {
   const latestLoadRequestRef = useRef(0);
   const currentDocumentIdRef = useRef(null);
   const lastSaveConflictRef = useRef(null);
+  const codexLockRef = useRef(null);
+  const [codexDocumentLock, setCodexDocumentLock] = useState(null);
+  const [externalDocumentVersion, setExternalDocumentVersion] = useState(0);
+  const guard = useCallback(setter => value => { if (!codexLockRef.current) setter(value); }, []);
+  const guardedSetters = useMemo(() => ({
+    setTitle: guard(setTitle), setContent: guard(setContent), setDocSetting: guard(setDocSetting),
+    setBulletStyle: guard(setBulletStyle), setViewPage: guard(setViewPage), setPageNumber: guard(setPageNumber), setFocus: guard(setFocus)
+  }), [guard]);
 
 
   useEffect(() => {
@@ -153,12 +162,14 @@ export function DocumentProvider({ children }) {
   }, []);
 
   const applyDocumentState = useCallback((nextDocument) => {
+    currentDocumentIdRef.current = nextDocument?._id || null;
+    latestStateRef.current = nextDocument;
     setDocument(nextDocument);
     setError(false);
     setTitle(nextDocument?.title || "");
     setContent(nextDocument?.content || "");
-    setDocSetting(nextDocument?.docSetting || null);
-    setBulletStyle(nextDocument?.bulletStyle || null);
+    setDocSetting(previous => JSON.stringify(previous) === JSON.stringify(nextDocument?.docSetting || null) ? previous : nextDocument?.docSetting || null);
+    setBulletStyle(previous => JSON.stringify(previous) === JSON.stringify(nextDocument?.bulletStyle || null) ? previous : nextDocument?.bulletStyle || null);
     setThumbnail(nextDocument?.thumbnail || null);
 
     setViewPage(nextDocument?.viewPage ?? true);
@@ -362,8 +373,59 @@ export function DocumentProvider({ children }) {
     isSaving,
     hasQueuedSave,
     lastSaveResult,
-    save: saveDocument
+    save: queueSaveDocument
   } = useSaveQueue(handleSaveProcess);
+
+  const saveDocument = useCallback((id, ...args) => {
+    if (codexLockRef.current) return Promise.resolve(false);
+    return queueSaveDocument(id, ...args);
+  }, [queueSaveDocument]);
+
+  const applyCodexDocument = useCallback(nextDocument => {
+    if (!nextDocument?._id || nextDocument._id !== codexLockRef.current?.id) return;
+    documentCacheRef.current.set(nextDocument._id, nextDocument);
+    if (currentDocumentIdRef.current === nextDocument._id) {
+      applyDocumentState(nextDocument);
+      lastSaveConflictRef.current = null;
+      setLastSaveConflict(null);
+      setExternalDocumentVersion(version => version + 1);
+    }
+  }, [applyDocumentState]);
+
+  const finishCodexDocument = useCallback(() => {
+    const activeEditor = codexLockRef.current?.editor;
+    if (activeEditor?.storage?.codexDocumentLock) activeEditor.storage.codexDocumentLock.locked = false;
+    codexLockRef.current = null;
+    setCodexDocumentLock(null);
+  }, []);
+
+  const restoreCodexDocumentLock = useCallback(id => {
+    if (!id || codexLockRef.current) return;
+    codexLockRef.current = { id };
+    setCodexDocumentLock({ id });
+  }, []);
+
+  const prepareCodexDocument = useCallback(async editor => {
+    if (codexLockRef.current) throw new Error('Codex가 문서를 작업 중입니다.');
+    const id = currentDocumentIdRef.current;
+    if (!id) return null;
+    if (!editor || editor.isDestroyed || !editor.storage.codexDocumentLock) throw new Error('문서 편집기가 준비된 뒤 다시 보내주세요.');
+    const lock = { id, editor };
+    codexLockRef.current = lock;
+    setCodexDocumentLock({ id });
+    editor.storage.codexDocumentLock.locked = true;
+    editor.setEditable(false, false);
+    try {
+      const snapshot = captureNotePersistenceSnapshot(editor);
+      if (!snapshot.ok) throw new Error('문서를 저장할 수 없습니다. 문서 형식을 확인해주세요.');
+      setContent(snapshot.html);
+      // The final immediate entry drains earlier title/settings/autosave entries.
+      const saved = await queueSaveDocument(id, { ...latestStateRef.current, content: snapshot.html, focus: editor.state.selection.anchor }, true);
+      if (!saved) throw new Error('문서를 저장하지 못해 Codex 작업을 시작하지 않았습니다.');
+      await window.dockitLocal?.flush();
+      return { id, revision: documentCacheRef.current.get(id)?.revision };
+    } catch (error) { finishCodexDocument(); throw error; }
+  }, [queueSaveDocument, finishCodexDocument]);
 
   const getLastSaveConflict = useCallback((documentId) => {
     const conflict = lastSaveConflictRef.current;
@@ -442,6 +504,13 @@ export function DocumentProvider({ children }) {
       setPageNumber,
       focus,
       setFocus,
+      ...guardedSetters,
+      codexDocumentLock,
+      externalDocumentVersion,
+      prepareCodexDocument,
+      applyCodexDocument,
+      finishCodexDocument,
+      restoreCodexDocumentLock,
     }),
     [
       document,
@@ -464,6 +533,13 @@ export function DocumentProvider({ children }) {
       viewPage,
       pageNumber,
       focus,
+      guardedSetters,
+      codexDocumentLock,
+      externalDocumentVersion,
+      prepareCodexDocument,
+      applyCodexDocument,
+      finishCodexDocument,
+      restoreCodexDocumentLock,
     ]
   );
   // 주석

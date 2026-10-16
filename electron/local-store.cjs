@@ -67,12 +67,17 @@ class LocalStore {
     this.trash = trash;
     this.queue = Promise.resolve();
     this.documentPaths = new Map();
+    this.documentLocks = new Map();
     this.indexDirty = false;
   }
 
   async init() {
     await contained(path.dirname(this.root), this.root);
     await fs.mkdir(this.root, { recursive: true });
+    const guidance = await contained(this.root, path.join(this.root, 'AGENTS.md'));
+    try {
+      await fs.writeFile(guidance, await fs.readFile(path.join(__dirname, '..', 'docs', 'codex', 'AGENTS.md')), { flag: 'wx', mode: 0o600 });
+    } catch (error) { if (error.code !== 'EEXIST') throw error; }
     for (const dir of [...Object.values(FEATURES), 'backups']) {
       const folder = await contained(this.root, path.join(this.root, dir));
       await fs.mkdir(folder, { recursive: true });
@@ -103,6 +108,7 @@ class LocalStore {
   flush() { return this.queue; }
   async changeDocuments(folder) {
     return this.run(async () => {
+      if (this.documentLocks.size) throw fail('Codex 작업이 끝난 뒤 문서 폴더를 변경해주세요.', 'DocumentLocked');
       if (!path.isAbsolute(folder)) throw fail('문서 폴더를 선택해 주세요.');
       await contained(folder, folder);
       if (!(await fs.stat(folder)).isDirectory()) throw fail('폴더가 아닙니다.');
@@ -222,6 +228,9 @@ class LocalStore {
   }
 
   async execute(action, { type, id, parentId = null, data = {}, title, sortBy = 'updated_at', sortOrder = -1 } = {}) {
+    if (this.documentLocks.size && ['documents', 'folders'].includes(type) && ['update', 'delete', 'move'].includes(action)) {
+      if (type === 'folders' || this.documentLocks.has(id)) throw fail('Codex가 문서를 작업 중입니다.', 'DocumentLocked');
+    }
     if (!['list', 'get', 'create', 'update', 'delete', 'move', 'tree'].includes(action)) throw fail('지원하지 않는 작업입니다.');
     if (!object(data)) throw fail('저장 데이터가 올바르지 않습니다.');
     if (action === 'tree') return this.tree(parentId);

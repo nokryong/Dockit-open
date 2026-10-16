@@ -7,6 +7,8 @@ const { LocalStore, contained } = require('./local-store.cjs');
 const { ChatGPTClient, safeFailure } = require('./chatgpt-client.cjs');
 const { CodexClient, safeFailure: codexFailure } = require('./codex-client.cjs');
 const { extensions } = require('./chat-attachments.cjs');
+const { WindowsPrintService } = require('./windows-print.cjs');
+const { FONT_ORIGINS, STYLE_ORIGINS, readFontAsset } = require('./font-assets.cjs');
 
 const testMode = process.argv.includes('--test-mode');
 let devOrigin = null;
@@ -68,7 +70,19 @@ else app.whenReady().then(async () => {
   chatHandle('clear-history', () => chatgpt.clearHistory());
   chatHandle('send', (text, attachments) => chatgpt.send(text, attachments));
   chatHandle('cancel-response', () => chatgpt.cancelResponse());
-  codex = new CodexClient({ root: store.root, openExternal: url => shell.openExternal(url),
+  const { CodexDocuments } = require('./codex-documents.cjs');
+  const validations = new Map();
+  const emitCodex = event => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('codex:event', event); };
+  const documents = new CodexDocuments({ store, emit: emitCodex, validate: record => new Promise((resolve, reject) => {
+    const requestId = require('node:crypto').randomUUID();
+    const timer = setTimeout(() => { validations.delete(requestId); reject(Object.assign(new Error('문서 편집기의 응답을 확인하지 못했습니다.'), { dockit: true, code: 'document_validation' })); }, 10_000);
+    validations.set(requestId, result => { clearTimeout(timer); validations.delete(requestId); resolve(result); });
+    emitCodex({ type: 'document-validate', requestId, document: record });
+  }) });
+  handle('codex:document-validation', (requestId, result) => {
+    validations.get(requestId)?.({ ok: result?.ok === true, message: typeof result?.message === 'string' ? result.message.slice(0, 500) : undefined });
+  });
+  codex = new CodexClient({ root: store.root, documents, openExternal: url => shell.openExternal(url),
     emit: event => { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('codex:event', event); }
   });
   const codexHandle = (name, callback) => handle(`codex:${name}`, async (...args) => {
@@ -86,7 +100,7 @@ else app.whenReady().then(async () => {
   codexHandle('usage', () => codex.readUsage());
   codexHandle('history', kind => codex.history(kind));
   codexHandle('clear-history', kind => codex.clearHistory(kind));
-  codexHandle('send', (text, attachments) => codex.send(text, 'chat', undefined, attachments));
+  codexHandle('send', (text, attachments, document) => codex.send(text, 'chat', undefined, attachments, document));
   codexHandle('generate-image', (text, reference) => codex.send(text, 'image', reference));
   codexHandle('cancel-response', kind => codex.cancelResponse(kind));
   codexHandle('copy-image', async id => {
@@ -123,13 +137,12 @@ else app.whenReady().then(async () => {
   // Permit web-font resources and, in development, the loopback Vite server.
   session.defaultSession.webRequest.onBeforeRequest({ urls: ['http://*/*', 'https://*/*', 'ws://*/*', 'wss://*/*'] }, (details, callback) => {
     const url = new URL(details.url);
-    const fontOrigins = ['https://cdn.jsdelivr.net', 'https://gcore.jsdelivr.net', 'https://hangeul.pstatic.net', 'https://fonts.gstatic.com'];
-    const styleOrigins = ['https://cdn.jsdelivr.net', 'https://gcore.jsdelivr.net', 'https://hangeul.pstatic.net', 'https://fonts.googleapis.com'];
-    const isWebFont = (details.resourceType === 'font' && fontOrigins.includes(url.origin)) || (details.resourceType === 'stylesheet' && styleOrigins.includes(url.origin));
+    const isWebFont = (details.resourceType === 'font' && FONT_ORIGINS.includes(url.origin)) || (details.resourceType === 'stylesheet' && STYLE_ORIGINS.includes(url.origin));
     const isDevServer = devOrigin && (url.origin === devOrigin || url.origin === devOrigin.replace('http:', 'ws:'));
     callback({ cancel: !isWebFont && !isDevServer });
   });
   handle('local:paths', async () => ({ dataPath: store.root, documentsPath: (await store.config()).documentsPath }));
+  handle('local:font-asset', url => readFontAsset(url));
   handle('local:choose-chat-attachments', async provider => {
     if (!['chatgpt', 'codex'].includes(provider)) throw new Error('연결 방식을 확인해주세요.');
     const result = await dialog.showOpenDialog(mainWindow, { title: '파일 첨부', properties: ['openFile', 'multiSelections'], filters: [{ name: '지원하는 파일', extensions: extensions(provider) }] });
@@ -171,6 +184,13 @@ else app.whenReady().then(async () => {
   handle('local:window-maximize', () => mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize());
   handle('local:window-is-maximized', () => mainWindow.isMaximized());
   handle('local:window-close', () => mainWindow.close());
+  const printing = new WindowsPrintService({ getWindow: () => mainWindow, root: store.root });
+  handle('local:print', options => process.platform === 'win32' ? printing.print(options) : new Promise((resolve, reject) => {
+    mainWindow.webContents.print({ silent: false, printBackground: true }, (success, reason) => {
+      if (success || /cancel/i.test(reason || '')) resolve({ cancelled: !success });
+      else reject(new Error(reason || '인쇄창을 열지 못했습니다.'));
+    });
+  }));
 
   Menu.setApplicationMenu(null);
   mainWindow = new BrowserWindow({ width: 1440, height: 960, minWidth: 640, minHeight: 500, title: 'Dockit Open', frame: false, show: !testMode, backgroundColor: '#ffffff', webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
