@@ -7,9 +7,9 @@ The listed licenses apply only to their respective third-party components. They 
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: b4b7cda89edc3b13bae49dfc799561b2ae4ccd1d3233a1f57d7d8f7c2071c665
-Included non-dev lock entries: 593
-Unique third-party package name/version pairs: 579
+package-lock.json SHA-256: 22da8d9d2c6f6203d41252cea936453ad38b0f8cdada0fdbede8be62fcf9ca99
+Included non-dev lock entries: 453
+Unique third-party package name/version pairs: 441
 Owner-controlled lock entries excluded from this notice: 1
 Fallback/missing-evidence records: 0
 
@@ -44,65 +44,6 @@ react-icons is MIT-licensed, while each source icon project retains its own lice
 PACKAGE INDEX
 ================================================================================
 
-@ant-design/colors@8.0.1
-  License: MIT
-  Source: https://github.com/ant-design/ant-design-colors
-  Evidence: collected
-  Lockfile instances: 1
-  Author: afc163 <afc163@gmail.com>
-  Included files: LICENSE (a00104af602c87cb0bce9742008e39800c8d1b64940b0e9dc124b60a3f7ab475)
-
-@ant-design/cssinjs-utils@2.0.2
-  License: MIT
-  Source: https://github.com/ant-design/cssinjs-util
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@ant-design/cssinjs@1.24.0
-  License: MIT
-  Source: https://github.com/ant-design/cssinjs
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@ant-design/cssinjs@2.0.3
-  License: MIT
-  Source: https://github.com/ant-design/cssinjs
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@ant-design/fast-color@3.0.0
-  License: MIT
-  Source: https://github.com/ant-design/fast-color
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Guo Yunhe <i@guoyunhe.me> (https://guoyunhe.me/)
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@ant-design/icons-svg@4.4.2
-  License: MIT
-  Source: https://github.com/ant-design/ant-design-icons
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: none; package metadata or reviewed override is retained
-
-@ant-design/icons@6.1.0
-  License: MIT
-  Source: https://github.com/ant-design/ant-design-icons/tree/master/packages/icons-react
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (a00104af602c87cb0bce9742008e39800c8d1b64940b0e9dc124b60a3f7ab475)
-
-@ant-design/react-slick@2.0.0
-  License: MIT
-  Source: https://github.com/ant-design/react-slick
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kiran Abburi
-  Included files: LICENSE (8e7a0e17a14c91d325c22a8ade50da3aaa5a97e321beebbdce77d63fc719a1c2)
-
 @antfu/install-pkg@1.1.0
   License: MIT
   Source: https://github.com/antfu/install-pkg
@@ -110,94 +51,6 @@ PACKAGE INDEX
   Lockfile instances: 1
   Author: Anthony Fu <anthonyfu117@hotmail.com>
   Included files: LICENSE (665f7d320f283fea91448fa8fd17e17f129b7aedc9cecdc45d0b7bb0eb9b28cc)
-
-@babel/code-frame@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/generator@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/helper-globals@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/helper-module-imports@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/helper-string-parser@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/helper-validator-identifier@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/parser@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (5937a76954e9322bac4f3ada3634b2d01cdf22bd05c630f7ec672c5487a8182f)
-
-@babel/runtime@7.28.6
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/template@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/traverse@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
-
-@babel/types@7.29.7
-  License: MIT
-  Source: https://github.com/babel/babel
-  Evidence: collected
-  Lockfile instances: 1
-  Author: The Babel Team (https://babel.dev/team)
-  Included files: LICENSE (8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2)
 
 @braintree/sanitize-url@7.1.2
   License: MIT
@@ -246,107 +99,6 @@ PACKAGE INDEX
   Author: Claudéric Demers
   Included files: LICENSE (6fdf84a73d062925aa339ef281196dfee3bd73aa825739c7fdc349b360f46993)
 
-@emotion/babel-plugin@11.13.5
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/babel-plugin
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kye Hohenberger
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/cache@11.14.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/cache
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/css@11.13.5
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/css
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kye Hohenberger
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/hash@0.8.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/master/packages/hash
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/hash@0.9.2
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/hash
-  Evidence: collected
-  Lockfile instances: 2
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/memoize@0.9.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/memoize
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/react@11.14.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/react
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Emotion Contributors
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/serialize@1.3.3
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/serialize
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/sheet@1.4.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/sheet
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/unitless@0.10.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/unitless
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/unitless@0.7.5
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/master/packages/unitless
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/use-insertion-effect-with-fallbacks@1.2.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/use-insertion-effect-with-fallbacks
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/utils@1.4.2
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/utils
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
-@emotion/weak-memoize@0.4.0
-  License: MIT
-  Source: https://github.com/emotion-js/emotion/tree/main/packages/weak-memoize
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280)
-
 @fast-csv/format@4.3.5
   License: MIT
   Source: https://github.com/C2FO/fast-csv
@@ -363,7 +115,7 @@ PACKAGE INDEX
   Author: doug-martin <doug@dougamartin.com>
   Included files: LICENSE (2450088d1769a2b36e210a5a345a55b209944f4c6a9a89f7ce3aaba163680a42)
 
-@floating-ui/core@1.7.5
+@floating-ui/core@1.8.0
   License: MIT
   Source: https://github.com/floating-ui/floating-ui
   Evidence: collected
@@ -371,7 +123,7 @@ PACKAGE INDEX
   Author: atomiks
   Included files: LICENSE (6c1117dc530c1ffcffb309e6bd53f333c2620453285327bde5ce91516eee1011)
 
-@floating-ui/dom@1.7.6
+@floating-ui/dom@1.8.0
   License: MIT
   Source: https://github.com/floating-ui/floating-ui
   Evidence: collected
@@ -379,7 +131,7 @@ PACKAGE INDEX
   Author: atomiks
   Included files: LICENSE (6c1117dc530c1ffcffb309e6bd53f333c2620453285327bde5ce91516eee1011)
 
-@floating-ui/utils@0.2.11
+@floating-ui/utils@0.2.12
   License: MIT
   Source: https://github.com/floating-ui/floating-ui
   Evidence: collected
@@ -433,38 +185,6 @@ PACKAGE INDEX
   Author: Vjacheslav Trushkin
   Included files: license.txt (a86793ac023162ce98b91899601c15f6712f44943163c4f92a0a4bf89152b3bf)
 
-@jridgewell/gen-mapping@0.3.13
-  License: MIT
-  Source: https://github.com/jridgewell/sourcemaps
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Justin Ridgewell <justin@ridgewell.name>
-  Included files: LICENSE (928e59141142e3b9b68a2403e490c6a73ac90833066c5d6f876e2de108e06865)
-
-@jridgewell/resolve-uri@3.1.2
-  License: MIT
-  Source: https://github.com/jridgewell/resolve-uri
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Justin Ridgewell <justin@ridgewell.name>
-  Included files: LICENSE (b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab)
-
-@jridgewell/sourcemap-codec@1.5.5
-  License: MIT
-  Source: https://github.com/jridgewell/sourcemaps
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Justin Ridgewell <justin@ridgewell.name>
-  Included files: LICENSE (928e59141142e3b9b68a2403e490c6a73ac90833066c5d6f876e2de108e06865)
-
-@jridgewell/trace-mapping@0.3.31
-  License: MIT
-  Source: https://github.com/jridgewell/sourcemaps
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Justin Ridgewell <justin@ridgewell.name>
-  Included files: LICENSE (928e59141142e3b9b68a2403e490c6a73ac90833066c5d6f876e2de108e06865)
-
 @lottiefiles/react-lottie-player@3.6.0
   License: MIT
   Source: https://github.com/LottieFiles/lottie-react
@@ -481,320 +201,6 @@ PACKAGE INDEX
   Author: Yokozuna59
   Included files: LICENSE (d872b89e34b794519bb00f82dbad5710435fe5eb37a0a80ed0b72a92db47ced5)
 
-@rc-component/async-validator@5.1.0
-  License: MIT
-  Source: https://github.com/react-component/async-validator
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/cascader@1.11.0
-  License: MIT
-  Source: https://github.com/react-component/cascader
-  Evidence: collected
-  Lockfile instances: 1
-  Author: afc163@gmail.com
-  Included files: LICENSE.md (420804296afd6233a4593910942e843b35df2133cd30cbd08173ce922d4dbad0)
-
-@rc-component/checkbox@1.0.1
-  License: MIT
-  Source: https://github.com/react-component/checkbox
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (3fefe89002bfade435e706a0c93f22c8ca326fbcdb479a849b36dc00b895853e)
-
-@rc-component/collapse@1.2.0
-  License: MIT
-  Source: https://github.com/react-component/collapse
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/color-picker@3.0.3
-  License: MIT
-  Source: https://github.com/react-component/color-picker
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (aa9ce8bad1af7244867385a0b9c3a3f13b3f9c1dba6bc29f275a66075203dc6f)
-
-@rc-component/context@2.0.1
-  License: MIT
-  Source: https://github.com/react-component/context
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/dialog@1.8.0
-  License: MIT
-  Source: https://github.com/react-component/dialog
-  Evidence: collected
-  Lockfile instances: 1
-  Author: yiminghe@gmail.com
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/drawer@1.4.0
-  License: MIT
-  Source: https://github.com/react-component/drawer
-  Evidence: collected
-  Lockfile instances: 1
-  Author: 155259966@qq.com
-  Included files: LICENSE (a57f8fe084177ae391bbe1dab0944b298e87674f3b064fceb6d6c933ae8c5923)
-
-@rc-component/dropdown@1.0.2
-  License: MIT
-  Source: https://github.com/react-component/dropdown
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@rc-component/form@1.6.2
-  License: MIT
-  Source: https://github.com/react-component/field-form
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE (8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654)
-
-@rc-component/image@1.6.0
-  License: MIT
-  Source: https://github.com/react-component/image
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (06af38d559a6264a5e99521e1b754ac1e9ffcf24e88dbd09528b1bec862c627a)
-
-@rc-component/input-number@1.6.2
-  License: MIT
-  Source: https://github.com/react-component/input-number
-  Evidence: collected
-  Lockfile instances: 1
-  Author: tsjxyz@gmail.com
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/input@1.1.2
-  License: MIT
-  Source: https://github.com/react-component/input
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/mentions@1.6.0
-  License: MIT
-  Source: https://github.com/react-component/mentions
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (aa9ce8bad1af7244867385a0b9c3a3f13b3f9c1dba6bc29f275a66075203dc6f)
-
-@rc-component/menu@1.2.0
-  License: MIT
-  Source: https://github.com/react-component/menu
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/mini-decimal@1.1.0
-  License: MIT
-  Source: https://github.com/react-component/mini-decimal
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE (8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654)
-
-@rc-component/motion@1.1.6
-  License: MIT
-  Source: https://github.com/react-component/motion
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/mutate-observer@2.0.1
-  License: MIT
-  Source: https://github.com/react-component/mutate-observer
-  Evidence: collected
-  Lockfile instances: 1
-  Author: 574980606@qq.com
-  Included files: LICENSE (8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654)
-
-@rc-component/notification@1.2.0
-  License: MIT
-  Source: https://github.com/react-component/notification
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/overflow@1.0.0
-  License: MIT
-  Source: https://github.com/react-component/overflow
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/pagination@1.2.0
-  License: MIT
-  Source: https://github.com/react-component/pagination
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/picker@1.9.0
-  License: MIT
-  Source: https://github.com/react-component/picker
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/portal@2.2.0
-  License: MIT
-  Source: https://github.com/react-component/portal
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE (8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654)
-
-@rc-component/progress@1.0.2
-  License: MIT
-  Source: https://github.com/react-component/progress
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/qrcode@1.1.1
-  License: MIT
-  Source: https://github.com/react-component/qrcode
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@rc-component/rate@1.0.1
-  License: MIT
-  Source: https://github.com/react-component/rate
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/resize-observer@1.1.1
-  License: MIT
-  Source: https://github.com/react-component/resize-observer
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/segmented@1.3.0
-  License: MIT
-  Source: https://github.com/react-component/segmented
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/select@1.5.0
-  License: MIT
-  Source: https://github.com/react-component/select
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (420804296afd6233a4593910942e843b35df2133cd30cbd08173ce922d4dbad0)
-
-@rc-component/slider@1.0.1
-  License: MIT
-  Source: https://github.com/react-component/slider
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@rc-component/steps@1.2.2
-  License: MIT
-  Source:  git+ssh://git@github.com/react-component/steps
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/switch@1.0.3
-  License: MIT
-  Source: https://github.com/react-component/switch
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/table@1.9.1
-  License: MIT
-  Source: https://github.com/react-component/table
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (06af38d559a6264a5e99521e1b754ac1e9ffcf24e88dbd09528b1bec862c627a)
-
-@rc-component/tabs@1.7.0
-  License: MIT
-  Source: https://github.com/react-component/tabs
-  Evidence: collected
-  Lockfile instances: 1
-  Author: yiminghe@gmail.com
-  Included files: LICENSE.md (509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d)
-
-@rc-component/textarea@1.1.2
-  License: MIT
-  Source: https://github.com/react-component/textarea
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef)
-
-@rc-component/tooltip@1.4.0
-  License: MIT
-  Source: https://github.com/react-component/tooltip
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fa70b699d4f04cb3e64775b004cd7fe017bb0ac3041fce408f2adadce0b57aee)
-
-@rc-component/tour@2.3.0
-  License: MIT
-  Source: https://github.com/react-component/tour
-  Evidence: collected
-  Lockfile instances: 1
-  Author: wangning4567@163.com
-  Included files: LICENSE (8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654)
-
-@rc-component/tree-select@1.6.0
-  License: MIT
-  Source: https://github.com/react-component/tree-select
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE.md (a57f8fe084177ae391bbe1dab0944b298e87674f3b064fceb6d6c933ae8c5923)
-
-@rc-component/tree@1.1.0
-  License: MIT
-  Source: https://github.com/react-component/tree
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE.md (a57f8fe084177ae391bbe1dab0944b298e87674f3b064fceb6d6c933ae8c5923)
-
-@rc-component/trigger@3.9.0
-  License: MIT
-  Source: https://github.com/react-component/trigger
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0)
-
-@rc-component/upload@1.1.0
-  License: MIT
-  Source: https://github.com/react-component/upload
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (7a5ab6aef50795b809eba30bf225c8ad91d7bae170840cf701f5a9e26990faf2)
-
-@rc-component/util@1.7.0
-  License: MIT
-  Source: https://github.com/react-component/util
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (9eb9cb6b607e73703ba9df9872583faf11c6c3abf7a2be80ea79390251ae9905)
-
-@rc-component/virtual-list@1.0.2
-  License: MIT
-  Source: https://github.com/react-component/virtual-list
-  Evidence: collected
-  Lockfile instances: 1
-  Author: smith3816@gmail.com
-  Included files: LICENSE (fa70b699d4f04cb3e64775b004cd7fe017bb0ac3041fce408f2adadce0b57aee)
-
 @reduxjs/toolkit@2.11.2
   License: MIT
   Source: https://github.com/reduxjs/redux-toolkit
@@ -802,13 +208,6 @@ PACKAGE INDEX
   Lockfile instances: 1
   Author: Mark Erikson <mark@isquaredsoftware.com>
   Included files: LICENSE (d7a7667d33abd427a7c05cf15c4698db60e7c29286b9c1660165ac6f58f7c8c6)
-
-@remirror/core-constants@3.0.0
-  License: MIT
-  Source: https://github.com/remirror/remirror
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (2d17590573e37bcf0886be81f7c6e1955fe484518dd91e73114f1d905afd7b9b)
 
 @standard-schema/spec@1.1.0
   License: MIT
@@ -826,266 +225,266 @@ PACKAGE INDEX
   Author: Fabian Hiller
   Included files: LICENSE (9cf2166507311f427e083ef7671da566949391cb745789abcff8bd43ac26d1f1)
 
-@tiptap/core@3.15.3
+@tiptap/core@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-blockquote@3.15.3
+@tiptap/extension-blockquote@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bold@3.15.3
+@tiptap/extension-bold@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bubble-menu@3.15.3
+@tiptap/extension-bubble-menu@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bullet-list@3.15.3
+@tiptap/extension-bullet-list@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-code-block@3.15.3
+@tiptap/extension-code-block@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-code@3.15.3
+@tiptap/extension-code@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-document@3.15.3
+@tiptap/extension-document@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-dropcursor@3.15.3
+@tiptap/extension-dropcursor@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-floating-menu@3.15.3
+@tiptap/extension-floating-menu@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-gapcursor@3.15.3
+@tiptap/extension-gapcursor@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-hard-break@3.15.3
+@tiptap/extension-hard-break@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-heading@3.15.3
+@tiptap/extension-heading@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-highlight@3.15.3
+@tiptap/extension-highlight@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-horizontal-rule@3.15.3
+@tiptap/extension-horizontal-rule@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-image@3.15.3
+@tiptap/extension-image@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-italic@3.15.3
+@tiptap/extension-italic@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-link@3.15.3
+@tiptap/extension-link@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list-item@3.15.3
+@tiptap/extension-list-item@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list-keymap@3.15.3
+@tiptap/extension-list-keymap@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list@3.15.3
+@tiptap/extension-list@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-mathematics@3.15.3
+@tiptap/extension-mathematics@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-ordered-list@3.15.3
+@tiptap/extension-ordered-list@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-paragraph@3.15.3
+@tiptap/extension-paragraph@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-placeholder@3.15.3
+@tiptap/extension-placeholder@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-strike@3.15.3
+@tiptap/extension-strike@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-subscript@3.15.3
+@tiptap/extension-subscript@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-superscript@3.15.3
+@tiptap/extension-superscript@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-table@3.15.3
+@tiptap/extension-table@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text-align@3.15.3
+@tiptap/extension-text-align@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text-style@3.15.3
+@tiptap/extension-text-style@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text@3.15.3
+@tiptap/extension-text@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-underline@3.15.3
+@tiptap/extension-underline@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extensions@3.15.3
+@tiptap/extensions@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/html@3.15.3
+@tiptap/html@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/pm@3.15.3
+@tiptap/pm@3.32.0
+  License: MIT
+  Source: https://github.com/ueberdosis/tiptap
+  Evidence: collected
+  Lockfile instances: 1
+  Included files: LICENSE (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f), THIRD_PARTY_LICENSES.md (16644057cce82165b1db5d07fd8ec51dab79ec19d908006efbff74877561d256)
+
+@tiptap/react@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/react@3.15.3
-  License: MIT
-  Source: https://github.com/ueberdosis/tiptap
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
-
-@tiptap/starter-kit@3.15.3
+@tiptap/starter-kit@3.32.0
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
@@ -1351,13 +750,6 @@ PACKAGE INDEX
   Lockfile instances: 1
   Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
 
-@types/linkify-it@5.0.0
-  License: MIT
-  Source: https://github.com/DefinitelyTyped/DefinitelyTyped
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
-
 @types/lodash.clonedeep@4.5.9
   License: MIT
   Source: https://github.com/DefinitelyTyped/DefinitelyTyped
@@ -1372,21 +764,7 @@ PACKAGE INDEX
   Lockfile instances: 1
   Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
 
-@types/markdown-it@14.1.2
-  License: MIT
-  Source: https://github.com/DefinitelyTyped/DefinitelyTyped
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
-
 @types/mdast@4.0.4
-  License: MIT
-  Source: https://github.com/DefinitelyTyped/DefinitelyTyped
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
-
-@types/mdurl@2.0.0
   License: MIT
   Source: https://github.com/DefinitelyTyped/DefinitelyTyped
   Evidence: collected
@@ -1408,13 +786,6 @@ PACKAGE INDEX
   Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
 
 @types/node@25.0.9
-  License: MIT
-  Source: https://github.com/DefinitelyTyped/DefinitelyTyped
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310)
-
-@types/parse-json@4.0.2
   License: MIT
   Source: https://github.com/DefinitelyTyped/DefinitelyTyped
   Evidence: collected
@@ -1500,21 +871,6 @@ PACKAGE INDEX
   Author: Ben Frederickson <ben@benfrederickson.com> (https://www.benfrederickson.com)
   Included files: LICENSE (7bdac5ba137b8460596d8a7148ddf6e453c662bd22733a333ce4da500b3c889d)
 
-antd-style@3.7.1
-  License: MIT
-  Source: https://github.com/ant-design/antd-style
-  Evidence: collected
-  Lockfile instances: 1
-  Author: arvinxx(arvinx@foxmail.com)
-  Included files: LICENSE (fbac72036d70b36bde1499d7741bd7ec8f38ad0bf711bf36b4458766e52d46c3)
-
-antd@6.2.0
-  License: MIT
-  Source: https://github.com/ant-design/ant-design
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (f696794c35873d9bbbe361b8b3c6bb0b9621a88022897f84eff41cbf2f803f6c)
-
 archiver-utils@2.1.0
   License: MIT
   Source: https://github.com/archiverjs/archiver-utils
@@ -1539,13 +895,6 @@ archiver@5.3.2
   Author: Chris Talkington (http://christalkington.com/)
   Included files: LICENSE (9e23899170d96e708b24a2afce11e96d169c8cebf1bd24ac60b675a400cb1cf1)
 
-argparse@2.0.1
-  License: Python-2.0
-  Source: nodeca/argparse
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (8cb1adb54549bbffc30325e4a0a245978750efb5f150d684b700e1f92e0ebfcc)
-
 async@3.2.6
   License: MIT
   Source: https://github.com/caolan/async
@@ -1553,14 +902,6 @@ async@3.2.6
   Lockfile instances: 1
   Author: Caolan McMahon
   Included files: LICENSE (5d8c2d5da497b8bad89a395cec1974850557bb70591bce5ecd614824db33cc36)
-
-babel-plugin-macros@3.1.0
-  License: MIT
-  Source: https://github.com/kentcdodds/babel-plugin-macros
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)
-  Included files: LICENSE (822bfd229e98175bd2ce9ab3fd24caf54161893ff2b0bd1f1c9c202f2a606ac6)
 
 bail@2.0.2
   License: MIT
@@ -1633,7 +974,7 @@ bluebird@3.4.7
   Author: Petka Antonov <petka_antonov@hotmail.com> (http://github.com/petkaantonov/)
   Included files: LICENSE (dd60fcdf99e045a54665f39fdb6b361e19459fa7335802201171b496ac2c54f1)
 
-brace-expansion@1.1.18
+brace-expansion@1.1.21
   License: MIT
   Source: https://github.com/juliangruber/brace-expansion
   Evidence: collected
@@ -1641,7 +982,7 @@ brace-expansion@1.1.18
   Author: Julian Gruber <mail@juliangruber.com> (http://juliangruber.com)
   Included files: LICENSE (cfe46dde9d4b5f4c1e2db0935b3f5b8570a19c59e8938bb082065e3b6e26d834)
 
-brace-expansion@2.1.4
+brace-expansion@2.1.7
   License: MIT
   Source: https://github.com/juliangruber/brace-expansion
   Evidence: collected
@@ -1689,14 +1030,6 @@ buffers@0.1.1
   License evidence: https://sources.debian.org/copyright/license/node-buffers/0.1.1-2/
   Author: James Halliday <mail@substack.net> (http://substack.net)
   Included files: none; package metadata or reviewed override is retained
-
-callsites@3.1.0
-  License: MIT
-  Source: sindresorhus/callsites
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-  Included files: license (c9808a775260db5602f6a0c29f5f8b78e81f9666a33623fedfa34a22208b1063)
 
 ccount@2.0.1
   License: MIT
@@ -1746,14 +1079,6 @@ character-reference-invalid@2.0.1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (c37a32dd1cd44e7b68afdf88cb45eb2c4028574f7d894c720371d5688f73ef45)
 
-classnames@2.5.1
-  License: MIT
-  Source: https://github.com/JedWatson/classnames
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Jed Watson
-  Included files: LICENSE (bedcfd7e502f54290e1a061b49d5e90347362a4d68c3d196ff3001b6ecbe7176)
-
 clsx@2.1.1
   License: MIT
   Source: lukeed/clsx
@@ -1794,14 +1119,6 @@ compress-commons@4.1.2
   Author: Chris Talkington (http://christalkington.com/)
   Included files: LICENSE (79bad9f51738814f83251ae89460326b2ff2ea19ff5f71ab8f7636b2e17bb231)
 
-compute-scroll-into-view@3.1.1
-  License: MIT
-  Source: https://github.com/scroll-into-view/compute-scroll-into-view
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Cody Olsen
-  Included files: LICENSE (b58c311d6fa4d2729b4220f6e1cb13d8df7d7406b360ac47eccf5e5cd356a23f)
-
 concat-map@0.0.1
   License: MIT
   Source: https://github.com/substack/node-concat-map
@@ -1809,14 +1126,6 @@ concat-map@0.0.1
   Lockfile instances: 1
   Author: James Halliday <mail@substack.net> (http://substack.net)
   Included files: LICENSE (2cd23e64d69941c70a6a6a42ee2e4b3249bb9f071380a6e68709f5c6efd9d96a)
-
-convert-source-map@1.9.0
-  License: MIT
-  Source: https://github.com/thlorenz/convert-source-map
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Thorsten Lorenz <thlorenz@gmx.de> (http://thlorenz.com)
-  Included files: LICENSE (e66591b0b1530a830d6cb1aab72646a6d0e4a4e77adb42e0bb15673a0afa1263)
 
 core-util-is@1.0.3
   License: MIT
@@ -1840,14 +1149,6 @@ cose-base@2.2.0
   Lockfile instances: 1
   Included files: LICENSE (90ee3cca58dabf88333de774d3d05509516d5e80cec40e0109ae2717d52b0f94)
 
-cosmiconfig@7.1.0
-  License: MIT
-  Source: https://github.com/davidtheclark/cosmiconfig
-  Evidence: collected
-  Lockfile instances: 1
-  Author: David Clark <david.dave.clark@gmail.com>
-  Included files: LICENSE (020991f5faee10ddd4afc8d31fe4fbc1b004c37eeb6c6d8065b85885aac6e882)
-
 crc-32@1.2.2
   License: Apache-2.0
   Source: https://github.com/SheetJS/js-crc32
@@ -1863,14 +1164,6 @@ crc32-stream@4.0.3
   Lockfile instances: 1
   Author: Chris Talkington (http://christalkington.com/)
   Included files: LICENSE (79bad9f51738814f83251ae89460326b2ff2ea19ff5f71ab8f7636b2e17bb231)
-
-crelt@1.0.6
-  License: MIT
-  Source: https://github.com/marijnh/crelt
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Marijn Haverbeke <marijn@haverbeke.berlin>
-  Included files: LICENSE (1f7269cdcd8d4d3006402f765e3ff6abc082a7a27dc52e61045f2f5792ed8c59)
 
 cropperjs@1.6.1
   License: MIT
@@ -2294,14 +1587,6 @@ end-of-stream@1.4.5
   Author: Mathias Buus <mathiasbuus@gmail.com>
   Included files: LICENSE (3fe8d55a98dbf260eace67c00cf9bc53edb46234e840098a0b93df3096b97fb6)
 
-entities@4.5.0
-  License: BSD-2-Clause
-  Source: https://github.com/fb55/entities
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Felix Boehm <me@feedic.com>
-  Included files: LICENSE (0e57eeaccc07eadeb2c7f720ab2601ef37e02fbc6a86cd6667caf7bf5c614de6)
-
 entities@6.0.1
   License: BSD-2-Clause
   Source: https://github.com/fb55/entities
@@ -2318,27 +1603,12 @@ entities@7.0.1
   Author: Felix Boehm <me@feedic.com>
   Included files: LICENSE (0e57eeaccc07eadeb2c7f720ab2601ef37e02fbc6a86cd6667caf7bf5c614de6)
 
-error-ex@1.3.4
-  License: MIT
-  Source: qix-/node-error-ex
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (849dffdc5103ad6274d337e9608d70198a6e76b6f8fa0aecdf303fa07f03cae4)
-
 es-toolkit@1.49.0
   License: MIT
   Source: https://github.com/toss/es-toolkit
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (02f3b7dba54e1b4236395ae6d31d9abe56c264a30a9be5c82c8bf36f95cb1ccd)
-
-escape-string-regexp@4.0.0
-  License: MIT
-  Source: sindresorhus/escape-string-regexp
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
-  Included files: license (1529f88b3675095087120854c6fa2cc1113ab2da2f88c4f6aa4ffe52e98ef81b)
 
 escape-string-regexp@5.0.0
   License: MIT
@@ -2412,14 +1682,6 @@ file-saver@2.0.5
   Author: Eli Grey <me@eligrey.com>
   Included files: LICENSE.md (6d19ea9ec11b4b5716aae55d5665bd0da238deea9546b61b718c4c88e477fdf0)
 
-find-root@1.1.0
-  License: MIT
-  Source: https://github.com/js-n/find-root
-  Evidence: collected
-  Lockfile instances: 1
-  Author: jsdnxx
-  Included files: LICENSE.md (c3b7834a158755947fca791ea34b8a0d5ac01b203d8b43ecf3dfefa368eb8e72)
-
 fs-constants@1.0.0
   License: MIT
   Source: https://github.com/mafintosh/fs-constants
@@ -2443,14 +1705,6 @@ fstream@1.0.12
   Lockfile instances: 1
   Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
   Included files: LICENSE (0ae52fe329ccfd23fedbd688361bd0dedaf5cae3e3516eb2ad17831f2d8b347c)
-
-function-bind@1.1.2
-  License: MIT
-  Source: https://github.com/Raynos/function-bind
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Raynos <raynos2@gmail.com>
-  Included files: LICENSE (741668cc22140f4a3837acf3feb70734fb4f2b04403455c5c31acc3882aa92d0)
 
 glob@7.2.3
   License: ISC
@@ -2482,14 +1736,6 @@ happy-dom@20.10.6
   Lockfile instances: 1
   Author: David Ortner
   Included files: LICENSE (8f48c4095e8a983dce50c97ded97bd1ea589b6154ee5fe5c8e330046636272bb)
-
-hasown@2.0.2
-  License: MIT
-  Source: https://github.com/inspect-js/hasOwn
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Jordan Harband <ljharb@gmail.com>
-  Included files: LICENSE (928a86b1d2984fd8ca1e148ef9c3b80ec4ee5e452aa58b0fda60a8f46f8c7dc6)
 
 hast-util-from-dom@5.0.1
   License: ISC
@@ -2571,14 +1817,6 @@ hastscript@9.0.1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (ea559213e0e927a249bd60f4f6a27d1a272fb5d38d2babbd723099c66a17c5af)
 
-hoist-non-react-statics@3.3.2
-  License: BSD-3-Clause
-  Source: https://github.com/mridgway/hoist-non-react-statics
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Michael Ridgway <mcridgway@gmail.com>
-  Included files: LICENSE.md (0df6c27751ad005a6b6ad6936ec8761a139fd9db8f242a8fa82dd84deb4a2036)
-
 html-url-attributes@3.0.1
   License: MIT
   Source: https://github.com/rehypejs/rehype-minify/tree/main/packages/html-url-attributes
@@ -2642,14 +1880,6 @@ immer@9.0.21
   Author: Michel Weststrate
   Included files: LICENSE (6768b01a4a41e5a49b80a34e0a52e25a00d69a1e4e99c457e579daccb3b4fecc)
 
-import-fresh@3.3.1
-  License: MIT
-  Source: sindresorhus/import-fresh
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
-  Included files: license (1529f88b3675095087120854c6fa2cc1113ab2da2f88c4f6aa4ffe52e98ef81b)
-
 import-meta-resolve@4.2.0
   License: MIT
   Source: wooorm/import-meta-resolve
@@ -2712,22 +1942,6 @@ is-alphanumerical@2.0.1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb)
 
-is-arrayish@0.2.1
-  License: MIT
-  Source: https://github.com/qix-/node-is-arrayish
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Qix (http://github.com/qix-)
-  Included files: LICENSE (849dffdc5103ad6274d337e9608d70198a6e76b6f8fa0aecdf303fa07f03cae4)
-
-is-core-module@2.16.1
-  License: MIT
-  Source: https://github.com/inspect-js/is-core-module
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Jordan Harband <ljharb@gmail.com>
-  Included files: LICENSE (5c496ce5ae47eb8e5ddcaa5e29c27c446a3855b19e3a66991b52f361bed22b28)
-
 is-decimal@2.0.1
   License: MIT
   Source: wooorm/is-decimal
@@ -2743,14 +1957,6 @@ is-hexadecimal@2.0.1
   Lockfile instances: 1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb)
-
-is-mobile@5.0.0
-  License: MIT
-  Source: https://github.com/juliangruber/is-mobile
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Julian Gruber <julian@juliangruber.com> (http://juliangruber.com)
-  Included files: none; package metadata or reviewed override is retained
 
 is-plain-obj@4.1.0
   License: MIT
@@ -2775,38 +1981,6 @@ jose@6.2.12
   Lockfile instances: 1
   Author: Filip Skokan <panva.ip@gmail.com>
   Included files: LICENSE.md (d6f4fc856b9900ac2bb491c9c82cfbb5ff8d9b8fb3d22c7dc47dd5ac644c79c4)
-
-js-tokens@4.0.0
-  License: MIT
-  Source: lydell/js-tokens
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Simon Lydell
-  Included files: LICENSE (7e02e9c37c8849280e70bf5fd67d65e93d902c700104a997b11fb7175fdbf37e)
-
-jsesc@3.1.0
-  License: MIT
-  Source: https://github.com/mathiasbynens/jsesc
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Mathias Bynens (https://mathiasbynens.be/)
-  Included files: LICENSE-MIT.txt (e7f14c40a4fc6bcd3ac4cbbabe5b6a2fd9c4063f4fe124e3a5222fb3ce13f479)
-
-json-parse-even-better-errors@2.3.1
-  License: MIT
-  Source: https://github.com/npm/json-parse-even-better-errors
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kat Marchán <kzm@zkat.tech>
-  Included files: LICENSE.md (8978b09d9e8385661475302e135aff5bf50412d8ac2c3767d067e2484840c6de)
-
-json2mq@0.2.0
-  License: MIT
-  Source: https://github.com/akiran/json2mq
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Kiran Abburi
-  Included files: LICENSE (8e7a0e17a14c91d325c22a8ade50da3aaa5a97e321beebbdce77d63fc719a1c2)
 
 jstat@1.9.6
   License: MIT
@@ -2870,22 +2044,7 @@ lie@3.3.0
   Lockfile instances: 1
   Included files: license.md (04b11337b6a187f7601f96a7214921fd19d6fc312b861cf28595b9667fce4b74)
 
-lines-and-columns@1.2.4
-  License: MIT
-  Source: https://github.com/eventualbuddha/lines-and-columns
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Brian Donovan <brian@donovans.cc>
-  Included files: LICENSE (8ecd0fb4cd2c3b0dd695b568234c466478ceb542b9f8b3c4af5a01c27b36229e)
-
-linkify-it@5.0.2
-  License: MIT
-  Source: markdown-it/linkify-it
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (655fb7baa3721defda72c48e7e4e0e12ee0699c13f4697bbc5fc1704839a252f)
-
-linkifyjs@4.3.2
+linkifyjs@4.3.3
   License: MIT
   Source: https://github.com/nfrasser/linkifyjs
   Evidence: collected
@@ -3052,13 +2211,6 @@ lottie-web@5.13.0
   Lockfile instances: 1
   Included files: LICENSE.md (9d8d4d8b4bb99572ee8b51025a30b8493d949798cac465c6c15b1b29420bcb06)
 
-markdown-it@14.1.0
-  License: MIT
-  Source: markdown-it/markdown-it
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (9fc15c73fe40f618d0485364854183747b26d00163810e8ba4a8f8f1cd68f851)
-
 markdown-table@3.0.4
   License: MIT
   Source: wooorm/markdown-table
@@ -3202,13 +2354,6 @@ mdast-util-to-string@4.0.0
   Lockfile instances: 1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (c37a32dd1cd44e7b68afdf88cb45eb2c4028574f7d894c720371d5688f73ef45)
-
-mdurl@2.0.0
-  License: MIT
-  Source: markdown-it/mdurl
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (a094e8da18394b1d8eee1098a6a0d69d189db0a81c2bdf29711eea4d3695e560)
 
 mermaid@11.16.0
   License: MIT
@@ -3536,14 +2681,6 @@ pako@1.0.11
   Lockfile instances: 1
   Included files: LICENSE (9bce71206bb197a44eea817bf9c4091118b153cbe09f7544ed7e5abc536d5bcc)
 
-parent-module@1.0.1
-  License: MIT
-  Source: sindresorhus/parent-module
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-  Included files: license (c9808a775260db5602f6a0c29f5f8b78e81f9666a33623fedfa34a22208b1063)
-
 parse-entities@4.0.2
   License: MIT
   Source: wooorm/parse-entities
@@ -3551,14 +2688,6 @@ parse-entities@4.0.2
   Lockfile instances: 1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (c74f9c5a522f5929f11d6de847a4af6e025b18ee22f00e917d60391cc78864ad)
-
-parse-json@5.2.0
-  License: MIT
-  Source: sindresorhus/parse-json
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
-  Included files: license (1529f88b3675095087120854c6fa2cc1113ab2da2f88c4f6aa4ffe52e98ef81b)
 
 parse5@7.3.0
   License: MIT
@@ -3583,30 +2712,6 @@ path-is-absolute@1.0.1
   Lockfile instances: 1
   Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
   Included files: license (2bc4beb49d4852de32aecc72c9db954596cfcfcdc980fd7693adc89d5aa5d31f)
-
-path-parse@1.0.7
-  License: MIT
-  Source: https://github.com/jbgutierrez/path-parse
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Javier Blanco <http://jbgutierrez.info>
-  Included files: LICENSE (77bc892db218ea7644c6ab771374f3b8ddf1fe4bb6350c4e14efc024f525554b)
-
-path-type@4.0.0
-  License: MIT
-  Source: sindresorhus/path-type
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-  Included files: license (c9808a775260db5602f6a0c29f5f8b78e81f9666a33623fedfa34a22208b1063)
-
-picocolors@1.1.1
-  License: ISC
-  Source: alexeyraspopov/picocolors
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Alexey Raspopov
-  Included files: LICENSE (fa11af88c78d3b5a92fd94c1a8e61d0684c605fb42e72d90f92d01c0ad59df01)
 
 points-on-curve@0.2.0
   License: MIT
@@ -3639,44 +2744,37 @@ property-information@7.1.0
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (c74f9c5a522f5929f11d6de847a4af6e025b18ee22f00e917d60391cc78864ad)
 
-prosemirror-changeset@2.3.1
+prosemirror-changeset@2.4.4
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-changeset
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-changeset
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (940ef9fe4ef9e784d1088f6af9bee69ddcf9bd44c96803e0f6d43ccc42d55208)
 
-prosemirror-collab@1.3.1
+prosemirror-commands@1.7.2
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-collab
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-commands
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
 
-prosemirror-commands@1.7.1
+prosemirror-dropcursor@1.8.4
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-commands
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-dropcursor
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
 
-prosemirror-dropcursor@1.8.2
-  License: MIT
-  Source: https://github.com/prosemirror/prosemirror-dropcursor
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
-
-prosemirror-gapcursor@1.4.0
+prosemirror-gapcursor@1.4.1
   License: MIT
   Source: https://github.com/prosemirror/prosemirror-gapcursor
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
 
-prosemirror-history@1.5.0
+prosemirror-history@1.5.1
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-history
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-history
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
@@ -3695,30 +2793,9 @@ prosemirror-keymap@1.2.3
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
 
-prosemirror-markdown@1.13.2
+prosemirror-model@1.25.12
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-markdown
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
-
-prosemirror-menu@1.2.5
-  License: MIT
-  Source: https://github.com/prosemirror/prosemirror-menu
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
-
-prosemirror-model@1.25.4
-  License: MIT
-  Source: https://github.com/prosemirror/prosemirror-model
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
-
-prosemirror-schema-basic@1.2.4
-  License: MIT
-  Source: https://github.com/prosemirror/prosemirror-schema-basic
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-model
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
@@ -3744,41 +2821,19 @@ prosemirror-tables@1.8.5
   Lockfile instances: 1
   Included files: LICENSE (3363c2fef90aa88547790769109da5a6f9f70619b7a8d0ba2b4287330138d6a9)
 
-prosemirror-trailing-node@3.0.0
+prosemirror-transform@1.12.2
   License: MIT
-  Source: https://github.com/remirror/remirror
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (2d17590573e37bcf0886be81f7c6e1955fe484518dd91e73114f1d905afd7b9b)
-
-prosemirror-transform@1.10.5
-  License: MIT
-  Source: https://github.com/prosemirror/prosemirror-transform
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-transform
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
 
-prosemirror-view@1.41.5
+prosemirror-view@1.42.6
   License: MIT
-  Source: https://github.com/prosemirror/prosemirror-view
+  Source: https://code.haverbeke.berlin/prosemirror/prosemirror-view
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (32b18408ca2d9dd65e84ab250271f939b82b6274b8724ed79f67ff37402b9649)
-
-punycode.js@2.3.1
-  License: MIT
-  Source: https://github.com/mathiasbynens/punycode.js
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Mathias Bynens (https://mathiasbynens.be/)
-  Included files: LICENSE-MIT.txt (e7f14c40a4fc6bcd3ac4cbbabe5b6a2fd9c4063f4fe124e3a5222fb3ce13f479)
-
-rc-util@5.44.4
-  License: MIT
-  Source: https://github.com/react-component/util
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (9eb9cb6b607e73703ba9df9872583faf11c6c3abf7a2be80ea79390251ae9905)
 
 react-cropper@2.3.3
   License: MIT
@@ -3802,13 +2857,6 @@ react-icons@5.7.0
   Lockfile instances: 1
   Author: Goran Gajic
   Included files: LICENSE (e4eb9204f9738fa51a9b9b7e31104beb937e530436fbc8cf7ad15718e940d6f7)
-
-react-is@16.13.1
-  License: MIT
-  Source: https://github.com/facebook/react
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (a80c79b8f80e824c8ea0612b7abadb9c92c48673cf0adc20b2a7f43e2b19faa0)
 
 react-is@18.3.1
   License: MIT
@@ -3956,22 +3004,6 @@ reselect@5.1.1
   Lockfile instances: 1
   Included files: LICENSE (a8eee3fe035db1c5332ce3cdb696656a962e4e6e70d09c069649893edefcf2f7)
 
-resolve-from@4.0.0
-  License: MIT
-  Source: sindresorhus/resolve-from
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-  Included files: license (c9808a775260db5602f6a0c29f5f8b78e81f9666a33623fedfa34a22208b1063)
-
-resolve@1.22.11
-  License: MIT
-  Source: ssh://github.com/browserify/resolve
-  Evidence: collected
-  Lockfile instances: 1
-  Author: James Halliday <mail@substack.net> (http://substack.net)
-  Included files: LICENSE (c955faf4959d831df8ce4e229e1e859dd35d91b9b45aa0d6ab565ab9cbb15265)
-
 rimraf@2.7.1
   License: ISC
   Source: https://github.com/isaacs/rimraf
@@ -4043,14 +3075,6 @@ scheduler@0.26.0
   Lockfile instances: 1
   Included files: LICENSE (cf9b17822d1fcd4ff32ccbe14183386fb3adf6f2ff92dc184130823f7fc28173)
 
-scroll-into-view-if-needed@3.1.0
-  License: MIT
-  Source: https://github.com/scroll-into-view/scroll-into-view-if-needed
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Cody Olsen
-  Included files: LICENSE (96f25b41a87abdf7159a47864199c02f2356972dd6aeb6b13f23ebaf7ab6dc5e)
-
 setimmediate@1.0.5
   License: MIT
   Source: YuzuJS/setImmediate
@@ -4059,14 +3083,6 @@ setimmediate@1.0.5
   Author: YuzuJS
   Included files: LICENSE.txt (e989f62f4fdcda4199c3d1d6049e9a52aad32539c02d2a5e8c92583ed0960e2b)
 
-source-map@0.5.7
-  License: BSD-3-Clause
-  Source: http://github.com/mozilla/source-map
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Nick Fitzgerald <nfitzgerald@mozilla.com>
-  Included files: LICENSE (6ead954f967233375b98f6d8363bdb27ddc7d945a83f88c20952e7ca0fa8675d)
-
 space-separated-tokens@2.0.2
   License: MIT
   Source: wooorm/space-separated-tokens
@@ -4074,13 +3090,6 @@ space-separated-tokens@2.0.2
   Lockfile instances: 1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb)
-
-string-convert@0.2.1
-  License: MIT
-  Source: https://github.com/akiran/string-convert
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (8e7a0e17a14c91d325c22a8ade50da3aaa5a97e321beebbdce77d63fc719a1c2)
 
 string_decoder@1.1.1
   License: MIT
@@ -4113,14 +3122,6 @@ style-to-object@1.0.14
   Author: Mark <mark@remarkablemark.org>
   Included files: LICENSE (20b25fb4d9ba5aab95799ed66d6563361ea9299550d16697173442dd1f4ab588)
 
-stylis@4.2.0
-  License: MIT
-  Source: https://github.com/thysultan/stylis.js
-  Evidence: collected
-  Lockfile instances: 2
-  Author: Sultan Tarimo <sultantarimo@me.com>
-  Included files: LICENSE (6821b85df4724cddb1de03c371af9a7cc055839d0331dcd7c2f1b1d025098c49)
-
 stylis@4.3.6
   License: MIT
   Source: https://github.com/thysultan/stylis.js
@@ -4129,21 +3130,13 @@ stylis@4.3.6
   Author: Sultan Tarimo <sultantarimo@me.com>
   Included files: LICENSE (6821b85df4724cddb1de03c371af9a7cc055839d0331dcd7c2f1b1d025098c49)
 
-sud-ui@1.9.2
+sud-ui@2.1.0
   License: MIT
   Source: https://github.com/SeeUSoon93/sud-lib
   Evidence: collected
   Lockfile instances: 1
   Author: SeeUSoon93
-  Included files: none; package metadata or reviewed override is retained
-
-supports-preserve-symlinks-flag@1.0.0
-  License: MIT
-  Source: https://github.com/inspect-js/node-supports-preserve-symlinks-flag
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Jordan Harband <ljharb@gmail.com>
-  Included files: LICENSE (2284934c546b14ee6d1845257fe1964f93b7e4f847d6c5e792d5c154f235842d)
+  Included files: LICENSE (faaabd353842ef746ba973e242d0849a33a6835de83010a5516d865bace26422)
 
 tar-stream@2.2.0
   License: MIT
@@ -4160,14 +3153,6 @@ text-segmentation@1.0.3
   Lockfile instances: 1
   Author: Niklas von Hertzen <niklasvh@gmail.com> (https://hertzen.com)
   Included files: LICENSE (8b00952cd8d0f5cbbefb13576778e1185dc963943151353d90c4e14a5a4caf40)
-
-throttle-debounce@5.0.2
-  License: MIT
-  Source: https://github.com/niksy/throttle-debounce
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Ivan Nikolić <niksy5@gmail.com> (http://ivannikolic.com)
-  Included files: LICENSE.md (7c6cea49d80c4c206b752c68fee35a27707303103ed867b359b0c33692be0489)
 
 tiny-emitter@2.1.0
   License: MIT
@@ -4240,13 +3225,6 @@ tslib@2.8.1
   Lockfile instances: 1
   Author: Microsoft Corp.
   Included files: LICENSE.txt (0e8d2550baea17eb3072c4f919b36fbf9852bb49dba948549872e713863c0834)
-
-uc.micro@2.1.0
-  License: MIT
-  Source: markdown-it/uc.micro
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE.txt (e7f14c40a4fc6bcd3ac4cbbabe5b6a2fd9c4063f4fe124e3a5222fb3ce13f479)
 
 undici-types@7.16.0
   License: MIT
@@ -4326,13 +3304,6 @@ unzipper@0.10.14
   Lockfile instances: 1
   Author: Evan Oxfeld <eoxfeld@gmail.com>
   Included files: LICENSE (b9e9abeaf8b92573dc28915d4948dbce30d55b30c688d109898b35e6105c4215)
-
-use-merge-value@1.2.0
-  License: MIT
-  Source: https://github.com/chenshuai2144/merge-value-hooks
-  Evidence: collected
-  Lockfile instances: 1
-  Included files: LICENSE (15be3f3bd75b777365158a9e1a6da75be6bfe0e1791155cbff18a96968371aee)
 
 use-sync-external-store@1.6.0
   License: MIT
@@ -4451,14 +3422,6 @@ xmlchars@2.2.0
   Author: Louis-Dominique Dubeau <ldd@lddubeau.com>
   Included files: LICENSE (700e990091f60c6a9d222e9c601b945ff9a2bcbd32998d5b0bbea18551cd72ab)
 
-yaml@1.10.3
-  License: ISC
-  Source: https://github.com/eemeli/yaml
-  Evidence: collected
-  Lockfile instances: 1
-  Author: Eemeli Aro <eemeli@gmail.com>
-  Included files: LICENSE (b98c7fcf09a54cdd30ea5bea9ec672f81676191d990c8673a2fcd874308552bf)
-
 zip-stream@4.1.1
   License: MIT
   Source: https://github.com/archiverjs/node-zip-stream
@@ -4477,31 +3440,6 @@ zwitch@2.0.4
 
 LICENSE, COPYRIGHT, COPYING, AND NOTICE TEXTS
 ================================================================================
-
---------------------------------------------------------------------------------
-Text SHA-256: 020991f5faee10ddd4afc8d31fe4fbc1b004c37eeb6c6d8065b85885aac6e882
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015 David Clark
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 02f3b7dba54e1b4236395ae6d31d9abe56c264a30a9be5c82c8bf36f95cb1ccd
@@ -4615,19 +3553,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 06af38d559a6264a5e99521e1b754ac1e9ffcf24e88dbd09528b1bec862c627a
---------------------------------------------------------------------------------
-MIT LICENSE
-
-Copyright (c) 2015-present Alipay.com, https://www.alipay.com/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 0a1df3a083d0c010560aa342e87959c8c1070e6fd54545741f083f22d0c8b551
 --------------------------------------------------------------------------------
 MIT License
@@ -4720,39 +3645,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 0df6c27751ad005a6b6ad6936ec8761a139fd9db8f242a8fa82dd84deb4a2036
---------------------------------------------------------------------------------
-Software License Agreement (BSD License)
-========================================
-
-Copyright (c) 2015, Yahoo! Inc. All rights reserved.
-----------------------------------------------------
-
-Redistribution and use of this software in source and binary forms, with or
-without modification, are permitted provided that the following conditions are
-met:
-
-  * Redistributions of source code must retain the above copyright notice, this
-    list of conditions and the following disclaimer.
-  * Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions and the following disclaimer in the documentation
-    and/or other materials provided with the distribution.
-  * Neither the name of Yahoo! Inc. nor the names of YUI's contributors may be
-    used to endorse or promote products derived from this software without
-    specific prior written permission of Yahoo! Inc.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 0e57eeaccc07eadeb2c7f720ab2601ef37e02fbc6a86cd6667caf7bf5c614de6
@@ -4990,31 +3882,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 15be3f3bd75b777365158a9e1a6da75be6bfe0e1791155cbff18a96968371aee
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2019-present chenshuai2144 (qixian.cs@outlook.com)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 15f4a4066e49ca29f5f5822381383e29692f24f3e1a019ebc048cd3e5f2e54cb
 --------------------------------------------------------------------------------
 Apache License
@@ -5220,6 +4087,57 @@ Apache License
    limitations under the License.
 
 --------------------------------------------------------------------------------
+Text SHA-256: 16644057cce82165b1db5d07fd8ec51dab79ec19d908006efbff74877561d256
+--------------------------------------------------------------------------------
+# Third-party licenses
+
+This package re-exports packages from the [ProseMirror](https://prosemirror.net) project.
+
+ProseMirror is licensed under the MIT License.
+
+Copyright (C) Marijn Haverbeke <marijn@haverbeke.berlin> and others
+
+The following ProseMirror packages are re-exported by this package:
+
+- prosemirror-changeset
+- prosemirror-commands
+- prosemirror-dropcursor
+- prosemirror-gapcursor
+- prosemirror-history
+- prosemirror-inputrules
+- prosemirror-keymap
+- prosemirror-model
+- prosemirror-schema-list
+- prosemirror-state
+- prosemirror-tables
+- prosemirror-transform
+- prosemirror-view
+
+---
+
+## [MIT License (ProseMirror)](https://code.haverbeke.berlin/prosemirror/prosemirror/src/branch/main/LICENSE)
+
+Copyright (C) 2015-2017 by Marijn Haverbeke <marijn@haverbeke.berlin> and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+--------------------------------------------------------------------------------
 Text SHA-256: 16e34a46fa584c2cc09682bd36edae63e88c4696371b5d95476f676a65763535
 --------------------------------------------------------------------------------
 MIT License
@@ -5334,29 +4252,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 1f7269cdcd8d4d3006402f765e3ff6abc082a7a27dc52e61045f2f5792ed8c59
---------------------------------------------------------------------------------
-Copyright (C) 2020 by Marijn Haverbeke <marijn@haverbeke.berlin>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 20b25fb4d9ba5aab95799ed66d6563361ea9299550d16697173442dd1f4ab588
 --------------------------------------------------------------------------------
 The MIT License (MIT)
@@ -5381,31 +4276,6 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 2284934c546b14ee6d1845257fe1964f93b7e4f847d6c5e792d5c154f235842d
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2022 Inspect JS
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 22fc2b0e60ba1aba633480a843b0cded65e5de44f4be0cc17b19e1449a00d465
@@ -6050,31 +4920,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 2d17590573e37bcf0886be81f7c6e1955fe484518dd91e73114f1d905afd7b9b
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2019-2022, Remirror Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 2d268c85482defcef07110cb4dbc737acebce56c043c7106cb7bd68c5916a1c2
 --------------------------------------------------------------------------------
 The MIT License (MIT)
@@ -6508,30 +5353,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 3fefe89002bfade435e706a0c93f22c8ca326fbcdb479a849b36dc00b895853e
---------------------------------------------------------------------------------
-The MIT License (MIT) Copyright (c) 2016 React Components
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 420804296afd6233a4593910942e843b35df2133cd30cbd08173ce922d4dbad0
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014-present alipay.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 48186f5950f28caaafaa7f4c18b0b31350bea5c93f3a2d74b883b35a0d528863
@@ -7218,19 +6039,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 509eabacb9ef4e7b928250ab700616becb11036759dd1e937c122fde602c4b1d
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014-present yiminghe
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 5135f3f7607134fae453693e070d5afb8704957fa2f4388dd4abdc14b99aebfb
 --------------------------------------------------------------------------------
 The MIT License (MIT)
@@ -7330,29 +6138,6 @@ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 5937a76954e9322bac4f3ada3634b2d01cdf22bd05c630f7ec672c5487a8182f
---------------------------------------------------------------------------------
-Copyright (C) 2012-2014 by various contributors (see AUTHORS)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 59e8b888f1d3003cac8583b94deb25d940d4d429dbd7336b1203dc1b0af0ea27
 --------------------------------------------------------------------------------
 (The MIT License)
@@ -7377,30 +6162,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 5c496ce5ae47eb8e5ddcaa5e29c27c446a3855b19e3a66991b52f361bed22b28
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014 Dave Justice
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 5ca1040a186f709f87266e620a9c318ffebf80bb055aeecedbc8fcea2ba2feaf
@@ -8192,32 +6953,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 655fb7baa3721defda72c48e7e4e0e12ee0699c13f4697bbc5fc1704839a252f
---------------------------------------------------------------------------------
-Copyright (c) 2015 Vitaly Puzrin.
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 665f7d320f283fea91448fa8fd17e17f129b7aedc9cecdc45d0b7bb0eb9b28cc
 --------------------------------------------------------------------------------
 MIT License
@@ -8486,37 +7221,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 6ead954f967233375b98f6d8363bdb27ddc7d945a83f88c20952e7ca0fa8675d
---------------------------------------------------------------------------------
-Copyright (c) 2009-2011, Mozilla Foundation and contributors
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-* Neither the names of the Mozilla Foundation nor the names of project
-  contributors may be used to endorse or promote products derived from this
-  software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 6fdf84a73d062925aa339ef281196dfee3bd73aa825739c7fdc349b360f46993
 --------------------------------------------------------------------------------
 MIT License
@@ -8562,31 +7266,6 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 719058ae8dbdba06fafd4b21795bf624026bd34f61baf2b122fb35630d990280
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) Emotion team and other contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 71a8b71c2a0d5d301a3a178f57b1a2693b2bbd63510a9302ea09340897be211d
@@ -8659,29 +7338,6 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 741668cc22140f4a3837acf3feb70734fb4f2b04403455c5c31acc3882aa92d0
---------------------------------------------------------------------------------
-Copyright (c) 2013 Raynos.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 745f4ee4c28f6ddde845f4326610128ff29c73fa35cf8cd68aef06010355dc53
 --------------------------------------------------------------------------------
 Copyright © Domenic Denicola <d@domenic.me>
@@ -8698,31 +7354,6 @@ Text SHA-256: 75316bd7d261f6ea20ba4eaf7892987aa45a8ba2284f7357b71ea188e830fdc0
 MIT License
 
 Copyright (c) 2020 Mikayel Saghyan
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 77bc892db218ea7644c6ab771374f3b8ddf1fe4bb6350c4e14efc024f525554b
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015 Javier Blanco
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8797,31 +7428,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <http://unlicense.org>
 
 --------------------------------------------------------------------------------
-Text SHA-256: 7a5ab6aef50795b809eba30bf225c8ad91d7bae170840cf701f5a9e26990faf2
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2016-present react-component
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 7adebaeee45b60d995843745060fe5486b76eb6c9e8fc7bca6fbc67b8680d96d
 --------------------------------------------------------------------------------
 Copyright (c) 2011 Einar Otto Stangvik <einaros@gmail.com>
@@ -8872,128 +7478,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 7c6cea49d80c4c206b752c68fee35a27707303103ed867b359b0c33692be0489
---------------------------------------------------------------------------------
-Copyright (c) Ivan Nikolić <http://ivannikolic.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
----
-
-Copyright (c) 2010 "Cowboy" Ben Alman
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 7e02e9c37c8849280e70bf5fd67d65e93d902c700104a997b11fb7175fdbf37e
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014, 2015, 2016, 2017, 2018 Simon Lydell
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 822bfd229e98175bd2ce9ab3fd24caf54161893ff2b0bd1f1c9c202f2a606ac6
---------------------------------------------------------------------------------
-The MIT License (MIT)
-Copyright (c) 2020 Kent C. Dodds
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 849dffdc5103ad6274d337e9608d70198a6e76b6f8fa0aecdf303fa07f03cae4
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015 JD Ballard
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 86200ce4e92d9a22c41c8647a55f7a5fddff304ff89b4d36ecc699ed8c123d2c
 --------------------------------------------------------------------------------
 Copyright (c) 2012 Niklas von Hertzen
@@ -9020,31 +7504,6 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 8781f0ca192057330d7fbab763f8bcd3c8e671032f98e9cf1f8c82d6748e5654
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2019-present react-component
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 8885adee5b78b990348487962651590b68873e9843cf377a8f7312080a15db57
 --------------------------------------------------------------------------------
 (The MIT License)
@@ -9069,35 +7528,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 8978b09d9e8385661475302e135aff5bf50412d8ac2c3767d067e2484840c6de
---------------------------------------------------------------------------------
-Copyright 2017 Kat Marchán
-Copyright npm, Inc.
-
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the "Software"),
-to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-
----
-
-This library is a fork of 'better-json-errors' by Kat Marchán, extended and
-distributed under the terms of the MIT license above.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 8af47eab821e755a7cde5ed95eb8f7edbeecaea18a9183911f1855616b646b32
@@ -9150,340 +7580,6 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 8cb1adb54549bbffc30325e4a0a245978750efb5f150d684b700e1f92e0ebfcc
---------------------------------------------------------------------------------
-A. HISTORY OF THE SOFTWARE
-==========================
-
-Python was created in the early 1990s by Guido van Rossum at Stichting
-Mathematisch Centrum (CWI, see http://www.cwi.nl) in the Netherlands
-as a successor of a language called ABC.  Guido remains Python's
-principal author, although it includes many contributions from others.
-
-In 1995, Guido continued his work on Python at the Corporation for
-National Research Initiatives (CNRI, see http://www.cnri.reston.va.us)
-in Reston, Virginia where he released several versions of the
-software.
-
-In May 2000, Guido and the Python core development team moved to
-BeOpen.com to form the BeOpen PythonLabs team.  In October of the same
-year, the PythonLabs team moved to Digital Creations, which became
-Zope Corporation.  In 2001, the Python Software Foundation (PSF, see
-https://www.python.org/psf/) was formed, a non-profit organization
-created specifically to own Python-related Intellectual Property.
-Zope Corporation was a sponsoring member of the PSF.
-
-All Python releases are Open Source (see http://www.opensource.org for
-the Open Source Definition).  Historically, most, but not all, Python
-releases have also been GPL-compatible; the table below summarizes
-the various releases.
-
-    Release         Derived     Year        Owner       GPL-
-                    from                                compatible? (1)
-
-    0.9.0 thru 1.2              1991-1995   CWI         yes
-    1.3 thru 1.5.2  1.2         1995-1999   CNRI        yes
-    1.6             1.5.2       2000        CNRI        no
-    2.0             1.6         2000        BeOpen.com  no
-    1.6.1           1.6         2001        CNRI        yes (2)
-    2.1             2.0+1.6.1   2001        PSF         no
-    2.0.1           2.0+1.6.1   2001        PSF         yes
-    2.1.1           2.1+2.0.1   2001        PSF         yes
-    2.1.2           2.1.1       2002        PSF         yes
-    2.1.3           2.1.2       2002        PSF         yes
-    2.2 and above   2.1.1       2001-now    PSF         yes
-
-Footnotes:
-
-(1) GPL-compatible doesn't mean that we're distributing Python under
-    the GPL.  All Python licenses, unlike the GPL, let you distribute
-    a modified version without making your changes open source.  The
-    GPL-compatible licenses make it possible to combine Python with
-    other software that is released under the GPL; the others don't.
-
-(2) According to Richard Stallman, 1.6.1 is not GPL-compatible,
-    because its license has a choice of law clause.  According to
-    CNRI, however, Stallman's lawyer has told CNRI's lawyer that 1.6.1
-    is "not incompatible" with the GPL.
-
-Thanks to the many outside volunteers who have worked under Guido's
-direction to make these releases possible.
-
-
-B. TERMS AND CONDITIONS FOR ACCESSING OR OTHERWISE USING PYTHON
-===============================================================
-
-PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
---------------------------------------------
-
-1. This LICENSE AGREEMENT is between the Python Software Foundation
-("PSF"), and the Individual or Organization ("Licensee") accessing and
-otherwise using this software ("Python") in source or binary form and
-its associated documentation.
-
-2. Subject to the terms and conditions of this License Agreement, PSF hereby
-grants Licensee a nonexclusive, royalty-free, world-wide license to reproduce,
-analyze, test, perform and/or display publicly, prepare derivative works,
-distribute, and otherwise use Python alone or in any derivative version,
-provided, however, that PSF's License Agreement and PSF's notice of copyright,
-i.e., "Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Python Software Foundation;
-All Rights Reserved" are retained in Python alone or in any derivative version
-prepared by Licensee.
-
-3. In the event Licensee prepares a derivative work that is based on
-or incorporates Python or any part thereof, and wants to make
-the derivative work available to others as provided herein, then
-Licensee hereby agrees to include in any such work a brief summary of
-the changes made to Python.
-
-4. PSF is making Python available to Licensee on an "AS IS"
-basis.  PSF MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
-IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, PSF MAKES NO AND
-DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
-FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON WILL NOT
-INFRINGE ANY THIRD PARTY RIGHTS.
-
-5. PSF SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON
-FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS
-A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON,
-OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-6. This License Agreement will automatically terminate upon a material
-breach of its terms and conditions.
-
-7. Nothing in this License Agreement shall be deemed to create any
-relationship of agency, partnership, or joint venture between PSF and
-Licensee.  This License Agreement does not grant permission to use PSF
-trademarks or trade name in a trademark sense to endorse or promote
-products or services of Licensee, or any third party.
-
-8. By copying, installing or otherwise using Python, Licensee
-agrees to be bound by the terms and conditions of this License
-Agreement.
-
-
-BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0
--------------------------------------------
-
-BEOPEN PYTHON OPEN SOURCE LICENSE AGREEMENT VERSION 1
-
-1. This LICENSE AGREEMENT is between BeOpen.com ("BeOpen"), having an
-office at 160 Saratoga Avenue, Santa Clara, CA 95051, and the
-Individual or Organization ("Licensee") accessing and otherwise using
-this software in source or binary form and its associated
-documentation ("the Software").
-
-2. Subject to the terms and conditions of this BeOpen Python License
-Agreement, BeOpen hereby grants Licensee a non-exclusive,
-royalty-free, world-wide license to reproduce, analyze, test, perform
-and/or display publicly, prepare derivative works, distribute, and
-otherwise use the Software alone or in any derivative version,
-provided, however, that the BeOpen Python License is retained in the
-Software, alone or in any derivative version prepared by Licensee.
-
-3. BeOpen is making the Software available to Licensee on an "AS IS"
-basis.  BEOPEN MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
-IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, BEOPEN MAKES NO AND
-DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
-FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE WILL NOT
-INFRINGE ANY THIRD PARTY RIGHTS.
-
-4. BEOPEN SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF THE
-SOFTWARE FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS
-AS A RESULT OF USING, MODIFYING OR DISTRIBUTING THE SOFTWARE, OR ANY
-DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-5. This License Agreement will automatically terminate upon a material
-breach of its terms and conditions.
-
-6. This License Agreement shall be governed by and interpreted in all
-respects by the law of the State of California, excluding conflict of
-law provisions.  Nothing in this License Agreement shall be deemed to
-create any relationship of agency, partnership, or joint venture
-between BeOpen and Licensee.  This License Agreement does not grant
-permission to use BeOpen trademarks or trade names in a trademark
-sense to endorse or promote products or services of Licensee, or any
-third party.  As an exception, the "BeOpen Python" logos available at
-http://www.pythonlabs.com/logos.html may be used according to the
-permissions granted on that web page.
-
-7. By copying, installing or otherwise using the software, Licensee
-agrees to be bound by the terms and conditions of this License
-Agreement.
-
-
-CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1
----------------------------------------
-
-1. This LICENSE AGREEMENT is between the Corporation for National
-Research Initiatives, having an office at 1895 Preston White Drive,
-Reston, VA 20191 ("CNRI"), and the Individual or Organization
-("Licensee") accessing and otherwise using Python 1.6.1 software in
-source or binary form and its associated documentation.
-
-2. Subject to the terms and conditions of this License Agreement, CNRI
-hereby grants Licensee a nonexclusive, royalty-free, world-wide
-license to reproduce, analyze, test, perform and/or display publicly,
-prepare derivative works, distribute, and otherwise use Python 1.6.1
-alone or in any derivative version, provided, however, that CNRI's
-License Agreement and CNRI's notice of copyright, i.e., "Copyright (c)
-1995-2001 Corporation for National Research Initiatives; All Rights
-Reserved" are retained in Python 1.6.1 alone or in any derivative
-version prepared by Licensee.  Alternately, in lieu of CNRI's License
-Agreement, Licensee may substitute the following text (omitting the
-quotes): "Python 1.6.1 is made available subject to the terms and
-conditions in CNRI's License Agreement.  This Agreement together with
-Python 1.6.1 may be located on the Internet using the following
-unique, persistent identifier (known as a handle): 1895.22/1013.  This
-Agreement may also be obtained from a proxy server on the Internet
-using the following URL: http://hdl.handle.net/1895.22/1013".
-
-3. In the event Licensee prepares a derivative work that is based on
-or incorporates Python 1.6.1 or any part thereof, and wants to make
-the derivative work available to others as provided herein, then
-Licensee hereby agrees to include in any such work a brief summary of
-the changes made to Python 1.6.1.
-
-4. CNRI is making Python 1.6.1 available to Licensee on an "AS IS"
-basis.  CNRI MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
-IMPLIED.  BY WAY OF EXAMPLE, BUT NOT LIMITATION, CNRI MAKES NO AND
-DISCLAIMS ANY REPRESENTATION OR WARRANTY OF MERCHANTABILITY OR FITNESS
-FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF PYTHON 1.6.1 WILL NOT
-INFRINGE ANY THIRD PARTY RIGHTS.
-
-5. CNRI SHALL NOT BE LIABLE TO LICENSEE OR ANY OTHER USERS OF PYTHON
-1.6.1 FOR ANY INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES OR LOSS AS
-A RESULT OF MODIFYING, DISTRIBUTING, OR OTHERWISE USING PYTHON 1.6.1,
-OR ANY DERIVATIVE THEREOF, EVEN IF ADVISED OF THE POSSIBILITY THEREOF.
-
-6. This License Agreement will automatically terminate upon a material
-breach of its terms and conditions.
-
-7. This License Agreement shall be governed by the federal
-intellectual property law of the United States, including without
-limitation the federal copyright law, and, to the extent such
-U.S. federal law does not apply, by the law of the Commonwealth of
-Virginia, excluding Virginia's conflict of law provisions.
-Notwithstanding the foregoing, with regard to derivative works based
-on Python 1.6.1 that incorporate non-separable material that was
-previously distributed under the GNU General Public License (GPL), the
-law of the Commonwealth of Virginia shall govern this License
-Agreement only as to issues arising under or with respect to
-Paragraphs 4, 5, and 7 of this License Agreement.  Nothing in this
-License Agreement shall be deemed to create any relationship of
-agency, partnership, or joint venture between CNRI and Licensee.  This
-License Agreement does not grant permission to use CNRI trademarks or
-trade name in a trademark sense to endorse or promote products or
-services of Licensee, or any third party.
-
-8. By clicking on the "ACCEPT" button where indicated, or by copying,
-installing or otherwise using Python 1.6.1, Licensee agrees to be
-bound by the terms and conditions of this License Agreement.
-
-        ACCEPT
-
-
-CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2
---------------------------------------------------
-
-Copyright (c) 1991 - 1995, Stichting Mathematisch Centrum Amsterdam,
-The Netherlands.  All rights reserved.
-
-Permission to use, copy, modify, and distribute this software and its
-documentation for any purpose and without fee is hereby granted,
-provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in
-supporting documentation, and that the name of Stichting Mathematisch
-Centrum or CWI not be used in advertising or publicity pertaining to
-distribution of the software without specific, written prior
-permission.
-
-STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO
-THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE
-FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
-OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 8e7a0e17a14c91d325c22a8ade50da3aaa5a97e321beebbdce77d63fc719a1c2
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014 Kiran Abburi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 8ecd0fb4cd2c3b0dd695b568234c466478ceb542b9f8b3c4af5a01c27b36229e
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015 Brian Donovan
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 8f08c824b2bb54eda2b6ee6053d2eeed46877b3b7b2ef3f60fc2b9fa580f54b2
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2014-present Sebastian McKenzie and other contributors
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 8f48c4095e8a983dce50c97ded97bd1ea589b6154ee5fe5c8e330046636272bb
@@ -9606,54 +7702,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 928a86b1d2984fd8ca1e148ef9c3b80ec4ee5e452aa58b0fda60a8f46f8c7dc6
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) Jordan Harband and contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 928e59141142e3b9b68a2403e490c6a73ac90833066c5d6f876e2de108e06865
---------------------------------------------------------------------------------
-Copyright 2024 Justin Ridgewell <justin@ridgewell.name>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 9345cfa93d4ba78f7c8d849a53aeea67e5551b399467a8c7be0fabed4c6d70d7
@@ -9801,31 +7849,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 96f25b41a87abdf7159a47864199c02f2356972dd6aeb6b13f23ebaf7ab6dc5e
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2023 Cody Olsen
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 9b87046206ea4e66f50b3b092166f4c424f3f98897d91511b842e3bee020de3d
@@ -9999,32 +8022,6 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: 9eb9cb6b607e73703ba9df9872583faf11c6c3abf7a2be80ea79390251ae9905
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2014-present yiminghe
-Copyright (c) 2015-present Alipay.com, https://www.alipay.com/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: 9f5ea8f5a2689d9e0fd255197282d4526fc2219637d7e76c4ef02f1ea289f544
 --------------------------------------------------------------------------------
 Copyright (c) 2018 - present, iVis-at-Bilkent.
@@ -10046,32 +8043,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: 9fc15c73fe40f618d0485364854183747b26d00163810e8ba4a8f8f1cd68f851
---------------------------------------------------------------------------------
-Copyright (c) 2014 Vitaly Puzrin, Alex Kocharin.
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: 9fe335fb097fbff0b7f709ee14a77b1d1cf739d3400cd0b0e19118946772ea56
@@ -10117,32 +8088,6 @@ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: a00104af602c87cb0bce9742008e39800c8d1b64940b0e9dc124b60a3f7ab475
---------------------------------------------------------------------------------
-MIT LICENSE
-
-Copyright (c) 2018-present Ant UED, https://xtech.antfin.com/
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: a0071c9694f9d2813c586364281e42132539bebe451e31c19bb03f180db1ef04
 --------------------------------------------------------------------------------
 Copyright (c) MMXV jden <jason@denizac.org>
@@ -10150,55 +8095,6 @@ Copyright (c) MMXV jden <jason@denizac.org>
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: a094e8da18394b1d8eee1098a6a0d69d189db0a81c2bdf29711eea4d3695e560
---------------------------------------------------------------------------------
-Copyright (c) 2015 Vitaly Puzrin, Alex Kocharin.
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-
-.parse() is based on Joyent's node.js `url` code:
-
-Copyright Joyent, Inc. and other Node contributors. All rights reserved.
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to
-deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-sell copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: a1563f431b1fa6bd1430c424d3e79247887f16bb66855dbf8b99c01047ed9f28
@@ -10250,32 +8146,6 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Glob's logo created by Tanya Brassie <http://tanyabrassie.com/>, licensed
 under a Creative Commons Attribution-ShareAlike 4.0 International License
 https://creativecommons.org/licenses/by-sa/4.0/
-
---------------------------------------------------------------------------------
-Text SHA-256: a57f8fe084177ae391bbe1dab0944b298e87674f3b064fceb6d6c933ae8c5923
---------------------------------------------------------------------------------
-MIT LICENSE
-
-Copyright (c) 2015-present Alipay.com, https://www.alipay.com/
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: a734fd0e3f64745e4d78dd34b37a3546f4488a3e516879d62e952f2b9e0f69a4
@@ -10403,19 +8273,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: aa9ce8bad1af7244867385a0b9c3a3f13b3f9c1dba6bc29f275a66075203dc6f
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2019-present alipay.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: ac1f2978a646f2d409b80c433e49c489c835988e2729a5afddcfe29d352196dc
 --------------------------------------------------------------------------------
 MIT License
@@ -10539,31 +8396,6 @@ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: b58c311d6fa4d2729b4220f6e1cb13d8df7d7406b360ac47eccf5e5cd356a23f
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2025 Cody Olsen
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: b7972f57b949d275b4fdcb36de706fd560b79930ee2c2998f5da7409d6d37527
 --------------------------------------------------------------------------------
 The MIT License (MIT)
@@ -10587,46 +8419,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: b8778b155bfde5a28b023a558753c0fa058a52bb9de35c343c250be1bbcdedab
---------------------------------------------------------------------------------
-Copyright 2019 Justin Ridgewell <jridgewell@google.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: b98c7fcf09a54cdd30ea5bea9ec672f81676191d990c8673a2fcd874308552bf
---------------------------------------------------------------------------------
-Copyright 2018 Eemeli Aro <eemeli@gmail.com>
-
-Permission to use, copy, modify, and/or distribute this software for any purpose
-with or without fee is hereby granted, provided that the above copyright notice
-and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
-OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
-THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: b9e9abeaf8b92573dc28915d4948dbce30d55b30c688d109898b35e6105c4215
@@ -10734,31 +8526,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: bedcfd7e502f54290e1a061b49d5e90347362a4d68c3d196ff3001b6ecbe7176
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2018 Jed Watson
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: c0e4b0b302173791312fb6a29289ecc2f23d6ccf63e08232b7a06e14b2eaeefb
 --------------------------------------------------------------------------------
 MIT License
@@ -10808,17 +8575,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: c3b7834a158755947fca791ea34b8a0d5ac01b203d8b43ecf3dfefa368eb8e72
---------------------------------------------------------------------------------
-Copyright © 2017 jsdnxx
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: c5b780142b6f8a11eb4cdad8e47036e60259f6470718a924fd0ab38a4c7958e7
@@ -10887,44 +8643,6 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: c955faf4959d831df8ce4e229e1e859dd35d91b9b45aa0d6ab565ab9cbb15265
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2012 James Halliday
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: c9808a775260db5602f6a0c29f5f8b78e81f9666a33623fedfa34a22208b1063
---------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: caf96060dc6de2af3adca29e7f50445b9ac26f860a8f646396a42e5d26cd9564
@@ -11480,19 +9198,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: e3be4577f9f035670585db1fd5b0d881707556307ce11d8cc3df2ea19ca5a4ef
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2019-present afc163
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: e453dafb35c9b3cb911a8d2f1a0b37526ee15d1bc21cfc689756bed25e9483b8
 --------------------------------------------------------------------------------
 (The MIT License)
@@ -11637,57 +9342,6 @@ License: MIT https://github.com/phosphor-icons/core/blob/main/LICENSE
 
 Icons8 Line Awesome - https://icons8.com/line-awesome
 License: MIT https://github.com/icons8/line-awesome/blob/master/LICENSE.md
-
---------------------------------------------------------------------------------
-Text SHA-256: e66591b0b1530a830d6cb1aab72646a6d0e4a4e77adb42e0bb15673a0afa1263
---------------------------------------------------------------------------------
-Copyright 2013 Thorsten Lorenz.
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: e7f14c40a4fc6bcd3ac4cbbabe5b6a2fd9c4063f4fe124e3a5222fb3ce13f479
---------------------------------------------------------------------------------
-Copyright Mathias Bynens <https://mathiasbynens.be/>
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: e87ae4ac338d47ce509af51623763b9a197e6ca26f958be54f67c1a64cd0062c
@@ -11979,32 +9633,6 @@ TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: f696794c35873d9bbbe361b8b3c6bb0b9621a88022897f84eff41cbf2f803f6c
---------------------------------------------------------------------------------
-MIT LICENSE
-
-Copyright (c) 2015-present Ant UED, https://xtech.antfin.com/
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
 Text SHA-256: f78777570e325f82b885c1f8ec8ee15009beb786b97ef054fa4007781c9d4e1c
 --------------------------------------------------------------------------------
 (The MIT License)
@@ -12056,55 +9684,11 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Text SHA-256: fa11af88c78d3b5a92fd94c1a8e61d0684c605fb42e72d90f92d01c0ad59df01
---------------------------------------------------------------------------------
-ISC License
-
-Copyright (c) 2021-2024 Oleksii Raspopov, Kostiantyn Denysov, Anton Verinov
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: fa70b699d4f04cb3e64775b004cd7fe017bb0ac3041fce408f2adadce0b57aee
---------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015-present Alipay.com, https://www.alipay.com/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: fbac72036d70b36bde1499d7741bd7ec8f38ad0bf711bf36b4458766e52d46c3
+Text SHA-256: faaabd353842ef746ba973e242d0849a33a6835de83010a5516d865bace26422
 --------------------------------------------------------------------------------
 MIT License
 
-Copyright (c) 2022-current Arvin Xu
+Copyright (c) 2025 SeeUSoon93
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -12123,30 +9707,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
---------------------------------------------------------------------------------
-Text SHA-256: fc54f50dbda2f75b27de8bb3ae27f401d30bf41c1d76cfbde0e17dca6ff135f0
---------------------------------------------------------------------------------
-The MIT License (MIT)
-Copyright (c) 2015-present Alipay.com, https://www.alipay.com/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 Text SHA-256: fe64958bfaef10b1c9628b4ee9f1c48170b0219bd4b2a7ef4a0c41aebd920c9e

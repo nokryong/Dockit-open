@@ -361,7 +361,7 @@ describe("U2 note deletion, context menu, and endnote order", () => {
       )).not.toBeNull();
     });
     [...document.querySelectorAll(
-      '[data-dockit-note-context-menu="true"] [role="menuitem"]'
+      '[data-dockit-note-context-menu="true"] button'
     )].find((item) => item.textContent.includes("미주로 변환"))?.click();
     await vi.waitFor(() => {
       expect(editor.view.dom.querySelector(
@@ -380,11 +380,11 @@ describe("U2 note deletion, context menu, and endnote order", () => {
     }));
     await vi.waitFor(() => {
       expect([...document.querySelectorAll(
-        '[data-dockit-note-context-menu="true"] [role="menuitem"]'
+        '[data-dockit-note-context-menu="true"] button'
       )].some((item) => item.textContent.includes("미주 삭제"))).toBe(true);
     });
     [...document.querySelectorAll(
-      '[data-dockit-note-context-menu="true"] [role="menuitem"]'
+      '[data-dockit-note-context-menu="true"] button'
     )].find((item) => item.textContent.includes("미주 삭제"))?.click();
 
     await vi.waitFor(() => {

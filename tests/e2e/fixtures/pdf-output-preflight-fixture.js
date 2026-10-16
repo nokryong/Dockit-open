@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import PdfOutputPreflightModal from "../../../app/LIB/components/docs/PdfOutputPreflightModal";
 import { DarkModeProvider } from "../../../app/LIB/context/DarkModeContext";
+import { SettingProvider } from "../../../app/LIB/context/SettingContext";
 import {
   auditPdfOutputPreflight,
   getPdfOutputPreflightIssueSignature
@@ -122,9 +123,14 @@ function FixtureApp() {
 }
 
 createRoot(document.querySelector("#app")).render(
+  // DarkModeProvider reads the theme from settings, so it needs SettingProvider.
   React.createElement(
-    DarkModeProvider,
+    SettingProvider,
     null,
-    React.createElement(FixtureApp)
+    React.createElement(
+      DarkModeProvider,
+      null,
+      React.createElement(FixtureApp)
+    )
   )
 );

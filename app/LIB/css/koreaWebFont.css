@@ -2034,7 +2034,7 @@
 }
 @font-face {
   font-family: "Hangyore";
-  src: url("//cdn.jsdelivr.net/korean-webfonts/1/corps/hani/Hankc/Hankc.woff2")
+  src: url("https://cdn.jsdelivr.net/korean-webfonts/1/corps/hani/Hankc/Hankc.woff2")
     format("woff2");
   font-weight: 400;
   font-display: swap;

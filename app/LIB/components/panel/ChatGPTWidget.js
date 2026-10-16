@@ -13,8 +13,6 @@ import {
   Switch,
   Textarea,
   Typography,
-  resolveColor,
-  useTheme,
 } from "sud-ui";
 import {
   TbArrowUp,
@@ -63,7 +61,6 @@ function ReasoningEffortSlider({
   disabled,
   onSelect,
 }) {
-  const uiTheme = useTheme();
   const efforts = [
     ...new Set(
       options
@@ -263,9 +260,9 @@ function ReasoningEffortSlider({
           aria-label="모델 목록"
           expandType="popover"
           selectedKey={modelId}
-          selectedColor={resolveColor(theme + "-2", uiTheme)}
-          selectedTextColor={resolveColor(theme + "-9", uiTheme)}
-          hoverColor={resolveColor(theme + "-1", uiTheme)}
+          selectedColor={`${theme}-2`}
+          selectedTextColor={`${theme}-9`}
+          hoverColor={`${theme}-1`}
           className="w-full [&_.sud-menu__item>span]:w-full"
           onSelect={selectModelItem}
           items={models.map((model) => ({

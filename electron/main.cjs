@@ -9,6 +9,7 @@ const { CodexClient, safeFailure: codexFailure } = require('./codex-client.cjs')
 const { extensions } = require('./chat-attachments.cjs');
 const { WindowsPrintService } = require('./windows-print.cjs');
 const { FONT_ORIGINS, STYLE_ORIGINS, readFontAsset } = require('./font-assets.cjs');
+const { registerPluginHost } = require('./plugin-host.cjs');
 
 const testMode = process.argv.includes('--test-mode');
 let devOrigin = null;
@@ -20,7 +21,10 @@ if (!app.isPackaged && process.argv.includes('--dev')) {
 const testHome = testMode && process.env.DOCKIT_TEST_HOME;
 if (testHome) app.setPath('userData', path.join(testHome, 'electron-profile'));
 app.setName('Dockit Open');
-protocol.registerSchemesAsPrivileged([{ scheme: 'dockit', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }]);
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'dockit', privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } },
+  { scheme: 'dockit-plugin', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } }
+]);
 let store;
 let mainWindow;
 let closing = false;
@@ -46,6 +50,7 @@ else app.whenReady().then(async () => {
     trash: file => shell.trashItem(file)
   });
   await store.init();
+  const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: () => mainWindow });
   chatgpt = new ChatGPTClient({
     root: store.root, encryption: safeStorage,
     openExternal: url => shell.openExternal(url),
@@ -197,6 +202,21 @@ else app.whenReady().then(async () => {
   mainWindow.on('maximize', () => mainWindow.webContents.send('local:window-maximized', true));
   mainWindow.on('unmaximize', () => mainWindow.webContents.send('local:window-maximized', false));
   mainWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  mainWindow.webContents.on('did-start-navigation', details => {
+    if (details.isSameDocument) return;
+    if (details.isMainFrame) { plugins.closeAll(); return; }
+    // CSP can reject a subframe navigation before will-frame-navigate fires.
+    // Revoke that frame's capabilities and let the host display a retry action.
+    if (details.frame?.url.startsWith('dockit-plugin:')) {
+      const sessionId = new URL(details.frame.url).hostname;
+      plugins.close(sessionId);
+      mainWindow.webContents.send('plugins:stopped', { sessionId, message: '플러그인의 페이지 이동을 차단했습니다.' });
+    }
+  });
+  mainWindow.webContents.on('will-frame-navigate', details => {
+    // Only the trusted main frame may mount a plugin.
+    if (!details.isMainFrame && (details.initiator !== mainWindow.webContents.mainFrame || !details.url.startsWith('dockit-plugin:'))) details.preventDefault();
+  });
   mainWindow.webContents.on('will-navigate', (event, url) => {
     if (devOrigin && url === mainWindow.webContents.getURL()) return;
     event.preventDefault();

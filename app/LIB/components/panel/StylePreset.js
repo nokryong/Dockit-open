@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Divider, Input, Typography, toast, Div } from "sud-ui";
+import { Button, Divider, Input, Skeleton, Typography, toast, Div } from "sud-ui";
 import WidgetCard from "./WidgetCard";
 import { useStylePreset } from "../../context/StylePresetContext";
 import { useEditor } from "../../context/EditorContext";
@@ -16,7 +16,6 @@ import {
 } from "../../utils/stylePresetUtils";
 import { MdAdd, MdDragIndicator, MdEdit, MdStyle } from "react-icons/md";
 import { useDarkMode } from "../../context/DarkModeContext";
-import { Skeleton } from "antd";
 import {
   DndContext,
   PointerSensor,
@@ -574,7 +573,7 @@ export default function StylePreset({ dragHandleProps }) {
           <Divider style={{ margin: 0 }} />
 
           {stylePresetLoading ? (
-            <Skeleton active />
+            <Skeleton active ariaLabel="스타일 불러오는 중" />
           ) : stylePresetList.length === 0 ? (
             <Typography size="sm" color="neutral-7">
               저장된 스타일이 없습니다.

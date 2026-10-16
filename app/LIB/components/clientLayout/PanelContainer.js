@@ -8,7 +8,7 @@ import {
 import { useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
-import { widgets } from "../../constant/widgets";
+import WidgetRenderer from "../panel/WidgetRenderer";
 import React from "react";
 import { Div } from "sud-ui";
 import { useSetting } from "../../context/SettingContext";
@@ -30,13 +30,10 @@ const SortableWidget = React.memo(function SortableWidget({ id, panelWidth }) {
     zIndex: isDragging ? 999 : "auto",
     opacity: isDragging ? 0 : 1
   };
-  const WidgetComponent = widgets[id];
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} className="w-full">
-      {WidgetComponent ? (
-        <WidgetComponent dragHandleProps={listeners} width={panelWidth} />
-      ) : null}
+      <WidgetRenderer id={id} dragHandleProps={listeners} width={panelWidth} />
     </div>
   );
 });

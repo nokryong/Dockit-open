@@ -7,6 +7,7 @@ const DrawerContext = createContext(null);
 export function DrawerProvider({ children }) {
   const [openTreeDrawer, setOpenTreeDrawer] = useState(false);
   const [openWidgetDrawer, setOpenWidgetDrawer] = useState(false);
+  const [openPluginDrawer, setOpenPluginDrawer] = useState(false);
   const [openSettingsDrawer, setOpenSettingsDrawer] = useState(false);
 
   // 개별 드로어 토글 함수들
@@ -16,6 +17,9 @@ export function DrawerProvider({ children }) {
   const toggleWidgetDrawer = useCallback(() => {
     setOpenWidgetDrawer((prev) => !prev);
   }, []);
+  const togglePluginDrawer = useCallback(() => {
+    setOpenPluginDrawer((prev) => !prev);
+  }, []);
   const toggleSettingsDrawer = useCallback(() => {
     setOpenSettingsDrawer((prev) => !prev);
   }, []);
@@ -24,6 +28,7 @@ export function DrawerProvider({ children }) {
   const closeAllDrawers = useCallback(() => {
     setOpenTreeDrawer(false);
     setOpenWidgetDrawer(false);
+    setOpenPluginDrawer(false);
     setOpenSettingsDrawer(false);
   }, []);
 
@@ -31,29 +36,39 @@ export function DrawerProvider({ children }) {
   const openOnlyTreeDrawer = useCallback(() => {
     setOpenTreeDrawer(true);
     setOpenWidgetDrawer(false);
+    setOpenPluginDrawer(false);
     setOpenSettingsDrawer(false);
   }, []);
 
   const openOnlyWidgetDrawer = useCallback(() => {
     setOpenTreeDrawer(false);
     setOpenWidgetDrawer(true);
+    setOpenPluginDrawer(false);
+    setOpenSettingsDrawer(false);
+  }, []);
+
+  const openOnlyPluginDrawer = useCallback(() => {
+    setOpenTreeDrawer(false);
+    setOpenWidgetDrawer(false);
+    setOpenPluginDrawer(true);
     setOpenSettingsDrawer(false);
   }, []);
 
   const openOnlySettingsDrawer = useCallback(() => {
     setOpenTreeDrawer(false);
     setOpenWidgetDrawer(false);
+    setOpenPluginDrawer(false);
     setOpenSettingsDrawer(true);
   }, []);
 
   const value = useMemo(() => ({
-    openTreeDrawer, openWidgetDrawer, openSettingsDrawer,
-    setOpenTreeDrawer, setOpenWidgetDrawer, setOpenSettingsDrawer,
-    toggleTreeDrawer, toggleWidgetDrawer, toggleSettingsDrawer,
-    closeAllDrawers, openOnlyTreeDrawer, openOnlyWidgetDrawer, openOnlySettingsDrawer,
-  }), [openTreeDrawer, openWidgetDrawer, openSettingsDrawer,
-    toggleTreeDrawer, toggleWidgetDrawer, toggleSettingsDrawer, closeAllDrawers,
-    openOnlyTreeDrawer, openOnlyWidgetDrawer, openOnlySettingsDrawer]);
+    openTreeDrawer, openWidgetDrawer, openPluginDrawer, openSettingsDrawer,
+    setOpenTreeDrawer, setOpenWidgetDrawer, setOpenPluginDrawer, setOpenSettingsDrawer,
+    toggleTreeDrawer, toggleWidgetDrawer, togglePluginDrawer, toggleSettingsDrawer,
+    closeAllDrawers, openOnlyTreeDrawer, openOnlyWidgetDrawer, openOnlyPluginDrawer, openOnlySettingsDrawer,
+  }), [openTreeDrawer, openWidgetDrawer, openPluginDrawer, openSettingsDrawer,
+    toggleTreeDrawer, toggleWidgetDrawer, togglePluginDrawer, toggleSettingsDrawer, closeAllDrawers,
+    openOnlyTreeDrawer, openOnlyWidgetDrawer, openOnlyPluginDrawer, openOnlySettingsDrawer]);
 
   return (
     <DrawerContext.Provider value={value}>{children}</DrawerContext.Provider>

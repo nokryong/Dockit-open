@@ -1,0 +1,13 @@
+{
+  "name": "@dockit/plugin-sdk",
+  "version": "0.1.0",
+  "description": "Dockit plugin browser bridge, manifest validation and packaging tools",
+  "author": "nokryong",
+  "main": "manifest.cjs",
+  "bin": { "dockit-plugin-pack": "package.cjs" },
+  "exports": { ".": "./manifest.cjs", "./package": "./package.cjs", "./icons": "./icons.cjs", "./browser": "./browser.js" },
+  "files": ["browser.js", "manifest.cjs", "icons.cjs", "package.cjs", "README.md", "docs"],
+  "repository": { "type": "git", "url": "https://github.com/nokryong/dockit-plugin-sdk.git" },
+  "engines": { "node": ">=22" },
+  "dependencies": { "fflate": "0.8.3", "react": "19.1.0", "react-dom": "19.1.0", "react-icons": "5.7.0" }
+}

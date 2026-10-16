@@ -18,6 +18,7 @@ import {
   MdMinimize
 } from "react-icons/md";
 import { LuLoaderCircle } from "react-icons/lu";
+import { TbPuzzle } from "react-icons/tb";
 import TitleEditor from "../write/TitleEditor";
 import { useDebounce } from "../../hook/useDebounce";
 import WriteHeader from "./header/WriteHeader";
@@ -65,7 +66,7 @@ export default function Header({
   const { title, setTitle, isSaving, saveDocument, codexDocumentLock } = useDocument();
   const { editor } = useEditor();
   const { exitBook } = useInBook();
-  const { setOpenTreeDrawer, setOpenWidgetDrawer, setOpenSettingsDrawer } =
+  const { setOpenTreeDrawer, setOpenWidgetDrawer, setOpenPluginDrawer, setOpenSettingsDrawer } =
     useDrawer();
   const [openTabs, setOpenTabs] = useState([]);
 
@@ -303,6 +304,11 @@ export default function Header({
           icon: GridFourDiaOutline
         },
         {
+          tooltip: "플러그인",
+          onClick: () => setOpenPluginDrawer(true),
+          icon: TbPuzzle
+        },
+        {
           tooltip: "설정", onClick: () => setOpenSettingsDrawer(true), icon: UserOutline
         }
       );
@@ -345,6 +351,7 @@ export default function Header({
     isMaximized,
     setIsDarkMode,
     setOpenTreeDrawer,
+    setOpenPluginDrawer,
     setOpenSettingsDrawer,
     setOpenWidgetDrawer
   ]);

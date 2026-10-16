@@ -5,6 +5,25 @@ async function invoke(channel, ...args) {
   return result.value;
 }
 contextBridge.exposeInMainWorld('dockitLocal', {
+  plugins: {
+    list: () => invoke('plugins:list'),
+    inspect: url => invoke('plugins:inspect', url),
+    install: (token, folder) => invoke('plugins:install', token, folder),
+    uninstall: (id, keepData) => invoke('plugins:uninstall', id, keepData),
+    open: (id, widgetId) => invoke('plugins:open', id, widgetId),
+    close: sessionId => invoke('plugins:close', sessionId),
+    storage: (sessionId, operation, key, value) => invoke('plugins:storage', sessionId, operation, key, value),
+    onChanged: callback => {
+      const listener = (_event, value) => callback(value);
+      ipcRenderer.on('plugins:changed', listener);
+      return () => ipcRenderer.removeListener('plugins:changed', listener);
+    },
+    onStopped: callback => {
+      const listener = (_event, value) => callback(value);
+      ipcRenderer.on('plugins:stopped', listener);
+      return () => ipcRenderer.removeListener('plugins:stopped', listener);
+    }
+  },
   codex: {
     status: () => invoke('codex:status'),
     signIn: () => invoke('codex:sign-in'),

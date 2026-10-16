@@ -14,6 +14,8 @@ import { Hanja } from "@/app/LIB/constant/icons";
 import { inputProps, newShadowDarkSm, newShadowLightSm } from "@/app/LIB/constant/uiProps";
 import { useDarkMode } from "@/app/LIB/context/DarkModeContext";
 import { WIDGET_DRAWER_GROUPS } from "@/app/LIB/constant/widgetGroups";
+import { usePlugins } from "@/app/LIB/context/PluginContext";
+import { getPluginIcon } from "../../plugins/PluginIcon";
 
 const WIDGET_ICON_COMPONENTS = {
   aiGenerate: RiAiGenerate2,
@@ -49,6 +51,7 @@ export default function WidgetDrawer({
   setOpenWidgetDrawer,
 }) {
   const { left, right, toggle, setLeft, remove } = usePanels();
+  const { widgets: pluginWidgets } = usePlugins();
   const { setting } = useSetting();
   const { isDarkMode, currentColors } = useDarkMode();
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,8 +63,13 @@ export default function WidgetDrawer({
   const themeScale = currentColors?.[setting.theme] || currentColors?.mint;
 
   const widgetGroups = useMemo(
-    () => WIDGET_DRAWER_GROUPS.map(attachWidgetIcons),
-    [],
+    () => {
+      const groups = WIDGET_DRAWER_GROUPS.map(attachWidgetIcons);
+      const items = Object.entries(pluginWidgets).map(([id, widget]) => ({ id, title: widget.title, icon: getPluginIcon(widget.iconAsset || widget.icon) }));
+      if (items.length) groups.push({ id: 'plugins', title: '플러그인', icon: getPluginIcon('puzzle'), defaultExpanded: true, items });
+      return groups;
+    },
+    [pluginWidgets],
   );
 
   const normalizedSearch = searchTerm.trim().toLowerCase();

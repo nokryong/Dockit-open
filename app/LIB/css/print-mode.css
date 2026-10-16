@@ -2,7 +2,7 @@
   #header,
   .app-layout-footer,
   .dockit-panel,
-  .ant-splitter-bar,
+  .sud-splitter__bar,
   .tiptap-page-shell-layer,
   .dockit-ruler-horizontal-layer,
   .dockit-ruler-vertical-layer,
@@ -20,9 +20,9 @@
     border: none !important;
     box-shadow: none !important;
   }
-  .ant-splitter,
-  .ant-splitter-panel,
-  .ant-splitter-panel > *,
+  .sud-splitter,
+  .sud-splitter__panel,
+  .sud-splitter__panel > *,
   .zoom-container,
   .doc-print-page-root,
   .tiptap-container,

@@ -70,11 +70,6 @@ const renderDrawer = async () => {
   return container;
 };
 
-const findButtonContaining = (container, label) =>
-  Array.from(container.querySelectorAll("button")).find((button) =>
-    button.textContent.includes(label)
-  );
-
 const findButtonWithText = (container, label) =>
   Array.from(container.querySelectorAll("button")).find(
     (button) => button.textContent.trim() === label
@@ -89,32 +84,31 @@ afterEach(() => {
 });
 
 describe("WidgetDrawer release hierarchy", () => {
-  it("AI와 문서 작성을 먼저 열고 자료 탐색·도구·기타는 요청 전까지 접어 둔다", async () => {
+  it("AI와 문서 작성을 먼저 열고 도구는 요청 전까지 접어 둔다", async () => {
     const container = await renderDrawer();
     const groupButton = (id) =>
       container.querySelector(`button[aria-controls="widget-tier-${id}"]`);
 
     expect(groupButton("ai").getAttribute("aria-expanded")).toBe("true");
     expect(groupButton("writing").getAttribute("aria-expanded")).toBe("true");
-    expect(groupButton("research").getAttribute("aria-expanded")).toBe("false");
     expect(groupButton("tools").getAttribute("aria-expanded")).toBe("false");
-    expect(groupButton("etc").getAttribute("aria-expanded")).toBe("false");
-    expect(container.textContent).toContain("AI 채팅");
-    expect(container.textContent).not.toContain("한자");
+    expect(container.textContent).toContain("ChatGPT");
+    expect(container.textContent).toContain("한자");
+    expect(container.textContent).not.toContain("계산기");
 
-    const aiItem = findButtonWithText(container, "AI 채팅");
+    const aiItem = findButtonWithText(container, "ChatGPT");
     expect(aiItem.className).toContain("border-0");
 
-    const researchButton = groupButton("research");
-    await act(async () => researchButton.click());
+    const toolsButton = groupButton("tools");
+    await act(async () => toolsButton.click());
 
-    expect(researchButton.getAttribute("aria-expanded")).toBe("true");
-    expect(container.querySelector("#widget-tier-research")).not.toBeNull();
-    expect(container.textContent).toContain("한자");
+    expect(toolsButton.getAttribute("aria-expanded")).toBe("true");
+    expect(container.querySelector("#widget-tier-tools")).not.toBeNull();
+    expect(container.textContent).toContain("계산기");
 
-    const researchItem = findButtonWithText(container, "한자");
-    expect(researchItem.className).toContain("border-0");
-    expect(researchItem.className).toBe(aiItem.className);
+    const toolItem = findButtonWithText(container, "계산기");
+    expect(toolItem.className).toContain("border-0");
+    expect(toolItem.className).toBe(aiItem.className);
   });
 
   it("expands matching tiers while searching", async () => {
@@ -122,17 +116,19 @@ describe("WidgetDrawer release hierarchy", () => {
     const input = container.querySelector('input[placeholder="도구 검색"]');
 
     await act(async () => {
-      fireEvent.change(input, { target: { value: "한자" } });
+      fireEvent.change(input, { target: { value: "계산기" } });
     });
 
-    const researchButton = findButtonContaining(container, "자료 탐색");
-    expect(researchButton.getAttribute("aria-expanded")).toBe("true");
-    expect(container.textContent).toContain("한자");
+    const toolsButton = container.querySelector(
+      'button[aria-controls="widget-tier-tools"]'
+    );
+    expect(toolsButton.getAttribute("aria-expanded")).toBe("true");
+    expect(container.textContent).toContain("계산기");
     expect(
       container.querySelector('button[aria-controls="widget-tier-writing"]')
     ).toBeNull();
     expect(
-      container.querySelector('button[aria-controls="widget-tier-etc"]')
+      container.querySelector('button[aria-controls="widget-tier-ai"]')
     ).toBeNull();
   });
 

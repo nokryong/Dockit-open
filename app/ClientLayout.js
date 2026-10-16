@@ -13,6 +13,8 @@ import "sud-ui/dist/index.css";
 import { darkTheme } from "./LIB/config/darkTheme";
 // context
 import { PanelProvider, usePanels } from "./LIB/context/PanelContext";
+import { PluginProvider } from "./LIB/context/PluginContext";
+import WidgetRenderer from "./LIB/components/panel/WidgetRenderer";
 import { DarkModeProvider, useDarkMode } from "./LIB/context/DarkModeContext";
 import { LayoutProvider } from "./LIB/context/LayoutContext";
 import { UserProvider, useUser } from "./LIB/context/UserContext";
@@ -39,7 +41,6 @@ import { useZoom } from "./LIB/hook/useZoom";
 import { useDocumentManager } from "./LIB/hook/useDocumentManager";
 import { useDragState } from "./LIB/hook/useDragState";
 // constant
-import { widgets } from "./LIB/constant/widgets";
 
 import { newShadowDarkSm, newShadowLightSm } from "./LIB/constant/uiProps";
 
@@ -64,7 +65,6 @@ function LayoutContent({ children }) {
     handleDragEnd,
     handleDragOver
   } = useDragState();
-  const ActiveWidget = activeId ? widgets[activeId] : null;
 
   //■■■■■■■■■■■■ dnd-kit 센서 설정 ■■■■■■■■■■■■■■■■■■
   //  (PointerSensor 사용, 8px 이동 시 드래그 시작)
@@ -150,12 +150,12 @@ function LayoutContent({ children }) {
           )}
           {/*■■■■■ 드래그 오버레이 ■■■■■*/}
           <DragOverlay>
-            {activeId && ActiveWidget ? (
+            {activeId ? (
               <div
                 className="w-full"
                 style={{ width: `${setting.panelWidth}px` }}
               >
-                <ActiveWidget width={setting.panelWidth} />
+                <WidgetRenderer id={activeId} preview width={setting.panelWidth} />
               </div>
             ) : null}
           </DragOverlay>
@@ -178,6 +178,7 @@ export default function ClientLayout({ children }) {
                 <ContentProvider>
                   <InBookProvider>
                     <PanelProvider>
+                      <PluginProvider>
                       <DocumentProvider>
                         <>
                           <EditorProvider>
@@ -197,6 +198,7 @@ export default function ClientLayout({ children }) {
                           </EditorProvider>
                         </>
                       </DocumentProvider>
+                      </PluginProvider>
                     </PanelProvider>
                   </InBookProvider>
                 </ContentProvider>

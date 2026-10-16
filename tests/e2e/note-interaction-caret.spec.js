@@ -111,7 +111,8 @@ test("marker deletion, undo, conversion, and menu deletion preserve note pairs",
     );
   });
   await page.locator(".dockit-note-reference").click({ button: "right" });
-  const convertItem = page.getByRole("menuitem").filter({ hasText: "미주로 변환" });
+  const noteMenu = page.locator('[data-dockit-note-context-menu="true"]');
+  const convertItem = noteMenu.getByRole("button").filter({ hasText: "미주로 변환" });
   await expect.poll(async () => ({
     consoleErrors,
     contextMenuEvents: await page.evaluate(() => window.__noteContextMenuEvents),
@@ -126,7 +127,7 @@ test("marker deletion, undo, conversion, and menu deletion preserve note pairs",
   await expect(page.locator(".dockit-endnote-section-heading")).toHaveText("미주");
 
   await page.locator('[data-dockit-note-body="true"]').click({ button: "right" });
-  await page.getByRole("menuitem").filter({ hasText: "미주 삭제" }).click();
+  await noteMenu.getByRole("button").filter({ hasText: "미주 삭제" }).click();
   await expect.poll(async () => await snapshot(page)).toMatchObject({
     bodyCount: 0,
     referenceCount: 0
@@ -185,6 +186,6 @@ test.describe("read-only mobile touch", () => {
     await expect(page.locator(".dockit-note-body-activator")).toHaveCount(0);
 
     await marker.click({ button: "right" });
-    await expect(page.getByRole("menuitem")).toHaveCount(0);
+    await expect(page.locator('[data-dockit-note-context-menu="true"]')).toHaveCount(0);
   });
 });

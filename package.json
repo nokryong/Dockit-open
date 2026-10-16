@@ -24,7 +24,9 @@
     "test:local": "node --test tests/local/*.test.cjs",
     "test:desktop": "node scripts/desktop-smoke.cjs",
     "test:chatgpt": "node scripts/chatgpt-smoke.cjs",
-    "test:codex": "node scripts/codex-smoke.cjs"
+    "test:codex": "node scripts/codex-smoke.cjs",
+    "plugin:example": "node scripts/build-example-plugin.mjs",
+    "test:plugins": "node --test tests/local/plugins.test.cjs tests/local/plugin-github.test.cjs && node scripts/build-example-plugin.mjs && node scripts/plugin-smoke.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -32,37 +34,35 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@fortune-sheet/react": "^1.0.4",
     "@lottiefiles/react-lottie-player": "^3.6.0",
-    "@tiptap/core": "^3.4.3",
-    "@tiptap/extension-blockquote": "^3.4.3",
-    "@tiptap/extension-bold": "^3.15.3",
-    "@tiptap/extension-code-block": "^3.4.3",
-    "@tiptap/extension-document": "^3.15.3",
-    "@tiptap/extension-hard-break": "^3.15.3",
-    "@tiptap/extension-heading": "^3.4.2",
-    "@tiptap/extension-highlight": "^3.4.3",
-    "@tiptap/extension-horizontal-rule": "^3.4.4",
-    "@tiptap/extension-image": "^3.4.4",
-    "@tiptap/extension-italic": "^3.15.3",
-    "@tiptap/extension-link": "^3.4.2",
-    "@tiptap/extension-list": "^3.4.3",
-    "@tiptap/extension-mathematics": "^3.8.0",
-    "@tiptap/extension-paragraph": "^3.15.3",
-    "@tiptap/extension-placeholder": "^3.4.2",
-    "@tiptap/extension-strike": "^3.15.3",
-    "@tiptap/extension-subscript": "^3.7.2",
-    "@tiptap/extension-superscript": "^3.7.2",
-    "@tiptap/extension-table": "^3.4.3",
-    "@tiptap/extension-text": "^3.15.3",
-    "@tiptap/extension-text-align": "^3.4.3",
-    "@tiptap/extension-text-style": "^3.4.3",
-    "@tiptap/extension-underline": "^3.4.2",
-    "@tiptap/extensions": "^3.15.3",
-    "@tiptap/html": "^3.4.3",
-    "@tiptap/pm": "^3.4.2",
-    "@tiptap/react": "^3.4.2",
-    "@tiptap/starter-kit": "^3.4.2",
-    "antd": "^6.0.0",
-    "antd-style": "^3.7.1",
+    "@tiptap/core": "^3.32.0",
+    "@tiptap/extension-blockquote": "^3.32.0",
+    "@tiptap/extension-bold": "^3.32.0",
+    "@tiptap/extension-code-block": "^3.32.0",
+    "@tiptap/extension-document": "^3.32.0",
+    "@tiptap/extension-hard-break": "^3.32.0",
+    "@tiptap/extension-heading": "^3.32.0",
+    "@tiptap/extension-highlight": "^3.32.0",
+    "@tiptap/extension-horizontal-rule": "^3.32.0",
+    "@tiptap/extension-image": "^3.32.0",
+    "@tiptap/extension-italic": "^3.32.0",
+    "@tiptap/extension-link": "^3.32.0",
+    "@tiptap/extension-list": "^3.32.0",
+    "@tiptap/extension-mathematics": "^3.32.0",
+    "@tiptap/extension-paragraph": "^3.32.0",
+    "@tiptap/extension-placeholder": "^3.32.0",
+    "@tiptap/extension-strike": "^3.32.0",
+    "@tiptap/extension-subscript": "^3.32.0",
+    "@tiptap/extension-superscript": "^3.32.0",
+    "@tiptap/extension-table": "^3.32.0",
+    "@tiptap/extension-text": "^3.32.0",
+    "@tiptap/extension-text-align": "^3.32.0",
+    "@tiptap/extension-text-style": "^3.32.0",
+    "@tiptap/extension-underline": "^3.32.0",
+    "@tiptap/extensions": "^3.32.0",
+    "@tiptap/html": "^3.32.0",
+    "@tiptap/pm": "^3.32.0",
+    "@tiptap/react": "^3.32.0",
+    "@tiptap/starter-kit": "^3.32.0",
     "cropperjs": "^1.6.1",
     "dayjs": "^1.11.19",
     "exceljs": "^4.4.0",
@@ -84,7 +84,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "sud-icons": "^1.0.4",
-    "sud-ui": "^1.9.2"
+    "sud-ui": "^2.1.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
@@ -121,12 +121,15 @@
     "nanoid@3.3.11": "3.3.17",
     "nanoid@4.0.2": "5.1.16",
     "glob@7.2.3": {
-      "minimatch": "3.1.5"
+      "minimatch": {
+        ".": "3.1.5",
+        "brace-expansion": "1.1.21"
+      }
     },
     "readdir-glob@1.1.3": {
       "minimatch": {
         ".": "5.1.9",
-        "brace-expansion": "2.1.4"
+        "brace-expansion": "2.1.7"
       }
     },
     "flatted@3.3.3": "3.4.2",
@@ -140,7 +143,7 @@
     "vite@6.4.3": {
       "picomatch": "4.0.5"
     },
-    "brace-expansion@1.1.12": "1.1.18"
+    "brace-expansion@1.1.12": "1.1.21"
   },
   "main": "electron/main.cjs"
 }
