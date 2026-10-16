@@ -4,10 +4,10 @@ const { randomUUID } = require('node:crypto');
 const { inspectGitHubPlugins, downloadGitHubPlugin } = require('./plugin-github.cjs');
 const { PluginServices } = require('./plugin-services.cjs');
 
-async function registerPluginHost({ root, handle, protocol, shell, getWindow, encryption, dialog, downloads }) {
+async function registerPluginHost({ root, handle, protocol, shell, getWindow, encryption, dialog, downloads, clipboard, nativeImage }) {
   const plugins = new PluginStore({ root, trash: file => shell.trashItem(file) });
   await plugins.init();
-  const services = new PluginServices({ store: plugins, encryption, dialog, shell, getWindow, downloads });
+  const services = new PluginServices({ store: plugins, encryption, dialog, shell, getWindow, downloads, clipboard, nativeImage });
   const changed = () => getWindow()?.webContents.send('plugins:changed', plugins.list());
   handle('plugins:list', () => plugins.list());
   const previews = new Map();

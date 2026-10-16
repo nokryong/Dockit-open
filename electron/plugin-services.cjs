@@ -10,8 +10,8 @@ const imageTypes = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'web
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
 
 class PluginServices {
-  constructor({ store, encryption, fetcher = requestPublic, dialog, shell, getWindow, downloads }) {
-    Object.assign(this, { store, encryption, fetcher, dialog, shell, getWindow, downloads });
+  constructor({ store, encryption, fetcher = requestPublic, dialog, shell, getWindow, downloads, clipboard, nativeImage }) {
+    Object.assign(this, { store, encryption, fetcher, dialog, shell, getWindow, downloads, clipboard, nativeImage });
   }
 
   context(sessionId, permission) {
@@ -167,6 +167,16 @@ class PluginServices {
     return `data:${image.type};base64,${image.bytes.toString('base64')}`;
   }
 
+  copyImage(sessionId, payload) {
+    this.context(sessionId, 'images');
+    const dataUrl = payload?.dataUrl;
+    if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/png;base64,') || dataUrl.length > 32 * 1024 * 1024 * 4 / 3 + 22) throw new Error('복사할 이미지 형식을 확인해주세요.');
+    const image = this.nativeImage.createFromDataURL(dataUrl);
+    if (image.isEmpty()) throw new Error('이미지를 복사하지 못했습니다.');
+    this.clipboard.writeImage(image);
+    return true;
+  }
+
   async openExternal(sessionId, url) {
     const { manifest } = this.context(sessionId, 'external');
     await this.shell.openExternal(allowedUrl(url, manifest.externalOrigins).href);
@@ -180,6 +190,7 @@ class PluginServices {
     if (method === 'images.preview') return this.preview(sessionId, payload);
     if (method === 'images.load') return this.loadImage(sessionId, payload?.url);
     if (method === 'images.download') return this.download(sessionId, payload);
+    if (method === 'images.copy') return this.copyImage(sessionId, payload);
     if (method === 'external.open') return this.openExternal(sessionId, payload?.url);
     throw new Error('지원하지 않는 플러그인 요청입니다.');
   }

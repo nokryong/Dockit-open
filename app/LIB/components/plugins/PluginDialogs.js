@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Avatar, Button, Card, Div, Input, Modal, Typography, toast } from 'sud-ui';
-import { TbDownload, TbExternalLink, TbHeartFilled } from 'react-icons/tb';
+import { TbCheck, TbCopy, TbDownload, TbExternalLink, TbHeartFilled } from 'react-icons/tb';
 import SmallButton from '../common/SmallButton';
 import { inputProps, withOverlayShadow } from '../../constant/uiProps';
 import { localBridge } from '../../utils/localBridge';
@@ -31,13 +31,29 @@ export function PluginCredentialDialog({ prompt, sessionId, theme, onClose }) {
 
 export function PluginImageDialog({ image, sessionId, theme, isDarkMode, onClose }) {
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const imageRef = useRef(null);
+  const copy = async () => {
+    setBusy(true);
+    try {
+      const source = imageRef.current;
+      if (!source?.complete || !source.naturalWidth) throw new Error('이미지를 불러온 후 다시 복사해주세요.');
+      const canvas = document.createElement('canvas');
+      canvas.width = source.naturalWidth;
+      canvas.height = source.naturalHeight;
+      canvas.getContext('2d').drawImage(source, 0, 0);
+      await localBridge().plugins.request(sessionId, 'images.copy', { dataUrl: canvas.toDataURL('image/png') });
+      setCopied(true);
+    } catch (error) { toast.danger(error.message); }
+    finally { setBusy(false); }
+  };
   const invoke = async (method, payload) => {
     setBusy(true);
     try { await localBridge().plugins.request(sessionId, method, payload); }
     catch (error) { toast.danger(error.message); }
     finally { setBusy(false); }
   };
-  return <Modal open ariaLabel="이미지 미리보기" onClose={onClose} width="min(760px, calc(100vw - 32px))" border={false} style={withOverlayShadow({ maxHeight: '90vh', overflowY: 'auto' }, isDarkMode)} thumb={<img src={image.displaySrc} alt={image.alt} className="max-h-[60vh] w-full object-contain" />}>
+  return <Modal open ariaLabel="이미지 미리보기" onClose={onClose} width="min(760px, calc(100vw - 32px))" border={false} style={withOverlayShadow({ maxHeight: '90vh', overflowY: 'auto' }, isDarkMode)} thumb={<img ref={imageRef} src={image.displaySrc} alt={image.alt} className="max-h-[60vh] w-full object-contain" />}>
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-end justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
@@ -51,6 +67,7 @@ export function PluginImageDialog({ image, sessionId, theme, isDarkMode, onClose
           <div className="flex items-center gap-2">
             {image.sourceUrl && <Button size="sm" ariaLabel="원본 페이지" border={false} background="transparent" color={`${theme}-8`} icon={<TbExternalLink size={18} />} disabled={busy} onClick={() => invoke('external.open', { url: image.sourceUrl })} />}
             <Button size="sm" ariaLabel="이미지 다운로드" border={false} background="transparent" color={`${theme}-8`} icon={<TbDownload size={18} />} disabled={busy} onClick={() => invoke('images.download', { url: image.url, filename: image.filename })} />
+            <Button size="sm" ariaLabel="이미지 복사" border={false} background="transparent" color={`${theme}-8`} icon={copied ? <TbCheck size={18} /> : <TbCopy size={18} />} disabled={busy} onClick={copy} />
           </div>
           {image.likes !== undefined && <div className="flex items-center gap-1"><Div color="volcano"><TbHeartFilled size={18} /></Div><Typography size="sm">{image.likes}</Typography></div>}
         </div>

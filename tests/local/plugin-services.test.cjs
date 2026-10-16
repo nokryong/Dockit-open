@@ -140,6 +140,25 @@ test('images load and preview through the host, download only after an explicit 
   await assert.rejects(services.loadImage(sessionId, url), /형식/);
 });
 
+test('host image copy writes decoded image pixels and rejects invalid or revoked requests', async t => {
+  const { store, services, sessionId } = await fixture(t);
+  const image = { isEmpty: () => false };
+  const copied = [];
+  const dataUrl = 'data:image/png;base64,aW1hZ2U=';
+  services.nativeImage = { createFromDataURL: value => { assert.equal(value, dataUrl); return image; } };
+  services.clipboard = { writeImage: value => copied.push(value) };
+  assert.equal(await services.request(sessionId, 'images.copy', { dataUrl }), true);
+  assert.deepEqual(copied, [image]);
+  for (const invalid of [null, {}, { dataUrl: 'https://cdn.pixabay.com/image.png' }, { dataUrl: 'data:text/html;base64,aW1hZ2U=' }]) {
+    assert.throws(() => services.copyImage(sessionId, invalid), /형식/);
+  }
+  image.isEmpty = () => true;
+  assert.throws(() => services.copyImage(sessionId, { dataUrl }), /복사하지/);
+  store.close(sessionId);
+  assert.throws(() => services.copyImage(sessionId, { dataUrl }), /종료/);
+  assert.equal(copied.length, 1);
+});
+
 test('closing the session revokes in-flight image and API responses', async t => {
   const { store, services, sessionId } = await fixture(t);
   await services.setCredential(sessionId, 'pixabay', 'fixture-secret');
