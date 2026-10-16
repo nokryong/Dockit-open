@@ -1,0 +1,437 @@
+@media print {
+  #header,
+  .app-layout-footer,
+  .dockit-panel,
+  .ant-splitter-bar,
+  .tiptap-page-shell-layer,
+  .dockit-ruler-horizontal-layer,
+  .dockit-ruler-vertical-layer,
+  .ProseMirror-focused .column {
+    display: none;
+  }
+  body,
+  #__next,
+  #main-layout {
+    overflow: visible !important;
+    height: auto !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .ant-splitter,
+  .ant-splitter-panel,
+  .ant-splitter-panel > *,
+  .zoom-container,
+  .doc-print-page-root,
+  .tiptap-container,
+  .tiptap-editor-flow-layer,
+  .tiptap-main-canvas,
+  .ProseMirror {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  .doc-print-page-root {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .zoom-container {
+    transform: scale(1) !important;
+    transform-origin: top left !important;
+  }
+  .tiptap-main-canvas {
+    width: var(--print-page-width, auto) !important;
+    min-width: var(--print-page-width, auto) !important;
+    max-width: var(--print-page-width, auto) !important;
+    margin: 0 auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: var(--print-page-padding-left, 0) !important;
+    padding-right: var(--print-page-padding-right, 0) !important;
+    box-sizing: border-box !important;
+  }
+  /* N4b2 prints only the stable transient projection. */
+  .ProseMirror
+    > .dockit-note-body[data-dockit-note-kind="footnote"] {
+    display: none !important;
+  }
+  .dockit-footnote-screen-projection,
+  .dockit-footnote-screen-projection__separator {
+    display: none !important;
+  }
+  .dockit-footnote-print-only-page {
+    display: block !important;
+  }
+  .dockit-footnote-print-projection {
+    display: block !important;
+    overflow: hidden !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+  .dockit-footnote-print-projection__separator {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    border-top: 1px solid rgba(15, 23, 42, 0.45) !important;
+    color: #475569 !important;
+    font-size: 10px !important;
+    line-height: 16px !important;
+  }
+  .dockit-footnote-print-projection__clip {
+    display: block !important;
+    overflow: hidden !important;
+  }
+  .dockit-footnote-print-projection__content {
+    display: block !important;
+    min-height: 1px !important;
+  }
+  .dockit-footnote-print-projection__content > :first-child { margin-top: 0 !important; }
+  .dockit-footnote-print-projection__content > :last-child { margin-bottom: 0 !important; }
+  .dockit-footnote-print-projection__continuation { white-space: nowrap !important; }
+  [data-dockit-footnote-print-state="blocked"]
+    .ProseMirror
+    > :not(.dockit-footnote-print-blocking-error) {
+    display: none !important;
+  }
+  .dockit-footnote-print-blocking-error {
+    display: block !important;
+    visibility: visible !important;
+    color: #991b1b !important;
+    border: 1px solid #991b1b !important;
+    padding: 12px !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+  /* 도형 블록: CSS 변수로 인쇄 시 스타일 복원 */
+  .shape-block-container {
+    background-color: var(--shape-bg) !important;
+    background-image: var(--shape-bg-image) !important;
+    background-size: var(--shape-bg-size) !important;
+    background-position: var(--shape-bg-position) !important;
+    background-repeat: var(--shape-bg-repeat) !important;
+    border: var(--shape-border) !important;
+    border-radius: var(--shape-border-radius) !important;
+    padding: var(--shape-padding) !important;
+    box-shadow: var(--shape-shadow) !important;
+    min-height: var(--shape-min-height) !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+  .printable-area .not-prose,
+  .printable-area .diagram-block-wrapper,
+  .printable-area .diagram-frame-container,
+  .printable-area [data-type="chartBlock"] {
+    display: block !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 차트 내부의 canvas나 svg가 인쇄 영역을 벗어나지 않게 조절 */
+  .printable-area .not-prose canvas,
+  .printable-area .not-prose svg,
+  .printable-area .diagram-frame-container canvas,
+  .printable-area .diagram-frame-container svg {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .tiptap-print-fixed-page-number-layer,
+  .tiptap-print-fixed-page-number-layer *,
+  .tiptap-print-fixed-page-number,
+  .tiptap-print-fixed-page-number * {
+    visibility: visible !important;
+  }
+  .tiptap-print-fixed-page-number-layer {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: block !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    pointer-events: none !important;
+    overflow: visible !important;
+    z-index: 20 !important;
+  }
+  .tiptap-print-fixed-page-number {
+    position: absolute !important;
+    display: block !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    pointer-events: none !important;
+    left: 50% !important;
+    transform: translate(-50%, -100%) !important;
+    box-sizing: border-box !important;
+  }
+  .tiptap-print-fixed-page-number__text {
+    position: relative !important;
+    display: block !important;
+    font-size: 11px !important;
+    color: #555 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+  .tiptap-page-break-structure,
+  .tiptap-page-container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+  .page-content-filler {
+    display: block !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .page-footer-spacer {
+    background: transparent !important;
+    position: relative !important;
+    display: block !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .tiptap-page-break-structure--end .page-footer-spacer,
+  .tiptap-page-break-structure--final .page-footer-spacer,
+  .tiptap-final-page-filler .page-footer-spacer {
+    height: var(--print-footer-height, 0) !important;
+    min-height: var(--print-footer-height, 0) !important;
+  }
+  .tiptap-page-break-structure--final .page-footer-spacer,
+  .tiptap-final-page-filler .page-footer-spacer {
+    display: block !important;
+    height: var(--print-footer-height, 0) !important;
+    min-height: var(--print-footer-height, 0) !important;
+    max-height: var(--print-footer-height, 0) !important;
+    margin-top: calc(var(--print-footer-height, 0px) * -1) !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .page-break-boundary {
+    display: block !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+  .tiptap-inline-page-break {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    vertical-align: top !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+  .tiptap-inline-page-break .page-break-boundary {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+  .tiptap-inline-page-break-boundary {
+    display: block !important;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+    overflow: hidden !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+  .tiptap-page-break-structure,
+  .tiptap-inline-page-break-boundary {
+    font-size: 0 !important;
+    line-height: 0 !important;
+  }
+  .page-break-boundary--terminal {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+  .tiptap-page-break-structure--header .page-content-filler,
+  .tiptap-page-break-structure--header .page-footer-spacer,
+  .tiptap-page-break-structure--header .page-gap,
+  .tiptap-page-break-structure--header .page-break-boundary {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  /* Print page numbers come from ContentEditor's fixed layer only.
+     Re-enabling footer pseudo content causes last-page duplication. */
+  .page-footer-spacer[data-page-number]::after {
+    content: none !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: var(--print-page-padding-left, 0) !important;
+    right: var(--print-page-padding-right, 0) !important;
+    bottom: var(--print-page-number-bottom-offset, 0) !important;
+    display: block !important;
+    font-size: 11px !important;
+    color: #555 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .page-footer-spacer[data-page-number-position="left"]::after {
+    text-align: left !important;
+  }
+  .page-footer-spacer[data-page-number-position="center"]::after {
+    text-align: center !important;
+  }
+  .page-footer-spacer[data-page-number-position="right"]::after {
+    text-align: right !important;
+  }
+  .page-header-spacer {
+    background: transparent !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+  .tiptap-page-break-structure--start .page-header-spacer,
+  .tiptap-page-break-structure--header .page-header-spacer {
+    height: var(--print-header-height, 0) !important;
+    min-height: var(--print-header-height, 0) !important;
+  }
+  .printable-area,
+  .printable-area * {
+    visibility: visible;
+  }
+  .printable-area img {
+    max-width: 100% !important;
+    display: block !important;
+  }
+  .printable-area table {
+    table-layout: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .printable-area th,
+  .printable-area td {
+    overflow-wrap: break-word;
+    /* position: relative이 border-collapse에서 셀을 테두리 위 레이어로 올려
+       배경색이 테두리를 덮는 문제 방지 */
+    position: static !important;
+    border-width: var(--table-border-width, 1pt) !important;
+  }
+  .printable-area .tiptap-table-page-break-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 0 !important;
+    background: transparent !important;
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+  .printable-area .tiptap-table-page-break-cell {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    line-height: 0 !important;
+    font-size: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .printable-area
+    .tiptap-table-page-break-cell
+    > .tiptap-page-break-structure {
+    border: 0 !important;
+    background: transparent !important;
+    height: auto !important;
+  }
+  .printable-area .tiptap-table-page-break-row + tr th,
+  .printable-area .tiptap-table-page-break-row + tr td {
+    border-top: var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000) !important;
+  }
+  .printable-area table tr.tiptap-table-row-too-tall {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    max-height: var(--tiptap-table-row-visible-height, auto) !important;
+    overflow: hidden !important;
+    contain: paint;
+  }
+  .printable-area table tr.tiptap-table-row-too-tall--clipped > th,
+  .printable-area table tr.tiptap-table-row-too-tall--clipped > td {
+    height: var(--tiptap-table-row-visible-height, auto) !important;
+    max-height: var(--tiptap-table-row-visible-height, none) !important;
+    overflow: hidden !important;
+    clip-path: inset(
+      0 0 calc(100% - var(--tiptap-table-row-visible-height, 100%)) 0
+    );
+  }
+  .printable-area table tr.tiptap-table-row-too-tall--clipped-out > th,
+  .printable-area table tr.tiptap-table-row-too-tall--clipped-out > td {
+    height: 0 !important;
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+  }
+  .printable-area .tiptap-pagination-aware-block {
+    position: static !important;
+  }
+  .printable-area .tiptap-table-header-repeat,
+  .printable-area .tiptap-table-header-repeat-table,
+  .printable-area .tiptap-table-header-repeat-table * {
+    visibility: visible !important;
+  }
+  .printable-area * {
+    overflow-wrap: break-word;
+  }
+
+  *,
+  *::before,
+  *::after {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .page-gap {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+  .tiptap-page-shell-layer,
+  .tiptap-page-shell,
+  .tiptap-page-shell * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}

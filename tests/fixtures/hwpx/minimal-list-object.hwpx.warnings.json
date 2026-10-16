@@ -1,0 +1,11 @@
+[
+  {
+    "code": "object-placeholder",
+    "severity": "warning",
+    "message": "Object media parts and relationships are not emitted; a visible placeholder paragraph is written instead.",
+    "sectionIndex": 0,
+    "blockIndex": 3,
+    "blockType": "object",
+    "path": "sections[0].blocks[3]"
+  }
+]

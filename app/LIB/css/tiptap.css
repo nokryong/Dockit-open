@@ -1,0 +1,1787 @@
+/*
+  Tiptap 에디터 스타일
+*/
+
+/* ═══ 에디터 기본 ═══ */
+
+.tiptap:focus {
+  outline: none;
+}
+
+.tiptap {
+  border: none;
+  outline: none;
+  min-height: 1.5rem;
+  min-width: 10px;
+}
+
+.tiptap-main-canvas {
+  font-size: 12pt;
+}
+
+.tiptap p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  color: #adb5bd;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+strong,
+em,
+s,
+u {
+  font-family: inherit;
+}
+
+.tiptap-container br {
+  display: initial !important;
+  content: initial !important;
+}
+
+.tiptap-container a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  word-break: break-all;
+}
+
+.tiptap-container span[data-inline-tag="true"] {
+  display: inline;
+  padding: 0.08em 0.48em;
+  border-radius: 0.45em;
+  border: 1px solid var(--inline-tag-border, rgba(59, 130, 246, 0.35));
+  background: var(--inline-tag-bg, rgba(96, 165, 250, 0.22));
+  box-shadow:
+    0 0 0 1px var(--inline-tag-shadow, rgba(96, 165, 250, 0.16)),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  color: inherit;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ═══ 페이지 레이아웃 ═══ */
+
+.tiptap.ProseMirror #pages {
+  background-color: #ffffff;
+}
+
+.tiptap-container.is-view-page {
+  background-color: var(--editor-page-gap-bg, #f5f5f5);
+}
+
+body.dockit-thumbnail-capture-mode .dockit-ruler-horizontal-layer,
+body.dockit-thumbnail-capture-mode .dockit-ruler-vertical-layer,
+body.dockit-thumbnail-capture-mode .tiptap-page-shell-layer {
+  display: none !important;
+}
+
+body.dockit-thumbnail-capture-mode .zoom-container {
+  transform: scale(1) !important;
+  transform-origin: top left !important;
+}
+
+.tiptap-page-shell-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tiptap-page-shell {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tiptap-page-shell__paper {
+  width: 100%;
+  height: 100%;
+  /* border: 1px solid rgba(15, 23, 42, 0.08); */
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.08),
+    0 10px 14px rgba(15, 23, 42, 0.08);
+}
+
+.tiptap-page-shell__content-frame {
+  position: absolute;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+}
+
+.tiptap-page-shell__margin-marks {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tiptap-page-shell__margin-mark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid rgba(71, 85, 105, 0.62);
+  box-sizing: border-box;
+}
+
+.tiptap-page-shell__margin-mark--top-left {
+  top: calc(var(--page-content-top) - 14px);
+  left: calc(var(--page-content-left) - 14px);
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.tiptap-page-shell__margin-mark--top-right {
+  top: calc(var(--page-content-top) - 14px);
+  left: var(--page-content-right);
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.tiptap-page-shell__margin-mark--bottom-left {
+  top: var(--page-content-bottom);
+  left: calc(var(--page-content-left) - 14px);
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.tiptap-page-shell__margin-mark--bottom-right {
+  top: var(--page-content-bottom);
+  left: var(--page-content-right);
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.tiptap-page-shell__segment-fill {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-radius: 14px 14px 8px 8px;
+  background: linear-gradient(
+    180deg,
+    var(--editor-page-segment-fill, rgba(37, 99, 235, 0.06)) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+}
+
+.tiptap-page-shell__mirror-host {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tiptap-page-shell__mirror-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.tiptap-page-shell__mirror-host .ProseMirror {
+  pointer-events: none !important;
+  user-select: none !important;
+  background: transparent !important;
+  margin: 0 !important;
+}
+
+.tiptap-page-shell__mirror-host .ProseMirror:focus {
+  outline: none !important;
+}
+
+.tiptap-page-shell__segment-content {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+
+.tiptap-page-shell__segment-item {
+  position: absolute;
+  border-radius: 8px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  background: rgba(37, 99, 235, 0.08);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tiptap-page-shell__segment-item--textLine,
+.tiptap-page-shell__segment-item--listLine {
+  min-height: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(37, 99, 235, 0.14) 0%,
+    rgba(37, 99, 235, 0.06) 100%
+  );
+  border-color: rgba(37, 99, 235, 0.14);
+}
+
+.tiptap-page-shell__segment-item.has-segment-marker {
+  padding-left: var(--segment-marker-gutter-width, 18px);
+}
+
+.tiptap-page-shell__segment-item--tableRow {
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.06) 0%,
+    rgba(15, 23, 42, 0.02) 100%
+  );
+  border-color: rgba(15, 23, 42, 0.18);
+}
+
+.tiptap-page-shell__segment-item--block {
+  border-style: dashed;
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+.tiptap-page-shell__segment-item.is-continuation-start {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.tiptap-page-shell__segment-item.is-continuation-end {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.tiptap-page-shell__segment-item.is-merged-row {
+  border-width: 1.5px;
+  border-color: rgba(249, 115, 22, 0.42);
+  background: linear-gradient(
+    180deg,
+    rgba(249, 115, 22, 0.12) 0%,
+    rgba(249, 115, 22, 0.05) 100%
+  );
+}
+
+.tiptap-page-shell__segment-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--segment-marker-gutter-width, 18px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 1px;
+  padding-right: 4px;
+  color: rgba(15, 23, 42, 0.72);
+  font-size: 12px;
+  line-height: 1.25;
+  letter-spacing: 0;
+  white-space: nowrap;
+  font-family: "PretendardRegular", sans-serif;
+  box-sizing: border-box;
+}
+
+.tiptap-page-shell__segment-marker--bullet {
+  justify-content: center;
+  padding-right: 0;
+}
+
+.tiptap-page-shell__segment-marker--task {
+  justify-content: center;
+  padding-right: 0;
+  font-size: 11px;
+}
+
+.tiptap-page-shell__segment-flag {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #9a3412;
+  font-size: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.tiptap-page-shell__segment-badge,
+.tiptap-page-shell__segment-note {
+  position: absolute;
+  z-index: 1;
+  max-width: calc(100% - 48px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--editor-page-segment-border, rgba(37, 99, 235, 0.18));
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  color: var(--editor-page-break-text, #555);
+  font-size: 10px;
+  font-family: "PretendardRegular", sans-serif;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tiptap-page-shell__segment-note {
+  background: var(--editor-page-segment-note, rgba(37, 99, 235, 0.12));
+}
+
+.tiptap-page-shell__footer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.tiptap-page-shell__number {
+  position: absolute;
+  display: block;
+  font-size: 11pt;
+  color: var(--editor-page-break-text, #555);
+  font-family: "PretendardLight", sans-serif;
+}
+
+.dockit-ruler-horizontal-layer {
+  position: sticky;
+  top: 0;
+  height: 0;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.dockit-ruler-vertical-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.tippy-box,
+.tippy-popper {
+  z-index: 10000 !important;
+}
+
+.dockit-ruler {
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.75);
+  color: #64748b;
+  font-family: "PretendardRegular", sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.02),
+    0 4px 12px rgba(15, 23, 42, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.dockit-ruler:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dockit-ruler--horizontal {
+  top: -28px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.dockit-ruler--vertical {
+  width: 20px;
+  border-radius: 4px;
+}
+
+.dockit-ruler-margin,
+.dockit-ruler-content-band {
+  position: absolute;
+  pointer-events: none;
+}
+
+.dockit-ruler-margin {
+  background: color-mix(in srgb, var(--editor-selection-accent, #2563eb) 8%, transparent);
+}
+
+.dockit-ruler-content-band {
+  /* Using border for indicators instead of background color */
+}
+
+.dockit-ruler-content-band--horizontal {
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed color-mix(in srgb, var(--editor-selection-accent, #2563eb) 60%, transparent);
+  border-right: 1px dashed color-mix(in srgb, var(--editor-selection-accent, #2563eb) 60%, transparent);
+}
+
+.dockit-ruler-content-band--vertical {
+  left: 0;
+  right: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--editor-selection-accent, #2563eb) 60%, transparent);
+  border-bottom: 1px dashed color-mix(in srgb, var(--editor-selection-accent, #2563eb) 60%, transparent);
+}
+
+.dockit-ruler-margin--horizontal-start,
+.dockit-ruler-margin--horizontal-end {
+  top: 0;
+  bottom: 0;
+}
+
+.dockit-ruler-margin--vertical-start,
+.dockit-ruler-margin--vertical-end {
+  left: 0;
+  right: 0;
+}
+
+.dockit-ruler-tick {
+  position: absolute;
+  display: block;
+  background: rgba(100, 116, 139, 0.2);
+}
+
+.dockit-ruler-tick--horizontal {
+  bottom: 0;
+  width: 1px;
+}
+
+.dockit-ruler-tick--vertical {
+  right: 0;
+  height: 1px;
+}
+
+.dockit-ruler-tick--minor.dockit-ruler-tick--horizontal {
+  height: 2px;
+}
+
+.dockit-ruler-tick--middle.dockit-ruler-tick--horizontal {
+  height: 4px;
+  background: rgba(100, 116, 139, 0.4);
+}
+
+.dockit-ruler-tick--major.dockit-ruler-tick--horizontal {
+  height: 7px;
+  background: rgba(100, 116, 139, 0.6);
+}
+
+.dockit-ruler-tick--minor.dockit-ruler-tick--vertical {
+  width: 2px;
+}
+
+.dockit-ruler-tick--middle.dockit-ruler-tick--vertical {
+  width: 4px;
+  background: rgba(100, 116, 139, 0.4);
+}
+
+.dockit-ruler-tick--major.dockit-ruler-tick--vertical {
+  width: 7px;
+  background: rgba(100, 116, 139, 0.6);
+}
+
+.dockit-ruler-label {
+  position: absolute;
+  color: #64748b;
+  user-select: none;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.dockit-ruler-label--horizontal {
+  bottom: 8px;
+  top: auto;
+  left: 2px;
+}
+
+.dockit-ruler-label--vertical {
+  top: -4px;
+  right: 8px;
+}
+
+.tiptap-print-fixed-page-number-layer,
+.tiptap-print-fixed-page-number,
+.tiptap-print-fixed-page-number__text {
+  display: none;
+}
+
+.tiptap-page-break-structure,
+.tiptap-page-container {
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+.tiptap-pagination-aware-block {
+  position: relative;
+}
+
+.tiptap-pagination-aware-block--spanning {
+  outline: none;
+}
+
+.tiptap-inline-page-break {
+  display: inline-block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  vertical-align: top !important;
+  font-size: 0;
+  line-height: 0;
+}
+
+.tiptap-inline-page-break > .page-content-filler,
+.tiptap-inline-page-break > .page-footer-spacer,
+.tiptap-inline-page-break > .page-header-spacer {
+  width: 100%;
+}
+
+.tiptap-inline-page-break-boundary {
+  display: block !important;
+  width: 100% !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  font-size: 0 !important;
+}
+
+.tiptap-editor-flow-layer.is-segment-mirrored .ProseMirror {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  caret-color: var(--editor-selection-accent, #2563eb);
+  background: transparent !important;
+}
+
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"]),
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  caret-color: var(--editor-selection-accent, #2563eb);
+}
+
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  img,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  canvas,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  svg,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  .lazy-image-container,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  .chart-block-container,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  .diagram-frame-container,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  .diagram-block-wrapper,
+.tiptap-editor-flow-layer.is-segment-mirrored
+  .ProseMirror
+  > :not(.dockit-note-body[data-dockit-footnote-projection-canonical="true"])
+  .shape-block-container {
+  opacity: 0 !important;
+}
+
+.tiptap-editor-flow-layer.is-segment-mirrored .ProseMirror .selectedCell:after {
+  background: transparent !important;
+}
+
+.tiptap-container .tiptap-list-page-break-item {
+  display: block !important;
+  align-items: stretch !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  counter-increment: none !important;
+}
+
+.tiptap-container .tiptap-list-page-break-item::before {
+  content: none !important;
+}
+
+.tiptap-list-page-break-item > .tiptap-page-container {
+  width: auto !important;
+}
+
+.tiptap-table-page-break-row > .tiptap-table-page-break-cell {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  height: auto !important;
+}
+
+.tiptap-table-page-break-row
+  > .tiptap-table-page-break-cell
+  > .tiptap-table-page-container {
+  width: auto !important;
+}
+
+.tiptap-table-page-break-row + tr th,
+.tiptap-table-page-break-row + tr td {
+  border-top: var(--table-border-width, 1pt) var(--table-border-style, solid)
+    var(--table-border, #000) !important;
+}
+
+.tiptap-table-header-repeat {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+.tiptap-table-header-repeat-table {
+  width: 100% !important;
+  table-layout: fixed;
+  margin: 0 !important;
+}
+
+.page-footer-spacer {
+  display: block;
+  background: transparent !important;
+  position: relative;
+}
+
+.page-break-boundary {
+  display: block;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+.page-gap {
+  display: block;
+  background: transparent !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+.page-header-spacer {
+  display: block;
+  background: transparent !important;
+  position: relative;
+}
+
+.corner-mark {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-color: var(--editor-page-break-line, #ccc);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.toc-item {
+  margin: 0 !important;
+}
+
+.toc-item-row {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.toc-item-title {
+  padding-left: var(--toc-item-indent, 0px);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.toc-item-leader {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 1px dotted #b7b7b7;
+  transform: translateY(-2px);
+}
+
+.toc-item-page {
+  flex-shrink: 0;
+  font-size: 10pt;
+  font-family: "PretendardRegular", sans-serif;
+  font-weight: 400;
+  color: inherit;
+}
+
+.caption-block {
+  margin: 4px 0 8px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.caption-block-shell {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.caption-block-number {
+  flex-shrink: 0;
+  white-space: pre-wrap;
+  user-select: none;
+}
+
+.caption-block-number:empty {
+  display: none;
+}
+
+.caption-block-content {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.caption-block-content > p {
+  display: inline;
+  margin: 0 !important;
+}
+
+.caption-block-content > p + p {
+  display: block;
+  margin-top: 4px !important;
+}
+
+.prose img,
+.prose .grid-layout-node,
+.prose td {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.prose img,
+.prose .tableWrapper,
+.prose .shape-block-container {
+  margin: 4px 0;
+}
+
+.prose .diagram-block-wrapper,
+.prose .diagram-frame-container {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin: 4px 0;
+}
+
+.prose br {
+  display: revert !important;
+}
+
+/* ═══ 제목 카운터 ═══ */
+
+.tiptap-container {
+  counter-reset: h1 !important;
+}
+.tiptap-container h1 {
+  counter-increment: h1;
+  counter-reset: h2 !important;
+}
+.tiptap-container h2 {
+  counter-increment: h2;
+  counter-reset: h3 !important;
+}
+.tiptap-container h3 {
+  counter-increment: h3;
+  counter-reset: h4 !important;
+}
+.tiptap-container h4 {
+  counter-increment: h4;
+  counter-reset: h5 !important;
+}
+.tiptap-container h5 {
+  counter-increment: h5;
+  counter-reset: h6 !important;
+}
+.tiptap-container h6 {
+  counter-increment: h6;
+}
+
+.tiptap-container h1::before {
+  content: counter(h1, var(--h1-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+.tiptap-container h2::before {
+  content: counter(h1, var(--h1-style, decimal)) "."
+    counter(h2, var(--h2-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+.tiptap-container h3::before {
+  content: counter(h1, var(--h1-style, decimal)) "."
+    counter(h2, var(--h2-style, decimal)) "."
+    counter(h3, var(--h3-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+.tiptap-container h4::before {
+  content: counter(h1, var(--h1-style, decimal)) "."
+    counter(h2, var(--h2-style, decimal)) "."
+    counter(h3, var(--h3-style, decimal)) "."
+    counter(h4, var(--h4-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+.tiptap-container h5::before {
+  content: counter(h1, var(--h1-style, decimal)) "."
+    counter(h2, var(--h2-style, decimal)) "."
+    counter(h3, var(--h3-style, decimal)) "."
+    counter(h4, var(--h4-style, decimal)) "."
+    counter(h5, var(--h5-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+.tiptap-container h6::before {
+  content: counter(h1, var(--h1-style, decimal)) "."
+    counter(h2, var(--h2-style, decimal)) "."
+    counter(h3, var(--h3-style, decimal)) "."
+    counter(h4, var(--h4-style, decimal)) "."
+    counter(h5, var(--h5-style, decimal)) "."
+    counter(h6, var(--h6-style, decimal)) ". " !important;
+  margin-right: 0.1em;
+  float: none;
+}
+
+/* ═══ 리스트 공통 ═══ */
+
+.tiptap-container
+  ul:not([data-type="taskList"])
+  li:not(.tiptap-list-page-break-item),
+.tiptap-container ol li:not(.tiptap-list-page-break-item) {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 0.1em;
+  align-items: baseline !important;
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+  padding-left: 0 !important;
+}
+
+.tiptap-container
+  ul:not([data-type="taskList"])
+  li:not(.tiptap-list-page-break-item)
+  > p,
+.tiptap-container ol li:not(.tiptap-list-page-break-item) > p {
+  margin: 0 !important;
+  min-width: 0;
+  grid-column: 2;
+}
+
+.tiptap-container
+  ul:not([data-type="taskList"])
+  li:not(.tiptap-list-page-break-item)
+  > ul,
+.tiptap-container
+  ul:not([data-type="taskList"])
+  li:not(.tiptap-list-page-break-item)
+  > ol,
+.tiptap-container ol li:not(.tiptap-list-page-break-item) > ul,
+.tiptap-container ol li:not(.tiptap-list-page-break-item) > ol {
+  grid-column: 1 / -1;
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: calc(-1 * var(--tiptap-indent-offset, 0px)) !important;
+  padding: 0 !important;
+}
+
+.tiptap-container
+  ul:not([data-type="taskList"])
+  li:not(.tiptap-list-page-break-item)::before,
+.tiptap-container ol li:not(.tiptap-list-page-break-item)::before {
+  margin-right: 0 !important;
+  line-height: inherit !important;
+  vertical-align: baseline !important;
+  position: relative !important;
+  top: 0.05em !important;
+}
+
+/* ═══ 기호 리스트 (ul) ═══ */
+
+.tiptap-container ul:not([data-type="taskList"]) {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.tiptap-container
+  ul:not([data-type="taskList"])
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: var(--list-1-content, "•") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  ul:not([data-type="taskList"])
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: var(--list-2-content, "•") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  ul:not([data-type="taskList"])
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: var(--list-3-content, "•") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  ul:not([data-type="taskList"])
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: var(--list-4-content, "•") !important;
+}
+
+/* ═══ 순서 리스트 (ol) ═══ */
+
+.tiptap-container ol {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  counter-reset: item;
+}
+.tiptap-container ol li:not(.tiptap-list-page-break-item) {
+  counter-increment: item !important;
+}
+.tiptap-container ol > li:not(.tiptap-list-page-break-item)::before {
+  content: counter(item, var(--order-list-1-type, decimal))
+    var(--order-list-1-suffix, ". ") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  ol
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: counter(item, var(--order-list-2-type, decimal))
+    var(--order-list-2-suffix, ". ") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  ol
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: counter(item, var(--order-list-3-type, decimal))
+    var(--order-list-3-suffix, ". ") !important;
+}
+.tiptap-container
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  :is(ul:not([data-type="taskList"]), ol)
+  ol
+  > li:not(.tiptap-list-page-break-item)::before {
+  content: counter(item, var(--order-list-4-type, decimal))
+    var(--order-list-4-suffix, ". ") !important;
+}
+
+/* ═══ 들여쓰기 (통합) ═══ */
+/* 인라인 스타일(margin-left)로 동적 들여쓰기 처리됨 */
+/* 하위 호환을 위한 고정값 폴백 */
+
+.tiptap-container [data-indent="16"]:not([style*="margin-left"]),
+.tiptap-container li:has(> p[data-indent="16"]) {
+  margin-left: 16px !important;
+}
+.tiptap-container [data-indent="32"]:not([style*="margin-left"]),
+.tiptap-container li:has(> p[data-indent="32"]) {
+  margin-left: 32px !important;
+}
+.tiptap-container [data-indent="48"]:not([style*="margin-left"]),
+.tiptap-container li:has(> p[data-indent="48"]) {
+  margin-left: 48px !important;
+}
+.tiptap-container [data-indent="64"]:not([style*="margin-left"]),
+.tiptap-container li:has(> p[data-indent="64"]) {
+  margin-left: 64px !important;
+}
+
+/* li 내부 p의 중복 들여쓰기 방지 */
+.tiptap-container li > p[data-indent] {
+  margin-left: 0 !important;
+}
+
+/* ═══ Task 리스트 ═══ */
+
+.tiptap-container
+  ul[data-type="taskList"]
+  li:not(.tiptap-list-page-break-item) {
+  display: flex !important;
+  align-items: center;
+}
+
+.tiptap-container
+  ul[data-type="taskList"]
+  li:not(.tiptap-list-page-break-item)
+  > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem !important;
+  user-select: none !important;
+}
+
+.tiptap-container
+  ul[data-type="taskList"]
+  li:not(.tiptap-list-page-break-item)
+  > div {
+  flex: 1 1 auto !important;
+}
+
+.tiptap-container ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer !important;
+}
+
+.tiptap-container ul[data-type="taskList"] ul[data-type="taskList"] {
+  margin: 0 !important;
+}
+
+.tiptap-container li[data-checked="true"] > div {
+  text-decoration: line-through !important;
+  opacity: 0.6;
+}
+
+/* ═══ 인용 (Blockquote) ═══ */
+
+.tiptap-container blockquote {
+  border-left: 5px solid #a3a3a3 !important;
+  margin: 0;
+  padding-left: 0.8rem;
+}
+
+/* ═══ 코드 블록 ═══ */
+
+.tiptap-container pre {
+  background: #666666;
+  color: white;
+  border-radius: 0.5rem;
+  font-family: monospace;
+  margin: 0;
+  padding: 0.75rem 1rem;
+}
+
+.tiptap-container pre code {
+  font-family: monospace;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* ═══ 테이블 ═══ */
+
+.tiptap-container table {
+  border-collapse: collapse;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0;
+}
+
+.tiptap-final-page-filler {
+  pointer-events: none;
+  user-select: none;
+}
+
+.tiptap-container .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 10;
+  cursor: col-resize;
+}
+
+.tiptap-container table th {
+  min-width: 1em;
+  word-break: break-all;
+  box-sizing: border-box;
+  position: relative;
+  background: var(--header-bg, #dcdddd);
+  border-left: var(
+    --table-cell-border-left,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-right: var(
+    --table-cell-border-right,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-top: var(
+    --table-cell-border-top,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-bottom: var(
+    --table-cell-border-bottom,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  padding-top: var(--cell-pt, 4px);
+  padding-bottom: var(--cell-pb, 4px);
+  padding-left: var(--cell-pl, 8px);
+  padding-right: var(--cell-pr, 8px);
+  vertical-align: top;
+}
+
+.tiptap-container table td {
+  box-sizing: border-box;
+  word-break: break-all;
+  position: relative;
+  min-width: 1em;
+  padding-top: var(--cell-pt, 4px);
+  padding-bottom: var(--cell-pb, 4px);
+  padding-left: var(--cell-pl, 8px);
+  padding-right: var(--cell-pr, 8px);
+  vertical-align: top;
+  background-color: var(--table-cell-bg, transparent);
+  border-left: var(
+    --table-cell-border-left,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-right: var(
+    --table-cell-border-right,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-top: var(
+    --table-cell-border-top,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+  border-bottom: var(
+    --table-cell-border-bottom,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border, #000)
+  );
+}
+
+.tiptap-container table th:first-child,
+.tiptap-container table td:first-child {
+  border-left: var(--table-cell-border-left, none);
+}
+
+.tiptap-container table th:last-child,
+.tiptap-container table td:last-child {
+  border-right: var(--table-cell-border-right, none);
+}
+
+.tiptap-container table tr:first-child th,
+.tiptap-container table tr:first-child td {
+  border-top: var(
+    --table-cell-border-top,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border)
+  );
+}
+
+.tiptap-container table tr:last-child th,
+.tiptap-container table tr:last-child td {
+  border-bottom: var(
+    --table-cell-border-bottom,
+    var(--table-border-width, 1pt) var(--table-border-style, solid)
+      var(--table-border)
+  );
+}
+
+.tiptap-container table tr.tiptap-table-page-break-row {
+  border: 0 !important;
+  background: transparent !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+.tiptap-container
+  table
+  tr.tiptap-table-page-break-row
+  > td.tiptap-table-page-break-cell {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  line-height: 0 !important;
+  font-size: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.tiptap-container
+  table
+  tr.tiptap-table-page-break-row
+  > td.tiptap-table-page-break-cell
+  > .tiptap-page-break-structure {
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.tiptap-container table tr.tiptap-table-page-break-row + tr th,
+.tiptap-container table tr.tiptap-table-page-break-row + tr td {
+  border-top: var(--table-border-width, 1pt) var(--table-border-style, solid)
+    var(--table-border, #000) !important;
+}
+
+.tiptap-container.is-view-page table tr.tiptap-table-row-too-tall {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+  max-height: var(--tiptap-table-row-visible-height, auto) !important;
+  overflow: hidden !important;
+  contain: paint;
+}
+
+.tiptap-container.is-view-page table tr.tiptap-table-row-too-tall--clipped > th,
+.tiptap-container.is-view-page
+  table
+  tr.tiptap-table-row-too-tall--clipped
+  > td {
+  height: var(--tiptap-table-row-visible-height, auto) !important;
+  max-height: var(--tiptap-table-row-visible-height, none) !important;
+  overflow: hidden !important;
+  clip-path: inset(
+    0 0 calc(100% - var(--tiptap-table-row-visible-height, 100%)) 0
+  );
+}
+
+.tiptap-container.is-view-page
+  table
+  tr.tiptap-table-row-too-tall--clipped-out
+  > th,
+.tiptap-container.is-view-page
+  table
+  tr.tiptap-table-row-too-tall--clipped-out
+  > td {
+  height: 0 !important;
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+
+.ProseMirror .selectedCell:after {
+  z-index: 2;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--editor-selection-accent-soft, rgba(200, 200, 255, 0.4));
+  pointer-events: none;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  position: relative;
+}
+
+/* ═══ 커스텀 노드(이미지, 차트 등) 선택 스타일 통합 ═══ */
+
+/* ═══ 커스텀 노드 선택 스타일 통합 (이미지, 차트, 도형) ═══ */
+
+/* NodeView가 직접 selection frame을 그리므로 기본 outline은 끈다 */
+.tiptap-container .ProseMirror-selectednode .lazy-image-container,
+.tiptap-container .ProseMirror-selectednode .chart-block-container,
+.tiptap-container .ProseMirror-selectednode.shape-block-container,
+.tiptap-container .ProseMirror-selectednode > .shape-block-container {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap-container .ProseMirror-selectednode img,
+.tiptap-container img.ProseMirror-selectednode {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap-container .ProseMirror-selectednode .shape-block-container img,
+.tiptap-container
+  .ProseMirror-selectednode
+  .shape-block-container
+  .lazy-image-container,
+.tiptap-container
+  .ProseMirror-selectednode
+  .shape-block-container
+  .chart-block-container {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.tiptap-container.is-readonly .lazy-image-container,
+.tiptap-container.is-readonly .chart-block-container,
+.tiptap-container.is-readonly .diagram-frame-container,
+.tiptap-container.is-readonly .diagram-excalidraw-root {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.tiptap-container.is-readonly .lazy-image-container,
+.tiptap-container.is-readonly .chart-block-container,
+.tiptap-container.is-readonly .diagram-frame-container,
+.tiptap-container.is-readonly .diagram-excalidraw-root {
+  pointer-events: none !important;
+}
+
+.tiptap-container.is-readonly .shape-block-container,
+.tiptap-container.is-readonly .shape-block-content,
+.tiptap-container.is-readonly .shape-block-content *,
+.tiptap-container.is-readonly .tableWrapper,
+.tiptap-container.is-readonly .tableWrapper *,
+.tiptap-container.is-readonly table,
+.tiptap-container.is-readonly table * {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+.tiptap-container.is-readonly .shape-block-container,
+.tiptap-container.is-readonly .shape-block-content,
+.tiptap-container.is-readonly .shape-block-content *,
+.tiptap-container.is-readonly .tableWrapper,
+.tiptap-container.is-readonly .tableWrapper *,
+.tiptap-container.is-readonly table,
+.tiptap-container.is-readonly table * {
+  pointer-events: auto !important;
+}
+
+.tiptap-container.is-readonly .selectedCell:after,
+.tiptap-container.is-readonly .ProseMirror-selectednode,
+.tiptap-container.is-readonly .ProseMirror-selectednode .lazy-image-container,
+.tiptap-container.is-readonly .ProseMirror-selectednode .chart-block-container,
+.tiptap-container.is-readonly .ProseMirror-selectednode.shape-block-container,
+.tiptap-container.is-readonly
+  .ProseMirror-selectednode
+  > .shape-block-container,
+.tiptap-container.is-readonly
+  .ProseMirror-selectednode
+  .diagram-frame-container,
+.tiptap-container.is-readonly .ProseMirror-selectednode .tableWrapper {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+.tiptap-container .shape-block-container:focus-within {
+  outline: none !important;
+}
+
+.shape-block-container {
+  transition: outline 0.15s ease;
+}
+
+.shape-block-content {
+  width: 100%;
+  min-height: 1em;
+  outline: none;
+}
+
+.shape-block-content > *:first-child {
+  margin-top: 0;
+}
+
+.shape-block-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.shape-block-content p {
+  margin: 0;
+}
+
+/* ═══ 컬럼 레이아웃 ═══ */
+
+.ProseMirror .column-block {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1px;
+  margin: 2px 0;
+}
+
+.ProseMirror .column {
+  overflow: hidden;
+  padding: 2px;
+}
+
+.ProseMirror-focused .column {
+  border: 1px dashed var(--editor-selection-accent);
+}
+
+.sud-segmented {
+  background: transparent !important;
+}
+
+/* ═══ 볼륨 슬라이더 뉴모피즘 ═══ */
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+  background: var(--volume-track-color);
+  box-shadow:
+    inset 3px 3px 5px #c2c2c2,
+    inset -3px -3px 5px #f5f5f5;
+}
+
+.volume-slider.dark {
+  background: var(--volume-track-color);
+  box-shadow:
+    inset 3px 3px 5px #000000,
+    inset -3px -3px 5px #4d4d4d;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--volume-thumb-color);
+  box-shadow:
+    3px 3px 5px #c2c2c2,
+    -3px -3px 5px #f5f5f5;
+  cursor: pointer;
+}
+
+.volume-slider.dark::-webkit-slider-thumb {
+  box-shadow:
+    3px 3px 5px #000000,
+    -3px -3px 5px #4d4d4d;
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: none;
+  background: var(--volume-thumb-color);
+  box-shadow:
+    3px 3px 5px #c2c2c2,
+    -3px -3px 5px #f5f5f5;
+  cursor: pointer;
+}
+
+.volume-slider.dark::-moz-range-thumb {
+  box-shadow:
+    3px 3px 5px #000000,
+    -3px -3px 5px #4d4d4d;
+}
+.dockit-note-reference {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0.75em;
+  margin: 0 0.08em;
+  padding: 0 0.08em;
+  border: 0;
+  border-radius: 0.15em;
+  background: transparent;
+  color: inherit;
+  font-size: 0.75em;
+  font-weight: inherit;
+  line-height: 1;
+  vertical-align: super;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.dockit-note-reference:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.dockit-note-reference.is-read-only {
+  cursor: pointer;
+}
+
+.dockit-note-reference-tooltip {
+  position: fixed;
+  z-index: 80;
+  display: flex;
+  width: min(20rem, calc(100vw - 1rem));
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  border-radius: 0.35rem;
+  background: var(--editor-surface, #fff);
+  color: var(--editor-text-color, #111827);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.dockit-note-reference-tooltip__label {
+  font-weight: 600;
+}
+
+.dockit-note-reference-tooltip__preview {
+  color: color-mix(in srgb, currentColor 76%, transparent);
+  overflow-wrap: anywhere;
+}
+
+.dockit-note-reference:focus-visible {
+  outline: 2px solid var(--editor-selection-accent, var(--accent-color, #0f766e));
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 420px) {
+  .dockit-note-reference::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+}
+
+.dockit-note-body {
+  margin: 0.35rem 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.dockit-endnote-section-heading {
+  margin: 2rem 0 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+}
+
+.dockit-endnote-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dockit-note-body-row {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.35rem;
+  align-items: start;
+}
+
+.dockit-note-body-number {
+  display: block;
+  padding-top: 0.05em;
+  color: inherit;
+  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
+  line-height: inherit;
+  text-align: right;
+  user-select: none;
+}
+
+.ProseMirror[contenteditable="true"] .dockit-note-body-number {
+  cursor: pointer;
+}
+
+.dockit-note-body-content {
+  min-height: 1.5em;
+  cursor: text;
+}
+
+.dockit-note-body-content > :first-child {
+  margin-top: 0;
+}
+
+.dockit-note-body-content > :last-child {
+  margin-bottom: 0;
+}
+
+.dockit-note-body-placeholder::before {
+  float: left;
+  height: 0;
+  color: color-mix(in srgb, currentColor 38%, transparent);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+/* U3 screen projection keeps the first fragment's live NodeView editable. */
+.dockit-note-body[data-dockit-footnote-projection-canonical="true"] {
+  max-height: var(--dockit-footnote-canonical-fragment-height);
+  overflow: clip;
+  background: var(--editor-surface, #fff);
+  color: var(--editor-text-color, #111827);
+  -webkit-text-fill-color: currentColor;
+  pointer-events: auto;
+}
+
+.dockit-footnote-screen-projection {
+  position: absolute;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+  box-sizing: border-box;
+  background: #fff;
+  color: #0f172a;
+}
+
+.dockit-footnote-screen-projection--continuation {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.dockit-footnote-screen-projection__separator {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1px 0 0;
+  overflow: hidden;
+  background: #fff;
+  color: #475569;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.dockit-footnote-screen-projection__clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.dockit-footnote-screen-projection__content {
+  display: block;
+  min-height: 1px;
+}
+
+.dockit-footnote-screen-projection__content > :first-child {
+  margin-top: 0;
+}
+
+.dockit-footnote-screen-projection__content > :last-child {
+  margin-bottom: 0;
+}
+
+.dockit-footnote-screen-projection__continuation { white-space: nowrap; }
+
+/* Print projection lives in pagination widgets but must never affect editor flow. */
+.dockit-footnote-print-projection,
+.dockit-footnote-print-only-page,
+.dockit-footnote-print-blocking-error {
+  display: none;
+}
+
+/*
+ * Opt-in, synchronous clone portal used only by footnote measurement.
+ * It is attached outside the ProseMirror root and cannot expand page scroll.
+ */
+.dockit-footnote-measurement-stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+  contain: layout style;
+  overflow: visible;
+  z-index: -2147483647;
+  margin: 0;
+  transform: none;
+}
+
+.dockit-footnote-measurement-stage > .dockit-footnote-measurement-body {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Dockit-controlled design tokens used by AI drafts and editable templates. */
+.tiptap-main-canvas [data-dockit-design="cover-title-primary"] {
+  box-sizing: border-box;
+  margin: 0 0 12px;
+  padding: 28px 30px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 58%, #22c55e 140%);
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+}
+
+.tiptap-main-canvas [data-dockit-design="cover-subtitle"] {
+  margin: 0 0 34px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.tiptap-main-canvas [data-dockit-design="section-title-accent"] {
+  margin-top: 28px;
+  padding-left: 12px;
+  border-left: 4px solid #0ea5e9;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+}
+
+.tiptap-main-canvas [data-dockit-design="summary-callout"] {
+  box-sizing: border-box;
+  margin: 14px 0 22px;
+  padding: 16px 18px;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  background: #f0f9ff;
+  color: #0c4a6e;
+  line-height: 1.75;
+}
+
+.tiptap-main-canvas [data-dockit-design="key-message"] {
+  margin: 18px 0;
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: -0.02em;
+}
+
+@media print {
+  .tiptap-main-canvas [data-dockit-design="cover-title-primary"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .tiptap-main-canvas [data-dockit-design="summary-callout"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

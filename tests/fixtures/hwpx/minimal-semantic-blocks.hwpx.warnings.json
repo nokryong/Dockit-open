@@ -1,0 +1,20 @@
+[
+  {
+    "code": "semantic-block-fallback",
+    "severity": "warning",
+    "message": "Unsupported IR codeBlock is emitted as code-like HWPX paragraphs with monospace shaded text.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "unsupported",
+    "path": "sections[0].blocks[1]"
+  },
+  {
+    "code": "semantic-block-fallback",
+    "severity": "warning",
+    "message": "Unsupported IR blockquote is emitted as quote-like HWPX paragraphs with indentation and italic text.",
+    "sectionIndex": 0,
+    "blockIndex": 2,
+    "blockType": "unsupported",
+    "path": "sections[0].blocks[2]"
+  }
+]

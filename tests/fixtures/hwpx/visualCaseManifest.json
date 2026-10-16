@@ -1,0 +1,56 @@
+[
+  {
+    "fileName": "minimal-styled-text.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "font-sensitive",
+    "visualFocus": ["styled-text", "inline-code"]
+  },
+  {
+    "fileName": "minimal-merged-table.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "geometry-sensitive",
+    "visualFocus": ["table-merge", "row-height", "border"]
+  },
+  {
+    "fileName": "minimal-table-merge-mixed-span.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "geometry-sensitive",
+    "visualFocus": ["table-merge", "mixed-span"]
+  },
+  {
+    "fileName": "minimal-image-object.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "smoke",
+    "visualFocus": ["image"]
+  },
+  {
+    "fileName": "minimal-link.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "smoke",
+    "visualFocus": ["link"]
+  },
+  {
+    "fileName": "minimal-semantic-blocks.hwpx",
+    "roundTrip": "paired",
+    "renderTarget": "pdf",
+    "pageScope": "first-page",
+    "baselinePolicy": "artifact-only-smoke",
+    "toleranceProfile": "font-sensitive",
+    "visualFocus": ["code-block", "blockquote"]
+  }
+]

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Dockit PDF output preflight fixture</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #e5e7eb;
+        color: #111827;
+        font-family: Arial, "Noto Sans KR", sans-serif;
+      }
+      body {
+        padding: 40px 24px;
+      }
+      button {
+        font: inherit;
+      }
+      .flex {
+        display: flex;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .flex-wrap {
+        flex-wrap: wrap;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .justify-end {
+        justify-content: flex-end;
+      }
+      .gap-2 {
+        gap: 8px;
+      }
+      #fixture-shell {
+        width: min(860px, 100%);
+        margin: 0 auto;
+      }
+      #fixture-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: #111827;
+        color: #f9fafb;
+      }
+      #fixture-toolbar button {
+        min-height: 38px;
+        padding: 8px 16px;
+        border: 0;
+        border-radius: 8px;
+        background: #f9fafb;
+        color: #111827;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      #fixture-status {
+        font-size: 13px;
+      }
+      #editor-root {
+        width: 100%;
+        min-height: 720px;
+        padding: 64px 72px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        box-shadow: 0 8px 24px rgb(15 23 42 / 12%);
+        line-height: 1.7;
+      }
+      #editor-root h1 {
+        margin: 0 0 24px;
+        font-size: 28px;
+      }
+      #editor-root h2 {
+        margin: 30px 0 12px;
+        font-size: 20px;
+      }
+      #editor-root p {
+        margin: 0 0 14px;
+      }
+      #editor-root table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+      #editor-root th,
+      #editor-root td {
+        padding: 10px 12px;
+        border: 1px solid #9ca3af;
+        text-align: left;
+      }
+      #pending-image {
+        display: block;
+        width: 180px;
+        height: 90px;
+        margin: 18px 0;
+        border: 1px dashed #94a3b8;
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+      }
+    </style>
+  </head>
+  <body data-fixture-status="loading">
+    <main id="fixture-shell">
+      <div id="fixture-toolbar">
+        <span id="fixture-status" role="status">fixture 준비 중</span>
+        <div id="app"></div>
+      </div>
+      <article id="editor-root" aria-label="PDF 출력 사전 점검 문서">
+        <h1>PDF 출력 사전 점검 예시 문서</h1>
+        <p>
+          출력 직전의 이미지, 각주, 표, 글꼴과 가로 넘침 상태를 확인하는
+          실제 브라우저 fixture입니다.
+        </p>
+        <img id="pending-image" alt="준비 중인 보고서 이미지" />
+        <h2>분기 요약</h2>
+        <p>
+          경고를 확인하는 사이 새 차단 사유가 생기면 기존 확인으로 인쇄를
+          진행하지 않아야 합니다.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="audited-table-row">
+              <td>출력 사전 점검</td>
+              <td>경고 재검증</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </main>
+    <script type="module" src="./pdf-output-preflight-fixture.js"></script>
+  </body>
+</html>

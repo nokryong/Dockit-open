@@ -1,0 +1,98 @@
+{
+  "benchmarkVersion": "v1",
+  "fixtureId": "phase-h-report-outline-v1",
+  "claims": {
+    "externalMutationTransport": false,
+    "liveProvider": false,
+    "userStudy": false
+  },
+  "records": [
+    {
+      "mode": "manual-first",
+      "observations": {
+        "dockit-completion": {
+          "status": "automated-pass",
+          "evidenceId": "dkt-v1-import"
+        },
+        "direct-edit-completeness": {
+          "status": "automated-pass",
+          "evidenceId": "tiptap-edit-roundtrip"
+        },
+        "ai-off-journey": {
+          "status": "automated-pass",
+          "evidenceId": "offline-print-export"
+        },
+        "scoped-mutation-accuracy": {
+          "status": "not-applicable",
+          "evidenceId": "manual-no-ai-mutation"
+        },
+        "pdf-defects": {
+          "status": "automated-pass",
+          "evidenceId": "external-chromium-pdf"
+        },
+        "reuse-intent": {
+          "status": "not-collected",
+          "evidenceId": "user-study-not-run"
+        }
+      }
+    },
+    {
+      "mode": "assistive-ai",
+      "observations": {
+        "dockit-completion": {
+          "status": "automated-pass",
+          "evidenceId": "dkt-v1-import"
+        },
+        "direct-edit-completeness": {
+          "status": "automated-pass",
+          "evidenceId": "tiptap-edit-roundtrip"
+        },
+        "ai-off-journey": {
+          "status": "automated-pass",
+          "evidenceId": "offline-print-export"
+        },
+        "scoped-mutation-accuracy": {
+          "status": "automated-pass",
+          "evidenceId": "canonical-report-outline-vector"
+        },
+        "pdf-defects": {
+          "status": "automated-pass",
+          "evidenceId": "external-chromium-pdf"
+        },
+        "reuse-intent": {
+          "status": "not-collected",
+          "evidenceId": "user-study-not-run"
+        }
+      }
+    },
+    {
+      "mode": "ai-led",
+      "observations": {
+        "dockit-completion": {
+          "status": "automated-pass",
+          "evidenceId": "dkt-v1-import"
+        },
+        "direct-edit-completeness": {
+          "status": "automated-pass",
+          "evidenceId": "tiptap-edit-roundtrip"
+        },
+        "ai-off-journey": {
+          "status": "automated-pass",
+          "evidenceId": "offline-print-export"
+        },
+        "scoped-mutation-accuracy": {
+          "status": "automated-pass",
+          "evidenceId": "canonical-report-outline-vector"
+        },
+        "pdf-defects": {
+          "status": "automated-pass",
+          "evidenceId": "external-chromium-pdf"
+        },
+        "reuse-intent": {
+          "status": "not-collected",
+          "evidenceId": "user-study-not-run"
+        }
+      }
+    }
+  ]
+}

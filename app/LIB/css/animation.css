@@ -1,0 +1,42 @@
+.shrinkAndBlink-animation {
+  animation: shrinkAndBlink 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes shrinkAndBlink {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.7);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.rotation-animation {
+  animation: rotation 1.5s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: rotate(120deg);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: rotate(180deg);
+    opacity: 0.4;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+}

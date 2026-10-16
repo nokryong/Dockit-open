@@ -1,0 +1,186 @@
+{
+  "fixtureVersion": "document-first-ai-a2/v1",
+  "identity": {
+    "documentId": "a2-core-document",
+    "ownerUid": "a2-owner",
+    "viewerUid": "a2-viewer"
+  },
+  "document": {
+    "fileType": "dkt-document",
+    "schemaVersion": 1,
+    "title": "Dockit A2 core document",
+    "content": "<h1>Dockit A2 core document</h1><p>Original document body.</p>",
+    "docSetting": {
+      "pageWidth": 210,
+      "pageHeight": 297,
+      "paddingTop": 25,
+      "paddingBottom": 25,
+      "paddingLeft": 25,
+      "paddingRight": 25,
+      "lineHeight": 1.5
+    },
+    "bulletStyle": {
+      "disc": "•"
+    },
+    "viewPage": true,
+    "pageNumber": "center",
+    "focus": 0,
+    "sourceFileName": "a2-core-document.docx"
+  },
+  "journey": {
+    "editedContent": "<h1>Dockit A2 core document</h1><p>Edited content survives an AI outage.</p>",
+    "coreText": [
+      "Dockit A2 core document",
+      "Edited content survives an AI outage."
+    ]
+  },
+  "semanticIR": {
+    "type": "document",
+    "version": "ir-v1.1-draft",
+    "metadata": {
+      "extractedAt": "2026-07-14T00:00:00.000Z",
+      "extractorVersion": "document-first-ai-a2",
+      "source": {
+        "editor": "tiptap-prosemirror",
+        "mode": "readonly-snapshot"
+      },
+      "warnings": []
+    },
+    "sections": [
+      {
+        "type": "section",
+        "id": "a2-core-section",
+        "breakType": "continuous",
+        "pageSettings": {
+          "widthMm": 210,
+          "heightMm": 297,
+          "paddingTopMm": 25,
+          "paddingBottomMm": 25,
+          "paddingLeftMm": 25,
+          "paddingRightMm": 25,
+          "lineHeight": 1.5
+        },
+        "blocks": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 1,
+              "textAlign": "left",
+              "lineHeight": "1.5",
+              "indent": 0,
+              "indentLevel": 0,
+              "wordBreak": "keep-all"
+            },
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "Dockit A2 core document",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "left",
+              "lineHeight": "1.5",
+              "indent": 0,
+              "indentLevel": 0,
+              "wordBreak": "keep-all"
+            },
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "Edited content survives an AI outage.",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "aiMatrix": [
+    {
+      "id": "disabled",
+      "capability": {
+        "version": "v1",
+        "state": "disabled",
+        "retryable": false,
+        "message": "AI 기능이 현재 비활성화되어 있습니다."
+      },
+      "expectedNotice": {
+        "code": "ai_disabled",
+        "retryable": false
+      }
+    },
+    {
+      "id": "provider_unconfigured",
+      "capability": {
+        "version": "v1",
+        "state": "provider_unconfigured",
+        "retryable": false,
+        "message": "AI 제공자 설정이 완료되지 않았습니다."
+      },
+      "expectedNotice": {
+        "code": "provider_unconfigured",
+        "retryable": false
+      }
+    },
+    {
+      "id": "provider_network_failure",
+      "error": {
+        "code": "network_error",
+        "message": "AI provider connection failed."
+      },
+      "expectedNotice": {
+        "code": "network_error",
+        "retryable": true
+      }
+    },
+    {
+      "id": "quota_point_exceeded",
+      "error": {
+        "status": 402,
+        "body": {
+          "error": {
+            "code": "insufficient_points",
+            "message": "AI points are exhausted."
+          }
+        }
+      },
+      "expectedNotice": {
+        "code": "insufficient_points",
+        "retryable": false
+      }
+    }
+  ],
+  "roles": {
+    "owner": {
+      "read": true,
+      "edit": true,
+      "settingsWrite": true,
+      "sharingWrite": true
+    },
+    "viewer": {
+      "teamReadable": true,
+      "linkReadable": true,
+      "publicReadable": true,
+      "edit": false,
+      "settingsWrite": false,
+      "sharingWrite": false,
+      "denyCode": "AuthorizationDenied"
+    },
+    "public": {
+      "read": true,
+      "edit": false,
+      "settingsWrite": false,
+      "sharingWrite": false,
+      "anonymousMutationStatus": 401
+    }
+  }
+}

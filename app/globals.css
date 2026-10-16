@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    PretendardRegular,
+    PretendardSemiBold,
+    PretendardBold,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
+}
+
+/* 스크롤바 숨기기 */
+.overflow-y-auto::-webkit-scrollbar {
+  display: none !important;
+}
+.overflow-y-auto {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.sud-modal__thumbnail {
+  overflow-y: auto !important;
+}
+
+.lazy-image-container img {
+  will-change: transform;
+}
+
+.sud-typography {
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+}
+
+.sud-select,
+.sud-select sud-hover {
+  background: transparent !important;
+}
+
+.sud-tabs__content {
+  padding: 0 !important;
+}
+
+.dockit-context-menu .sud-menu__item {
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+}
+
+.dockit-context-menu .sud-menu__item + .sud-menu__item {
+  margin-top: 2px;
+}
+
+.dockit-context-menu .sud-menu__item > span {
+  min-width: 0;
+  width: 100%;
+}
+
+@keyframes account-state-progress-fill {
+  0% {
+    transform: scaleX(0);
+  }
+  58% {
+    transform: scaleX(0.58);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes account-state-progress-shimmer {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(240%);
+  }
+}
+
+.account-state-progress-fill {
+  position: relative;
+  overflow: hidden;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: account-state-progress-fill 8000ms cubic-bezier(0.4, 0, 0.2, 1)
+    forwards;
+  will-change: transform;
+}
+
+.account-state-progress-fill::after {
+  position: absolute;
+  inset: 0;
+  width: 42%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 55%),
+    transparent
+  );
+  content: "";
+  animation: account-state-progress-shimmer 1300ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-state-progress-fill {
+    transform: scaleX(0.72);
+    animation: none;
+    will-change: auto;
+  }
+
+  .account-state-progress-fill::after {
+    display: none;
+  }
+}
+
+/* PC버전 */
+.electron-titlebar {
+  -webkit-app-region: drag;
+  z-index: 9999;
+}
+
+/* 버튼, 입력창, 로고 등은 드래그 제외 */
+.electron-titlebar button,
+.electron-titlebar input,
+.electron-titlebar .tiptap-title,
+.electron-titlebar .titlebar-logo {
+  -webkit-app-region: no-drag;
+}
+
+@keyframes text-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+.text-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    currentColor 40%,
+    color-mix(in srgb, currentColor 20%, white) 50%,
+    currentColor 60%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+@keyframes activity-dots {
+  0%, 100% { clip-path: inset(0 100% 0 0); }
+  25% { clip-path: inset(0 66.6667% 0 0); }
+  50% { clip-path: inset(0 33.3333% 0 0); }
+  75% { clip-path: inset(0 0 0 0); }
+}
+
+.activity-dots {
+  width: 3em;
+  animation: activity-dots 1.6s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-dots {
+    animation: none;
+    clip-path: none;
+  }
+}

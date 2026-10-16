@@ -1,0 +1,587 @@
+[
+  {
+    "fileName": "minimal-paragraph-heading.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "A long paragraph with an inline tag."
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "warningCodes": [
+      "run-style-fallback"
+    ]
+  },
+  {
+    "fileName": "minimal-list-object.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Nested item",
+      "Bullet item",
+      "[Object placeholder: image img-1]"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness",
+      "3. Nested item",
+      "• Bullet item"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 1,
+      "bullets": 1,
+      "numberPara": 1,
+      "bulletPara": 1
+    },
+    "warningCodes": [
+      "object-placeholder"
+    ]
+  },
+  {
+    "fileName": "minimal-basic-table.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Simple cell"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 1
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "warningCodes": []
+  },
+  {
+    "fileName": "minimal-merged-table.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Merged left",
+      "Top right",
+      "Bottom right"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 3
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "warningCodes": [
+      "table-merge-layout-warning"
+    ]
+  },
+  {
+    "fileName": "minimal-table-merge-colspan-only.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Colspan top",
+      "Top right",
+      "Bottom left",
+      "Bottom middle",
+      "Bottom right"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 5
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "tableGeometry": {
+      "table": {
+        "rowCnt": "2",
+        "colCnt": "3"
+      },
+      "size": {
+        "width": "5100",
+        "height": "4200"
+      },
+      "cells": [
+        {
+          "addr": { "colAddr": "0", "rowAddr": "0" },
+          "span": { "colSpan": "2", "rowSpan": "1" },
+          "size": { "width": "3000", "height": "2000" }
+        },
+        {
+          "addr": { "colAddr": "2", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "2100", "height": "2000" }
+        },
+        {
+          "addr": { "colAddr": "0", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1350", "height": "2200" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1650", "height": "2200" }
+        },
+        {
+          "addr": { "colAddr": "2", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "2100", "height": "2200" }
+        }
+      ]
+    },
+    "warningCodes": [
+      "table-merge-layout-warning"
+    ]
+  },
+  {
+    "fileName": "minimal-table-merge-rowspan-only.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Rowspan left",
+      "R1C2",
+      "R2C2",
+      "R3C2"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 4
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "tableGeometry": {
+      "table": {
+        "rowCnt": "3",
+        "colCnt": "2"
+      },
+      "size": {
+        "width": "3300",
+        "height": "7200"
+      },
+      "cells": [
+        {
+          "addr": { "colAddr": "0", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "3" },
+          "size": { "width": "1500", "height": "7200" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1800", "height": "1800" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1800", "height": "2400" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "2" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1800", "height": "3000" }
+        }
+      ]
+    },
+    "warningCodes": [
+      "table-merge-layout-warning"
+    ]
+  },
+  {
+    "fileName": "minimal-table-merge-mixed-span.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Mixed block",
+      "Top right",
+      "Middle right",
+      "Bottom left",
+      "Bottom middle",
+      "Bottom right"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 6
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "tableGeometry": {
+      "table": {
+        "rowCnt": "3",
+        "colCnt": "3"
+      },
+      "size": {
+        "width": "5400",
+        "height": "7300"
+      },
+      "cells": [
+        {
+          "addr": { "colAddr": "0", "rowAddr": "0" },
+          "span": { "colSpan": "2", "rowSpan": "2" },
+          "size": { "width": "3000", "height": "4800" }
+        },
+        {
+          "addr": { "colAddr": "2", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "2400", "height": "2100" }
+        },
+        {
+          "addr": { "colAddr": "2", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "2400", "height": "2700" }
+        },
+        {
+          "addr": { "colAddr": "0", "rowAddr": "2" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1200", "height": "2500" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "2" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1800", "height": "2500" }
+        },
+        {
+          "addr": { "colAddr": "2", "rowAddr": "2" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "2400", "height": "2500" }
+        }
+      ]
+    },
+    "warningCodes": [
+      "table-merge-layout-warning"
+    ]
+  },
+  {
+    "fileName": "minimal-table-merge-clamped-rowspan.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Oversized rowspan",
+      "Clamp top",
+      "Clamp bottom"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 3
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "borderFillMapping": {
+      "count": 2,
+      "tableRef": "2",
+      "cellRef": "2",
+      "requiredSideXml": [
+        "<hh:leftBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:rightBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:topBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>",
+        "<hh:bottomBorder type=\"SOLID\" width=\"0.4 mm\" color=\"#333333\"/>"
+      ]
+    },
+    "tableGeometry": {
+      "table": {
+        "rowCnt": "2",
+        "colCnt": "2"
+      },
+      "size": {
+        "width": "3450",
+        "height": "4600"
+      },
+      "cells": [
+        {
+          "addr": { "colAddr": "0", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "2" },
+          "size": { "width": "1500", "height": "4600" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "0" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1950", "height": "2000" }
+        },
+        {
+          "addr": { "colAddr": "1", "rowAddr": "1" },
+          "span": { "colSpan": "1", "rowSpan": "1" },
+          "size": { "width": "1950", "height": "2600" }
+        }
+      ]
+    },
+    "warningCodes": [
+      "table-merge-layout-warning"
+    ]
+  },
+  {
+    "fileName": "minimal-image-object.hwpx",
+    "expectedText": [
+      "Export readiness"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness",
+      "[Object placeholder: image"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "imageMedia": {
+      "id": "image1",
+      "binPath": "BinData/dockit-image-fixture.png",
+      "roundTripBinPath": "BinData/image1.png",
+      "contentItem": "<opf:item id=\"image1\" href=\"BinData/dockit-image-fixture.png\" media-type=\"image/png\" isEmbeded=\"1\"/>",
+      "roundTripContentItem": "<opf:item id=\"image1\" href=\"BinData/image1.png\" media-type=\"image/png\" isEmbeded=\"1\"/>",
+      "picCount": 1
+    },
+    "warningCodes": []
+  },
+  {
+    "fileName": "minimal-readiness-smoke.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "A long paragraph with an inline tag.",
+      "Nested item",
+      "Merged cell",
+      "Bullet item",
+      "[Object placeholder: image img-1]"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness",
+      "3. Nested item",
+      "• Bullet item"
+    ],
+    "sectionCounts": {
+      "table": 1,
+      "cell": 1
+    },
+    "nativeListCounts": {
+      "numberings": 1,
+      "bullets": 1,
+      "numberPara": 1,
+      "bulletPara": 1
+    },
+    "warningCodes": [
+      "run-style-fallback",
+      "table-merge-layout-warning",
+      "object-placeholder"
+    ]
+  },
+  {
+    "fileName": "minimal-bullet-list.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Bullet item"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness",
+      "• Bullet item"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 1,
+      "numberPara": 0,
+      "bulletPara": 1
+    },
+    "warningCodes": []
+  },
+  {
+    "fileName": "minimal-nested-list-limit.hwpx",
+    "expectedText": [
+      "Export readiness",
+      "Parent item",
+      "Nested bullet"
+    ],
+    "forbiddenText": [
+      "1.1. Export readiness"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 1,
+      "bullets": 0,
+      "numberPara": 1,
+      "bulletPara": 0
+    },
+    "warningCodes": [
+      "list-marker-text-fallback",
+      "nested-list-fallback"
+    ]
+  },
+  {
+    "fileName": "minimal-styled-text.hwpx",
+    "expectedText": [
+      "굵게 기울임 밑줄 취소선 색상 강조 코드"
+    ],
+    "forbiddenText": [
+      "[Unsupported block"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "warningCodes": []
+  },
+  {
+    "fileName": "minimal-link.hwpx",
+    "expectedText": [
+      "Dockit 링크"
+    ],
+    "forbiddenText": [
+      "[Unsupported block",
+      "https://example.com/dockit?x=1&y=2"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "hyperlinkTargets": [
+      "https://example.com/dockit?x=1&y=2"
+    ],
+    "warningCodes": []
+  },
+  {
+    "fileName": "minimal-semantic-blocks.hwpx",
+    "expectedText": [
+      "Semantic fallback blocks",
+      "const dockit = true;",
+      "return dockit;",
+      "인용문 첫 줄",
+      "인용문 둘째 줄"
+    ],
+    "forbiddenText": [
+      "[Unsupported block: codeBlock]",
+      "[Unsupported block: blockquote]"
+    ],
+    "sectionCounts": {
+      "table": 0,
+      "cell": 0
+    },
+    "nativeListCounts": {
+      "numberings": 0,
+      "bullets": 0,
+      "numberPara": 0,
+      "bulletPara": 0
+    },
+    "warningCodes": [
+      "semantic-block-fallback",
+      "semantic-block-fallback"
+    ]
+  }
+]

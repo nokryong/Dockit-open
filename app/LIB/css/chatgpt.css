@@ -1,0 +1,5 @@
+.chatgpt-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; font-size: 12px; }
+.chatgpt-error { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; color: #a32a25; background: #d33d330d; padding: 8px; border-radius: 8px; font-size: 12px; overflow-wrap: anywhere; }
+.dark .chatgpt-error { color: #ffaaa3; }
+.chatgpt-message-status { font-size: 11px; opacity: .8; margin-top: 6px; }
+.chatgpt-avatar { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0; }

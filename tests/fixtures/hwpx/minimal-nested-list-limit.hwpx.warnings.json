@@ -1,0 +1,20 @@
+[
+  {
+    "code": "list-marker-text-fallback",
+    "severity": "warning",
+    "message": "Native HWPX numbering definitions are not emitted for this list level; list markers are written as paragraph text.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "list",
+    "path": "sections[0].blocks[1].items[0].lists[0]"
+  },
+  {
+    "code": "nested-list-fallback",
+    "severity": "warning",
+    "message": "Nested list restart and indentation are marker-text-only in the minimal HWPX spike.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "list",
+    "path": "sections[0].blocks[1].items[0].lists[0]"
+  }
+]

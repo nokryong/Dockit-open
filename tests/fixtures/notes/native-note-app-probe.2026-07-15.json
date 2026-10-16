@@ -1,0 +1,94 @@
+{
+  "schema": "dockit-native-note-app-probe-v1",
+  "recordedAt": "2026-07-15T23:57:20.0281926+09:00",
+  "source": {
+    "manifest": "native-note-corpus.manifest.json",
+    "files": {
+      "native-note-corpus.docx": "8b0401ad0ab6ddda21e2ec295e109d9a68e46679e96930173a858397893d9829",
+      "native-note-corpus.hwpx": "6374e2d39e9adb66f88259d11eac747d7815f9736736d225e3e91d3dab6c7a68"
+    }
+  },
+  "environment": {
+    "os": "Microsoft Windows 11 Home",
+    "osVersion": "10.0.26200",
+    "architecture": "AMD64"
+  },
+  "microsoftWord": {
+    "fileVersion": "16.0.19127.20302",
+    "open": {
+      "status": "PASS",
+      "mode": "hidden COM OpenNoRepairDialog read-only",
+      "pageCount": 1,
+      "footnoteCount": 2,
+      "endnoteCount": 1,
+      "mainMarkersPreserved": true,
+      "noteBodyLeakIntoMainStory": false,
+      "noteBodyMarkersPreserved": [
+        "__N5D_NOTE_ONLY__",
+        "__N5D_NOTE_SECOND__",
+        "__N5D_CELL_NOTE_ONLY__",
+        "__N5D_ENDNOTE_ONLY__"
+      ],
+      "firstFootnoteHyperlinkCount": 3,
+      "firstFootnoteStyleChecks": {
+        "bold": true,
+        "italic": true,
+        "underline": true,
+        "strike": true,
+        "subscript": true,
+        "superscript": true,
+        "rgb336699WordBgrValue": 10053171
+      }
+    },
+    "roundTripSave": {
+      "status": "UNKNOWN",
+      "attemptedMethods": [
+        "SaveAs2",
+        "SaveCopyAs"
+      ],
+      "blockedBy": "This Office installation requires OneDrive before editing is enabled.",
+      "observedDialogTitle": "편집을 사용하려면 OneDrive에 저장하세요.",
+      "artifactProduced": false
+    },
+    "visual": {
+      "status": "UNKNOWN",
+      "reason": "ExportAsFixedFormat did not complete in the read-only Office environment and produced no artifact."
+    }
+  },
+  "hancomOffice": {
+    "fileVersion": "13.0.0.3379",
+    "directOpen": {
+      "status": "PASS",
+      "mode": "hidden Hwp.exe direct file open",
+      "windowTitleContainedSourceFile": true,
+      "processResponded": true
+    },
+    "automationSecurityModule": {
+      "status": "FAIL",
+      "module": "FilePathCheckerModuleExample",
+      "registerModuleReturned": false
+    },
+    "roundTripSave": {
+      "status": "UNKNOWN",
+      "blockedBy": "The official Automation file-path security module is not installed, so unattended Open/SaveAs cannot be authorized safely.",
+      "artifactProduced": false
+    },
+    "visual": {
+      "status": "UNKNOWN",
+      "reason": "The file opened in the native app, but no unattended page image or PDF could be produced without the approved Automation module."
+    }
+  },
+  "libreOffice": {
+    "availability": "N/A",
+    "installed": false,
+    "reason": "LibreOffice is not installed on this machine."
+  },
+  "remainingOperatorGate": {
+    "status": "UNKNOWN",
+    "requirements": [
+      "Word or LibreOffice DOCX open-save semantic re-import",
+      "Hancom HWPX open-save semantic re-import",
+      "native-app PDF or page-image visual review for numbering, placement, clipping, and overlap"
+    ]
+  }
+}

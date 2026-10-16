@@ -1,0 +1,14 @@
+{
+  "format": "A4",
+  "minBytes": 10000,
+  "maxBytes": 500000,
+  "minPages": 1,
+  "maxPages": 2,
+  "pageMarginsMm": {
+    "top": 20,
+    "right": 20,
+    "bottom": 20,
+    "left": 20
+  },
+  "tagged": true
+}

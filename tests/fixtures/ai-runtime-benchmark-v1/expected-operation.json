@@ -1,0 +1,202 @@
+{
+  "operation": "report-outline",
+  "schemaVersion": "v1",
+  "baseDocument": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 1
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Phase H benchmark source"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "H2-BENCHMARK-SOURCE-BASELINE"
+          }
+        ]
+      }
+    ]
+  },
+  "brief": {
+    "audience": "제품 및 품질 검토자",
+    "constraints": [
+      "제공된 두 자료만 참조한다",
+      "Dockit 안에서 직접 편집하고 AI 없이 저장 및 출력할 수 있어야 한다"
+    ],
+    "purpose": "재사용 가능한 AI 작업 검증 보고서의 개요를 만든다",
+    "sourceReferences": [
+      {
+        "referenceId": "runtime_contract",
+        "label": "AI runtime contract v1",
+        "summary": "승인, 권한 위임, 오류 및 감사 envelope의 provider-neutral 기준"
+      },
+      {
+        "referenceId": "durability_evidence",
+        "label": "20-edit durability evidence",
+        "summary": "사람 편집과 승인된 AI 편집의 저장, 재열기, 복구 및 PDF 근거"
+      }
+    ],
+    "workingTitle": "Dockit AI 작업 검증 보고서"
+  },
+  "providerPayload": {
+    "documentTitle": "Dockit AI 작업 검증 보고서",
+    "sections": [
+      {
+        "level": 2,
+        "objective": "현재 계약과 내구성 증거의 기준선을 설명한다.",
+        "plannedBlocks": [
+          "paragraph",
+          "citations"
+        ],
+        "sourceReferenceIds": [
+          "runtime_contract",
+          "durability_evidence"
+        ],
+        "title": "기준선"
+      },
+      {
+        "level": 2,
+        "objective": "동일 fixture에서 수동 우선, 보조 AI, AI 주도 경로를 검증한다.",
+        "plannedBlocks": [
+          "paragraph",
+          "table",
+          "chart"
+        ],
+        "sourceReferenceIds": [
+          "runtime_contract",
+          "durability_evidence"
+        ],
+        "title": "검증 절차"
+      },
+      {
+        "level": 3,
+        "objective": "완료, 직접 편집, AI-off, 변경 범위, PDF 결함과 재사용 의향을 판정한다.",
+        "plannedBlocks": [
+          "paragraph",
+          "table"
+        ],
+        "sourceReferenceIds": [
+          "durability_evidence"
+        ],
+        "title": "판정 기준"
+      }
+    ]
+  },
+  "expectedDocument": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 1
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Dockit AI 작업 검증 보고서"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "기준선"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "현재 계약과 내구성 증거의 기준선을 설명한다."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "참고 자료: AI runtime contract v1, 20-edit durability evidence"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "검증 절차"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "동일 fixture에서 수동 우선, 보조 AI, AI 주도 경로를 검증한다."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "참고 자료: AI runtime contract v1, 20-edit durability evidence"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 3
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "판정 기준"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "완료, 직접 편집, AI-off, 변경 범위, PDF 결함과 재사용 의향을 판정한다."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "참고 자료: 20-edit durability evidence"
+          }
+        ]
+      }
+    ]
+  }
+}

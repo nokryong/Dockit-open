@@ -1,0 +1,13 @@
+{
+  "autoSave": true,
+  "autoSaveDelay": 2000,
+  "workspaceWidth": 800,
+  "panelLeft": 320,
+  "panelRight": 320,
+  "theme": "mint",
+  "fontFamily": "Pretendard-Medium",
+  "isDarkMode": false,
+  "workspaceOrderType": "updated_at",
+  "workspaceIsAscending": true,
+  "workspaceViewMode": "list"
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 3,
+  "auditScope": "production",
+  "lockfileSha256": "d9cdec66fe216cb7d850472c32b0f6a794244a951491880cd06776756b074307",
+  "policy": {
+    "expiresOn": null,
+    "allowedHigh": []
+  },
+  "findings": {
+    "critical": [],
+    "high": [
+      {
+        "package": "@excalidraw/excalidraw",
+        "advisoryIds": [
+          "GHSA-2V37-7H3G-55P8",
+          "GHSA-VFJ7-8CJW-P6XM"
+        ]
+      },
+      {
+        "package": "@tiptap/core",
+        "advisoryIds": [
+          "GHSA-CP6Q-959Q-F8RH",
+          "GHSA-J95F-988M-3J2F"
+        ]
+      },
+      {
+        "package": "brace-expansion",
+        "advisoryIds": [
+          "GHSA-6J4F-FJ2G-MC7P",
+          "GHSA-Q2HR-2G5M-VWHR",
+          "GHSA-QHR7-859C-M2P7"
+        ]
+      },
+      {
+        "package": "braces",
+        "advisoryIds": [
+          "GHSA-VFJ7-8CJW-P6XM"
+        ]
+      },
+      {
+        "package": "chokidar",
+        "advisoryIds": [
+          "GHSA-VFJ7-8CJW-P6XM"
+        ]
+      },
+      {
+        "package": "minimatch",
+        "advisoryIds": [
+          "GHSA-6J4F-FJ2G-MC7P",
+          "GHSA-Q2HR-2G5M-VWHR",
+          "GHSA-QHR7-859C-M2P7"
+        ]
+      },
+      {
+        "package": "nanoid",
+        "advisoryIds": [
+          "GHSA-2V37-7H3G-55P8"
+        ]
+      },
+      {
+        "package": "prosemirror-view",
+        "advisoryIds": [
+          "GHSA-C8X8-7FP4-3X9W"
+        ]
+      },
+      {
+        "package": "sass",
+        "advisoryIds": [
+          "GHSA-VFJ7-8CJW-P6XM"
+        ]
+      },
+      {
+        "package": "source-map-js",
+        "advisoryIds": [
+          "GHSA-68FV-2MGG-JV7Q"
+        ]
+      }
+    ]
+  }
+}

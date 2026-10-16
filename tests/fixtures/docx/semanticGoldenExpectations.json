@@ -1,0 +1,266 @@
+[
+  {
+    "id": "minimal-paragraph-heading",
+    "source": "paragraphHeadingReadinessIR",
+    "expectedText": [
+      "Export readiness",
+      "A long paragraph with an inline tag."
+    ],
+    "forbiddenText": [
+      "[Object placeholder",
+      "[Unsupported block"
+    ],
+    "headingStyles": ["Heading1"],
+    "requiredRunXml": ["<w:b/>"],
+    "requiredNumberingXml": [],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 0,
+      "drawing": 0,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": [],
+    "warningCodes": ["docx-run-style-fallback"]
+  },
+  {
+    "id": "minimal-styled-text",
+    "source": "styledTextIR",
+    "expectedText": [
+      "Bold",
+      "Italic",
+      "Underline",
+      "Strike",
+      "Color",
+      "Link",
+      "Sup",
+      "Sub"
+    ],
+    "forbiddenText": [
+      "[Unsupported block"
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [
+      "<w:b/>",
+      "<w:i/>",
+      "<w:u w:val=\"single\"/>",
+      "<w:strike/>",
+      "<w:color w:val=\"336699\"/>",
+      "<w:vertAlign w:val=\"superscript\"/>",
+      "<w:vertAlign w:val=\"subscript\"/>"
+    ],
+    "requiredNumberingXml": [],
+    "documentCounts": {
+      "hyperlink": 1,
+      "numPr": 0,
+      "drawing": 0,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": ["https://example.com"],
+    "mediaEntries": [],
+    "warningCodes": []
+  },
+  {
+    "id": "minimal-list-table",
+    "source": "listTableReadinessIR",
+    "expectedText": [
+      "Nested item",
+      "Merged cell"
+    ],
+    "forbiddenText": [
+      "3. ",
+      "[Object placeholder",
+      "[Unsupported block"
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [],
+    "requiredNumberingXml": [
+      "<w:numFmt w:val=\"decimal\"/>",
+      "<w:startOverride w:val=\"3\"/>"
+    ],
+    "requiredDocumentXml": [
+      "<w:tblBorders>",
+      "<w:tcBorders>",
+      "<w:insideH w:val=\"single\" w:sz=\"8\" w:space=\"0\" w:color=\"333333\"/>",
+      "<w:shd w:val=\"clear\" w:fill=\"F5F5F5\"/>"
+    ],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 1,
+      "drawing": 0,
+      "table": 1,
+      "row": 1,
+      "cell": 1
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": [],
+    "warningCodes": []
+  },
+  {
+    "id": "minimal-object-unsupported",
+    "source": "objectUnsupportedReadinessIR",
+    "expectedText": [
+      "[Object placeholder: image image.png]",
+      "[Unsupported block: columnBlock]"
+    ],
+    "forbiddenText": [
+      "<w:drawing"
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [],
+    "requiredNumberingXml": [],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 0,
+      "drawing": 0,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": [],
+    "warningCodes": [
+      "docx-object-placeholder",
+      "docx-unsupported-block"
+    ]
+  },
+  {
+    "id": "minimal-readiness-smoke",
+    "source": "readinessSmokeIR",
+    "expectedText": [
+      "Export readiness",
+      "A long paragraph with an inline tag.",
+      "Nested item",
+      "Merged cell",
+      "[Object placeholder: image image.png]",
+      "[Unsupported block: columnBlock]"
+    ],
+    "forbiddenText": [
+      "3. ",
+      "<w:drawing"
+    ],
+    "headingStyles": ["Heading1"],
+    "requiredRunXml": ["<w:b/>"],
+    "requiredNumberingXml": [
+      "<w:numFmt w:val=\"decimal\"/>",
+      "<w:startOverride w:val=\"3\"/>"
+    ],
+    "requiredDocumentXml": [
+      "<w:tblBorders>",
+      "<w:tcBorders>",
+      "<w:insideH w:val=\"single\" w:sz=\"8\" w:space=\"0\" w:color=\"333333\"/>",
+      "<w:shd w:val=\"clear\" w:fill=\"F5F5F5\"/>"
+    ],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 1,
+      "drawing": 0,
+      "table": 1,
+      "row": 1,
+      "cell": 1
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": [],
+    "warningCodes": [
+      "docx-run-style-fallback",
+      "docx-object-placeholder",
+      "docx-unsupported-block"
+    ]
+  },
+  {
+    "id": "minimal-link-policy",
+    "source": "linkPolicyIR",
+    "expectedText": [
+      "Website",
+      "Mail",
+      "Internal"
+    ],
+    "forbiddenText": [
+      "[Unsupported block",
+      "file://"
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [],
+    "requiredNumberingXml": [],
+    "documentCounts": {
+      "hyperlink": 2,
+      "numPr": 0,
+      "drawing": 0,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": [
+      "https://example.com/dockit?x=1&y=2",
+      "mailto:hello@example.com"
+    ],
+    "mediaEntries": [],
+    "warningCodes": [
+      "docx-link-attribute-fallback",
+      "docx-link-target-fallback"
+    ]
+  },
+  {
+    "id": "minimal-list-policy",
+    "source": "listPolicyIR",
+    "expectedText": [
+      "Starts at five",
+      "Bullet item",
+      "[ ] ",
+      "Task item"
+    ],
+    "forbiddenText": [
+      "5. ",
+      "- "
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [],
+    "requiredNumberingXml": [
+      "<w:numFmt w:val=\"decimal\"/>",
+      "<w:numFmt w:val=\"bullet\"/>",
+      "<w:startOverride w:val=\"5\"/>"
+    ],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 2,
+      "drawing": 0,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": [],
+    "warningCodes": ["docx-list-fallback"]
+  },
+  {
+    "id": "minimal-embedded-image",
+    "source": "embeddedImageIR",
+    "expectedText": [],
+    "forbiddenText": [
+      "[Object placeholder"
+    ],
+    "headingStyles": [],
+    "requiredRunXml": [],
+    "requiredNumberingXml": [],
+    "requiredDocumentXml": [
+      "<w:drawing>",
+      "r:embed=\"rId3\"",
+      "descr=\"Embedded PNG\""
+    ],
+    "documentCounts": {
+      "hyperlink": 0,
+      "numPr": 0,
+      "drawing": 1,
+      "table": 0,
+      "row": 0,
+      "cell": 0
+    },
+    "hyperlinkTargets": [],
+    "mediaEntries": ["word/media/image1.png"],
+    "warningCodes": []
+  }
+]

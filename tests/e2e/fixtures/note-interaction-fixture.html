@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Dockit note interaction fixture</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #f3f4f6;
+        color: #111827;
+        font-family: Arial, sans-serif;
+      }
+      #fixture-status {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: #111827;
+        color: #fff;
+        font-size: 12px;
+      }
+      #editor {
+        width: min(720px, calc(100vw - 48px));
+        margin: 64px auto;
+        padding: 24px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+      }
+      .ProseMirror {
+        min-height: 240px;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="fixture-status">loading</div>
+    <main id="editor"></main>
+    <script type="module" src="./note-interaction-fixture.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "fileType": "dkt-document",
+  "schemaVersion": 1,
+  "title": "Dockit AI 작업 검증 보고서",
+  "content": "<article data-benchmark-fixture=\"phase-h-report-outline-v1\"><h1>Dockit AI 작업 검증 보고서</h1><h2>기준선</h2><p>현재 계약과 내구성 증거의 기준선을 설명한다.</p><p>참고 자료: AI runtime contract v1, 20-edit durability evidence</p><h2>검증 절차</h2><p>동일 fixture에서 수동 우선, 보조 AI, AI 주도 경로를 검증한다.</p><p>참고 자료: AI runtime contract v1, 20-edit durability evidence</p><h3>판정 기준</h3><p>완료, 직접 편집, AI-off, 변경 범위, PDF 결함과 재사용 의향을 판정한다.</p><p>참고 자료: 20-edit durability evidence</p></article>",
+  "docSetting": {
+    "pageWidth": 210,
+    "pageHeight": 297,
+    "pageMargin": 20
+  },
+  "bulletStyle": {},
+  "viewPage": true,
+  "pageNumber": "center",
+  "focus": 0
+}

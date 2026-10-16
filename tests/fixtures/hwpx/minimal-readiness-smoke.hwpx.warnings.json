@@ -1,0 +1,29 @@
+[
+  {
+    "code": "run-style-fallback",
+    "severity": "warning",
+    "message": "Text run 0 has style metadata that the minimal HWPX spike does not map natively.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "paragraph",
+    "path": "sections[0].blocks[1]"
+  },
+  {
+    "code": "table-merge-layout-warning",
+    "severity": "warning",
+    "message": "Merged cells preserve colspan/rowspan metadata, but row-group export normalization is not implemented.",
+    "sectionIndex": 0,
+    "blockIndex": 3,
+    "blockType": "table",
+    "path": "sections[0].blocks[3]"
+  },
+  {
+    "code": "object-placeholder",
+    "severity": "warning",
+    "message": "Object media parts and relationships are not emitted; a visible placeholder paragraph is written instead.",
+    "sectionIndex": 0,
+    "blockIndex": 5,
+    "blockType": "object",
+    "path": "sections[0].blocks[5]"
+  }
+]

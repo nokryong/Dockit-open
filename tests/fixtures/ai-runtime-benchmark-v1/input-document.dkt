@@ -1,0 +1,15 @@
+{
+  "fileType": "dkt-document",
+  "schemaVersion": 1,
+  "title": "Phase H benchmark source",
+  "content": "<article data-benchmark-fixture=\"phase-h-report-outline-v1\"><h1>Phase H benchmark source</h1><p>H2-BENCHMARK-SOURCE-BASELINE</p></article>",
+  "docSetting": {
+    "pageWidth": 210,
+    "pageHeight": 297,
+    "pageMargin": 20
+  },
+  "bulletStyle": {},
+  "viewPage": true,
+  "pageNumber": "center",
+  "focus": 0
+}

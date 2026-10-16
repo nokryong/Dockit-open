@@ -1,0 +1,74 @@
+[
+  {
+    "code": "ai",
+    "name": "Ant Design Icons",
+    "license": "MIT",
+    "source": "https://github.com/ant-design/ant-design-icons"
+  },
+  {
+    "code": "bs",
+    "name": "Bootstrap Icons",
+    "license": "MIT",
+    "source": "https://github.com/twbs/icons"
+  },
+  {
+    "code": "cg",
+    "name": "css.gg",
+    "license": "MIT",
+    "source": "https://github.com/astrit/css.gg"
+  },
+  {
+    "code": "go",
+    "name": "GitHub Octicons",
+    "license": "MIT",
+    "source": "https://github.com/primer/octicons"
+  },
+  {
+    "code": "gr",
+    "name": "Grommet Icons",
+    "license": "Apache-2.0",
+    "source": "https://github.com/grommet/grommet-icons"
+  },
+  {
+    "code": "hi",
+    "name": "Heroicons",
+    "license": "MIT",
+    "source": "https://github.com/tailwindlabs/heroicons"
+  },
+  {
+    "code": "io5",
+    "name": "Ionicons 5",
+    "license": "MIT",
+    "source": "https://github.com/ionic-team/ionicons"
+  },
+  {
+    "code": "lu",
+    "name": "Lucide",
+    "license": "ISC",
+    "source": "https://github.com/lucide-icons/lucide"
+  },
+  {
+    "code": "md",
+    "name": "Material Design Icons",
+    "license": "Apache-2.0",
+    "source": "https://github.com/google/material-design-icons"
+  },
+  {
+    "code": "pi",
+    "name": "Phosphor Icons",
+    "license": "MIT",
+    "source": "https://github.com/phosphor-icons/core"
+  },
+  {
+    "code": "ri",
+    "name": "Remix Icon",
+    "license": "Apache-2.0",
+    "source": "https://github.com/Remix-Design/RemixIcon"
+  },
+  {
+    "code": "tb",
+    "name": "Tabler Icons",
+    "license": "MIT",
+    "source": "https://github.com/tabler/tabler-icons"
+  }
+]

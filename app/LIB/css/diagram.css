@@ -1,0 +1,94 @@
+.diagram-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--diagram-background, #fff);
+}
+.diagram-preview-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin: 0 !important;
+}
+.diagram-preview[data-preview-theme="dark"] {
+  background: #121212;
+}
+.diagram-preview[data-preview-theme="dark"] .diagram-preview-image {
+  filter: invert(93%) hue-rotate(180deg);
+}
+.diagram-preview-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  pointer-events: none;
+}
+.diagram-preview-status button { pointer-events: auto; }
+.diagram-edit-trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.diagram-edit-trigger:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -3px;
+}
+.diagram-preview-status[role="alert"] { z-index: 2; }
+.diagram-editor-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 90%);
+  color: #333;
+  z-index: 13;
+}
+.diagram-editor-error {
+  position: absolute;
+  inset: auto 8px 8px;
+  z-index: 10;
+  padding: 8px 12px;
+  color: #991b1b;
+  background: #fef2f2;
+  border-radius: 6px;
+}
+.dockit-diagram-editor-modal .excalidraw .App-top-bar {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-items: stretch;
+}
+.dockit-diagram-editor-modal .excalidraw .App-toolbar--mobile {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+.dockit-diagram-editor-modal .excalidraw .App-toolbar--mobile > .Stack_horizontal {
+  width: max-content;
+}
+@media print {
+  .dockit-diagram-editor-modal,
+  .diagram-edit-trigger,
+  [data-diagram-chrome],
+  [data-diagram-handle] { display: none !important; }
+  .diagram-preview[data-preview-theme="dark"] {
+    background: var(--diagram-background, #fff) !important;
+  }
+  .diagram-preview-image { filter: none !important; }
+}

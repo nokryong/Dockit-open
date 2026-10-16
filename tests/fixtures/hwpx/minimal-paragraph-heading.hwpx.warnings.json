@@ -1,0 +1,11 @@
+[
+  {
+    "code": "run-style-fallback",
+    "severity": "warning",
+    "message": "Text run 0 has style metadata that the minimal HWPX spike does not map natively.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "paragraph",
+    "path": "sections[0].blocks[1]"
+  }
+]

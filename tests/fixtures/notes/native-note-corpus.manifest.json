@@ -1,0 +1,223 @@
+{
+  "schema": "dockit-native-note-corpus-v1",
+  "files": {
+    "native-note-corpus.docx": "8b0401ad0ab6ddda21e2ec295e109d9a68e46679e96930173a858397893d9829",
+    "native-note-corpus.hwpx": "6374e2d39e9adb66f88259d11eac747d7815f9736736d225e3e91d3dab6c7a68"
+  },
+  "expectedSemantics": {
+    "main": [
+      {
+        "placement": "section:0:block:0",
+        "type": "paragraph",
+        "runs": [
+          {
+            "type": "textRun",
+            "text": "__N5D_MAIN_TOP__ ",
+            "marks": []
+          },
+          {
+            "type": "noteReference",
+            "kind": "footnote",
+            "noteIndex": 0
+          },
+          {
+            "type": "textRun",
+            "text": " between ",
+            "marks": []
+          },
+          {
+            "type": "noteReference",
+            "kind": "endnote",
+            "noteIndex": 1
+          },
+          {
+            "type": "textRun",
+            "text": " after",
+            "marks": []
+          }
+        ]
+      },
+      {
+        "placement": "section:0:block:1:table:0:0:0",
+        "type": "paragraph",
+        "runs": [
+          {
+            "type": "textRun",
+            "text": "__N5D_MAIN_CELL__ ",
+            "marks": []
+          },
+          {
+            "type": "noteReference",
+            "kind": "footnote",
+            "noteIndex": 2
+          },
+          {
+            "type": "textRun",
+            "text": " cell-tail",
+            "marks": []
+          }
+        ]
+      }
+    ],
+    "mainText": "__N5D_MAIN_TOP__  between  after__N5D_MAIN_CELL__  cell-tail",
+    "notes": [
+      {
+        "kind": "footnote",
+        "referenceOrder": 0,
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "__N5D_NOTE_ONLY__ bold",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " underline",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " strike",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " sub",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " super",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "hardBreak"
+              },
+              {
+                "type": "textRun",
+                "text": " color",
+                "marks": [
+                  {
+                    "type": "textStyle",
+                    "attrs": {
+                      "color": "#336699"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " http",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "http://example.com/n5d"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " https",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com/n5d"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "textRun",
+                "text": " mail",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "mailto:n5d@example.com"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "runs": []
+          },
+          {
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "__N5D_NOTE_SECOND__",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "endnote",
+        "referenceOrder": 1,
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "__N5D_ENDNOTE_ONLY__",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "footnote",
+        "referenceOrder": 2,
+        "paragraphs": [
+          {
+            "runs": [
+              {
+                "type": "textRun",
+                "text": "__N5D_CELL_NOTE_ONLY__",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

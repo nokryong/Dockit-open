@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Dockit footnote screen fixture</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: #e5e7eb;
+        font-family: Arial, sans-serif;
+      }
+      #fixture-status {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 100;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: #111827;
+        color: #fff;
+        font-size: 12px;
+      }
+      #pages {
+        position: relative;
+        margin: 48px auto;
+      }
+      #editor-flow {
+        position: relative;
+        z-index: 10;
+      }
+      .ProseMirror {
+        position: relative;
+        margin: 0 auto;
+        box-sizing: border-box;
+        min-height: 360px;
+        padding-top: 0;
+        padding-bottom: 0;
+        background: transparent;
+        color: #111827;
+        line-height: 20px;
+        outline: none;
+      }
+      .ProseMirror > p {
+        margin: 0 0 10px;
+      }
+      .ProseMirror table {
+        width: 100%;
+        margin: 8px 0 10px;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+      .ProseMirror th,
+      .ProseMirror td {
+        padding: 4px 6px;
+        border: 1px solid #64748b;
+        font-size: 12px;
+      }
+      .fixture-chart {
+        height: 64px;
+        margin: 8px 0 10px;
+        padding: 6px 8px;
+        border: 1px solid #94a3b8;
+        background: #f8fafc;
+        box-sizing: border-box;
+      }
+      .fixture-chart-title {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .fixture-chart-bars {
+        display: flex;
+        height: 34px;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      .fixture-chart-bars > span {
+        display: block;
+        width: 28px;
+        background: #0f766e;
+      }
+      .tiptap-page-shell__paper {
+        border: 1px solid #cbd5e1;
+      }
+      @page {
+        size: 600px 360px;
+        margin: 0;
+      }
+      @media print {
+        html,
+        body,
+        #pages,
+        #editor-flow,
+        #editor {
+          width: 600px !important;
+          margin: 0 !important;
+          background: #fff !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="fixture-status">loading</div>
+    <main id="pages" class="tiptap-container is-view-page">
+      <div id="page-shells" class="tiptap-page-shell-layer" aria-hidden="true"></div>
+      <div id="editor-flow" class="tiptap-editor-flow-layer">
+        <div id="editor"></div>
+      </div>
+    </main>
+    <script type="module" src="./footnote-screen-fixture.js"></script>
+  </body>
+</html>

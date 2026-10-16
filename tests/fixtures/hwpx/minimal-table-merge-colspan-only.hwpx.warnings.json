@@ -1,0 +1,11 @@
+[
+  {
+    "code": "table-merge-layout-warning",
+    "severity": "warning",
+    "message": "Merged cells preserve colspan/rowspan metadata, but row-group export normalization is not implemented. coveredSlots=1; rowGroups=0; risks=covered-slot.",
+    "sectionIndex": 0,
+    "blockIndex": 1,
+    "blockType": "table",
+    "path": "sections[0].blocks[1]"
+  }
+]

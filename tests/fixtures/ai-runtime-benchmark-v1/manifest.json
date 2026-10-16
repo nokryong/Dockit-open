@@ -1,0 +1,36 @@
+{
+  "benchmarkVersion": "v1",
+  "runtimeContractVersion": "v1",
+  "dktSchemaVersion": 1,
+  "fixtureId": "phase-h-report-outline-v1",
+  "operation": "report-outline",
+  "modes": [
+    "manual-first",
+    "assistive-ai",
+    "ai-led"
+  ],
+  "evaluationDimensions": [
+    "dockit-completion",
+    "direct-edit-completeness",
+    "ai-off-journey",
+    "scoped-mutation-accuracy",
+    "pdf-defects",
+    "reuse-intent"
+  ],
+  "artifacts": {
+    "referencePrompt": "reference-prompt.txt",
+    "inputDocument": "input-document.dkt",
+    "expectedOperation": "expected-operation.json",
+    "expectedOutputDocument": "expected-output.dkt",
+    "expectedRunRecords": "expected-run-records.json",
+    "expectedPdfProfile": "expected-pdf-profile.json"
+  },
+  "digests": {
+    "referencePrompt": "dc294d51b8d327fe1130d3fbe9b942e20c6dd093787843f4d7030fcb57d6e929",
+    "inputDocument": "ab55e15197a36803e0b829044d1d9896ad754cd42d8d933337f9c103fb464177",
+    "expectedOperation": "8b1bd1f97c58d0d57fc7ed65047adc4288e8bb11b7005f751482a9951f9da7b5",
+    "expectedOutputDocument": "8545d6fc9a676e007894a93a94465c4fb6ecf22caa1096156c14958d52f6496f",
+    "expectedRunRecords": "a1184dee2c2f03fdbfd1697bbeeb27d39fe11eb8ca9bf6430dfa540e781e5fed",
+    "expectedPdfProfile": "03e5274a23cfe3b5e33c9f485a5372f4c8fa36515d5a1cdd7fe0bc3f8eaffc4f"
+  }
+}
