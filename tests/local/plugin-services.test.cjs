@@ -142,20 +142,34 @@ test('images load and preview through the host, download only after an explicit 
 
 test('host image copy writes decoded image pixels and rejects invalid or revoked requests', async t => {
   const { store, services, sessionId } = await fixture(t);
-  const image = { isEmpty: () => false };
+  const image = { isEmpty: () => false, toPNG: () => Buffer.from('decoded-png') };
   const copied = [];
   const dataUrl = 'data:image/png;base64,aW1hZ2U=';
   services.nativeImage = { createFromDataURL: value => { assert.equal(value, dataUrl); return image; } };
-  services.clipboard = { writeImage: value => copied.push(value) };
+  services.ClipboardItem = class { constructor(data) { this.data = data; } };
+  services.clipboard = { write: async items => copied.push(items) };
   assert.equal(await services.request(sessionId, 'images.copy', { dataUrl }), true);
-  assert.deepEqual(copied, [image]);
+  assert.equal(copied[0].length, 1);
+  const png = copied[0][0].data['image/png'];
+  assert.equal(png.type, 'image/png');
+  assert.equal(await png.text(), 'decoded-png');
+  let complete;
+  services.clipboard.write = () => new Promise(resolve => { complete = resolve; });
+  let finished = false;
+  const pending = services.copyImage(sessionId, { dataUrl }).then(() => { finished = true; });
+  await new Promise(setImmediate);
+  assert.equal(finished, false);
+  complete();
+  await pending;
+  services.clipboard.write = async () => { throw new Error('Clipboard busy'); };
+  await assert.rejects(services.copyImage(sessionId, { dataUrl }), /Clipboard busy/);
   for (const invalid of [null, {}, { dataUrl: 'https://cdn.pixabay.com/image.png' }, { dataUrl: 'data:text/html;base64,aW1hZ2U=' }]) {
-    assert.throws(() => services.copyImage(sessionId, invalid), /형식/);
+    await assert.rejects(services.copyImage(sessionId, invalid), /형식/);
   }
   image.isEmpty = () => true;
-  assert.throws(() => services.copyImage(sessionId, { dataUrl }), /복사하지/);
+  await assert.rejects(services.copyImage(sessionId, { dataUrl }), /복사하지/);
   store.close(sessionId);
-  assert.throws(() => services.copyImage(sessionId, { dataUrl }), /종료/);
+  await assert.rejects(services.copyImage(sessionId, { dataUrl }), /종료/);
   assert.equal(copied.length, 1);
 });
 

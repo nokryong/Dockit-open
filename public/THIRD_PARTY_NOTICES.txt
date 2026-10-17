@@ -3,11 +3,11 @@ DOCKIT THIRD-PARTY SOFTWARE NOTICES
 
 This document lists third-party npm components associated with the Dockit production dependency graph.
 It is generated conservatively from package-lock.json and a committed structured evidence manifest, and may include optional, server-side, or build-time components that are not delivered to every client.
-The listed licenses apply only to their respective third-party components. They do not license or disclose Dockit proprietary source code, product content, trademarks, or other proprietary materials.
+Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The licenses below apply to their respective third-party components.
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: fb91a575101a0e5eba7be91b0e0d4cb95a1e497adee720d35f1afb483d2fca04
+package-lock.json SHA-256: 7642727d4c9fe2fe94cb9cdf4016cedc7df3347894d0d1db4243a5a75df43718
 Included non-dev lock entries: 464
 Unique third-party package name/version pairs: 452
 Owner-controlled lock entries excluded from this notice: 1

@@ -428,7 +428,7 @@ function notices(manifest, packs) {
     "",
     "This document lists third-party npm components associated with the Dockit production dependency graph.",
     "It is generated conservatively from package-lock.json and a committed structured evidence manifest, and may include optional, server-side, or build-time components that are not delivered to every client.",
-    "The listed licenses apply only to their respective third-party components. They do not license or disclose Dockit proprietary source code, product content, trademarks, or other proprietary materials.",
+    "Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The licenses below apply to their respective third-party components.",
     "sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.",
     "If this summary conflicts with an included license text, the included license text controls for that component.",
     "",

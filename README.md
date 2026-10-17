@@ -2,6 +2,8 @@
 
 로그인 없이 로컬 문서를 편집하는 Electron 앱입니다.
 
+배포 파일은 유료 코드 서명 없이 제공합니다. Windows·macOS에서는 설치 또는 실행 시 보안 경고가 표시될 수 있습니다. Windows·Linux는 앱 내 업데이트를, macOS는 새 버전 알림에서 다운로드 후 직접 설치하는 방식을 사용합니다.
+
 ## 실행
 
 Node.js 24 이상에서 프로젝트 폴더를 열고 실행합니다.
@@ -81,6 +83,10 @@ npm run test:chatgpt
 npm run test:codex
 ```
 
-데스크톱 검사는 임시 사용자 폴더에서 실행합니다. 스크린샷은 `.cache/desktop-smoke/`에 저장합니다. 설치 파일 제작·서명과 macOS/Linux 실행 검증은 별도 단계입니다.
+데스크톱 검사는 임시 사용자 폴더에서 실행합니다. 스크린샷은 `.cache/desktop-smoke/`에 저장합니다. OS별 패키징과 업데이트 검사 방법은 [앱 업데이트](docs/desktop-updates.md)를 참고하세요.
 
-제3자 고지 자료는 `licenses/`에 있습니다.
+## 라이선스
+
+Dockit Open은 [GNU AGPL v3.0](LICENSE)으로 배포합니다. 소스 코드는 [nokryong/Dockit-open](https://github.com/nokryong/Dockit-open)에서 제공합니다.
+
+제3자 구성요소에는 각각의 라이선스가 적용됩니다. 고지와 라이선스 전문은 [THIRD_PARTY_NOTICES.txt](public/THIRD_PARTY_NOTICES.txt)에 있습니다.

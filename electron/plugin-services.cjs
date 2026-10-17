@@ -4,14 +4,15 @@ const { createHash, randomUUID } = require('node:crypto');
 const { contained, atomicJson } = require('./local-store.cjs');
 const { allowedUrl } = require('../plugin-sdk/capabilities.cjs');
 const { requestPublic } = require('./plugin-network.cjs');
+const { writeClipboardImage } = require('./image-clipboard.cjs');
 
 const binding = service => createHash('sha256').update(JSON.stringify({ url: service.url, credential: service.credential })).digest('hex');
 const imageTypes = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
 const object = value => value && typeof value === 'object' && !Array.isArray(value);
 
 class PluginServices {
-  constructor({ store, encryption, fetcher = requestPublic, dialog, shell, getWindow, downloads, clipboard, nativeImage }) {
-    Object.assign(this, { store, encryption, fetcher, dialog, shell, getWindow, downloads, clipboard, nativeImage });
+  constructor({ store, encryption, fetcher = requestPublic, dialog, shell, getWindow, downloads, clipboard, ClipboardItem, nativeImage }) {
+    Object.assign(this, { store, encryption, fetcher, dialog, shell, getWindow, downloads, clipboard, ClipboardItem, nativeImage });
   }
 
   context(sessionId, permission) {
@@ -167,13 +168,12 @@ class PluginServices {
     return `data:${image.type};base64,${image.bytes.toString('base64')}`;
   }
 
-  copyImage(sessionId, payload) {
+  async copyImage(sessionId, payload) {
     this.context(sessionId, 'images');
     const dataUrl = payload?.dataUrl;
     if (typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/png;base64,') || dataUrl.length > 32 * 1024 * 1024 * 4 / 3 + 22) throw new Error('복사할 이미지 형식을 확인해주세요.');
     const image = this.nativeImage.createFromDataURL(dataUrl);
-    if (image.isEmpty()) throw new Error('이미지를 복사하지 못했습니다.');
-    this.clipboard.writeImage(image);
+    await writeClipboardImage(this, image);
     return true;
   }
 

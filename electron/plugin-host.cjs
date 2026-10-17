@@ -5,10 +5,10 @@ const { inspectGitHubPlugins, downloadGitHubPlugin } = require('./plugin-github.
 const { PluginServices } = require('./plugin-services.cjs');
 const { PluginUpdates, sourceFor } = require('./plugin-updates.cjs');
 
-async function registerPluginHost({ root, handle, protocol, shell, getWindow, broadcast, encryption, dialog, downloads, clipboard, nativeImage }) {
+async function registerPluginHost({ root, handle, protocol, shell, getWindow, broadcast, encryption, dialog, downloads, clipboard, ClipboardItem, nativeImage }) {
   const plugins = new PluginStore({ root, trash: file => shell.trashItem(file) });
   await plugins.init();
-  const services = new PluginServices({ store: plugins, encryption, dialog, shell, getWindow, downloads, clipboard, nativeImage });
+  const services = new PluginServices({ store: plugins, encryption, dialog, shell, getWindow, downloads, clipboard, ClipboardItem, nativeImage });
   const updates = new PluginUpdates({ store: plugins });
   const changed = () => broadcast ? broadcast('plugins:changed', plugins.list()) : getWindow()?.webContents.send('plugins:changed', plugins.list());
   const owners = new Map();

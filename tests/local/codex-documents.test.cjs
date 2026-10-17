@@ -48,6 +48,16 @@ test('explicit original-file grant edits that file without importing or granting
   assert.equal(index.paths[record._id], undefined);
 });
 
+test('native opening reuses an internal document and rejects user-created links', async t => {
+  const { store, home, doc } = await setup(t);
+  const file = await store.documentPath(doc._id);
+  assert.equal((await store.openOriginal(file))._id, doc._id);
+  assert.equal(store.externalDocuments.size, 0);
+  const linked = path.join(home, 'linked');
+  await fs.symlink(path.dirname(file), linked, process.platform === 'win32' ? 'junction' : 'dir');
+  await assert.rejects(store.openOriginal(path.join(linked, path.basename(file))), /연결된/);
+});
+
 test('Korean guidance is installed once and preserves user edits', async t => {
   const { store } = await setup(t);
   const file = path.join(store.root, 'AGENTS.md');

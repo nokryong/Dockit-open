@@ -2,6 +2,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { randomUUID, createHash } = require('node:crypto');
 const defaultSettings = require('../desktop/default-settings.json');
+const { resolveSystemPath } = require('./system-path.cjs');
 
 const MAX_BYTES = 52_428_800;
 const FEATURES = { memo: 'memos', char: 'characters', stylePreset: 'styles', calendar: 'calendar', music: 'music' };
@@ -165,13 +166,14 @@ class LocalStore {
 
   async openOriginal(file) {
     if (typeof file !== 'string' || !path.isAbsolute(file) || !/\.dkt$/i.test(file)) throw fail('Dockit 문서를 선택해주세요.');
+    file = await resolveSystemPath(path.resolve(file));
     await contained(path.parse(file).root, path.resolve(file));
     file = await fs.realpath(file);
     const stat = await fs.stat(file);
     if (!stat.isFile() || stat.nlink !== 1) throw fail('연결된 문서는 열 수 없습니다.');
     const root = (await this.config()).documentsPath;
-    const relative = path.relative(root, file);
-    if (!relative.startsWith('..') && !path.isAbsolute(relative)) return this.documentRecord(file, root);
+    const relative = path.relative(await fs.realpath(root), file);
+    if (!relative.startsWith('..') && !path.isAbsolute(relative)) return this.documentRecord(path.resolve(root, relative), root);
     const id = `external-${hash(process.platform === 'win32' ? file.toLowerCase() : file).slice(0, 32)}`;
     if (this.documentPaths.has(id)) throw fail('문서 ID가 중복되었습니다.');
     this.externalDocuments.set(id, file);

@@ -9,7 +9,7 @@ import { Button, Div, Tooltip, Typography, toast } from "sud-ui";
 
 
 import { usePathname, useRouter, useSearchParams } from "@/desktop/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   MdCircle,
   MdClose,
@@ -21,7 +21,6 @@ import { LuLoaderCircle } from "react-icons/lu";
 import { TbPuzzle } from "react-icons/tb";
 import TitleEditor from "../write/TitleEditor";
 import { useDebounce } from "../../hook/useDebounce";
-import WriteHeader from "./header/WriteHeader";
 import { useSetting } from "../../context/SettingContext";
 import { useDocument } from "../../context/DocumentContext";
 import { useDrawer } from "../../context/DrawerContext";
@@ -39,6 +38,8 @@ import {
   OPEN_DOCUMENT_TABS_STORAGE_KEY
 } from "../../utils/openDocumentTabs";
 import { requestDocumentNavigation } from "../../utils/documentNavigationGuard";
+
+const WriteHeader = lazy(() => import("./header/WriteHeader"));
 
 export default function Header({
   user,
@@ -640,7 +641,7 @@ export default function Header({
           </div>
         </Div>
       )}
-      {isEditPage && currentDocument && <div inert={Boolean(codexDocumentLock)} aria-disabled={Boolean(codexDocumentLock)}><WriteHeader /></div>}
+      {isEditPage && currentDocument && <div inert={Boolean(codexDocumentLock)} aria-disabled={Boolean(codexDocumentLock)}><Suspense fallback={null}><WriteHeader /></Suspense></div>}
     </Div>
   );
 }

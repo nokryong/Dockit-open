@@ -1,0 +1,80 @@
+name: Desktop package check
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'codex/release-check-*'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run licenses:check
+      - run: npm run security:check
+      - run: npm run test:local
+      - run: npx vitest run tests/unit/officeFileImportUtils.test.js tests/unit/desktopNavigation.test.js tests/unit/documentFontOptions.test.js tests/unit/localFonts.test.js
+      - name: Install Linux desktop test dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb libgtk-3-0 libnss3 libasound2t64
+          node -e "require('electron')"
+          sudo chown root:root node_modules/electron/dist/chrome-sandbox
+          sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
+      - name: Check native clipboard contract
+        if: runner.os != 'Linux'
+        run: npm run test:clipboard
+      - name: Check native clipboard contract on Linux
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run test:clipboard
+      - run: npm run package:desktop
+      - name: Configure packaged Linux sandbox helper
+        if: runner.os == 'Linux'
+        run: |
+          sudo chown root:root release/linux-unpacked/chrome-sandbox
+          sudo chmod 4755 release/linux-unpacked/chrome-sandbox
+      - name: Check packaged application
+        if: runner.os != 'Linux'
+        run: npm run test:packaged
+      - name: Check packaged application on Linux
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run test:packaged
+      - name: Check Windows updater download and install handoff
+        if: runner.os == 'Windows'
+        run: npm run test:update-download
+      - name: Check actual Windows installation and update restart
+        if: runner.os == 'Windows'
+        run: node scripts/update-install-smoke.cjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dockit-${{ runner.os }}-${{ runner.arch }}
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.zip
+            release/*.AppImage
+            release/*.blockmap
+            release/latest*.yml
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: smoke-${{ runner.os }}-${{ runner.arch }}
+          retention-days: 7
+          include-hidden-files: true
+          path: .cache/packaged-smoke/

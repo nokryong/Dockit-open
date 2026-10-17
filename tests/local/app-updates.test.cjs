@@ -125,3 +125,36 @@ test('installer error restores normal close/save handling', async () => {
   assert.deepEqual(calls.at(-1), ['allowQuit', false]);
   assert.equal(service.busy, false);
 });
+
+test('manual updates open the release page only after a click, without saving or quitting', async () => {
+  let opened = 0;
+  const opening = deferred();
+  const { service, calls } = fixture({ openRelease: () => { opened += 1; return opening.promise; } });
+  await service.check();
+  assert.equal(service.snapshot().manualDownload, true);
+  assert.equal(service.snapshot().status, 'available');
+  assert.equal(opened, 0);
+  const job = service.install();
+  assert.equal(service.install(), job);
+  assert.equal(opened, 1);
+  assert.equal(service.blocksWork, false);
+  opening.resolve(); await job;
+  assert.equal(service.snapshot().status, 'idle');
+  await service.check();
+  assert.equal(service.snapshot().status, 'idle');
+  assert.deepEqual(calls, []);
+});
+
+test('manual update link failures can be retried without downloading or installing', async () => {
+  let attempts = 0;
+  const { service, calls } = fixture({ openRelease: async () => {
+    if (++attempts === 1) throw new Error('browser unavailable');
+  } });
+  await service.check(); await service.install();
+  assert.equal(service.snapshot().status, 'error');
+  assert.match(service.snapshot().error, /다운로드 페이지/);
+  await service.install();
+  assert.equal(attempts, 2);
+  assert.equal(service.snapshot().status, 'idle');
+  assert.deepEqual(calls, [['allowQuit', false]]);
+});

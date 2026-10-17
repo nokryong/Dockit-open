@@ -854,23 +854,22 @@ export default function WorkspacePage() {
         />
 
         {/* 컨텍스트 메뉴 */}
-        {contextMenu.visible && (
-          <ContextMenu
-            contextMenu={contextMenu}
-            setContextMenu={setContextMenu}
-            selectedItem={actions.selectedItem}
-            selectedItems={selection.selectedItems}
-            setRenameModalOpen={actions.setRenameModalOpen}
-            setMoveModalOpen={actions.setMoveModalOpen}
-            onDelete={deleteSelected}
-            handleCreateContent={actions.handleCreateContent}
-            handleUploadFile={(file) =>
-              actions.handleUploadFile(file, setContextMenu)
-            }
-            isDarkMode={isDarkMode}
-            layoutMode={layoutMode}
-          />
-        )}
+        {/* Keep the upload input mounted while its file picker is open. */}
+        <ContextMenu
+          contextMenu={contextMenu}
+          setContextMenu={setContextMenu}
+          selectedItem={actions.selectedItem}
+          selectedItems={selection.selectedItems}
+          setRenameModalOpen={actions.setRenameModalOpen}
+          setMoveModalOpen={actions.setMoveModalOpen}
+          onDelete={deleteSelected}
+          handleCreateContent={actions.handleCreateContent}
+          handleUploadFile={(file) =>
+            actions.handleUploadFile(file, setContextMenu)
+          }
+          isDarkMode={isDarkMode}
+          layoutMode={layoutMode}
+        />
       </ScrollReveal>
       {actions.onUpload && (
         <div

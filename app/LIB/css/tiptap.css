@@ -69,6 +69,19 @@ u {
 
 /* ═══ 페이지 레이아웃 ═══ */
 
+@media screen {
+  .zoom-container {
+    max-width: calc(100% / max(1, var(--document-canvas-scale, 1)));
+  }
+
+  .doc-print-page-root {
+    /* Keep the whole paper and ruler in the scroll range, including when zoomed. */
+    width: max-content;
+    min-width: calc(100% / min(1, var(--document-canvas-scale, 1)));
+    padding-inline: 3rem;
+  }
+}
+
 .tiptap.ProseMirror #pages {
   background-color: #ffffff;
 }
@@ -84,6 +97,7 @@ body.dockit-thumbnail-capture-mode .tiptap-page-shell-layer {
 }
 
 body.dockit-thumbnail-capture-mode .zoom-container {
+  --document-canvas-scale: 1 !important;
   transform: scale(1) !important;
   transform-origin: top left !important;
 }
@@ -974,7 +988,7 @@ body.dockit-thumbnail-capture-mode .zoom-container {
   margin: 0 !important;
   counter-reset: item;
 }
-.tiptap-container ol li:not(.tiptap-list-page-break-item) {
+.tiptap-container ol > li:not(.tiptap-list-page-break-item) {
   counter-increment: item !important;
 }
 .tiptap-container ol > li:not(.tiptap-list-page-break-item)::before {
@@ -1080,17 +1094,25 @@ body.dockit-thumbnail-capture-mode .zoom-container {
 
 /* ═══ 코드 블록 ═══ */
 
+/* Intel One Mono: SIL Open Font License 1.1, see public/fonts/IntelOneMono-OFL.txt */
+@font-face {
+  font-family: "IntelOneMono";
+  src: url("/fonts/IntelOneMono-Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .tiptap-container pre {
   background: #666666;
   color: white;
   border-radius: 0.5rem;
-  font-family: monospace;
+  font-family: IntelOneMono, monospace;
   margin: 0;
   padding: 0.75rem 1rem;
 }
 
 .tiptap-container pre code {
-  font-family: monospace;
+  font-family: IntelOneMono, monospace;
   background: none;
   color: inherit;
   padding: 0;

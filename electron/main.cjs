@@ -1,4 +1,4 @@
-const { app, BrowserWindow, protocol, net, ipcMain, dialog, shell, session, Menu, safeStorage, clipboard, nativeImage } = require('electron');
+const { app, BrowserWindow, protocol, net, ipcMain, dialog, shell, session, Menu, safeStorage, clipboard, ClipboardItem, nativeImage } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 const { pathToFileURL } = require('node:url');
@@ -14,6 +14,8 @@ const { AppUpdates } = require('./app-updates.cjs');
 const { AsyncLocalStorage } = require('node:async_hooks');
 const { DocumentWindows, filesFromArguments } = require('./document-windows.cjs');
 const { Conversations } = require('./conversations.cjs');
+const { allowDocumentPermission } = require('./document-permissions.cjs');
+const { writeClipboardImage } = require('./image-clipboard.cjs');
 
 const testMode = process.argv.includes('--test-mode');
 let devOrigin = null;
@@ -96,7 +98,7 @@ else app.whenReady().then(async () => {
     trash: file => shell.trashItem(file)
   });
   await store.init();
-  const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: requestWindow, broadcast: (channel, value) => windows.broadcast(channel, value), encryption: safeStorage, downloads: app.getPath('downloads'), clipboard, nativeImage });
+  const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: requestWindow, broadcast: (channel, value) => windows.broadcast(channel, value), encryption: safeStorage, downloads: app.getPath('downloads'), clipboard, ClipboardItem, nativeImage });
   chatgpt = new ChatGPTClient({
     root: store.root, encryption: safeStorage,
     openExternal: url => shell.openExternal(url),
@@ -213,7 +215,7 @@ else app.whenReady().then(async () => {
   codexHandle('copy-image', async id => {
     const image = nativeImage.createFromPath(await codex.imagePath(id));
     if (image.isEmpty()) throw new Error('Invalid image');
-    clipboard.writeImage(image);
+    await writeClipboardImage({ clipboard, ClipboardItem }, image);
   });
   codexHandle('save-image', async id => {
     const source = await codex.imagePath(id);
@@ -335,6 +337,8 @@ else app.whenReady().then(async () => {
     enabled: app.isPackaged && !testMode,
     updater: app.isPackaged && !testMode ? require('electron-updater').autoUpdater : null,
     currentVersion: app.getVersion(),
+    // Unsigned macOS builds can check for updates, but cannot use Squirrel.Mac to install them.
+    openRelease: process.platform === 'darwin' ? () => shell.openExternal('https://github.com/nokryong/Dockit-open/releases/latest') : undefined,
     emit: state => {
       windows.broadcast('app-update:changed', state);
       if (state.status === 'saving') windows.save().then(() => updates.saved(state.saveRequestId, { ok: true }), error => updates.saved(state.saveRequestId, { ok: false, message: error.message }));
@@ -350,9 +354,19 @@ else app.whenReady().then(async () => {
   handle('app-update:saved', () => {});
 
   Menu.setApplicationMenu(null);
+  session.defaultSession.setPermissionCheckHandler((contents, permission, requestingOrigin, details) =>
+    allowDocumentPermission({ contents, permission, requestingOrigin, details, windows: windows.windows, devOrigin }));
+  session.defaultSession.setPermissionRequestHandler((contents, permission, callback, details) =>
+    callback(allowDocumentPermission({ contents, permission, details, windows: windows.windows, devOrigin })));
+  const appIcon = path.join(__dirname, '..', devOrigin ? 'public' : 'dist', 'logo', 'symbol-square.png');
+  if (process.platform === 'darwin' && !app.isPackaged) app.dock?.setIcon(appIcon);
   const createWindow = async (documentId = null) => {
-  const mainWindow = new BrowserWindow({ width: 1440, height: 960, minWidth: 640, minHeight: 500, title: 'Dockit Open', frame: false, show: false, backgroundColor: '#ffffff', webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
+  const mainWindow = new BrowserWindow({ width: 1440, height: 960, minWidth: 640, minHeight: 500, title: 'Dockit Open', icon: appIcon, frame: false, show: false, backgroundColor: '#ffffff', webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
   windows.add(mainWindow, documentId);
+  const windowContext = windows.context(mainWindow);
+  mainWindow.webContents.on('did-navigate-in-page', (_event, url, isMainFrame) => {
+    if (isMainFrame) windows.navigate(mainWindow, url);
+  });
   const windowId = mainWindow.webContents.id;
   mainWindow.on('maximize', () => mainWindow.webContents.send('local:window-maximized', true));
   mainWindow.on('unmaximize', () => mainWindow.webContents.send('local:window-maximized', false));
@@ -383,7 +397,6 @@ else app.whenReady().then(async () => {
     }
   });
   mainWindow.webContents.on('will-attach-webview', event => event.preventDefault());
-  session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   mainWindow.on('close', event => {
     if (closing || mainWindow.dockitClosing) return;
     event.preventDefault();
@@ -396,29 +409,32 @@ else app.whenReady().then(async () => {
   });
   mainWindow.once('closed', () => plugins.closeWindow(windowId));
   mainWindow.once('closed', () => { chatgptChats.selections.delete(windowId); codexChats.selections.delete(windowId); });
-  mainWindow.once('closed', () => { if (documentId) store.externalDocuments.delete(documentId); });
+  mainWindow.once('closed', () => { if (windowContext.documentId) store.externalDocuments.delete(windowContext.documentId); });
   await mainWindow.loadURL(`${devOrigin || 'dockit://app'}/index.html#/docs${documentId ? '/' + encodeURIComponent(documentId) : ''}`);
   if (!testMode) { mainWindow.show(); mainWindow.focus(); }
   return mainWindow;
   };
   const focusWindow = window => { if (window.isMinimized()) window.restore(); if (!testMode) window.show(); window.focus(); };
-  openDocument = ({ id, file } = {}) => windows.serializeOpen(async () => {
+  openDocument = ({ id, file, targetWindow } = {}) => windows.serializeOpen(async () => {
     if (updates.blocksWork) throw new Error('앱 업데이트가 끝난 뒤 문서를 열어주세요.');
+    if (targetWindow && (codexOwner === targetWindow || chatOwner === targetWindow)) throw new Error('AI 응답이 끝난 뒤 문서를 열어주세요.');
     const record = file ? await store.run(() => store.openOriginal(file)) : (await store.request('get', { type: 'documents', id })).content;
     const existing = windows.find(record._id);
-    if (existing) { focusWindow(existing); return record._id; }
+    if (existing && existing !== targetWindow) { focusWindow(existing); return targetWindow ? null : record._id; }
+    if (targetWindow) { windows.context(targetWindow).documentId = record._id; return record._id; }
     await createWindow(record._id);
     return record._id;
   });
-  handle('local:open-document', id => openDocument({ id }));
+  handle('local:open-document', id => openDocument({ id, targetWindow: requestWindow() }));
   handle('local:open-document-file', file => openDocument({ file }));
   handle('local:open-workspace', () => windows.serializeOpen(async () => {
     if (updates.blocksWork) throw new Error('앱 업데이트가 끝난 뒤 문서를 열어주세요.');
     mainWindow = windows.find(null) || await createWindow();
     focusWindow(mainWindow);
   }));
-  mainWindow = await createWindow();
+  if (!pendingFiles.length) mainWindow = await createWindow();
   for (const file of pendingFiles.splice(0)) await openDocument({ file }).catch(error => dialog.showErrorBox('문서를 열 수 없습니다', error.message));
+  mainWindow ||= windows.all()[0] || await createWindow();
   if (app.isPackaged && !testMode) {
     const firstCheck = setTimeout(() => { void updates.check(); }, 3000);
     const nextChecks = setInterval(() => { void updates.check(); }, 6 * 60 * 60_000);

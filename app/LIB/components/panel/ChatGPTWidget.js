@@ -39,7 +39,6 @@ import {
   newShadowLightSm,
 } from "../../constant/uiProps";
 import { PiLightning, PiLightningFill } from "react-icons/pi";
-import { LuDot } from "react-icons/lu";
 
 const reasoningEffortLabels = {
   low: "Light",
@@ -49,6 +48,21 @@ const reasoningEffortLabels = {
   max: "Max",
   ultra: "Ultra",
 };
+
+export function formatWorkingTime(elapsedMs) {
+  const seconds = Math.max(0, Math.floor(elapsedMs / 1000));
+  return `${Math.floor(seconds / 60)}분 ${seconds % 60}초 작업 중`;
+}
+
+function WorkingTime({ since }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    setNow(Date.now());
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [since]);
+  return <span className="shrink-0 tabular-nums">{formatWorkingTime(since ? now - since : 0)}</span>;
+}
 
 function ReasoningEffortSlider({
   modelId,
@@ -350,6 +364,10 @@ export default function ChatGPTWidget({ dragHandleProps }) {
     setShowConversations(false);
   }, [setting.aiProvider, attachmentAccount]);
   const loading = connection.streaming || sending;
+  const [loadingSince, setLoadingSince] = useState(null);
+  useEffect(() => {
+    setLoadingSince(loading ? Date.now() : null);
+  }, [loading]);
   const activity =
     messages.findLast(
       (message) => message.role === "assistant" && message.activity,
@@ -502,14 +520,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
               >
                 <RxPencil2 />
                 <span className="">{activity}</span>
-                <span
-                  className="activity-dots inline-flex shrink-0"
-                  aria-hidden="true"
-                >
-                  {[0, 1, 2].map((dot) => (
-                    <LuDot key={dot} className="shrink-0" />
-                  ))}
-                </span>
+                <WorkingTime since={loadingSince} />
               </Typography>
             </div>
           )}

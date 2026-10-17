@@ -11,7 +11,8 @@ import { useParams } from "@/desktop/navigation";
 import { PiListBulletsBold, PiListChecksBold, PiListNumbersBold, PiTableFill, PiTextAlignCenterBold, PiTextAlignJustifyBold, PiTextAlignLeftBold, PiTextAlignRightBold, PiTextBBold, PiTextIndentFill, PiTextItalicBold, PiTextOutdentFill, PiTextStrikethroughBold, PiTextUnderlineBold } from "react-icons/pi";
 import { MdFormatColorFill, MdFormatColorText } from "react-icons/md";
 import DocSettingModal from "./DocSettingModal";
-import { fontOptions } from "@/app/LIB/constant/fontOptions";
+import { useDocumentFontOptions } from "@/app/LIB/hook/useDocumentFontOptions";
+import { unquoteFontFamily } from "@/app/LIB/utils/localFonts";
 import { LuSubscript, LuSuperscript } from "react-icons/lu";
 import { findParentNode } from "@tiptap/core";
 import { CellSelection } from "@tiptap/pm/tables";
@@ -87,6 +88,7 @@ export default function WriteHeader() {
   } = useDocument();
   const params = useParams();
   const [font, setFont] = useState("Pretendard-Medium");
+  const fontOptions = useDocumentFontOptions(font);
   const [currentFontSize, setCurrentFontSize] = useState(12);
 
   const [fontColorPickerOpen, setFontColorPickerOpen] = useState(false);
@@ -635,101 +637,6 @@ export default function WriteHeader() {
     toast.info("본문의 글자 위치에 커서를 놓고 다시 시도해 주세요.");
   };
 
-  const weightPriority = {
-    Thin: 1,
-    ExtraLight: 2,
-    Light: 3,
-    Regular: 4,
-    Medium: 5,
-    SemiBold: 6,
-    Bold: 7,
-    ExtraBold: 8,
-    Black: 9,
-    R: 4,
-    B: 7,
-    "Puzzle Outline": 1,
-    "Puzzle Black": 9
-  };
-
-  const sortedFontOptions = [...fontOptions].sort((a, b) => {
-    const { label: labelA, value: valueA } = a;
-    const { label: labelB, value: valueB } = b;
-
-    // 1. 한자/중국어 폰트 판별 (최하단 고정)
-    const hanjaValues = new Set([
-      "NotoSansTC",
-      "NotoSerifTC",
-      "NotoSansSC",
-      "NotoSerifSC",
-      "ChironGoRoundTC",
-      "MaShanZheng",
-      "ZCOOLQingKeHuangYou",
-      "LiuJianMaoCao",
-      "851ShouShu",
-      "AllSeto",
-      "GenWanMin",
-      "Jyhphy",
-      "SweiFistLeg",
-      "TaiWanMing",
-      "UnGungseo",
-      "XianErTi"
-    ]);
-    const isHanjaA = hanjaValues.has(valueA);
-    const isHanjaB = hanjaValues.has(valueB);
-
-    if (isHanjaA && !isHanjaB) return 1;
-    if (!isHanjaA && isHanjaB) return -1;
-    if (isHanjaA && isHanjaB) return labelA.localeCompare(labelB, "ko");
-
-    // 2. 영어 디자인 폰트 판별 (한자 바로 위, 일반 폰트 아래)
-    const isEngDesignA = labelA.includes("(Eng)");
-    const isEngDesignB = labelB.includes("(Eng)");
-
-    if (isEngDesignA && !isEngDesignB) return 1;
-    if (!isEngDesignA && isEngDesignB) return -1;
-    if (isEngDesignA && isEngDesignB) return labelA.localeCompare(labelB, "en");
-
-    // 3. 언어 판별 (일반 영문 폰트 vs 한글 폰트)
-    const isEngA = /^[A-Za-z]/.test(labelA);
-    const isEngB = /^[A-Za-z]/.test(labelB);
-    if (isEngA && !isEngB) return -1;
-    if (!isEngA && isEngB) return 1;
-
-    // 4. 이름과 굵기 분리 및 정렬 (일반 한글/영문 폰트용)
-    const getInfo = (label) => {
-      const numWeightMatch = label.match(/\d{3}/);
-      if (numWeightMatch) {
-        const weightScore = parseInt(numWeightMatch[0]) / 100;
-        const family = label.replace(numWeightMatch[0], "").trim();
-        return { family, weightScore };
-      }
-
-      const weights = Object.keys(weightPriority).sort(
-        (x, y) => y.length - x.length
-      );
-      let family = label;
-      let weightScore = 4;
-
-      for (const w of weights) {
-        if (label.includes(w)) {
-          family = label.replace(w, "").trim();
-          weightScore = weightPriority[w];
-          break;
-        }
-      }
-      return { family, weightScore };
-    };
-
-    const infoA = getInfo(labelA);
-    const infoB = getInfo(labelB);
-
-    if (infoA.family !== infoB.family) {
-      return infoA.family.localeCompare(infoB.family, "ko");
-    }
-
-    return infoA.weightScore - infoB.weightScore;
-  });
-
   // 파일 내보내기
   const exportFile = async () => {
     const dockitDocument = createDockitDocumentSnapshot({
@@ -884,7 +791,7 @@ export default function WriteHeader() {
           size="sm"
           background="transparent"
           shadow="none"
-          options={sortedFontOptions}
+          options={fontOptions}
           style={{ width: "170px", overflow: "hidden" }}
           dropdownStyle={withOverlayShadow({
             maxHeight: "70vh",
@@ -893,15 +800,17 @@ export default function WriteHeader() {
           })}
           border={false}
           value={font}
+          ariaLabel="글꼴"
           searchable
           onChange={(value) => {
             setFont(value);
             if (editor?.state.selection.node?.type.name === "diagramBlock") {
-              editor.chain().focus().setDiagramFontFamily(value).run();
+              editor.chain().focus().setDiagramFontFamily(unquoteFontFamily(value)).run();
               return;
             }
-            if (!applyTextStyleToSelection({ fontFamily: value })) {
-              editor?.chain()?.focus()?.setFontFamily(value)?.run();
+            const family = fontOptions.find(option => option.value === value)?.fontFamily || value;
+            if (!applyTextStyleToSelection({ fontFamily: family })) {
+              editor?.chain()?.focus()?.setFontFamily(family)?.run();
             }
           }}
         />

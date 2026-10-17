@@ -1,4 +1,5 @@
 import { embedSvgFont } from "./svgFontEmbedding";
+import { loadLocalFonts } from "./localFonts";
 
 let runtime;
 let queue = Promise.resolve();
@@ -12,7 +13,11 @@ export function renderMermaidSvg(source, dark = false, fontFamily = "") {
     if (cache.has(key)) return cache.get(key);
     runtime ??= import("mermaid").then((module) => module.default);
     const mermaid = await runtime;
-    if (fontFamily) await document.fonts?.load(`16px ${JSON.stringify(fontFamily)}`, source).catch(() => {});
+    if (fontFamily) {
+      // Local face aliases must exist before Mermaid measures and caches text.
+      await loadLocalFonts().catch(() => {});
+      await document.fonts?.load(`16px ${JSON.stringify(fontFamily)}`, source).catch(() => {});
+    }
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",

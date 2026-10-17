@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button, Menu, Typography } from 'sud-ui';
 import { PiTrash } from 'react-icons/pi';
 import { floatingSurfaceStyle, contextMenuStyles } from '../../constant/uiStyles';
+import useContextMenuDismiss from '../../hook/useContextMenuDismiss';
 
 export default function ChatConversationList({ conversations, disabled, onOpen, onDelete, dark, theme }) {
   const [menu, setMenu] = useState(null);
-  useEffect(() => {
-    if (!menu) return;
-    const close = () => setMenu(null);
-    const key = event => { if (event.key === 'Escape') close(); };
-    window.addEventListener('click', close);
-    window.addEventListener('blur', close);
-    window.addEventListener('keydown', key);
-    return () => { window.removeEventListener('click', close); window.removeEventListener('blur', close); window.removeEventListener('keydown', key); };
-  }, [menu]);
+  useContextMenuDismiss(Boolean(menu), () => setMenu(null));
   return <div className="flex max-h-[50vh] w-full min-w-0 flex-col overflow-y-auto" aria-label="채팅 목록">
     {!conversations.length && <Typography size="sm" className="py-4 text-center">저장된 대화가 없어요.</Typography>}
     {conversations.map(conversation => <div key={conversation.id} className="min-w-0"

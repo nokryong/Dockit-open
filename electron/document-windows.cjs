@@ -14,6 +14,14 @@ class DocumentWindows {
     });
   }
   context(window) { return this.windows.get(window?.webContents.id); }
+  navigate(window, url) {
+    const context = this.context(window);
+    if (!context) return;
+    try {
+      const id = new URL(url).hash.match(/^#\/docs\/([^/?#]+)/)?.[1];
+      context.documentId = id ? decodeURIComponent(id) : null;
+    } catch { context.documentId = null; }
+  }
   find(documentId) { return [...this.windows.values()].find(context => context.documentId === documentId)?.window; }
   all() { return [...this.windows.values()].map(context => context.window); }
   broadcast(channel, value) { for (const window of this.all()) if (!window.isDestroyed()) window.webContents.send(channel, value); }

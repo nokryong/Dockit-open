@@ -3,9 +3,9 @@ const { randomUUID } = require('node:crypto');
 const BUSY = new Set(['downloading', 'waiting', 'saving', 'installing']);
 
 class AppUpdates {
-  constructor({ updater, enabled, currentVersion, emit, waitForWork, flush, allowQuit, saveTimeout = 60_000 }) {
-    Object.assign(this, { updater, enabled, emit, waitForWork, flush, allowQuit, saveTimeout });
-    this.state = { status: 'idle', currentVersion, version: null, percent: 0 };
+  constructor({ updater, enabled, currentVersion, emit, waitForWork, flush, allowQuit, openRelease, saveTimeout = 60_000 }) {
+    Object.assign(this, { updater, enabled, emit, waitForWork, flush, allowQuit, openRelease, saveTimeout });
+    this.state = { status: 'idle', currentVersion, version: null, percent: 0, manualDownload: Boolean(openRelease) };
     this.dismissed = new Set();
     this.downloaded = false;
     this.pendingSave = null;
@@ -61,6 +61,11 @@ class AppUpdates {
 
   async runInstall() {
     try {
+      if (this.openRelease) {
+        await this.openRelease();
+        this.dismiss();
+        return;
+      }
       if (!this.downloaded) {
         this.set({ status: 'downloading', percent: 0, error: null });
         const files = await this.updater.downloadUpdate();
@@ -75,7 +80,9 @@ class AppUpdates {
       this.allowQuit(true);
       this.updater.quitAndInstall(true, true);
     } catch (error) {
-      const message = this.state.status === 'downloading'
+      const message = this.openRelease
+        ? '다운로드 페이지를 열지 못했습니다. 다시 시도해 주세요.'
+        : this.state.status === 'downloading'
         ? '다운로드하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.'
         : this.state.status === 'installing'
           ? '설치를 시작하지 못했습니다. 다시 시도해 주세요.'

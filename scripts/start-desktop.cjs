@@ -2,6 +2,17 @@ const { spawnSync, spawn } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 const root = path.join(__dirname, '..');
+function getDevServerOptions(rootDirectory = root, port = 5173) {
+  return {
+    root: rootDirectory,
+    server: {
+      host: '127.0.0.1', port, strictPort: true,
+      // Generated files can number in the tens of thousands. Vite does not
+      // apply .gitignore to its watcher, so keep them out of the startup crawl.
+      watch: { ignored: ['**/.cache/**', '**/.dockit/**', '**/release/**'] },
+    },
+  };
+}
 async function main() {
   const dev = process.argv.includes('--dev');
   const env = { ...process.env };
@@ -10,7 +21,7 @@ async function main() {
   let server;
   if (dev) {
     const { createServer } = await import('vite');
-    server = await createServer({ root, server: { host: '127.0.0.1', port: 5173, strictPort: true } });
+    server = await createServer(getDevServerOptions());
     await server.listen();
     env.DOCKIT_DEV_SERVER_URL = server.resolvedUrls.local[0];
     server.printUrls();
@@ -32,4 +43,5 @@ async function main() {
   process.on('SIGINT', () => stop(0));
   process.on('SIGTERM', () => stop(0));
 }
-main().catch(error => { console.error(error.message); process.exit(1); });
+if (require.main === module) main().catch(error => { console.error(error.message); process.exit(1); });
+module.exports = { getDevServerOptions };
