@@ -1,5 +1,6 @@
 appId: com.nokryong.dockit-open
 productName: Dockit Open
+icon: public/logo/symbol-square.svg
 fileAssociations:
   - ext: dkt
     name: Dockit Document
@@ -17,6 +18,8 @@ files:
   - native/windows-print/Program.cs
   - native/windows-print/app.manifest
   - package.json
+  - LICENSE
+  - README.md
 # Codex launches the skill reader in a separate Node process.
 asar: false
 publish:
@@ -40,3 +43,4 @@ mac:
 linux:
   target: AppImage
   category: Office
+  icon: public/logo/symbol-square.png

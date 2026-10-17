@@ -34,7 +34,8 @@ async function install({ shell }) {
             controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(events.shift())}\n\n`));
             if (events.length) timer = setTimeout(send, 100); else controller.close();
           };
-          timer = setTimeout(send, 40);
+          // "slow" keeps the pending indicator visible long enough to observe the elapsed time.
+          timer = setTimeout(send, mode === 'slow' ? 4000 : 40);
         }, cancel() { clearTimeout(timer); }
       }), { headers: { 'Content-Type': 'text/event-stream' } });
     }

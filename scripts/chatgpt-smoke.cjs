@@ -84,6 +84,13 @@ const fixture = path.join(root, 'tests/helpers/chatgpt-electron-fixture.cjs');
     assert.ok(!encrypted.includes('fixture-access')); assert.ok(!encrypted.includes('dockit-test@example.invalid'));
     const config = await fs.readFile(path.join(home, '.dockit/config.json'), 'utf8');
     assert.ok(!config.includes('fixture-access')); assert.ok(!config.includes('access_token'));
+    await call('mode', 'slow');
+    await widget.locator('textarea').fill('경과 시간 테스트');
+    await widget.getByRole('button', { name: 'ChatGPT 전송', exact: true }).click();
+    // The fixture delays the first event by 4 seconds; a screenshot here would be too slow to capture this state.
+    await expect(widget.getByText(/^0분 [1-3]초 작업 중$/)).toBeVisible({ timeout: 5000 });
+    await expect(widget.getByText(/작업 중$/)).toHaveCount(0, { timeout: 20000 });
+    await expect(widget.getByRole('button', { name: 'ChatGPT 전송', exact: true })).toBeVisible();
     await call('mode', 'usage-limit');
     await widget.locator('textarea').fill('한도 테스트');
     await widget.getByRole('button', { name: 'ChatGPT 전송', exact: true }).click();

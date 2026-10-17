@@ -25,7 +25,7 @@ export function AppUpdateDialog({ state, theme, isDarkMode, onInstall, onCancel 
     onClose={busy ? undefined : onCancel} onEsc={!busy}
     footer={!busy && <div className="flex justify-end gap-2">
       <Button size="sm" background="transparent" border={false} onClick={onCancel}>취소</Button>
-      <Button size="sm" colorType={theme} border={false} onClick={onInstall}>{state.status === 'error' ? '다시 시도' : '설치'}</Button>
+      <Button size="sm" colorType={theme} border={false} onClick={onInstall}>{state.status === 'error' ? '다시 시도' : state.manualDownload ? '다운로드' : '설치'}</Button>
     </div>}>
     <div className="flex min-w-0 flex-col gap-2">
       {state.preview && <Typography size="xs">미리보기 · 실제 설치하지 않아요.</Typography>}
@@ -39,6 +39,7 @@ export function AppUpdateDialog({ state, theme, isDarkMode, onInstall, onCancel 
           ? '진행 중인 AI 작업이 끝나면 설치를 계속해요.'
           : state.status === 'saving' ? '열려 있는 문서를 저장하고 있어요.'
             : state.status === 'installing' ? '잠시 후 앱이 다시 열려요.'
+              : state.manualDownload ? '다운로드 페이지에서 새 버전을 설치해 주세요.'
               : '문서를 저장한 뒤 설치하고 자동으로 다시 시작해요.'}
       </Typography>
     </div>
@@ -69,7 +70,7 @@ export default function AppUpdateModal() {
       previewCleanup.current?.();
       const parts = currentVersion.split('.').map(Number);
       parts[2] += 1;
-      setState({ status: 'available', currentVersion, version: parts.join('.'), percent: 0, preview: true });
+      setState(previous => ({ status: 'available', currentVersion, version: parts.join('.'), percent: 0, manualDownload: previous.manualDownload, preview: true }));
     };
     window.addEventListener('keydown', preview);
     return () => { window.removeEventListener('keydown', preview); previewCleanup.current?.(); };
@@ -77,6 +78,7 @@ export default function AppUpdateModal() {
 
   const install = async () => {
     if (state.preview && import.meta.env.DEV) {
+      if (state.manualDownload) { setState(previous => ({ ...previous, status: 'idle', preview: false })); return; }
       const { previewAppUpdate } = await import('../../../../desktop/update-preview');
       previewCleanup.current?.();
       previewCleanup.current = previewAppUpdate(setState);
@@ -86,7 +88,7 @@ export default function AppUpdateModal() {
     catch { setState(previous => ({ ...previous, status: 'error', error: '업데이트를 시작하지 못했습니다. 다시 시도해 주세요.' })); }
   };
   const cancel = async () => {
-    if (state.preview) { previewCleanup.current?.(); setState({ status: 'idle' }); return; }
+    if (state.preview) { previewCleanup.current?.(); setState(previous => ({ ...previous, status: 'idle', preview: false })); return; }
     await bridge.dismiss();
   };
   return <AppUpdateDialog state={state} theme={setting.theme} isDarkMode={isDarkMode} onInstall={install} onCancel={cancel} />;

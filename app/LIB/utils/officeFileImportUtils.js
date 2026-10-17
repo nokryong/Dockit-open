@@ -1,9 +1,3 @@
-import { generateHTML } from "@tiptap/html";
-import { editorExtensions } from "../constant/editorExtensions";
-import { importDOCXToIR } from "../ir/docxImport";
-import { importHWPXToIR } from "../ir/hwpxImport";
-import { irToProseMirror } from "../ir/toProseMirror";
-import { validateProseMirrorProjection } from "../ir/proseMirrorProjectionValidation";
 import {
   classifyImportDryRunFailure,
   classifyImportPreviewDisposition
@@ -64,16 +58,22 @@ export const convertOfficeFileToDocument = async (file) => {
     throw new Error("지원하지 않는 오피스 문서 형식입니다.");
   }
 
+  const [importer, { irToProseMirror }, { validateProseMirrorProjection }] = await Promise.all([
+    isDocx ? import("../ir/docxImport") : import("../ir/hwpxImport"),
+    import("../ir/toProseMirror"),
+    import("../ir/proseMirrorProjectionValidation"),
+  ]);
+
   const dryRun = isDocx
     ? await runDOCXImportDryRun({
         file,
-        importDOCXToIR,
+        importDOCXToIR: importer.importDOCXToIR,
         irToProseMirror,
         validateProseMirrorProjection
       })
     : await runHWPXImportDryRun({
         file,
-        importHWPXToIR,
+        importHWPXToIR: importer.importHWPXToIR,
         irToProseMirror,
         validateProseMirrorProjection,
         inflateRaw: createHWPXBrowserInflateRaw()
@@ -104,6 +104,10 @@ export const convertOfficeFileToDocument = async (file) => {
     });
   }
 
+  const [{ generateHTML }, { editorExtensions }] = await Promise.all([
+    import("@tiptap/html"),
+    import("../constant/editorExtensions"),
+  ]);
   const html = generateHTML(dryRun.projection.doc, editorExtensions);
 
   return {

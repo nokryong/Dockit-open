@@ -19,7 +19,7 @@ describe("editor empty-document guidance", () => {
     );
     expect(contentEditorSource).toContain("documentPlaceholderExtension");
     expect(contentEditorSource).toMatch(
-      /\.\.\.editorExtensions,\r?\n\s+documentPlaceholderExtension/
+      /extensions:\s*\[[\s\S]*?\bdocumentPlaceholderExtension\s*,/
     );
     expect(sharedExtensionsSource).not.toContain(
       "@tiptap/extension-placeholder"

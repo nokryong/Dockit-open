@@ -22,3 +22,16 @@ test('save barrier requires every window and rejects unrelated acknowledgements'
 test('native arguments select dkt files without interpreting flags as paths', () => {
   assert.equal(filesFromArguments(['electron', '--dev', 'one.dkt', '--flag.dkt']).length, 1);
 });
+
+test('in-app navigation keeps the window and updates its document scope', () => {
+  const windows = new DocumentWindows(), current = window(11);
+  windows.add(current);
+  windows.navigate(current, 'dockit://app/index.html#/docs/doc-a');
+  assert.equal(windows.find('doc-a'), current);
+  windows.navigate(current, 'dockit://app/index.html#/docs/doc-b');
+  assert.equal(windows.find('doc-a'), undefined);
+  assert.equal(windows.context(current).documentId, 'doc-b');
+  windows.navigate(current, 'dockit://app/index.html#/docs?folder=one');
+  assert.equal(windows.context(current).documentId, null);
+  assert.equal(windows.all().length, 1);
+});

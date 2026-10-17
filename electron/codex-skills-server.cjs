@@ -11,10 +11,9 @@ const within = (root, file) => {
 
 async function readSkill(file, roots) {
   if (typeof file !== 'string' || !path.isAbsolute(file) || !TEXT_EXTENSIONS.has(path.extname(file).toLowerCase())) throw new Error('Invalid skill path');
-  const candidate = path.resolve(file);
-  if (!roots.some(root => within(root, candidate))) throw new Error('Outside skill roots');
-  const actual = await fs.realpath(candidate);
-  // A reference or symlink must not expose auth.json or files outside a skill folder.
+  // Compare canonical paths: Windows short names and macOS system aliases may
+  // spell the same approved file differently. Links outside the roots stay denied.
+  const actual = await fs.realpath(path.resolve(file));
   if (!roots.some(root => within(root, actual))) throw new Error('Outside skill roots');
   const handle = await fs.open(actual, 'r');
   try {

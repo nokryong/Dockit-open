@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { createRoot } from "react-dom/client";
 import { Menu } from "sud-ui";
+import useContextMenuDismiss from "../../hook/useContextMenuDismiss";
 import {
   contextMenuStyles,
   cx,
@@ -46,6 +47,7 @@ export const createNoteContextMenuItemModel = ({ kind, source }) => [
 
 const NoteContextMenu = ({ kind, onAction, onClose, source, x, y }) => {
   const surfaceRef = useRef(null);
+  useContextMenuDismiss(true, onClose);
   const items = useMemo(
     () => createNoteContextMenuItemModel({ kind, source }).map((item) => ({
       key: item.action,
@@ -68,21 +70,11 @@ const NoteContextMenu = ({ kind, onAction, onClose, source, x, y }) => {
   }, [x, y]);
 
   useEffect(() => {
-    const closeOnPointer = (event) => {
-      if (!surfaceRef.current?.contains(event.target)) onClose();
-    };
-    const closeOnEscape = (event) => {
-      if (event.key === "Escape") onClose();
-    };
     window.addEventListener("scroll", onClose, true);
     window.addEventListener("resize", onClose);
-    document.addEventListener("pointerdown", closeOnPointer, true);
-    document.addEventListener("keydown", closeOnEscape, true);
     return () => {
       window.removeEventListener("scroll", onClose, true);
       window.removeEventListener("resize", onClose);
-      document.removeEventListener("pointerdown", closeOnPointer, true);
-      document.removeEventListener("keydown", closeOnEscape, true);
     };
   }, [onClose]);
 

@@ -224,9 +224,10 @@ export default function Content({
             transform: usesDocumentCanvasSizing
               ? `scale(${scale})`
               : undefined,
-            transformOrigin: "top center",
-            width: usesDocumentCanvasSizing ? "max-content" : "100%",
-            minWidth: "100%",
+            transformOrigin: usesDocumentCanvasSizing ? "top left" : "top center",
+            "--document-canvas-scale": usesDocumentCanvasSizing ? scale : 1,
+            width: "100%",
+            minWidth: usesDocumentCanvasSizing ? undefined : "100%",
             height: "100%",
             minHeight: "100%"
           }}
@@ -357,7 +358,8 @@ export default function Content({
               className="zoom-container"
               style={{
                 transform: isDocsRoute ? `scale(${scale})` : undefined,
-                transformOrigin: "top center",
+                transformOrigin: usesDocumentCanvasSizing ? "top left" : "top center",
+                "--document-canvas-scale": usesDocumentCanvasSizing ? scale : 1,
                 width: "100%",
                 height: "100%",
                 minHeight: "100%"

@@ -59,6 +59,7 @@ import {
   captureNotePersistenceSnapshot,
   restoreValidatedNotePersistenceHtml
 } from "../../utils/notePersistenceGate";
+import { deferEditorWrite } from "../../utils/deferEditorWrite";
 
 const TypeBubble = dynamic(() => import("./TypeBubble"), { ssr: false });
 const EditorBlockDeleteModal = dynamic(
@@ -1568,35 +1569,39 @@ export default function ContentEditor({
 
   // ✨ isEditable 상태 변경 시 즉시 반영 (이미 위에서 처리됨)
 
-  // ✨ 외부 value 변경 시 즉시 동기화
+  // ✨ 외부 value 변경 시 동기화
+  // setContent가 React 노드 뷰를 flushSync로 그리므로 커밋 중에 실행하지 않고 마이크로태스크로 미룬다.
+  // 새 value가 오거나 언마운트되면 대기 중인 동기화를 취소한다.
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
 
-    // 1. 현재 에디터의 HTML 가져오기
-    const editorHTML = editor.getHTML();
+    return deferEditorWrite(editor, () => {
+      // 1. 현재 에디터의 HTML 가져오기
+      const editorHTML = editor.getHTML();
 
-    // 2. 외부에서 들어온 value가 현재 에디터 내용과 다르고,
-    //    마지막으로 내가 저장했던 내용(lastContentRef)과도 다를 때만 업데이트
-    if (value !== editorHTML && value !== lastContentRef.current) {
-      const { from, to } = editor.state.selection; // 현재 커서 위치 저장
+      // 2. 외부에서 들어온 value가 현재 에디터 내용과 다르고,
+      //    마지막으로 내가 저장했던 내용(lastContentRef)과도 다를 때만 업데이트
+      if (value !== editorHTML && value !== lastContentRef.current) {
+        const { from, to } = editor.state.selection; // 현재 커서 위치 저장
 
-      editor.storage.codexDocumentLock.applying = true;
-      let restored;
-      try { restored = restoreValidatedNotePersistenceHtml(editor, value); }
-      finally { editor.storage.codexDocumentLock.applying = false; }
-      if (!restored.ok) {
-        onNotePersistenceRejected?.(restored.error);
-        return;
+        editor.storage.codexDocumentLock.applying = true;
+        let restored;
+        try { restored = restoreValidatedNotePersistenceHtml(editor, value); }
+        finally { editor.storage.codexDocumentLock.applying = false; }
+        if (!restored.ok) {
+          onNotePersistenceRejected?.(restored.error);
+          return;
+        }
+        lastContentRef.current = restored.html; // normalized persisted baseline
+        onNotePersistenceStatus?.({ source: "external-restore", status: "valid" });
+
+        // 선택적으로 커서 위치 복구 (필요한 경우)
+        const end = editor.state.doc.content.size;
+        editor.commands.setTextSelection({ from: Math.min(from, end), to: Math.min(to, end) });
+      } else if (value === editorHTML && value !== lastContentRef.current) {
+        lastContentRef.current = value;
       }
-      lastContentRef.current = restored.html; // normalized persisted baseline
-      onNotePersistenceStatus?.({ source: "external-restore", status: "valid" });
-
-      // 선택적으로 커서 위치 복구 (필요한 경우)
-      const end = editor.state.doc.content.size;
-      editor.commands.setTextSelection({ from: Math.min(from, end), to: Math.min(to, end) });
-    } else if (value === editorHTML && value !== lastContentRef.current) {
-      lastContentRef.current = value;
-    }
+    });
   }, [value, editor, onNotePersistenceRejected, onNotePersistenceStatus]);
 
   return (

@@ -34,7 +34,7 @@ const { LocalStore, atomicJson } = require('../electron/local-store.cjs');
   }, { url: page.url(), file: path.join(artifacts, name) });
   const open = async (page, id) => {
     const created = app.waitForEvent('window');
-    await page.evaluate(id => window.dockitLocal.openDocument(id), id);
+    await app.evaluate(({ app }, file) => app.emit('second-instance', {}, [file], process.cwd()), await store.documentPath(id));
     const next = watch(await created);
     await next.locator('.tiptap-main-canvas').waitFor({ timeout: 60000 });
     return next;
@@ -60,7 +60,7 @@ const { LocalStore, atomicJson } = require('../electron/local-store.cjs');
     const second = await open(workspace, b._id);
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().forEach(window => window.webContents.setBackgroundThrottling(false)));
     assert.equal(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length), 3);
-    await workspace.evaluate(id => window.dockitLocal.openDocument(id), a._id);
+    await app.evaluate(({ app }, file) => app.emit('second-instance', {}, [file], process.cwd()), await store.documentPath(a._id));
     assert.equal(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length), 3);
     await assert.rejects(first.evaluate(({ id, revision }) => window.dockitLocal.codex.send('wrong document', [], { id, revision }), { id: b._id, revision: b.revision }));
     console.log('PASS: document windows, duplicate focus and cross-window Codex denial');

@@ -72,8 +72,11 @@ test('chat and image get shared instructions on start and existing-thread resume
 });
 
 test('skill reader accepts skill references but denies traversal, outside links, binaries and large files', async t => {
-  const { globalHome, skills, skill } = await setup(t), roots = [await fs.realpath(skills)];
+  const { directory, globalHome, skills, skill } = await setup(t), roots = [await fs.realpath(skills)];
   assert.match(await readSkill(skill, roots), /fixture palette/);
+  const alias = path.join(directory, 'home-alias');
+  await fs.symlink(globalHome, alias, process.platform === 'win32' ? 'junction' : 'dir');
+  assert.match(await readSkill(path.join(alias, path.relative(globalHome, skill)), roots), /fixture palette/);
   const reference = path.join(path.dirname(skill), 'reference.md');
   await fs.writeFile(reference, 'Reference content');
   assert.equal(await readSkill(reference, roots), 'Reference content');

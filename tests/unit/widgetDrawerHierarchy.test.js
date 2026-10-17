@@ -38,6 +38,10 @@ vi.mock("../../app/LIB/context/SettingContext", () => ({
   useSetting: () => ({ setting: { theme: "mint" } })
 }));
 
+vi.mock("../../app/LIB/context/PluginContext", () => ({
+  usePlugins: () => ({ widgets: {} })
+}));
+
 vi.mock("../../app/LIB/context/DarkModeContext", () => ({
   useDarkMode: () => ({
     isDarkMode: false,

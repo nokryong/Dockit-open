@@ -64,7 +64,7 @@ async function embedFont(svg, fontFamily) {
   const embedded = await Promise.all(faces.map(async ({ rule, base }) => {
     const src = rule.style.getPropertyValue('src');
     const urls = [...src.matchAll(/url\(\s*(?:"([^"]+)"|'([^']+)'|([^\s)]+))\s*\)/g)];
-    if (!urls.length) return '';
+    if (!urls.length) return /\blocal\s*\(/.test(src) ? rule.cssText : '';
     let dataUrl;
     for (const match of urls) {
       const url = new URL(match[1] || match[2] || match[3], base).href;

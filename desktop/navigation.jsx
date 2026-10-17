@@ -9,12 +9,11 @@ function navigate(url, replace = false) {
   const target = url === '/' ? '/docs' : url;
   pendingNavigation = pendingNavigation.catch(() => {}).then(async () => {
     if (snapshot() === target) return;
+    await flushLocalData();
     if (window.dockitLocal?.documentWindows) {
       const id = target.split('?')[0].split('/')[2];
-      if (id) return window.dockitLocal.openDocument(decodeURIComponent(id));
-      if (snapshot().split('?')[0].split('/')[2]) return window.dockitLocal.openWorkspace();
+      if (id && await window.dockitLocal.openDocument(decodeURIComponent(id)) !== decodeURIComponent(id)) return;
     }
-    await flushLocalData();
     if (replace) { window.history.replaceState(null, '', '#' + target); window.dispatchEvent(new HashChangeEvent('hashchange')); }
     else window.location.hash = target;
   });

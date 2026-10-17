@@ -14,7 +14,11 @@ function install({ clipboard, dialog }) {
     this.openExternal = fixture.openExternal;
     return status.call(this);
   };
-  clipboard.writeImage = image => { if (image.isEmpty()) throw new Error('Empty clipboard image'); fixture.state.copies = (fixture.state.copies || 0) + 1; };
+  clipboard.write = async items => {
+    const png = await items[0].getType('image/png');
+    if (!png.size) throw new Error('Empty clipboard image');
+    fixture.state.copies = (fixture.state.copies || 0) + 1;
+  };
   dialog.showSaveDialog = async () => ({ canceled: false, filePath: path.join(process.env.DOCKIT_TEST_HOME, 'image-export.png') });
 }
 function mode(value) { fixture.state.mode = value; }

@@ -1,10 +1,12 @@
-import { Card, Div, Typography } from "sud-ui";
-import { useState, useEffect } from "react";
+import { Card, Div, Menu, Typography } from "sud-ui";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useSetting } from "../../context/SettingContext";
 import { usePanels } from "../../context/PanelContext";
 import { newShadowDarkLg, newShadowLightLg } from "../../constant/uiProps";
 import { useDarkMode } from "../../context/DarkModeContext";
+import { floatingSurfaceStyle } from "../../constant/uiStyles";
+import useContextMenuDismiss from "../../hook/useContextMenuDismiss";
 
 export default function WidgetCard({
   icon,
@@ -34,41 +36,41 @@ export default function WidgetCard({
   const handleContextMenu = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
+    setContextMenu({
+      visible: true,
+      x: Math.max(8, Math.min(e.clientX, window.innerWidth - 120)),
+      y: Math.max(8, Math.min(e.clientY, window.innerHeight - 52)),
+    });
   };
 
-  useEffect(() => {
-    if (!contextMenu.visible) return;
-    const close = () => setContextMenu({ visible: false, x: 0, y: 0 });
-    window.addEventListener("click", close);
-    window.addEventListener("contextmenu", close);
-    return () => {
-      window.removeEventListener("click", close);
-      window.removeEventListener("contextmenu", close);
-    };
-  }, [contextMenu.visible]);
+  useContextMenuDismiss(contextMenu.visible, () =>
+    setContextMenu({ visible: false, x: 0, y: 0 }),
+  );
 
   return (
     <>
       {contextMenu.visible &&
         typeof window !== "undefined" &&
         createPortal(
-          <Card
-            className="fixed z-50"
-            size="sm"
-            style={{ left: contextMenu.x, top: contextMenu.y }}
+          <div
+            className="fixed z-50 w-28 rounded-xl border p-1 shadow-lg"
+            style={{ left: contextMenu.x, top: contextMenu.y, ...floatingSurfaceStyle(isDarkMode) }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => {
-                remove(widgetType);
-                setContextMenu({ visible: false, x: 0, y: 0 });
-              }}
-            >
-              닫기
-            </div>
-          </Card>,
+            <Menu
+              aria-label="툴킷 메뉴"
+              expandType="popover"
+              className="w-full [&_button]:w-full [&_button]:px-3! [&_button]:py-1.5! [&_button]:text-sm!"
+              items={[{
+                key: "close",
+                label: "닫기",
+                onClick: () => {
+                  remove(widgetType);
+                  setContextMenu({ visible: false, x: 0, y: 0 });
+                },
+              }]}
+            />
+          </div>,
           document.body,
         )}
       <Card

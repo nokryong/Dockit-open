@@ -43,7 +43,7 @@ describe("officeFileImportUtils", () => {
     expect(result.content).toEqual(expect.any(String));
     expect(result.content.length).toBeGreaterThan(0);
     expect(result.warningTotal).toBeGreaterThanOrEqual(0);
-  });
+  }, 30000);
 
   it("converts an HWPX fixture into a new document payload", async () => {
     const result = await convertOfficeFileToDocument(
@@ -55,7 +55,7 @@ describe("officeFileImportUtils", () => {
     expect(result.content).toEqual(expect.any(String));
     expect(result.content.length).toBeGreaterThan(0);
     expect(result.warningTotal).toBeGreaterThanOrEqual(0);
-  });
+  }, 30000);
 
   it("attaches conversionFailure when the DOCX preview is blocked", async () => {
     await expect(

@@ -1,0 +1,127 @@
+// Real NSIS installation changes registry entries and file associations: hosted CI only.
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const { createReadStream } = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
+const { execFile, spawn } = require('node:child_process');
+const { promisify } = require('node:util');
+const { createServer } = require('node:http');
+const { load, dump } = require('js-yaml');
+const { _electron: electron, expect: baseExpect } = require('@playwright/test');
+const { LocalStore } = require('../electron/local-store.cjs');
+const exec = promisify(execFile);
+const expect = baseExpect.configure({ timeout: 60000 });
+
+(async () => {
+  assert.equal(process.platform, 'win32');
+  assert.equal(process.env.GITHUB_ACTIONS, 'true', 'Run only on an ephemeral GitHub-hosted Windows runner');
+  assert.equal(process.env.RUNNER_ENVIRONMENT, 'github-hosted');
+  assert.ok(process.env.RUNNER_TEMP);
+  const output = path.resolve(process.argv[2] || 'release');
+  const artifacts = path.resolve('.cache/packaged-smoke');
+  await fs.mkdir(artifacts, { recursive: true });
+  const scratch = await fs.mkdtemp(path.join(path.resolve(process.env.RUNNER_TEMP), 'dockit-install-smoke-'));
+  const installDir = path.join(scratch, 'app');
+  const executablePath = path.join(installDir, 'Dockit Open.exe');
+  const packageFile = path.join(installDir, 'resources/app/package.json');
+  const quitEvidence = path.join(artifacts, 'before-update-quit.json');
+  const metadata = load(await fs.readFile(path.join(output, 'latest.yml'), 'utf8'));
+  const assetName = path.basename(decodeURIComponent(metadata.files[0].url));
+  const localName = (await fs.readdir(output)).find(name => name.replaceAll(' ', '-') === assetName);
+  assert.ok(localName, 'Missing NSIS installer');
+  const installer = path.join(output, localName);
+  const server = createServer((request, response) => {
+    const name = decodeURIComponent(new URL(request.url, 'http://localhost').pathname.slice(1));
+    if (name === 'latest.yml') response.end(dump(metadata));
+    else if (name === assetName) {
+      response.writeHead(200, { 'Content-Length': metadata.files[0].size, 'Content-Type': 'application/octet-stream' });
+      createReadStream(installer).pipe(response);
+    } else { response.writeHead(404); response.end(); }
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  let application;
+  const env = { ...process.env };
+  delete env.ELECTRON_RUN_AS_NODE;
+  // Restrict all process observations/termination to this test's exact installation path.
+  const processes = async () => {
+    const command = "@(Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -eq $env:DOCKIT_INSTALL_SMOKE_EXE } | Select-Object ProcessId,CommandLine) | ConvertTo-Json -Compress";
+    const { stdout } = await exec('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', command], {
+      windowsHide: true, env: { ...env, DOCKIT_INSTALL_SMOKE_EXE: executablePath }
+    });
+    const data = JSON.parse(stdout.trim() || '[]');
+    return Array.isArray(data) ? data : [data];
+  };
+  try {
+    assert.equal(await fs.stat(path.join(os.homedir(), '.dockit')).catch(() => null), null, 'The hosted runner must have no existing Dockit data');
+    await new Promise((resolve, reject) => {
+      const child = spawn(installer, ['/S', `/D=${installDir}`], { env, windowsHide: true, stdio: 'ignore', timeout: 180000 });
+      child.once('error', reject);
+      child.once('exit', code => code === 0 ? resolve() : reject(new Error(`Initial NSIS install exited ${code}`)));
+    });
+    const installed = JSON.parse(await fs.readFile(packageFile, 'utf8'));
+    assert.equal(installed.version, metadata.version);
+    // Simulate the installed previous version; the new installer must restore these files.
+    await fs.writeFile(packageFile, JSON.stringify({ ...installed, version: '0.0.0' }));
+    await fs.writeFile(path.join(installDir, 'resources/app-update.yml'), dump({ provider: 'generic', url: `http://127.0.0.1:${server.address().port}/` }));
+    const store = new LocalStore({ home: os.homedir(), trash: async () => {} });
+    await store.init();
+    const { content: document } = await store.request('create', { type: 'documents', data: { title: '업데이트 보존 확인', content: '<p>업데이트 전</p>' } });
+    const documentFile = await store.documentPath(document._id);
+    application = await electron.launch({ executablePath, args: [documentFile], env, timeout: 60000 });
+    const oldPid = application.process().pid;
+    const page = await application.firstWindow();
+    await application.evaluate(({ app, BrowserWindow }, evidence) => {
+      const fs = process.getBuiltinModule('node:fs');
+      app.on('before-quit', () => fs.writeFileSync(evidence.path, JSON.stringify({ version: app.getVersion(), document: JSON.parse(fs.readFileSync(evidence.document, 'utf8')) })));
+      BrowserWindow.getAllWindows()[0].webContents.setBackgroundThrottling(false);
+    }, { path: quitEvidence, document: documentFile });
+    await expect(page.locator('.tiptap-main-canvas')).toContainText('업데이트 전');
+    const dialog = page.getByRole('dialog', { name: '앱 업데이트' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText(`0.0.0 → ${metadata.version}`);
+    // Change the open document while the update notice is visible; no explicit Save.
+    await page.locator('.tiptap-main-canvas').fill('업데이트 후에도 남아 있는 문서', { force: true });
+    const closed = application.waitForEvent('close', { timeout: 180000 });
+    await dialog.getByRole('button', { name: '설치', exact: true }).click();
+    await closed;
+    application = null;
+    const beforeQuit = JSON.parse(await fs.readFile(quitEvidence, 'utf8'));
+    assert.equal(beforeQuit.version, '0.0.0');
+    assert.match(beforeQuit.document.content, /업데이트 후에도 남아 있는 문서/);
+    await expect.poll(async () => {
+      try { return JSON.parse(await fs.readFile(packageFile, 'utf8')).version; } catch { return null; }
+    }, { timeout: 180000 }).toBe(metadata.version);
+    let restarted;
+    await expect.poll(async () => {
+      restarted = (await processes()).find(item => item.ProcessId !== oldPid && !item.CommandLine.includes('--type=') && item.CommandLine.includes('--updated'));
+      return Boolean(restarted);
+    }, { timeout: 180000 }).toBe(true);
+    await expect.poll(async () => {
+      const { stdout } = await exec('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', `(Get-Process -Id ${Number(restarted.ProcessId)}).MainWindowHandle`], { windowsHide: true });
+      return Number(stdout.trim());
+    }).toBeGreaterThan(0);
+    assert.match(JSON.parse(await fs.readFile(documentFile, 'utf8')).content, /업데이트 후에도 남아 있는 문서/);
+    const restoredFeed = load(await fs.readFile(path.join(installDir, 'resources/app-update.yml'), 'utf8'));
+    assert.equal(restoredFeed.provider, 'github');
+    await exec('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', "Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -eq $env:DOCKIT_INSTALL_SMOKE_EXE } | ForEach-Object { Stop-Process -Id $_.ProcessId -ErrorAction SilentlyContinue }"], {
+      windowsHide: true, env: { ...env, DOCKIT_INSTALL_SMOKE_EXE: executablePath }
+    });
+    await expect.poll(async () => (await processes()).length).toBe(0);
+    application = await electron.launch({ executablePath, args: [documentFile], env, timeout: 60000 });
+    const reopened = await application.firstWindow();
+    await expect(reopened.locator('.tiptap-main-canvas')).toContainText('업데이트 후에도 남아 있는 문서');
+    assert.equal(await application.evaluate(({ app }) => app.getVersion()), metadata.version);
+    await application.evaluate(async ({ BrowserWindow }, file) => {
+      const image = await BrowserWindow.getAllWindows()[0].webContents.capturePage();
+      process.getBuiltinModule('node:fs').writeFileSync(file, image.toPNG());
+    }, path.join(artifacts, 'updated-document.png'));
+    await fs.writeFile(path.join(artifacts, 'installed-update.json'), JSON.stringify({ version: metadata.version, previousVersion: beforeQuit.version,
+      savedBeforeQuit: true, installerReplacedFiles: true, automaticRestartPid: restarted.ProcessId, documentReopened: true }, null, 2));
+    console.log('PASS: real NSIS install, save on update, file replacement, automatic app restart and preserved document reopening');
+  } finally {
+    if (application) { await application.evaluate(({ app }) => app.exit(0)).catch(() => {}); await application.close().catch(() => {}); }
+    await new Promise(resolve => server.close(resolve));
+    // The hosted VM is discarded after the job; keep its installer evidence until then.
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });

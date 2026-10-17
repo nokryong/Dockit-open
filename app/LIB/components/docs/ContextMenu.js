@@ -2,6 +2,7 @@ import { Menu, Upload } from "sud-ui";
 import { createPortal } from "react-dom";
 import { newShadowDarkMd, newShadowLightMd } from "../../constant/uiProps";
 import { useState, useEffect } from "react";
+import useContextMenuDismiss from "../../hook/useContextMenuDismiss";
 import {
   contextMenuStyles,
   cx,
@@ -63,6 +64,8 @@ export default function ContextMenu({
   layoutMode
 }) {
   const [mounted, setMounted] = useState(false);
+  const closeMenu = () => setContextMenu({ visible: false, x: 0, y: 0 });
+  useContextMenuDismiss(contextMenu.visible, closeMenu);
 
   useEffect(() => {
     setMounted(true);
@@ -71,7 +74,6 @@ export default function ContextMenu({
   if (!mounted) return null;
 
   const multipleSelected = selectedItems.length > 1;
-  const closeMenu = () => setContextMenu({ visible: false, x: 0, y: 0 });
 
   const selectedItemsMenu = [
     ...(multipleSelected
@@ -193,11 +195,13 @@ export default function ContextMenu({
         {/* 뒷배경 딤 레이어 */}
         <div
           className={contextMenuStyles.mobileBackdrop}
+          hidden={!contextMenu.visible}
           onClick={closeMenu}
         />
         {/* 바텀 시트 본체 */}
         <div
           className={contextMenuStyles.mobileSurface}
+          hidden={!contextMenu.visible}
           style={floatingSurfaceStyle(isDarkMode, {
             boxShadow:
               "0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -8px 10px -6px rgba(0, 0, 0, 0.1)"
@@ -217,6 +221,7 @@ export default function ContextMenu({
   return createPortal(
     <div
       className={cx(contextMenuStyles.surface)}
+      hidden={!contextMenu.visible}
       style={{
         left: contextMenu.x,
         top: contextMenu.y,
