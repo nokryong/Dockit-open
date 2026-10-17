@@ -50,6 +50,13 @@ test('a GitHub folder URL resolves only that plugin', async () => {
   assert.equal(mock.requested.filter(request => request.includes('raw.githubusercontent.com')).length, 1);
 });
 
+test('update inspection reads just the installed folders from a shared repository tree', async () => {
+  const mock = fixture();
+  const snapshot = await inspectGitHubPlugins(url, { ...mock, folders: ['plugins/music'] });
+  assert.deepEqual(snapshot.plugins.map(plugin => plugin.path), ['plugins/music']);
+  assert.equal(mock.requested.filter(request => request.includes('raw.githubusercontent.com')).length, 1);
+});
+
 test('reject non-GitHub, credential-bearing, local, release and unsafe folder URLs', () => {
   for (const value of ['http://github.com/nokryong/dockit-plugins', 'https://github.com.evil.test/a/b', 'file:///C:/file', 'https://user:pass@github.com/a/b', 'https://127.0.0.1/a/b', `${url}?token=test`, `${url}/releases/latest`, `${url}/tree/main/plugins/%5Cbad`, `${url}/tree/main/plugins/CON`]) {
     assert.throws(() => parseGitHubUrl(value), /GitHub|경로/i);

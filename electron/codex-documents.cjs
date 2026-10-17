@@ -32,7 +32,7 @@ class CodexDocuments {
     if (!object(target) || typeof target.id !== 'string' || typeof target.revision !== 'string') throw fail('현재 문서를 먼저 저장해주세요.');
     return this.store.run(async () => {
       const file = await this.store.documentPath(target.id);
-      const root = (await this.store.config()).documentsPath;
+      const root = await this.store.documentRoot(target.id);
       const record = await this.store.documentRecord(file, root);
       if (record.revision !== target.revision) throw fail('문서가 외부에서 변경됐습니다. 다시 열어 확인해주세요.', 'RevisionConflict');
       if ((await fs.stat(file)).nlink !== 1) throw fail('연결된 문서는 수정할 수 없습니다.');
@@ -59,7 +59,7 @@ class CodexDocuments {
   async current(session) {
     if (this.active !== session) throw fail('문서 작업이 종료됐습니다.');
     await contained(session.root, session.file);
-    if ((await this.store.config()).documentsPath !== session.root || (await this.store.documentPath(session.id)) !== session.file || (await fs.stat(session.file)).nlink !== 1) throw fail('문서 경로가 변경됐습니다.');
+    if ((await this.store.documentRoot(session.id)) !== session.root || (await this.store.documentPath(session.id)) !== session.file || (await fs.stat(session.file)).nlink !== 1) throw fail('문서 경로가 변경됐습니다.');
     return this.store.documentRecord(session.file, session.root);
   }
   async check(record) {

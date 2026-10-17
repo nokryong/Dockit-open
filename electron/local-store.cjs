@@ -68,6 +68,8 @@ class LocalStore {
     this.queue = Promise.resolve();
     this.documentPaths = new Map();
     this.documentLocks = new Map();
+    // Exact files granted by a native open action; never persisted as directory access.
+    this.externalDocuments = new Map();
     this.indexDirty = false;
   }
 
@@ -148,15 +150,38 @@ class LocalStore {
   async documentRecord(file, root) {
     const { value, revision } = await readJson(await contained(root, file));
     if (!['dkt-document', 'dockit-document'].includes(value.fileType) || (value.schemaVersion || 0) > 2 || typeof value.content !== 'string') throw fail(`지원하지 않는 문서입니다: ${path.basename(file)}`);
-    const id = value._local?.id || `doc-${hash(path.relative(root, file)).slice(0, 32)}`;
+    const externalId = [...this.externalDocuments].find(([, target]) => target === file)?.[0];
+    const id = externalId || value._local?.id || `doc-${hash(path.relative(root, file)).slice(0, 32)}`;
     if (typeof id !== 'string' || !/^[\w-]{1,100}$/.test(id)) throw fail('문서 ID가 올바르지 않습니다.');
+    if (this.externalDocuments.has(id) && this.externalDocuments.get(id) !== file) throw fail('문서 ID가 중복되었습니다.');
     if (this.documentPaths.has(id) && this.documentPaths.get(id) !== file) {
       try { await fs.access(this.documentPaths.get(id)); throw fail(`문서 ID가 중복되었습니다: ${path.basename(file)}`); }
       catch (error) { if (error.code !== 'ENOENT') throw error; }
     }
-    this.rememberDocument(id, file);
+    if (!externalId) this.rememberDocument(id, file);
     const stat = await fs.stat(file);
-    return { ...value, _id: id, revision, title: value.title || path.basename(file, '.dkt'), content_type: 'documents', user_uid: 'local', parent_id: this.folderId(path.relative(root, path.dirname(file))), created_at: value._local?.createdAt || stat.birthtime.toISOString(), updated_at: stat.mtime.toISOString(), public: false, linkShare: false, teamMembers: [] };
+    return { ...value, _id: id, revision, title: value.title || path.basename(file, '.dkt'), content_type: 'documents', user_uid: 'local', parent_id: externalId ? null : this.folderId(path.relative(root, path.dirname(file))), created_at: value._local?.createdAt || stat.birthtime.toISOString(), updated_at: stat.mtime.toISOString(), public: false, linkShare: false, teamMembers: [] };
+  }
+
+  async openOriginal(file) {
+    if (typeof file !== 'string' || !path.isAbsolute(file) || !/\.dkt$/i.test(file)) throw fail('Dockit 문서를 선택해주세요.');
+    await contained(path.parse(file).root, path.resolve(file));
+    file = await fs.realpath(file);
+    const stat = await fs.stat(file);
+    if (!stat.isFile() || stat.nlink !== 1) throw fail('연결된 문서는 열 수 없습니다.');
+    const root = (await this.config()).documentsPath;
+    const relative = path.relative(root, file);
+    if (!relative.startsWith('..') && !path.isAbsolute(relative)) return this.documentRecord(file, root);
+    const id = `external-${hash(process.platform === 'win32' ? file.toLowerCase() : file).slice(0, 32)}`;
+    if (this.documentPaths.has(id)) throw fail('문서 ID가 중복되었습니다.');
+    this.externalDocuments.set(id, file);
+    try { return await this.documentRecord(file, path.dirname(file)); }
+    catch (error) { this.externalDocuments.delete(id); throw error; }
+  }
+
+  async documentRoot(id) {
+    const file = this.externalDocuments.get(id);
+    return file ? path.dirname(file) : (await this.config()).documentsPath;
   }
 
   async scan(parentId = null) {
@@ -203,6 +228,12 @@ class LocalStore {
   }
 
   async documentPath(id) {
+    if (this.externalDocuments.has(id)) {
+      const file = this.externalDocuments.get(id);
+      await contained(path.parse(file).root, file);
+      if ((await fs.stat(file)).nlink !== 1 || await fs.realpath(file) !== file) throw fail('문서 경로가 변경되었습니다.');
+      return file;
+    }
     if (!this.documentPaths.has(id)) await this.scan();
     const file = this.documentPaths.get(id);
     if (!file) throw fail('문서를 찾을 수 없습니다.');
@@ -309,12 +340,15 @@ class LocalStore {
       return { success: true };
     }
     if (type !== 'documents') throw fail('지원하지 않는 폴더 작업입니다.');
-    const previous = await this.documentRecord(file, root);
+    const documentRoot = await this.documentRoot(id);
+    const previous = await this.documentRecord(file, documentRoot);
     if (action === 'get') return { content: previous };
     if (action !== 'update') throw fail('지원하지 않는 문서 작업입니다.');
     if (data.expectedRevision && data.expectedRevision !== previous.revision) throw fail('문서가 외부에서 변경되었습니다. 다시 열어 변경 내용을 확인해 주세요.', 'RevisionConflict', { currentRevision: previous.revision });
-    const next = this.documentPayload({ ...previous, ...data }, { ...previous._local, id, createdAt: previous.created_at });
-    const destination = await contained(root, path.join(path.dirname(file), `${safeName(next.title)}.dkt`));
+    const external = this.externalDocuments.has(id);
+    const next = this.documentPayload({ ...previous, ...data }, { ...previous._local, id: external ? previous._local?.id : id, createdAt: previous.created_at });
+    safeName(next.title);
+    const destination = external ? file : await contained(root, path.join(path.dirname(file), `${next.title}.dkt`));
     if (destination !== file) {
       try { await fs.access(destination); throw fail('같은 이름의 문서가 있습니다.'); } catch (error) { if (error.code !== 'ENOENT') throw error; }
     }
@@ -323,8 +357,8 @@ class LocalStore {
     if (latest.revision !== previous.revision) throw fail('저장 중 문서가 외부에서 변경되었습니다.', 'RevisionConflict', { currentRevision: latest.revision });
     await atomicJson(file, next);
     if (destination !== file) await fs.rename(file, destination);
-    this.rememberDocument(id, destination);
-    return { content: await this.documentRecord(destination, root) };
+    if (!external) this.rememberDocument(id, destination);
+    return { content: await this.documentRecord(destination, documentRoot) };
   }
 
   documentPayload(data, local) {
@@ -339,4 +373,4 @@ class LocalStore {
   }
 }
 
-module.exports = { LocalStore, contained, atomicJson, safeName };
+module.exports = { LocalStore, contained, atomicJson, safeName, readJson };

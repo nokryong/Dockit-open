@@ -4,6 +4,7 @@
 
 - The project root is `.dockit`. Documents are stored in `Documents` by default.
 - The **current document path** supplied with each request identifies the target for that turn. Do not reuse a document path from an earlier conversation.
+- Each document has its own window. A file opened outside `Documents` remains at its original path; only that exact file is granted to this turn, never its parent directory or neighboring files. Do not create a working copy in a temporary folder.
 - Edit documents only when the user requests changes. Do not modify files when the user is asking for an explanation or discussing an idea.
 - Use `dockit_read_document` to read the actual document and its revision, then `dockit_edit_document` to modify it. These tools can save only the current document.
 - Keep the document path and ID unchanged during the turn. Changing the title does not change the file path during the turn.

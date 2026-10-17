@@ -6,6 +6,8 @@
     "dev": "node scripts/start-desktop.cjs --dev",
     "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build",
     "start": "node scripts/start-desktop.cjs",
+    "package:desktop": "npm run build && electron-builder --publish never",
+    "test:app-updates": "node --test tests/local/app-updates.test.cjs",
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "playwright test",
@@ -23,10 +25,11 @@
     "security:audit-live": "node scripts/live-audit-policy.mjs",
     "test:local": "node --test tests/local/*.test.cjs",
     "test:desktop": "node scripts/desktop-smoke.cjs",
+    "test:document-windows": "node scripts/document-windows-smoke.cjs",
     "test:chatgpt": "node scripts/chatgpt-smoke.cjs",
     "test:codex": "node scripts/codex-smoke.cjs",
     "plugin:example": "node scripts/build-example-plugin.mjs",
-    "test:plugins": "node --test tests/local/plugins.test.cjs tests/local/plugin-github.test.cjs tests/local/plugin-services.test.cjs && node scripts/build-example-plugin.mjs && node scripts/plugin-smoke.cjs"
+    "test:plugins": "node --test tests/local/plugins.test.cjs tests/local/plugin-github.test.cjs tests/local/plugin-services.test.cjs tests/local/plugin-updates.test.cjs && node scripts/build-example-plugin.mjs && node scripts/plugin-smoke.cjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -65,6 +68,7 @@
     "@tiptap/starter-kit": "^3.32.0",
     "cropperjs": "^1.6.1",
     "dayjs": "^1.11.19",
+    "electron-updater": "6.8.10",
     "exceljs": "^4.4.0",
     "fflate": "^0.8.3",
     "file-saver": "^2.0.5",
@@ -95,6 +99,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/parser": "^8.53.0",
     "electron": "44.7.2",
+    "electron-builder": "26.17.0",
     "eslint": "^9",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -133,7 +138,7 @@
       }
     },
     "flatted@3.3.3": "3.4.2",
-    "js-yaml@4.1.1": "4.3.0",
+    "js-yaml@^4.0.0": "4.3.2",
     "fdir@6.5.0": {
       "picomatch": "4.0.5"
     },

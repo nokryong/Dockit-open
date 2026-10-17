@@ -20,6 +20,23 @@ export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) 
   const [githubUrl, setGithubUrl] = useState("");
   const [preview, setPreview] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState(null);
+  const [updates, setUpdates] = useState({});
+  const [updating, setUpdating] = useState(null);
+  const installedVersions = plugins.map(plugin => `${plugin.id}@${plugin.version}`).join('|');
+  useEffect(() => {
+    if (!openPluginDrawer || loading) return;
+    let active = true;
+    const check = async () => {
+      try {
+        const result = await localBridge().plugins.checkUpdates();
+        if (!active) return;
+        setUpdates(Object.fromEntries(result.updates.map(update => [update.id, update.version])));
+        if (result.errors.length) toast.danger(result.errors.join('\n'));
+      } catch (failure) { if (active) toast.danger(failure.message); }
+    };
+    check();
+    return () => { active = false; };
+  }, [openPluginDrawer, loading, installedVersions]);
   useEffect(() => {
     if (!openPluginDrawer) return;
     if (loadError && loadError !== reported.current.error) toast.danger(loadError);
@@ -49,6 +66,15 @@ export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) 
     } catch (failure) { toast.danger(failure.message); }
     finally { setBusy(false); }
   };
+  const update = async plugin => {
+    setBusy(true); setUpdating(plugin.id);
+    try {
+      await localBridge().plugins.update(plugin.id);
+      setUpdates(previous => { const next = { ...previous }; delete next[plugin.id]; return next; });
+      await refresh();
+    } catch (failure) { toast.danger(failure.message); }
+    finally { setBusy(false); setUpdating(null); }
+  };
   return <Template open={openPluginDrawer} onClose={() => setOpenPluginDrawer(false)} title="플러그인" content={<section className="flex min-w-0 flex-col gap-2" aria-label="플러그인 관리" aria-busy={loading}>
     <div className="flex justify-end">
       <SmallButton disabled={busy || loading} onClick={() => setInstalling(true)}>플러그인 설치</SmallButton>
@@ -70,7 +96,10 @@ export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) 
           <Typography size="xs" className="block break-words leading-tight">{plugin.publisher} · {plugin.version}</Typography>
           {plugin.description && expanded[plugin.id] && <Typography id={`plugin-description-${plugin.id}`} size="sm" className="mt-1 block break-words leading-snug">{plugin.description}</Typography>}
         </div>
-        <SmallButton disabled={busy} ariaLabel={`${plugin.name} 삭제`} onClick={() => setRemoving(plugin)}>삭제</SmallButton>
+        <div className="flex shrink-0 items-center gap-0">
+          {updates[plugin.id] && <SmallButton disabled={busy} ariaLabel={`${plugin.name} 업데이트`} onClick={() => update(plugin)}>{updating === plugin.id ? '업데이트 중…' : '업데이트'}</SmallButton>}
+          <SmallButton disabled={busy} ariaLabel={`${plugin.name} 삭제`} onClick={() => setRemoving(plugin)}>삭제</SmallButton>
+        </div>
       </div>
     </Card>)}
     <Modal open={installing} onClose={() => { if (!busy) setInstalling(false); }} onEsc={!busy} title="플러그인 설치" ariaLabel="플러그인 설치" width="min(420px, calc(100vw - 32px))">

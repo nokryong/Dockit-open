@@ -1,0 +1,42 @@
+appId: com.nokryong.dockit-open
+productName: Dockit Open
+fileAssociations:
+  - ext: dkt
+    name: Dockit Document
+    role: Editor
+directories:
+  output: release
+files:
+  - dist/**/*
+  - electron/**/*.cjs
+  - plugin-sdk/*.cjs
+  - plugin-sdk/browser.js
+  - desktop/default-settings.json
+  - docs/codex/AGENTS.md
+  - scripts/build-windows-print.cjs
+  - native/windows-print/Program.cs
+  - native/windows-print/app.manifest
+  - package.json
+# Codex launches the skill reader in a separate Node process.
+asar: false
+publish:
+  provider: github
+  owner: nokryong
+  repo: Dockit-open
+  releaseType: release
+  private: false
+win:
+  target: nsis
+nsis:
+  oneClick: true
+  perMachine: false
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity
+linux:
+  target: AppImage
+  category: Office

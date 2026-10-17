@@ -1,14 +1,31 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 async function invoke(channel, ...args) {
   const result = await ipcRenderer.invoke(channel, ...args);
   if (result.error) throw Object.assign(new Error(result.error.message), result.error);
   return result.value;
 }
 contextBridge.exposeInMainWorld('dockitLocal', {
+  documentWindows: true,
+  openDocument: id => invoke('local:open-document', id),
+  openDocumentFile: file => invoke('local:open-document-file', webUtils.getPathForFile(file)),
+  openWorkspace: () => invoke('local:open-workspace'),
+  updates: {
+    status: () => invoke('app-update:status'),
+    install: () => invoke('app-update:install'),
+    dismiss: () => invoke('app-update:dismiss'),
+    saved: (id, result) => invoke('app-update:saved', id, result),
+    onChanged: callback => {
+      const listener = (_event, value) => callback(value);
+      ipcRenderer.on('app-update:changed', listener);
+      return () => ipcRenderer.removeListener('app-update:changed', listener);
+    }
+  },
   plugins: {
     list: () => invoke('plugins:list'),
     inspect: url => invoke('plugins:inspect', url),
     install: (token, folder) => invoke('plugins:install', token, folder),
+    checkUpdates: () => invoke('plugins:check-updates'),
+    update: id => invoke('plugins:update', id),
     uninstall: (id, keepData) => invoke('plugins:uninstall', id, keepData),
     open: (id, widgetId) => invoke('plugins:open', id, widgetId),
     close: sessionId => invoke('plugins:close', sessionId),
@@ -26,6 +43,9 @@ contextBridge.exposeInMainWorld('dockitLocal', {
     }
   },
   codex: {
+    conversations: () => invoke('codex:conversations'),
+    selectConversation: id => invoke('codex:select-conversation', id),
+    deleteConversation: id => invoke('codex:delete-conversation', id),
     status: () => invoke('codex:status'),
     signIn: () => invoke('codex:sign-in'),
     cancelSignIn: () => invoke('codex:cancel-sign-in'),
@@ -50,6 +70,9 @@ contextBridge.exposeInMainWorld('dockitLocal', {
     }
   },
   chatgpt: {
+    conversations: () => invoke('chatgpt:conversations'),
+    selectConversation: id => invoke('chatgpt:select-conversation', id),
+    deleteConversation: id => invoke('chatgpt:delete-conversation', id),
     status: () => invoke('chatgpt:status'),
     signIn: options => invoke('chatgpt:sign-in', options),
     cancelSignIn: () => invoke('chatgpt:cancel-sign-in'),
@@ -92,6 +115,22 @@ contextBridge.exposeInMainWorld('dockitLocal', {
   removeMusic: id => invoke('local:music-remove', id),
   flush: () => invoke('local:flush'),
   closeReady: () => invoke('local:close-ready'),
+  saveReady: (id, result) => invoke('local:save-ready', id, result),
+  onPrepareSave: callback => {
+    const listener = (_event, id) => callback(id);
+    ipcRenderer.on('local:prepare-save', listener);
+    return () => ipcRenderer.removeListener('local:prepare-save', listener);
+  },
+  onDataChanged: callback => {
+    const listener = (_event, value) => callback(value);
+    ipcRenderer.on('local:data-changed', listener);
+    return () => ipcRenderer.removeListener('local:data-changed', listener);
+  },
+  onDocumentChanged: callback => {
+    const listener = (_event, value) => callback(value);
+    ipcRenderer.on('local:document-changed', listener);
+    return () => ipcRenderer.removeListener('local:document-changed', listener);
+  },
   onPrepareClose: callback => {
     const listener = () => callback();
     ipcRenderer.on('local:prepare-close', listener);

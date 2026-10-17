@@ -33,7 +33,7 @@ export function PluginProvider({ children }) {
   }, [accept, refresh]);
 
   const widgets = useMemo(() => Object.fromEntries(plugins.flatMap(plugin => plugin.widgets.map(widget => [
-    pluginWidgetId(plugin.id, widget.id), { ...widget, pluginId: plugin.id, pluginName: plugin.name },
+    pluginWidgetId(plugin.id, widget.id), { ...widget, pluginId: plugin.id, pluginName: plugin.name, pluginVersion: plugin.version },
   ]))), [plugins]);
 
   useEffect(() => {

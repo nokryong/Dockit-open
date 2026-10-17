@@ -5,6 +5,7 @@ export const DOCUMENT_NAVIGATION_ACCEPTED_EVENT =
 
 export function requestDocumentNavigation(destination) {
   if (typeof window === "undefined") return true;
+  if (window.dockitLocal?.documentWindows && /^\/docs(?:\/|\?|$)/.test(destination)) return true;
 
   if (typeof destination === "string") {
     try {

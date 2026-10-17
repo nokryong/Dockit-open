@@ -41,10 +41,8 @@ export function useWorkspaceActions({
   navigateToDocument,
   openDocumentWidget
 }) {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [moveModalOpen, setMoveModalOpen] = useState(false);
-  const [deleteInput, setDeleteInput] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [onDelete, setOnDelete] = useState(false);
   const [onUpload, setOnUpload] = useState(false);
@@ -328,7 +326,7 @@ export function useWorkspaceActions({
     }
 
     if (type === "documents") {
-      return handleCreateDocument({ title: "새 문서" });
+      return handleCreateDocument({ title: "새 문서" }, { openAfterCreate: true });
     }
 
     try {
@@ -356,6 +354,10 @@ export function useWorkspaceActions({
 
     try {
       if (ext === "dkt") {
+        if (window.dockitLocal?.openDocumentFile) {
+          await window.dockitLocal.openDocumentFile(file);
+          return;
+        }
         const validation = validateDockitImportFile(file);
         if (!validation.valid) {
           throw new Error(validation.message);
@@ -445,18 +447,14 @@ export function useWorkspaceActions({
     setOnDelete(true);
     try {
       await deleteData(type, contentId);
-      toast.success("삭제되었습니다.");
-      setDeleteModalOpen(false);
-      setDeleteInput("");
       setSelectedItem(null);
       clearSelection();
-      setOnDelete(false);
       await fetchContent(currentFolderId);
       await fetchFolderTree();
     } catch (error) {
       console.error("삭제 실패:", error);
       toast.danger("삭제에 실패했습니다.");
-    }
+    } finally { setOnDelete(false); }
   };
 
   const handleDeleteMultiple = async (selectedItems, clearSelection) => {
@@ -466,18 +464,14 @@ export function useWorkspaceActions({
       for (const item of selectedItems) {
         await deleteData(item.content_type, item._id);
       }
-      toast.success(`${selectedItems.length}개 항목이 삭제되었습니다.`);
-      setDeleteModalOpen(false);
-      setDeleteInput("");
       setSelectedItem(null);
       clearSelection();
-      setOnDelete(false);
       await fetchContent(currentFolderId);
       await fetchFolderTree();
     } catch (error) {
       console.error("삭제 실패:", error);
       toast.danger("삭제에 실패했습니다.");
-    }
+    } finally { setOnDelete(false); }
   };
 
   const handleRename = async (
@@ -556,14 +550,10 @@ export function useWorkspaceActions({
   };
 
   return {
-    deleteModalOpen,
-    setDeleteModalOpen,
     renameModalOpen,
     setRenameModalOpen,
     moveModalOpen,
     setMoveModalOpen,
-    deleteInput,
-    setDeleteInput,
     selectedItem,
     setSelectedItem,
     onDelete,

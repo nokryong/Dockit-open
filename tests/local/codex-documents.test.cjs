@@ -24,6 +24,30 @@ async function setup(t) {
   return { store, documents, events, doc, other, home };
 }
 
+test('explicit original-file grant edits that file without importing or granting its siblings', async t => {
+  const { store, documents, home, doc } = await setup(t);
+  const external = path.join(home, 'external'); await fs.mkdir(external);
+  const file = path.join(external, 'original.dkt');
+  const source = JSON.parse(await fs.readFile(await store.documentPath(doc._id), 'utf8'));
+  await atomicJson(file, source);
+  await atomicJson(path.join(external, 'sibling.dkt'), source);
+  const record = await store.run(() => store.openOriginal(file));
+  assert.notEqual(record._id, doc._id); // copied embedded IDs cannot alias another window
+  const session = await documents.begin({ id: record._id, revision: record.revision });
+  await documents.edit(session, { expectedRevision: record.revision, updates: { title: 'Changed', content: '<p>Original edited</p>' } });
+  await documents.end(session);
+  const changed = JSON.parse(await fs.readFile(file, 'utf8'));
+  assert.equal(changed.content, '<p>Original edited</p>');
+  assert.deepEqual(changed._local, source._local);
+  assert.equal((await fs.readdir(external)).length, 2);
+  assert.equal(JSON.parse(await fs.readFile(path.join(external, 'sibling.dkt'), 'utf8')).content, source.content);
+  await assert.rejects(store.documentPath(path.join(external, 'sibling.dkt')));
+  await store.request('update', { type: 'documents', id: record._id, data: { title: 'User title', content: '<p>User edited</p>' } });
+  assert.equal(JSON.parse(await fs.readFile(file, 'utf8')).title, 'User title');
+  const index = JSON.parse(await fs.readFile(path.join(store.root, 'document-index.json'), 'utf8'));
+  assert.equal(index.paths[record._id], undefined);
+});
+
 test('Korean guidance is installed once and preserves user edits', async t => {
   const { store } = await setup(t);
   const file = path.join(store.root, 'AGENTS.md');

@@ -2,6 +2,7 @@ import { VscOpenai } from "react-icons/vsc";
 import WidgetCard from "./WidgetCard";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import ChatTranscript from "./ChatTranscript";
+import ChatConversationList from './ChatConversationList';
 import {
   Button,
   Card,
@@ -295,6 +296,10 @@ export default function ChatGPTWidget({ dragHandleProps }) {
     send,
     cancelResponse,
     clearHistory,
+    conversations,
+    selectConversation,
+    deleteConversation,
+    refreshConversations,
     selectModel,
     selectReasoningEffort,
     selectServiceTier,
@@ -331,6 +336,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
     reasoningEffortLabels[reasoningEffort] ?? reasoningEffort;
   const { openOnlySettingsDrawer } = useDrawer();
   const [input, setInput] = useState("");
+  const [showConversations, setShowConversations] = useState(false);
   const [sending, setSending] = useState(false);
   const [attachments, setAttachments] = useState([]);
   const [attaching, setAttaching] = useState(false);
@@ -341,6 +347,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
   useEffect(() => {
     setAttachments([]);
     setAttachmentError("");
+    setShowConversations(false);
   }, [setting.aiProvider, attachmentAccount]);
   const loading = connection.streaming || sending;
   const activity =
@@ -432,23 +439,20 @@ export default function ChatGPTWidget({ dragHandleProps }) {
     >
       <div className="w-full flex flex-col gap-2 ">
         {connection.active?.sharing ? (
-          messages.length > 0 && (
-            <div className="flex justify-end w-full">
+            <div className="flex justify-between w-full">
+              <SmallButton disabled={loading || busy} onClick={() => { if (!showConversations) refreshConversations(); setShowConversations(value => !value); }}>
+                {showConversations ? '대화로 돌아가기' : '채팅 목록 보기'}
+              </SmallButton>
               <SmallButton
                 disabled={loading || busy}
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      "이 계정의 현재 대화를 지우고 새로 시작할까요?",
-                    )
-                  )
-                    clearHistory();
+                onClick={async () => {
+                  const result = await clearHistory();
+                  if (result !== null && result?.ok !== false) { setShowConversations(false); setInput(''); setAttachments([]); }
                 }}
               >
                 새 대화
               </SmallButton>
             </div>
-          )
         ) : (
           <div className="chatgpt-actions">
             <Typography size="sm">
@@ -474,6 +478,11 @@ export default function ChatGPTWidget({ dragHandleProps }) {
 
         <Divider style={{ margin: 0 }} />
 
+        {showConversations ? <ChatConversationList conversations={conversations} disabled={loading || busy} theme={setting.theme} dark={isDarkMode}
+          onOpen={async id => {
+            const result = await selectConversation(id);
+            if (result !== null && result?.ok !== false) { setShowConversations(false); setInput(''); setAttachments([]); }
+          }} onDelete={deleteConversation} /> : <>
         <ChatTranscript
           key={[
             setting.aiProvider,
@@ -676,6 +685,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
             }
           />
         </Div>
+        </>}
       </div>
     </WidgetCard>
   );

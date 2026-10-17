@@ -304,8 +304,12 @@ class CodexClient {
   }
   save() {
     if (!this.key) return Promise.resolve();
-    const file = path.join(this.dataRoot, `${this.key}.json`); const value = structuredClone(this.data);
-    const next = this.persistTail.then(async () => atomicJson(await contained(this.dataRoot, file), value));
+    const key = this.key;
+    const file = path.join(this.dataRoot, `${key}.json`); const value = structuredClone(this.data);
+    const next = this.persistTail.then(async () => {
+      await atomicJson(await contained(this.dataRoot, file), value);
+      await this.onHistorySaved?.(key, value);
+    });
     this.persistTail = next.catch(() => {}); return next;
   }
   messages(kind) { this.emit({ type: 'messages', kind, messages: this.data[kind] }); }
@@ -330,7 +334,7 @@ class CodexClient {
   }
   async imagePath(id) {
     if (typeof id !== 'string' || !/^[\da-f-]{36}\.(png|jpg|webp)$/.test(id)) throw fail('잘못된 이미지입니다.', 'invalid_image');
-    if (!this.account || ![...this.data.chat, ...this.data.image].some(m => m.imageId === id)) throw fail('이미지를 찾을 수 없습니다.', 'image_missing');
+    if (!this.account || (!([...this.data.chat, ...this.data.image].some(m => m.imageId === id)) && !(await this.historyImageAllowed?.(id)))) throw fail('이미지를 찾을 수 없습니다.', 'image_missing');
     return contained(this.dataRoot, path.join(this.dataRoot, 'images', id));
   }
   async attachFiles(paths) {

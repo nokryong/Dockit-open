@@ -66,6 +66,8 @@ CLI 인증과 세션은 `.dockit/codex/`, 계정별 대화는 `.dockit/ai/codex/
 
 설치 파일은 `.dockit/plugins/<플러그인 ID>/`, 설정과 데이터는 `.dockit/plugin-data/<플러그인 ID>/`에 저장합니다. 플러그인 관리에서 삭제하면 **데이터 남기기 / 함께 삭제**를 선택합니다. 툴킷의 **닫기**는 창만 닫습니다.
 
+플러그인 창을 열면 새 버전을 확인합니다. 새 버전이 있으면 **삭제** 옆에 **업데이트** 버튼이 나타나며, 기존 데이터와 API Key를 유지한 채 업데이트합니다.
+
 [공식 플러그인](https://github.com/nokryong/dockit-plugins)에서 주사위를 설치할 수 있습니다. 제작 규격은 [Plugin SDK v1](docs/plugins/SDK.md), 공통 도구는 [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk)를 참고하세요.
 
 ## 검증

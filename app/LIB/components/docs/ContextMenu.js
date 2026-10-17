@@ -56,7 +56,7 @@ export default function ContextMenu({
   selectedItems = [],
   setRenameModalOpen,
   setMoveModalOpen,
-  setDeleteModalOpen,
+  onDelete,
   handleCreateContent,
   handleUploadFile,
   isDarkMode,
@@ -129,7 +129,7 @@ export default function ContextMenu({
         />
       ),
       onClick: () => {
-        setDeleteModalOpen(true);
+        onDelete();
         closeMenu();
       }
     }

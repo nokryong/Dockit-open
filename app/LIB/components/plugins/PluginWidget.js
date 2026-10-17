@@ -50,7 +50,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
       else setSession(result);
     }).catch(failure => { if (!disposed) setError(failure.message); });
     return () => { disposed = true; if (opened) bridge.close(opened.sessionId).catch(() => {}); };
-  }, [widget.pluginId, widget.id, attempt, preview]);
+  }, [widget.pluginId, widget.id, widget.pluginVersion, attempt, preview]);
 
   useEffect(() => {
     if (!session) return;

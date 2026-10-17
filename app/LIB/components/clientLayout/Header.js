@@ -524,7 +524,7 @@ export default function Header({
         </div>
       </Div>
 
-      {shouldShowTabs && (
+      {shouldShowTabs && !window.dockitLocal?.documentWindows && (
         <Div
           className="overflow-x-auto overflow-y-hidden"
           style={{

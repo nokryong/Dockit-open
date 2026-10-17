@@ -4,6 +4,7 @@ const { randomUUID } = require('node:crypto');
 const { contained, atomicJson } = require('./local-store.cjs');
 const { ICON_LIMIT, withIcons } = require('../plugin-sdk/icons.cjs');
 const { readPackage, validateManifest, safePath, SDK_VERSION, LIMITS, ID, object, fail } = require('../plugin-sdk/manifest.cjs');
+const { compareVersions, normalizeSource, legacySource } = require('./plugin-updates.cjs');
 
 class PluginStore {
   constructor({ root, trash }) {
@@ -12,6 +13,7 @@ class PluginStore {
     this.data = path.join(this.root, 'plugin-data');
     this.trash = trash;
     this.installed = new Map();
+    this.sources = new Map();
     this.sessions = new Map();
     this.warnings = [];
     this.queue = Promise.resolve();
@@ -25,6 +27,7 @@ class PluginStore {
 
   async init() {
     for (const folder of [this.packages, this.data]) await fs.mkdir(await contained(this.root, folder), { recursive: true });
+    await this.recoverUpdates();
     for (const entry of await fs.readdir(this.packages, { withFileTypes: true })) {
       if (!entry.isDirectory() || !ID.test(entry.name)) continue;
       try {
@@ -42,39 +45,116 @@ class PluginStore {
           if (!stat.isFile() || stat.size > ICON_LIMIT) throw fail('아이콘 SVG 파일을 읽을 수 없습니다.');
           return fs.readFile(iconFile);
         }));
+        try {
+          const receipt = await contained(folder, path.join(folder, '__dockit', 'source.json'));
+          if ((await fs.stat(receipt)).size > 8192) throw fail('플러그인 설치 출처를 확인해주세요.');
+          this.sources.set(manifest.id, normalizeSource(JSON.parse(await fs.readFile(receipt, 'utf8'))));
+        } catch (error) {
+          if (error.code === 'ENOENT') this.sources.set(manifest.id, legacySource(manifest));
+          else this.warnings.push(`${manifest.name}: 업데이트 출처를 읽을 수 없습니다.`);
+        }
       } catch { this.warnings.push(`${entry.name}: 플러그인을 불러오지 못했습니다.`); }
     }
   }
 
   list() { return { plugins: [...this.installed.values()], warnings: this.warnings }; }
+  source(id) { return this.sources.get(id) || null; }
+
+  async writePackage(folder, files, source) {
+    await fs.mkdir(folder);
+    for (const [name, bytes] of Object.entries(files)) {
+      const target = await contained(folder, path.join(folder, safePath(name)));
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.writeFile(target, bytes, { flag: 'wx' });
+    }
+    if (source) {
+      await fs.mkdir(path.join(folder, '__dockit'));
+      await atomicJson(path.join(folder, '__dockit', 'source.json'), source);
+    }
+  }
+
+  async recoverUpdates() {
+    for (const entry of await fs.readdir(this.packages, { withFileTypes: true })) {
+      if (!entry.isDirectory() || !/^\.update-[a-f0-9-]{36}$/.test(entry.name)) continue;
+      const temporary = await contained(this.packages, path.join(this.packages, entry.name));
+      const previous = await contained(temporary, path.join(temporary, 'previous'));
+      const hasPrevious = await fs.lstat(previous).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; });
+      if (!hasPrevious) {
+        await fs.rm(await contained(this.packages, temporary), { recursive: true, force: true });
+        continue;
+      }
+      try {
+        const file = await contained(previous, path.join(previous, 'manifest.json'));
+        if ((await fs.stat(file)).size > 65536) throw fail('플러그인 복구 정보를 확인해주세요.');
+        const manifest = validateManifest(JSON.parse(await fs.readFile(file, 'utf8')));
+        const destination = await contained(this.packages, path.join(this.packages, manifest.id));
+        const exists = await fs.lstat(destination).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; });
+        if (!exists) await fs.rename(previous, destination);
+      } catch {
+        this.warnings.push('중단된 플러그인 업데이트를 복구하지 못했습니다.');
+        continue;
+      }
+      await fs.rm(await contained(this.packages, temporary), { recursive: true, force: true });
+    }
+  }
 
   async installFile(file) {
     if ((await fs.stat(file)).size > LIMITS.archive) throw fail('플러그인 ZIP 파일은 32 MiB 이하여야 합니다.');
     return this.installBytes(await fs.readFile(file));
   }
 
-  installBytes(bytes) {
+  installBytes(bytes, source = null) {
     return this.run(async () => {
+      if (source) source = normalizeSource(source);
       const { manifest, files } = readPackage(bytes);
       const installed = await withIcons(manifest, relative => files[relative]);
       const destination = await contained(this.root, path.join(this.packages, manifest.id));
-      if (this.installed.has(manifest.id) || await fs.lstat(destination).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; })) throw fail('이미 설치된 플러그인입니다. 삭제 후 다시 설치해주세요.');
+      if (this.installed.has(manifest.id) || await fs.lstat(destination).then(() => true, error => { if (error.code === 'ENOENT') return false; throw error; })) throw fail('이미 설치된 플러그인입니다. 목록에서 업데이트를 확인해주세요.');
       const temporary = await contained(this.root, path.join(this.packages, `.install-${randomUUID()}`));
-      await fs.mkdir(temporary);
       try {
-        for (const [name, bytes] of Object.entries(files)) {
-          const target = await contained(temporary, path.join(temporary, safePath(name)));
-          await fs.mkdir(path.dirname(target), { recursive: true });
-          await fs.writeFile(target, bytes, { flag: 'wx' });
-        }
+        await this.writePackage(temporary, files, source);
         await fs.rename(temporary, destination);
         this.installed.set(manifest.id, installed);
+        this.sources.set(manifest.id, source || legacySource(manifest));
         this.warnings = this.warnings.filter(warning => !warning.startsWith(`${manifest.id}:`));
         return installed;
       } finally {
         // Only this operation's staging directory, never an installed package.
         await contained(this.root, temporary);
         await fs.rm(temporary, { recursive: true, force: true });
+      }
+    });
+  }
+
+  updateBytes(id, bytes, source) {
+    return this.run(async () => {
+      const current = this.installed.get(id);
+      const origin = this.source(id);
+      const nextSource = normalizeSource(source);
+      const { manifest, files } = readPackage(bytes);
+      if (!current || manifest.id !== id || manifest.publisher !== current.publisher || !origin || origin.url !== nextSource.url) throw fail('설치된 플러그인과 업데이트 출처가 일치하지 않습니다.');
+      if (compareVersions(manifest.version, current.version) <= 0) throw fail('이미 최신 버전의 플러그인입니다.');
+      const installed = await withIcons(manifest, relative => files[relative]);
+      const destination = await contained(this.packages, path.join(this.packages, id));
+      const temporary = await contained(this.packages, path.join(this.packages, `.update-${randomUUID()}`));
+      const next = path.join(temporary, 'next'), previous = path.join(temporary, 'previous');
+      await fs.mkdir(temporary);
+      let moved = false;
+      let committed = false;
+      try {
+        await this.writePackage(next, files, nextSource);
+        await fs.rename(destination, previous);
+        moved = true;
+        try { await fs.rename(next, destination); }
+        catch (error) { await fs.rename(previous, destination); moved = false; throw error; }
+        this.installed.set(id, installed);
+        this.sources.set(id, nextSource);
+        for (const [key, session] of this.sessions) if (session.pluginId === id) this.sessions.delete(key);
+        committed = true;
+        return installed;
+      } finally {
+        // Retain the previous package for startup recovery if rollback itself failed.
+        if (!moved || committed) await fs.rm(await contained(this.packages, temporary), { recursive: true, force: true }).catch(() => {});
       }
     });
   }
@@ -99,6 +179,7 @@ class PluginStore {
         this.installed.delete(id);
         await this.trash(temporary);
         for (const [key, session] of this.sessions) if (session.pluginId === id) this.sessions.delete(key);
+        this.sources.delete(id);
       } catch (error) {
         if (dataMoved) await fs.rename(path.join(temporary, 'data'), data);
         if (packageMoved) await fs.rename(path.join(temporary, 'package'), source);

@@ -117,8 +117,9 @@ async function inspectGitHubPlugins(value, suppliedOptions) {
     if (tree.truncated || !Array.isArray(tree.tree)) throw fail('GitHub 파일 목록을 모두 읽지 못했습니다.');
     const snapshot = { ...source, commit, tree: tree.tree };
     const prefix = source.folder ? source.folder + '/' : '';
-    let manifests = tree.tree.filter(entry => entry.path === prefix + 'manifest.json');
-    if (!manifests.length) {
+    const selectedPaths = suppliedOptions?.folders?.map(folder => (folder ? safePath(folder) + '/' : '') + 'manifest.json');
+    let manifests = tree.tree.filter(entry => selectedPaths ? selectedPaths.includes(entry.path) : entry.path === prefix + 'manifest.json');
+    if (!manifests.length && !selectedPaths) {
       const collection = prefix || 'plugins/';
       manifests = tree.tree.filter(entry => entry.path.startsWith(collection) && /^[^/]+\/manifest\.json$/.test(entry.path.slice(collection.length)));
     }

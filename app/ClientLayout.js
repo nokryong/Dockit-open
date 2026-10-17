@@ -34,6 +34,7 @@ import Header from "./LIB/components/clientLayout/Header";
 import Content from "./LIB/components/clientLayout/Content";
 import Drawers from "./LIB/components/clientLayout/Drawers";
 import Footer from "./LIB/components/clientLayout/Footer";
+import AppUpdateModal from "./LIB/components/updates/AppUpdateModal";
 
 
 // 커스텀 훅들
@@ -162,6 +163,7 @@ function LayoutContent({ children }) {
         </DndContext>
         {/*■■■■■ 드로어 ■■■■■*/}
         <Drawers />
+        <AppUpdateModal />
       </Div>
     </SoonUIDesign>
   );

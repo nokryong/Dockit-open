@@ -61,6 +61,7 @@ class ChatGPTStorage {
     const file = await this.file(`chats/${profileId}.json`);
     await fs.mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
     await atomicJson(file, { version: 1, messages });
+    await this.onHistorySaved?.(profileId, { messages });
   }
 }
 module.exports = { ChatGPTStorage };

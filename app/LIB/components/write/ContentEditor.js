@@ -180,6 +180,7 @@ export default function ContentEditor({
   onNotePersistenceStatus,
   onDocumentOperationSettled,
   onDocumentOperationWillApply,
+  onEditorReady,
   documentId,
   documentOwnerUid,
   noteActor,
@@ -214,6 +215,8 @@ export default function ContentEditor({
   // onChange debounce를 위한 ref
   const onChangeTimeoutRef = useRef(null);
   const lastContentRef = useRef("");
+  const historyRef = useRef({ documentId });
+  if (historyRef.current.documentId !== documentId) historyRef.current = { documentId };
   const hoverPreviewHideTimeoutRef = useRef(null);
   const activeHoveredLinkRef = useRef(null);
   const printInlineFixupsRef = useRef([]);
@@ -481,7 +484,7 @@ export default function ContentEditor({
           enabled: Boolean(pageMetrics),
           pageMetrics
         }),
-        ...editorExtensions,
+        ...editorExtensions.map(extension => extension.name === 'undoRedo' ? extension.configure({ historyRef }) : extension),
         documentPlaceholderExtension,
         ...(viewPage
           ? [
@@ -529,6 +532,7 @@ export default function ContentEditor({
         currentEditor.storage.codexDocumentLock.applying = true;
         const restored = restoreValidatedNotePersistenceHtml(currentEditor, value);
         currentEditor.storage.codexDocumentLock.applying = false;
+        historyRef.current.restoring = false;
         if (!restored.ok) {
           onNotePersistenceRejected?.(restored.error);
           return;
@@ -537,10 +541,16 @@ export default function ContentEditor({
         const finalSnapshot = capturePersistenceSnapshot("initial-restore");
         if (!finalSnapshot) return;
         lastContentRef.current = finalSnapshot.html;
+        onEditorReady?.(currentEditor);
+        if (historyRef.current.restoreFocus) {
+          historyRef.current.restoreFocus = false;
+          currentEditor.commands.focus(Math.min(historyRef.current.anchor || 1, currentEditor.state.doc.content.size), { scrollIntoView: false });
+        }
       },
       onMount: ({ editor: currentEditor }) => {
         editorRef.current = currentEditor;
         setEditor(currentEditor);
+        onEditorReady?.(currentEditor);
       },
       onUnmount: ({ editor: currentEditor }) => {
         if (editorRef.current === currentEditor) editorRef.current = null;
@@ -550,6 +560,15 @@ export default function ContentEditor({
       onUpdate: () => {
         if (codexLockedRef.current || editorRef.current?.storage.codexDocumentLock?.applying) return;
         debouncedOnChange();
+      },
+      onTransaction: ({ editor: currentEditor, transaction }) => {
+        const source = transaction.getMeta('dockitExternalContent');
+        if (source !== undefined) lastContentRef.current = source;
+        if (currentEditor.isFocused && transaction.steps.some(step => step.jsonID === 'dockitDocumentMetadata' &&
+          ['docSetting', 'viewPage', 'pageNumber'].some(key => JSON.stringify(step.before[key]) !== JSON.stringify(step.after[key])))) {
+          historyRef.current.restoreFocus = true;
+          historyRef.current.anchor = transaction.selection.anchor;
+        }
       }
     },
     // Tiptap forwards lifecycle callbacks through its latest options ref. Keep

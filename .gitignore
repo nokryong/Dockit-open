@@ -59,6 +59,7 @@ next-env.d.ts
 
 # desktop build and local test evidence
 /dist/
+/release/
 /.cache/
 /.cache-build.log
 /.dockit/

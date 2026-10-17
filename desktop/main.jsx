@@ -19,6 +19,10 @@ function CloseHandler() {
       await window.dockitLocal.closeReady();
     } catch (failure) { setError(failure.message); }
   }), []);
+  useEffect(() => window.dockitLocal.onPrepareSave(async id => {
+    try { await flushLocalData(); await window.dockitLocal.saveReady(id, { ok: true }); }
+    catch (failure) { await window.dockitLocal.saveReady(id, { ok: false, message: failure.message }); }
+  }), []);
   return error ? <div role="alert" style={{ position: 'fixed', bottom: 40, left: 20, zIndex: 10000, background: '#fff0f0', padding: 16 }}>{error}<button onClick={() => setError('')}>닫기</button></div> : null;
 }
 function Routes() { const pathname = usePathname(); return <><CloseHandler />{pathname.split('/')[2] ? <DocumentPage /> : <Workspace />}</>; }

@@ -3,6 +3,7 @@ import { useSetting } from './SettingContext';
 import { useDocument } from './DocumentContext';
 import { useEditor } from './EditorContext';
 import { validateCodexDocument } from '../utils/codexDocumentValidation';
+import { useChatConversations } from '../hook/useChatConversations';
 
 const CodexContext = createContext(null);
 const bridge = () => window.dockitLocal?.codex;
@@ -92,7 +93,8 @@ export function CodexProvider({ children }) {
     } catch (failure) { report(failure); return false; }
     finally { if (kind === 'chat') finishCodexDocument(); sending.current = false; }
   };
-  return <CodexContext.Provider value={{ connection: { ...connection, streaming: connection.streaming || Boolean(codexDocumentLock) }, models, messages, images, error, imageError, usageError, busy, loading,
+  const conversations = useChatConversations({ api: bridge(), account: connection.account?.id, setMessages, setError, run });
+  return <CodexContext.Provider value={{ ...conversations, connection: { ...connection, streaming: connection.streaming || Boolean(codexDocumentLock) }, models, messages, images, error, imageError, usageError, busy, loading,
     reload: () => run(reload), refreshModels, refreshUsage,
     signIn: () => run(async () => { const result = await bridge().signIn(); if (result.connected) setSetting(previous => ({ ...previous, aiProvider: 'codex' })); return result; }),
     cancelSignIn: () => bridge().cancelSignIn().catch(setError),

@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useChatConversations } from '../hook/useChatConversations';
 
 const ChatGPTContext = createContext(null);
 const bridge = () => window.dockitLocal?.chatgpt;
@@ -69,7 +70,9 @@ export function ChatGPTProvider({ children }) {
       return !result.error;
     } catch (failure) { setError(failure); return false; }
   };
+  const conversations = useChatConversations({ api: bridge(), account: connection.active?.id, setMessages, setError, run });
   const value = {
+    ...conversations,
     connection, models, messages, error, notice, busy, loading,
     clearError: () => setError(null), refreshModels,
     signIn: options => run(() => bridge().signIn(options)),

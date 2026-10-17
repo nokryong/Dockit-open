@@ -194,7 +194,8 @@ import {
   FontSize,
   BackgroundColor
 } from "@tiptap/extension-text-style";
-import { Gapcursor, UndoRedo } from "@tiptap/extensions";
+import { Gapcursor } from "@tiptap/extensions";
+import UndoRedo from '../extensions/DocumentHistory';
 import Subscript from "@tiptap/extension-subscript";
 import { ColumnsExtension } from "../extensions/ColumnsExtension";
 import Math from "@tiptap/extension-mathematics";

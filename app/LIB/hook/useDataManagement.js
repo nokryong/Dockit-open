@@ -10,6 +10,7 @@ export function useDataManagement(endpoint, defaultData, localStorageKey, autoSa
   const current = useRef(defaultData);
   const ready = useRef(false);
   const dirty = useRef(false);
+  const changedFields = useRef({});
   const timer = useRef();
   const pending = useRef(Promise.resolve());
   const mounted = useRef(true);
@@ -17,16 +18,23 @@ export function useDataManagement(endpoint, defaultData, localStorageKey, autoSa
   const persist = useCallback(async () => {
     clearTimeout(timer.current);
     if (!ready.current || !dirty.current) return pending.current;
-    const snapshot = current.current;
+    const snapshot = { ...changedFields.current };
+    const id = current.current._id;
+    changedFields.current = {};
     dirty.current = false;
     setIsSaving(true);
-    const write = pending.current.catch(() => {}).then(() => updateData(endpoint, snapshot._id, snapshot));
+    const write = pending.current.catch(() => {}).then(() => updateData(endpoint, id, snapshot));
     pending.current = write;
     try {
-      await write;
+      const result = await write;
+      if (result?.content) {
+        current.current = { ...current.current, ...result.content, ...changedFields.current };
+        if (mounted.current) setState(current.current);
+      }
       if (mounted.current) setError(null);
     } catch (failure) {
       dirty.current = true;
+      changedFields.current = { ...snapshot, ...changedFields.current };
       if (mounted.current) setError(failure);
       throw failure;
     } finally { if (mounted.current) setIsSaving(false); }
@@ -39,7 +47,15 @@ export function useDataManagement(endpoint, defaultData, localStorageKey, autoSa
     const load = async () => {
       try {
         const result = await fetchDataList(endpoint);
-        const stored = result.content[0] || (await createData(endpoint, null, defaultData)).content;
+        let stored = result.content[0];
+        if (!stored) {
+          try { stored = (await createData(endpoint, null, defaultData)).content; }
+          catch (failure) {
+            // Another window can create the shared default record at the same time.
+            stored = (await fetchDataList(endpoint)).content[0];
+            if (!stored) throw failure;
+          }
+        }
         if (cancelled) return;
         current.current = { ...defaultData, ...stored };
         setState(current.current);
@@ -52,9 +68,24 @@ export function useDataManagement(endpoint, defaultData, localStorageKey, autoSa
     return () => { cancelled = true; mounted.current = false; unregister(); clearTimeout(timer.current); if (dirty.current) persist().catch(() => {}); };
   }, [endpoint, defaultData, persist]);
 
+  useEffect(() => window.dockitLocal?.onDataChanged(async event => {
+    if (event.type !== endpoint || !ready.current) return;
+    try {
+      await pending.current.catch(() => {});
+      const result = await fetchDataList(endpoint);
+      if (!mounted.current || !result.content[0]) return;
+      current.current = { ...defaultData, ...result.content[0], ...changedFields.current };
+      setState(current.current);
+    } catch (failure) { if (mounted.current) setError(failure); }
+  }), [endpoint, defaultData]);
+
   const setData = useCallback(next => {
     if (!ready.current) return;
     const value = { ...current.current, ...(typeof next === "function" ? next(current.current) : next) };
+    for (const [key, field] of Object.entries(value)) {
+      if (key !== '_id' && JSON.stringify(field) !== JSON.stringify(current.current[key])) changedFields.current[key] = field;
+    }
+    if (!Object.keys(changedFields.current).length) return;
     current.current = value;
     dirty.current = true;
     setState(value);

@@ -5,7 +5,6 @@ import { Button, Div, Image, Upload, Typography } from "sud-ui";
 import { useLayout } from "../LIB/context/LayoutContext";
 import { useRouter, useSearchParams } from "@/desktop/navigation";
 import { useUser } from "../LIB/context/UserContext";
-import DeleteModal from "../LIB/components/docs/DeleteModal";
 import RenameModal from "../LIB/components/docs/RenameModal";
 import MoveModal from "../LIB/components/docs/MoveModal";
 import { TriangleLeft } from "sud-icons";
@@ -113,7 +112,6 @@ export default function WorkspacePage() {
     openDocumentWidget
   });
   const modalsOpen =
-    actions.deleteModalOpen ||
     actions.renameModalOpen ||
     actions.moveModalOpen;
 
@@ -122,9 +120,25 @@ export default function WorkspacePage() {
     getAllItems,
     modalsOpen,
     contextMenuVisible: contextMenu.visible,
-    onDeleteRequest: () => actions.setDeleteModalOpen(true),
+    onDeleteRequest: () => deleteSelected(),
     onClearItem: () => actions.setSelectedItem(null)
   });
+
+  const deleteSelected = () => {
+    if (actions.onDelete) return;
+    if (selection.selectedItems.length) return actions.handleDeleteMultiple(selection.selectedItems, selection.clearSelection);
+    if (actions.selectedItem) return actions.handleDelete(actions.selectedItem.content_type, actions.selectedItem._id, selection.clearSelection);
+  };
+
+  useEffect(() => {
+    let timer;
+    const unsubscribe = window.dockitLocal?.onDataChanged(event => {
+      if (!['documents', 'folders'].includes(event.type)) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => { fetchContentRef.current(currentFolderIdRef.current); fetchFolderTreeRef.current(); }, 100);
+    });
+    return () => { clearTimeout(timer); unsubscribe?.(); };
+  }, []);
 
   const dragDrop = useWorkspaceDragDrop({
     currentPath,
@@ -805,33 +819,6 @@ export default function WorkspacePage() {
           </ScrollReveal>
         )}
 
-        {/* 삭제 모달 */}
-        <DeleteModal
-          modalOpen={actions.deleteModalOpen}
-          setModalOpen={actions.setDeleteModalOpen}
-          deleteInput={actions.deleteInput}
-          setDeleteInput={actions.setDeleteInput}
-          handleDeleteContent={() => {
-            if (actions.selectedItem) {
-              actions.handleDelete(
-                actions.selectedItem.content_type,
-                actions.selectedItem._id,
-                selection.clearSelection
-              );
-            }
-          }}
-          handleDeleteMultiple={() =>
-            actions.handleDeleteMultiple(
-              selection.selectedItems,
-              selection.clearSelection
-            )
-          }
-          selectedItem={actions.selectedItem}
-          selectedItems={selection.selectedItems}
-          onDelete={actions.onDelete}
-          isDarkMode={isDarkMode}
-        />
-
         {/* 이름 변경 모달 */}
         <RenameModal
           modalOpen={actions.renameModalOpen}
@@ -875,7 +862,7 @@ export default function WorkspacePage() {
             selectedItems={selection.selectedItems}
             setRenameModalOpen={actions.setRenameModalOpen}
             setMoveModalOpen={actions.setMoveModalOpen}
-            setDeleteModalOpen={actions.setDeleteModalOpen}
+            onDelete={deleteSelected}
             handleCreateContent={actions.handleCreateContent}
             handleUploadFile={(file) =>
               actions.handleUploadFile(file, setContextMenu)

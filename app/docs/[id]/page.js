@@ -166,7 +166,8 @@ export default function WritePage() {
     pageNumber,
     error,
     codexDocumentLock,
-    externalDocumentVersion
+    externalDocumentVersion,
+    attachDocumentEditor
   } = useDocument();
   const {
     setSaveAction,
@@ -1368,6 +1369,7 @@ export default function WritePage() {
               pageNumber={pageNumber}
               editable={!codexDocumentLock}
               codexLocked={Boolean(codexDocumentLock)}
+              onEditorReady={attachDocumentEditor}
               showRulers={true}
             />
           </div>
