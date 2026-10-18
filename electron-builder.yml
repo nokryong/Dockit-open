@@ -23,7 +23,7 @@ files:
   # The renderer is bundled into dist. Ship only the packages the Electron main process
   # and the Codex skill reader load at runtime (tests/local/packaged-dependencies.test.cjs).
   - "!node_modules/**/*"
-  - "node_modules/{argparse,builder-util-runtime,debug,electron-updater,fflate,fs-extra,graceful-fs,jose,js-yaml,jsonfile,lazy-val,lodash.escaperegexp,lodash.isequal,ms,react,react-dom,react-icons,sax,scheduler,tiny-typed-emitter,universalify}/**/*"
+  - "node_modules/{argparse,builder-util-runtime,debug,electron-updater,fflate,fs-extra,graceful-fs,jose,js-yaml,jsonfile,lazy-val,lodash.escaperegexp,lodash.isequal,ms,react,react-dom,react-icons,sax,scheduler,semver,tiny-typed-emitter,universalify}/**/*"
 # Codex launches the skill reader in a separate Node process.
 asar: false
 publish:

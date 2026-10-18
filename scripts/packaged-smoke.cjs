@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
+const { execFile } = require('node:child_process');
+const { promisify } = require('node:util');
 const { LocalStore } = require('../electron/local-store.cjs');
 const expect = baseExpect.configure({ timeout: 30000 });
 
@@ -18,6 +20,14 @@ const expect = baseExpect.configure({ timeout: 30000 });
     if (await fs.stat(file).catch(() => null)) { executablePath = file; break; }
   }
   assert.ok(executablePath, 'Build the desktop package before running this smoke test');
+  // Test mode skips the updater, so load the main-process packages from the shipped app directly.
+  const appDir = process.platform === 'darwin' ? path.join(path.dirname(executablePath), '..', 'Resources', 'app') : path.join(path.dirname(executablePath), 'resources', 'app');
+  const loadCheck = `const p = require('node:path'), app = ${JSON.stringify(appDir)}, from = { paths: [p.join(app, 'electron')] };
+    for (const name of ['electron-updater', 'fflate', 'react-dom/server', 'react-icons']) require(require.resolve(name, from));
+    require(p.join(app, 'plugin-sdk', 'icons.cjs'));
+    import(require('node:url').pathToFileURL(require.resolve('jose', from)).href).then(() => console.log('runtime packages ok'));`;
+  const { stdout: loaded } = await promisify(execFile)(executablePath, ['-e', loadCheck], { env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' }, timeout: 60000 });
+  assert.match(loaded, /runtime packages ok/);
   const home = await fs.mkdtemp(path.join(os.tmpdir(), 'dockit-package-smoke-'));
   const artifacts = path.join(root, '.cache/packaged-smoke');
   await fs.mkdir(artifacts, { recursive: true });
