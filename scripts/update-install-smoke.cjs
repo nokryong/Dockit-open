@@ -43,6 +43,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   let application;
+  const appOutput = [];
   const env = { ...process.env };
   delete env.ELECTRON_RUN_AS_NODE;
   // Restrict all process observations/termination to this test's exact installation path.
@@ -74,6 +75,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     const documentFile = await store.documentPath(document._id);
     step('launch installed app');
     application = await electron.launch({ executablePath, args: [documentFile], env, timeout: 60000 });
+    for (const stream of ['stdout', 'stderr']) application.process()[stream]?.on('data', data => appOutput.push(`${stream}: ${data}`));
     const oldPid = application.process().pid;
     const page = await application.firstWindow();
     await application.evaluate(({ app, BrowserWindow }, evidence) => {
@@ -133,6 +135,13 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
   } catch (error) {
     step('failed');
     console.error(error);
+    const settle = promise => Promise.race([promise.catch(failure => `error: ${failure.message}`), new Promise(resolve => setTimeout(() => resolve('timed out'), 10000))]);
+    if (application) console.error('main process:', JSON.stringify(await settle(application.evaluate(({ app, BrowserWindow }) => ({
+      ready: app.isReady(), singleInstanceLock: app.hasSingleInstanceLock(), version: app.getVersion(),
+      windows: BrowserWindow.getAllWindows().map(window => ({ url: window.webContents.getURL(), visible: window.isVisible(), loading: window.webContents.isLoading() }))
+    })))));
+    console.error('app output:', appOutput.join('').slice(-4000) || '(none)');
+    console.error('installed processes:', JSON.stringify(await settle(processes())));
     throw error;
   } finally {
     // Cleanup must not hang on an app that never finished starting.
