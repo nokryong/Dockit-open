@@ -22,6 +22,36 @@ import { newShadowDarkSm, newShadowLightSm } from "../../constant/uiProps";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { useSetting } from "../../context/SettingContext";
 
+const TABLE_PART_TYPES = new Set([
+  "table",
+  "tableRow",
+  "tableCell",
+  "tableHeader",
+  "table_row",
+  "table_cell",
+  "table_header"
+]);
+
+// 커서가 표 칸 안에 있으면 선택 개체는 칸이므로, 감싸는 표를 찾는다.
+function findSelectedTable(editor, selectedObject) {
+  const node = selectedObject?.node;
+  if (!node || !TABLE_PART_TYPES.has(node.type?.name)) return null;
+  if (node.type.name === "table") return selectedObject;
+  try {
+    const $pos = editor.state.doc.resolve(selectedObject.from);
+    for (let depth = $pos.depth; depth > 0; depth--) {
+      const parent = $pos.node(depth);
+      if (parent.type.name === "table") {
+        const from = $pos.before(depth);
+        return { node: parent, from, to: from + parent.nodeSize };
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 const DEFAULT_COLORS = [
   "#13c2c2",
   "#1677ff",
@@ -37,7 +67,11 @@ export default function ChartPanel({ dragHandleProps }) {
   const { setting } = useSetting();
 
   const selectedType = selectedObject?.node?.type?.name;
-  const isTableSelected = selectedType === "table";
+  const selectedTable = useMemo(
+    () => (editor ? findSelectedTable(editor, selectedObject) : null),
+    [editor, selectedObject]
+  );
+  const isTableSelected = Boolean(selectedTable);
   const isChartSelected = selectedType === "chartBlock";
   const isActive = isTableSelected || isChartSelected;
 
@@ -61,8 +95,8 @@ export default function ChartPanel({ dragHandleProps }) {
 
   // ── 테이블 선택 시: 문서 테이블 데이터 추출 ──
   useEffect(() => {
-    if (!isTableSelected) return;
-    const tableNode = selectedObject.node;
+    if (!selectedTable) return;
+    const tableNode = selectedTable.node;
     const extracted = [];
     for (let i = 0; i < tableNode.childCount; i++) {
       const row = tableNode.child(i);
@@ -74,7 +108,7 @@ export default function ChartPanel({ dragHandleProps }) {
     }
     const newStr = JSON.stringify(extracted);
     if (newStr !== JSON.stringify(tableData)) setTableData(extracted);
-  }, [isTableSelected, selectedObject, tableData]);
+  }, [selectedTable, tableData]);
 
   // ── 차트 선택 시: 차트 속성 로드 ──
   useEffect(() => {
@@ -133,11 +167,11 @@ export default function ChartPanel({ dragHandleProps }) {
 
   // ── 문서에 삽입 (테이블 아래) ──
   const insertChartToDoc = () => {
-    if (!tableData || !editor || !isTableSelected) return;
+    if (!tableData || !editor || !selectedTable) return;
     editor
       .chain()
       .focus()
-      .insertContentAt(selectedObject.to, {
+      .insertContentAt(selectedTable.to, {
         type: "chartBlock",
         attrs: getAttrs()
       })

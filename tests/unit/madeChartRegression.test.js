@@ -208,6 +208,56 @@ describe("ChartPanel lint regression guard", () => {
     expect(mocks.run).toHaveBeenCalled();
   });
 
+  it("finds the table around a selected cell and inserts the chart after that table", async () => {
+    const table = {
+      ...tableNode(tableRow("label", "sales"), tableRow("Q1", "10")),
+      nodeSize: 30
+    };
+    const cell = { type: { name: "tableCell" } };
+    mocks.editor.state = {
+      doc: {
+        resolve: (pos) => {
+          expect(pos).toBe(7);
+          return {
+            depth: 3,
+            node: (depth) =>
+              depth === 1
+                ? table
+                : depth === 2
+                  ? { type: { name: "tableRow" } }
+                  : cell,
+            before: (depth) => (depth === 1 ? 4 : 0)
+          };
+        }
+      }
+    };
+    mocks.editorContext = {
+      editor: mocks.editor,
+      selectedObject: { from: 7, node: cell, to: 12, type: "tableCell" }
+    };
+
+    const container = await renderChartPanel();
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    const inputs = [...container.querySelectorAll("input")].map(
+      (input) => input.value
+    );
+    expect(inputs).toContain("Q1");
+
+    const insertButton = [...container.querySelectorAll("button")].find(
+      (button) => button.textContent.includes("삽입")
+    );
+
+    await act(async () => {
+      insertButton.click();
+    });
+
+    expect(mocks.insertContentAt).toHaveBeenCalledWith(34, expect.objectContaining({ type: "chartBlock" }));
+  });
+
   it("loads selected chart attrs and updates the existing chart block", async () => {
     mocks.editorContext = {
       editor: mocks.editor,
