@@ -1,6 +1,6 @@
 {
   "name": "dockit-open",
-  "version": "0.1.3",
+  "version": "0.1.6",
   "description": "로컬 문서 편집기 Dockit Open",
   "author": "nokryong",
   "license": "AGPL-3.0-only",
