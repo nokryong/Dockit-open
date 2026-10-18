@@ -1,7 +1,7 @@
 {
   "schemaVersion": 3,
   "auditScope": "production",
-  "lockfileSha256": "fa993bc170023c5c7ce4f06d82ec8a03091cb26eb89f7204b2e7eb88ae7e0033",
+  "lockfileSha256": "73b1c07d916eaba2d4909eb20ba87ca6c61b8409a45c52d5a3ba30ea3f2d9a8c",
   "policy": {
     "expiresOn": null,
     "allowedHigh": []

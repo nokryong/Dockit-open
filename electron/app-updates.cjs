@@ -78,7 +78,8 @@ class AppUpdates {
       await this.flush();
       this.set({ status: 'installing', saveRequestId: null });
       this.allowQuit(true);
-      this.updater.quitAndInstall(true, true);
+      // Keep the native installer visible after the app closes.
+      this.updater.quitAndInstall(false, true);
     } catch (error) {
       const message = this.openRelease
         ? '다운로드 페이지를 열지 못했습니다. 다시 시도해 주세요.'
