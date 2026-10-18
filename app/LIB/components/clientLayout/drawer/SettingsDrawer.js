@@ -15,6 +15,7 @@ import { flushLocalData, localBridge } from "@/app/LIB/utils/localBridge";
 import ChatGPTConnection from "./settings/ChatGPTConnection";
 import CodexConnection from "./settings/CodexConnection";
 import { SmallButton, TitleComponent } from "./settings/CommonComponents";
+import { version } from "../../../../../package.json";
 
 export default function SettingsDrawer({
   openSettingsDrawer,
@@ -24,6 +25,16 @@ export default function SettingsDrawer({
   const { isDarkMode, currentColors } = useDarkMode();
   const [paths, setPaths] = useState(null);
   const [error, setError] = useState("");
+  const [appVersion, setAppVersion] = useState(version);
+  useEffect(() => {
+    const updates = window.dockitLocal?.updates;
+    if (!updates) return;
+    let active = true;
+    updates.status().then(({ currentVersion }) => {
+      if (active && currentVersion) setAppVersion(currentVersion);
+    }).catch(() => {});
+    return () => { active = false; };
+  }, []);
   useEffect(() => {
     if (openSettingsDrawer)
       localBridge()
@@ -147,6 +158,9 @@ export default function SettingsDrawer({
               </Card>
             </div>
           </div>
+          <Typography as="div" size="xs" color="black-6" className="text-center">
+            v{appVersion}
+          </Typography>
         </>
       }
     />

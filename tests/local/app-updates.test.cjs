@@ -33,6 +33,7 @@ test('check never downloads automatically, keeps failures quiet and dismisses on
   const { service, updater, calls } = fixture();
   assert.equal(updater.autoDownload, false);
   assert.equal(updater.autoInstallOnAppQuit, false);
+  assert.equal(updater.autoRunAppAfterInstall, true);
   assert.equal(updater.allowDowngrade, false);
   updater.checkForUpdates = async () => { updater.emit('error', new Error('offline')); throw new Error('offline'); };
   await service.check();
@@ -51,7 +52,7 @@ test('check never downloads automatically, keeps failures quiet and dismisses on
   assert.deepEqual(calls, []);
 });
 
-test('download progress, in-flight AI, renderer save and disk flush precede install/restart', async () => {
+test('download progress, in-flight AI, renderer save and disk flush precede visible install/restart', async () => {
   const download = deferred(), ai = deferred(), disk = deferred();
   const { service, updater, calls } = fixture({ waitForWork: () => ai.promise, flush: () => disk.promise });
   updater.downloadUpdate = () => { calls.push('download'); return download.promise; };
@@ -72,7 +73,7 @@ test('download progress, in-flight AI, renderer save and disk flush precede inst
   service.saved(service.snapshot().saveRequestId, { ok: true }); await tick();
   assert.deepEqual(calls, ['download']);
   disk.resolve(); await job;
-  assert.deepEqual(calls, ['download', ['allowQuit', true], ['install', true, true]]);
+  assert.deepEqual(calls, ['download', ['allowQuit', true], ['install', false, true]]);
 });
 
 test('failed saves keep the app open; retry reuses download but saves again', async () => {

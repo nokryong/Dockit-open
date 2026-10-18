@@ -78,7 +78,13 @@ vi.mock("sud-ui", () => ({
   Button: ({ children, onClick, ...props }) =>
     h("button", { onClick, type: "button", ...props }, children),
   Card: ({ children }) => h("div", null, children),
-  ColorPicker: ({ children }) => h("div", null, children),
+  // Like sud-ui, report the current color through onChange after every render.
+  ColorPicker: function MockColorPicker({ children, color, onChange }) {
+    React.useEffect(() => {
+      onChange?.({ hex: color });
+    });
+    return h("div", null, children);
+  },
   Divider: () => h("hr"),
   Segmented: ({ onChange, options, value }) =>
     h(
