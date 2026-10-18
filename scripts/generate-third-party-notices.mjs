@@ -67,7 +67,7 @@ const licenseOverrides = new Map([
   ]
 ]);
 const licenseSelections = new Map([
-  ["dompurify@3.4.12", "Apache-2.0"],
+  ["dompurify@3.4.17", "Apache-2.0"],
   ["jszip@3.10.1", "MIT"]
 ]);
 
