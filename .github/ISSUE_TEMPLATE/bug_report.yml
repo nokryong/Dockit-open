@@ -1,0 +1,62 @@
+name: 버그 제보 / Bug report
+description: 앱이 예상과 다르게 동작할 때 알려 주세요. / Report something that does not work as expected.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        보안 문제는 이 양식 대신 SECURITY.md의 비공개 제보를 이용해 주세요.
+        For security issues, use the private report described in SECURITY.md instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 무슨 일이 있었나요? / What happened?
+      description: 실제로 일어난 일과 기대한 동작을 적어 주세요. / What happened and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 순서 / Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 앱 버전 / App version
+      description: 설정 또는 설치 파일 이름에서 확인할 수 있습니다. / Shown in Settings or the installer file name.
+      placeholder: "0.1.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: 운영체제 / Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 관련 기능 / Area
+      options:
+        - 문서 편집 / Editing
+        - 저장·열기 / Saving and opening
+        - HWPX·DOCX 가져오기·내보내기 / Import and export
+        - 인쇄·PDF / Printing and PDF
+        - ChatGPT·Codex
+        - 플러그인 / Plugins
+        - 설치·업데이트 / Install and update
+        - 기타 / Other
+  - type: textarea
+    id: extra
+    attributes:
+      label: 스크린샷·파일·기타 / Screenshots, files, anything else
+      description: 문서 파일을 첨부할 때는 개인 정보를 지운 예시를 사용해 주세요. / Attach sample files without personal data.
