@@ -9,7 +9,7 @@ import "katex/dist/katex.min.css";
 
 const remarkPlugins = [remarkGfm, remarkMath];
 const rehypePlugins = [[rehypeKatex, { strict: "ignore", trust: false }]];
-const RenderContext = createContext({ dark: false, streaming: false });
+const RenderContext = createContext({ dark: false, streaming: false, theme: "sky" });
 const markdownClassName = [
   "chat-markdown min-w-0 whitespace-normal break-words leading-[1.6] [overflow-wrap:anywhere]",
   "[&>:first-child]:mt-0 [&>:last-child]:mb-0",
@@ -32,7 +32,7 @@ const markdownClassName = [
 ].join(" ");
 
 function CodeBlock({ children }) {
-  const { dark, streaming } = useContext(RenderContext);
+  const { dark, streaming, theme } = useContext(RenderContext);
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
   const [showCode, setShowCode] = useState(false);
@@ -49,24 +49,36 @@ function CodeBlock({ children }) {
       setFailed(true);
     }
   };
-  return (
-    <div className="my-3 min-w-0 overflow-hidden rounded-lg border border-current/15">
-      <div className="flex items-center justify-between gap-2 bg-current/5 px-3 py-1 text-xs">
-        <span>{language}</span>
-        <div className="flex items-center gap-2">
-          {isMermaid && !streaming && (
-            <SmallButton onClick={() => setShowCode((value) => !value)}>
-              {showCode ? "도식 보기" : "코드 보기"}
-            </SmallButton>
-          )}
+  if (isMermaid) {
+    return (
+      <div className="my-3 min-w-0 overflow-hidden rounded-2xl border border-current/15">
+        {showCode ? source : streaming ? (
+          <div role="status" className="p-4 text-xs opacity-70">도식 그리는 중…</div>
+        ) : (
+          <ChatMermaidDiagram source={String(code)} dark={dark} theme={theme} fallback={source} />
+        )}
+        <div className="flex items-center justify-end gap-1 px-2 pb-1">
+          {!streaming && <SmallButton aria-pressed={showCode} onClick={() => setShowCode((value) => !value)}>
+            {showCode ? "도식 보기" : "코드 보기"}
+          </SmallButton>}
           <SmallButton onClick={copy}>
             {failed ? "복사 실패" : copied ? "복사됨" : "코드 복사"}
           </SmallButton>
         </div>
       </div>
-      {isMermaid && !streaming && !showCode ? (
-        <ChatMermaidDiagram source={String(code)} dark={dark} fallback={source} />
-      ) : source}
+    );
+  }
+  return (
+    <div className="my-3 min-w-0 overflow-hidden rounded-lg border border-current/15">
+      <div className="flex items-center justify-between gap-2 bg-current/5 px-3 py-1 text-xs">
+        <span>{language}</span>
+        <div className="flex items-center gap-2">
+          <SmallButton onClick={copy}>
+            {failed ? "복사 실패" : copied ? "복사됨" : "코드 복사"}
+          </SmallButton>
+        </div>
+      </div>
+      {source}
     </div>
   );
 }
@@ -83,9 +95,9 @@ const components = {
   ),
 };
 
-export default memo(function ChatMarkdown({ text, dark = false, streaming = false }) {
+export default memo(function ChatMarkdown({ text, dark = false, streaming = false, theme = "sky" }) {
   return (
-    <RenderContext.Provider value={{ dark, streaming }}>
+    <RenderContext.Provider value={{ dark, streaming, theme }}>
       <div className={markdownClassName}>
       <ReactMarkdown
         remarkPlugins={remarkPlugins}

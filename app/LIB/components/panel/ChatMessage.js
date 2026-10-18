@@ -51,7 +51,7 @@ export default function ChatMessage({ message, theme, dark, expanded, onToggle }
           } : undefined}
         >
           <div ref={content}>
-            <ChatMarkdown text={message.text || ""} dark={dark} streaming={["pending", "streaming"].includes(message.status)} />
+            <ChatMarkdown text={message.text || ""} dark={dark} theme={theme} streaming={["pending", "streaming"].includes(message.status)} />
           </div>
         </div>
         {canCollapse && (

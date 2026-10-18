@@ -6,8 +6,8 @@ let queue = Promise.resolve();
 let sequence = 0;
 const cache = new Map();
 
-export function renderMermaidSvg(source, dark = false, fontFamily = "") {
-  const key = `${dark}\0${fontFamily}\0${source}`;
+export function renderMermaidSvg(source, dark = false, fontFamily = "", presentation = null) {
+  const key = `${dark}\0${fontFamily}\0${JSON.stringify(presentation)}\0${source}`;
   if (cache.has(key)) return Promise.resolve(cache.get(key));
   const result = queue.then(async () => {
     if (cache.has(key)) return cache.get(key);
@@ -18,15 +18,17 @@ export function renderMermaidSvg(source, dark = false, fontFamily = "") {
       await loadLocalFonts().catch(() => {});
       await document.fonts?.load(`16px ${JSON.stringify(fontFamily)}`, source).catch(() => {});
     }
+    const diagramFont = fontFamily ? JSON.stringify(fontFamily) : presentation?.fontFamily || "sans-serif";
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
       suppressErrorRendering: true,
-      theme: dark ? "dark" : "neutral",
-      fontFamily: fontFamily ? JSON.stringify(fontFamily) : "sans-serif",
-      themeVariables: { fontFamily: fontFamily ? JSON.stringify(fontFamily) : "sans-serif" },
+      theme: presentation ? "base" : dark ? "dark" : "neutral",
+      ...(presentation ? { look: "classic", themeCSS: ".node rect { rx: 12px; ry: 12px; }" } : {}),
+      fontFamily: diagramFont,
+      themeVariables: { ...presentation, fontFamily: diagramFont },
       htmlLabels: false,
-      flowchart: { htmlLabels: false },
+      flowchart: { htmlLabels: false, ...(presentation ? { padding: 12, nodeSpacing: 20, rankSpacing: 32, curve: "linear" } : {}) },
     });
     const host = document.createElement("div");
     host.style.cssText = "position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none";
