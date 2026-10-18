@@ -79,7 +79,7 @@ if (!process.versions.electron) {
         updater.spawnLog = async (file, args) => {
           assert.equal(await fsp.readFile(path.join(folder, 'document.dkt'), 'utf8'), 'saved-before-install');
           assert.ok(calls.includes('flush'));
-          assert.ok(args.includes('/S'));
+          assert.ok(!args.includes('/S'), 'the installer must show its progress window');
           assert.ok(args.includes('--force-run'));
           assert.equal((await fsp.stat(file)).size, size);
           calls.push('installer');
@@ -116,7 +116,7 @@ if (!process.versions.electron) {
       };
       await run(false);
       await run(true);
-      console.log('PASS: real installer download/progress/checksum, save+flush before silent restart arguments, corrupt download blocked');
+      console.log('PASS: real installer download/progress/checksum, save+flush before visible install/restart arguments, corrupt download blocked');
     } finally { await new Promise(resolve => server.close(resolve)); }
   }).then(() => app.exit(0), error => { console.error(error); app.exit(1); });
 }

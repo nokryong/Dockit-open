@@ -410,6 +410,9 @@ export default function ChartPanel({ dragHandleProps }) {
                       }
                       color={color}
                       onChange={(c) => {
+                        // 색상 선택기는 표시될 때도 현재 색으로 onChange를 부른다.
+                        // 같은 색이면 상태를 바꾸지 않아야 무한 갱신이 생기지 않는다.
+                        if (c.hex.toLowerCase() === String(color).toLowerCase()) return;
                         setChartColors((prev) => {
                           const next = [...prev];
                           next[index] = c.hex;
