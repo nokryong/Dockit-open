@@ -146,14 +146,18 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
   } finally {
     // Cleanup must not hang on an app that never finished starting.
     const settle = promise => Promise.race([promise.catch(() => {}), new Promise(resolve => setTimeout(resolve, 15000))]);
-    if (application) {
-      await settle(application.evaluate(({ app }) => app.exit(0)));
-      await settle(application.close());
-      application.process()?.kill();
+    try {
+      if (application) {
+        const child = application.process();
+        await settle(application.evaluate(({ app }) => app.exit(0)));
+        await settle(application.close());
+        if (child.exitCode === null) child.kill();
+      }
+    } finally {
+      // A connection left open by the app or installer must not keep the run alive after a failure.
+      server.closeAllConnections();
+      await new Promise(resolve => server.close(resolve));
     }
-    // A connection left open by the app or installer must not keep the run alive after a failure.
-    server.closeAllConnections();
-    await new Promise(resolve => server.close(resolve));
     // The hosted VM is discarded after the job; keep its installer evidence until then.
   }
 })().catch(error => { console.error(error); process.exitCode = 1; });
