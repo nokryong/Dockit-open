@@ -12,6 +12,8 @@ const { _electron: electron, expect: baseExpect } = require('@playwright/test');
 const { LocalStore } = require('../electron/local-store.cjs');
 const exec = promisify(execFile);
 const expect = baseExpect.configure({ timeout: 60000 });
+// Each step is logged so a hosted-runner timeout shows where the run stopped.
+const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
 
 (async () => {
   assert.equal(process.platform, 'win32');
@@ -53,12 +55,14 @@ const expect = baseExpect.configure({ timeout: 60000 });
     return Array.isArray(data) ? data : [data];
   };
   try {
+    step('initial silent install');
     assert.equal(await fs.stat(path.join(os.homedir(), '.dockit')).catch(() => null), null, 'The hosted runner must have no existing Dockit data');
     await new Promise((resolve, reject) => {
       const child = spawn(installer, ['/S', `/D=${installDir}`], { env, windowsHide: true, stdio: 'ignore', timeout: 180000 });
       child.once('error', reject);
       child.once('exit', code => code === 0 ? resolve() : reject(new Error(`Initial NSIS install exited ${code}`)));
     });
+    step('initial install finished');
     const installed = JSON.parse(await fs.readFile(packageFile, 'utf8'));
     assert.equal(installed.version, metadata.version);
     // Simulate the installed previous version; the new installer must restore these files.
@@ -68,6 +72,7 @@ const expect = baseExpect.configure({ timeout: 60000 });
     await store.init();
     const { content: document } = await store.request('create', { type: 'documents', data: { title: '업데이트 보존 확인', content: '<p>업데이트 전</p>' } });
     const documentFile = await store.documentPath(document._id);
+    step('launch installed app');
     application = await electron.launch({ executablePath, args: [documentFile], env, timeout: 60000 });
     const oldPid = application.process().pid;
     const page = await application.firstWindow();
@@ -77,21 +82,26 @@ const expect = baseExpect.configure({ timeout: 60000 });
       BrowserWindow.getAllWindows()[0].webContents.setBackgroundThrottling(false);
     }, { path: quitEvidence, document: documentFile });
     await expect(page.locator('.tiptap-main-canvas')).toContainText('업데이트 전');
+    step('wait for update dialog');
     const dialog = page.getByRole('dialog', { name: '앱 업데이트' });
     await expect(dialog).toBeVisible();
     await expect(dialog).toContainText(`0.0.0 → ${metadata.version}`);
     // Change the open document while the update notice is visible; no explicit Save.
     await page.locator('.tiptap-main-canvas').fill('업데이트 후에도 남아 있는 문서', { force: true });
     const closed = application.waitForEvent('close', { timeout: 180000 });
+    step('click install');
     await dialog.getByRole('button', { name: '설치', exact: true }).click();
     await closed;
+    step('app closed for update');
     application = null;
     const beforeQuit = JSON.parse(await fs.readFile(quitEvidence, 'utf8'));
     assert.equal(beforeQuit.version, '0.0.0');
     assert.match(beforeQuit.document.content, /업데이트 후에도 남아 있는 문서/);
+    step('wait for installer to replace files');
     await expect.poll(async () => {
       try { return JSON.parse(await fs.readFile(packageFile, 'utf8')).version; } catch { return null; }
     }, { timeout: 180000 }).toBe(metadata.version);
+    step('wait for automatic restart');
     let restarted;
     await expect.poll(async () => {
       restarted = (await processes()).find(item => item.ProcessId !== oldPid && !item.CommandLine.includes('--type=') && item.CommandLine.includes('--updated'));
@@ -108,6 +118,7 @@ const expect = baseExpect.configure({ timeout: 60000 });
       windowsHide: true, env: { ...env, DOCKIT_INSTALL_SMOKE_EXE: executablePath }
     });
     await expect.poll(async () => (await processes()).length).toBe(0);
+    step('reopen updated app');
     application = await electron.launch({ executablePath, args: [documentFile], env, timeout: 60000 });
     const reopened = await application.firstWindow();
     await expect(reopened.locator('.tiptap-main-canvas')).toContainText('업데이트 후에도 남아 있는 문서');
@@ -119,8 +130,13 @@ const expect = baseExpect.configure({ timeout: 60000 });
     await fs.writeFile(path.join(artifacts, 'installed-update.json'), JSON.stringify({ version: metadata.version, previousVersion: beforeQuit.version,
       savedBeforeQuit: true, installerReplacedFiles: true, automaticRestartPid: restarted.ProcessId, documentReopened: true }, null, 2));
     console.log('PASS: real NSIS install, save on update, file replacement, automatic app restart and preserved document reopening');
+  } catch (error) {
+    step('failed');
+    throw error;
   } finally {
     if (application) { await application.evaluate(({ app }) => app.exit(0)).catch(() => {}); await application.close().catch(() => {}); }
+    // A connection left open by the app or installer must not keep the run alive after a failure.
+    server.closeAllConnections();
     await new Promise(resolve => server.close(resolve));
     // The hosted VM is discarded after the job; keep its installer evidence until then.
   }
