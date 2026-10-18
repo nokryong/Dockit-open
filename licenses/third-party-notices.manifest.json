@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "lockfileSha256": "1e9130edcaacbb2ddbae77d5149ed23f28a149a944059d01250e484d9df7be1f",
+  "lockfileSha256": "7afb58466dae82ac73ad26eccd765a4d58fd2a18a006e116a3a810322a37e40b",
   "packages": [
     {
       "lockPath": "node_modules/@antfu/install-pkg",
@@ -43,6 +43,28 @@
         {
           "name": "LICENSE",
           "sha256": "0bc46fcdad091a1d914ff9f7981f467faa976fa7a998796afc512f5b6e13287f"
+        }
+      ]
+    },
+    {
+      "lockPath": "node_modules/@chevrotain/types",
+      "name": "@chevrotain/types",
+      "version": "11.1.2",
+      "resolved": "https://registry.npmjs.org/@chevrotain/types/-/types-11.1.2.tgz",
+      "integrity": "sha512-U+HFai5+zmJCkK86QsaJtoITlboZHBqrVketcO2ROv865xfCMSFpELQoz1GkX5GzME8pTa+3kbKrZHQtI0gdbw==",
+      "optional": false,
+      "ownerControlled": false,
+      "ownerNote": "",
+      "license": "Apache-2.0",
+      "selectedLicense": "",
+      "licenseEvidence": "",
+      "source": "https://github.com/Chevrotain/chevrotain",
+      "author": "Shahar Soel",
+      "evidenceStatus": "collected",
+      "noticeFiles": [
+        {
+          "name": "LICENSE.txt",
+          "sha256": "283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b"
         }
       ]
     },
@@ -517,6 +539,28 @@
         {
           "name": "LICENSE",
           "sha256": "e923785030f1a14a65db0a7f163cbab870481bcd828c0739afe1e6fd9999ee02"
+        }
+      ]
+    },
+    {
+      "lockPath": "node_modules/@mermaid-js/parser",
+      "name": "@mermaid-js/parser",
+      "version": "1.2.1",
+      "resolved": "https://registry.npmjs.org/@mermaid-js/parser/-/parser-1.2.1.tgz",
+      "integrity": "sha512-n12NohV3mrUyUL2o93IgG/ifeW9FTyeJn3zDxkhwa8MJ9Fxg3HQMlA3RiGmD/3UnJvheztkjjQAjA2T4LmUcpw==",
+      "optional": false,
+      "ownerControlled": false,
+      "ownerNote": "",
+      "license": "MIT",
+      "selectedLicense": "",
+      "licenseEvidence": "",
+      "source": "https://github.com/mermaid-js/mermaid",
+      "author": "Yokozuna59",
+      "evidenceStatus": "collected",
+      "noticeFiles": [
+        {
+          "name": "LICENSE",
+          "sha256": "d872b89e34b794519bb00f82dbad5710435fe5eb37a0a80ed0b72a92db47ced5"
         }
       ]
     },
@@ -4630,9 +4674,9 @@
     {
       "lockPath": "node_modules/dompurify",
       "name": "dompurify",
-      "version": "3.4.12",
-      "resolved": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.12.tgz",
-      "integrity": "sha512-zQvGet8Z2sWbQhCmfFz/T5QWH2oBmjnqK3qvOjaqaNLrLEF912WamU+ohnTp0TCep/MFVHpdJuCZEdFOdTnEFg==",
+      "version": "3.4.17",
+      "resolved": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.17.tgz",
+      "integrity": "sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",
@@ -5004,6 +5048,23 @@
           "sha256": "c0e4b0b302173791312fb6a29289ecc2f23d6ccf63e08232b7a06e14b2eaeefb"
         }
       ]
+    },
+    {
+      "lockPath": "node_modules/fastdom",
+      "name": "fastdom",
+      "version": "1.0.12",
+      "resolved": "https://registry.npmjs.org/fastdom/-/fastdom-1.0.12.tgz",
+      "integrity": "sha512-LB+xjSTEbjHE1cWsxu+tN2Xqr1kpi+V9aADI7sVM5ZMaXyYGPHULQMzpJMYqOTULK/73pUkWVzzObFRBkPr+hg==",
+      "optional": false,
+      "ownerControlled": false,
+      "ownerNote": "",
+      "license": "MIT",
+      "selectedLicense": "",
+      "licenseEvidence": "",
+      "source": "https://github.com/wilsonpage/fastdom",
+      "author": "Wilson Page <wilsonpage@me.com>",
+      "evidenceStatus": "collected",
+      "noticeFiles": []
     },
     {
       "lockPath": "node_modules/fflate",
@@ -6934,9 +6995,9 @@
     {
       "lockPath": "node_modules/mermaid",
       "name": "mermaid",
-      "version": "11.16.0",
-      "resolved": "https://registry.npmjs.org/mermaid/-/mermaid-11.16.0.tgz",
-      "integrity": "sha512-Zvm3kbstgdpvIJPPItlL7fppIZ3kibvc1oZIGxdvk9t6UFz6flv+Jw7FtRGKwfcI8OckmH04LqG6LlS6X4B1pA==",
+      "version": "11.17.2",
+      "resolved": "https://registry.npmjs.org/mermaid/-/mermaid-11.17.2.tgz",
+      "integrity": "sha512-V6K3C8EBdEsPFZXSKMJe6ppQOENxuHARr9GvHX4hh47lAbhMRD9qf4oEK7LoaRQxULMa80/qt5gHO73aCleBBg==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",
@@ -6950,50 +7011,6 @@
         {
           "name": "LICENSE",
           "sha256": "94228ab8fc0bb327fa6c903ce56642885e72f7d2d274e9e33f8eea57e4c887cb"
-        }
-      ]
-    },
-    {
-      "lockPath": "node_modules/mermaid/node_modules/@chevrotain/types",
-      "name": "@chevrotain/types",
-      "version": "11.1.2",
-      "resolved": "https://registry.npmjs.org/@chevrotain/types/-/types-11.1.2.tgz",
-      "integrity": "sha512-U+HFai5+zmJCkK86QsaJtoITlboZHBqrVketcO2ROv865xfCMSFpELQoz1GkX5GzME8pTa+3kbKrZHQtI0gdbw==",
-      "optional": false,
-      "ownerControlled": false,
-      "ownerNote": "",
-      "license": "Apache-2.0",
-      "selectedLicense": "",
-      "licenseEvidence": "",
-      "source": "https://github.com/Chevrotain/chevrotain",
-      "author": "Shahar Soel",
-      "evidenceStatus": "collected",
-      "noticeFiles": [
-        {
-          "name": "LICENSE.txt",
-          "sha256": "283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b"
-        }
-      ]
-    },
-    {
-      "lockPath": "node_modules/mermaid/node_modules/@mermaid-js/parser",
-      "name": "@mermaid-js/parser",
-      "version": "1.2.0",
-      "resolved": "https://registry.npmjs.org/@mermaid-js/parser/-/parser-1.2.0.tgz",
-      "integrity": "sha512-oYPyv8A4As1yH5Bx+04iQEQxXuIQDe0GKCNSRgao6z8AM9jixXIfP0vsppRLvGf+nKIOb9/LdpWA4YuJiVvESA==",
-      "optional": false,
-      "ownerControlled": false,
-      "ownerNote": "",
-      "license": "MIT",
-      "selectedLicense": "",
-      "licenseEvidence": "",
-      "source": "https://github.com/mermaid-js/mermaid",
-      "author": "Yokozuna59",
-      "evidenceStatus": "collected",
-      "noticeFiles": [
-        {
-          "name": "LICENSE",
-          "sha256": "d872b89e34b794519bb00f82dbad5710435fe5eb37a0a80ed0b72a92db47ced5"
         }
       ]
     },
@@ -9093,6 +9110,23 @@
           "sha256": "d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb"
         }
       ]
+    },
+    {
+      "lockPath": "node_modules/strictdom",
+      "name": "strictdom",
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/strictdom/-/strictdom-1.0.1.tgz",
+      "integrity": "sha512-cEmp9QeXXRmjj/rVp9oyiqcvyocWab/HaoN4+bwFeZ7QzykJD6L3yD4v12K1x0tHpqRqVpJevN3gW7kyM39Bqg==",
+      "optional": false,
+      "ownerControlled": false,
+      "ownerNote": "",
+      "license": "MIT",
+      "selectedLicense": "",
+      "licenseEvidence": "",
+      "source": "https://github.com/wilsonpage/strictdom",
+      "author": "Wilson Page <wilsonpage@me.com>",
+      "evidenceStatus": "collected",
+      "noticeFiles": []
     },
     {
       "lockPath": "node_modules/string_decoder",

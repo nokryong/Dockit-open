@@ -7,9 +7,9 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: 1e9130edcaacbb2ddbae77d5149ed23f28a149a944059d01250e484d9df7be1f
-Included non-dev lock entries: 464
-Unique third-party package name/version pairs: 452
+package-lock.json SHA-256: 7afb58466dae82ac73ad26eccd765a4d58fd2a18a006e116a3a810322a37e40b
+Included non-dev lock entries: 466
+Unique third-party package name/version pairs: 454
 Owner-controlled lock entries excluded from this notice: 1
 Fallback/missing-evidence records: 0
 
@@ -18,7 +18,7 @@ MULTI-LICENSE OPTIONS SELECTED BY DOCKIT
 
 Where a component offers alternative licenses, Dockit uses the following option:
 
-- dompurify@3.4.12: Apache-2.0
+- dompurify@3.4.17: Apache-2.0
 - jszip@3.10.1: MIT
 
 REACT ICONS - ICON PACKS IMPORTED BY DOCKIT
@@ -193,7 +193,7 @@ PACKAGE INDEX
   Author: Jawish Hameed <jawish@lottiefiles.com>
   Included files: LICENSE (e923785030f1a14a65db0a7f163cbab870481bcd828c0739afe1e6fd9999ee02)
 
-@mermaid-js/parser@1.2.0
+@mermaid-js/parser@1.2.1
   License: MIT
   Source: https://github.com/mermaid-js/mermaid
   Evidence: collected
@@ -1577,7 +1577,7 @@ devlop@1.1.0
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (189cbd7c4b2289a2fae63d7038486b9a79a908d0230d28be2ac949f758e4c602)
 
-dompurify@3.4.12
+dompurify@3.4.17
   License: (MPL-2.0 OR Apache-2.0)
   Source: https://github.com/cure53/DOMPurify
   Evidence: collected
@@ -1688,6 +1688,14 @@ fast-equals@5.4.0
   Lockfile instances: 1
   Author: tony_quetano@planttheidea.com
   Included files: LICENSE (c0e4b0b302173791312fb6a29289ecc2f23d6ccf63e08232b7a06e14b2eaeefb)
+
+fastdom@1.0.12
+  License: MIT
+  Source: https://github.com/wilsonpage/fastdom
+  Evidence: collected
+  Lockfile instances: 1
+  Author: Wilson Page <wilsonpage@me.com>
+  Included files: none; package metadata or reviewed override is retained
 
 fflate@0.8.3
   License: MIT
@@ -2410,7 +2418,7 @@ mdast-util-to-string@4.0.0
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (c37a32dd1cd44e7b68afdf88cb45eb2c4028574f7d894c720371d5688f73ef45)
 
-mermaid@11.16.0
+mermaid@11.17.2
   License: MIT
   Source: https://github.com/mermaid-js/mermaid
   Evidence: collected
@@ -3161,6 +3169,14 @@ space-separated-tokens@2.0.2
   Lockfile instances: 1
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb)
+
+strictdom@1.0.1
+  License: MIT
+  Source: https://github.com/wilsonpage/strictdom
+  Evidence: collected
+  Lockfile instances: 1
+  Author: Wilson Page <wilsonpage@me.com>
+  Included files: none; package metadata or reviewed override is retained
 
 string_decoder@1.1.1
   License: MIT
