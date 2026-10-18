@@ -132,9 +132,16 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     console.log('PASS: real NSIS install, save on update, file replacement, automatic app restart and preserved document reopening');
   } catch (error) {
     step('failed');
+    console.error(error);
     throw error;
   } finally {
-    if (application) { await application.evaluate(({ app }) => app.exit(0)).catch(() => {}); await application.close().catch(() => {}); }
+    // Cleanup must not hang on an app that never finished starting.
+    const settle = promise => Promise.race([promise.catch(() => {}), new Promise(resolve => setTimeout(resolve, 15000))]);
+    if (application) {
+      await settle(application.evaluate(({ app }) => app.exit(0)));
+      await settle(application.close());
+      application.process()?.kill();
+    }
     // A connection left open by the app or installer must not keep the run alive after a failure.
     server.closeAllConnections();
     await new Promise(resolve => server.close(resolve));
