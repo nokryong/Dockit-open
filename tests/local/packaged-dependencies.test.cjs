@@ -23,7 +23,8 @@ function runtimePackages() {
   return names;
 }
 
-// Top-level node_modules folders those packages need, following npm's nested resolution.
+// Package names those packages need, following npm's nested resolution. electron-builder
+// flattens nested copies (electron-updater/node_modules/semver) into the top level.
 function closure(names) {
   const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8')).packages;
   const resolve = (from, name) => {
@@ -50,7 +51,7 @@ function closure(names) {
     assert.ok(lock[`node_modules/${name}`], `${name} is not installed`);
     walk(`node_modules/${name}`);
   }
-  return new Set([...seen].map(location => location.split('/node_modules/')[0].slice('node_modules/'.length)));
+  return new Set([...seen].map(location => location.slice(location.lastIndexOf('node_modules/') + 'node_modules/'.length)));
 }
 
 test('the installer ships exactly the node_modules the main process loads', () => {
