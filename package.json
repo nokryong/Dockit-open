@@ -81,7 +81,7 @@
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "jose": "6.2.12",
-    "katex": "^0.16.25",
+    "katex": "^0.18.2",
     "lottie-colorify": "^0.8.0",
     "mermaid": "^11.17.2",
     "react": "19.1.0",
