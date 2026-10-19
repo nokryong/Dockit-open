@@ -314,7 +314,7 @@ export default function WriteHeader() {
 
   useEffect(() => {
     if (!editor) return;
-    // 툴바의 상태(폰트 크기, 글꼴)를 한번에 업데이트한다.
+    // #툴바 상태(폰트 크기, 글꼴)를 한번에 업데이트하는 부분
     const updateToolbarState = () => {
       // 1. 현재 커서의 textStyle 속성을 한번에 가져옵니다.
       const attrs = editor.getAttributes("textStyle");
@@ -501,7 +501,7 @@ export default function WriteHeader() {
     }
   };
 
-  // 폰트 크기 변경을 처리한다.
+  // #폰트 크기를 바꾸는 부분
   const handleFontSize = (size) => {
     if (!editor) return;
 
@@ -849,7 +849,7 @@ export default function WriteHeader() {
       <div
         className="flex items-center gap-px"
         onMouseDown={(event) => {
-          // 클릭한 요소가 INPUT이 아닐 때만 기본 동작을 막는다.
+          // 클릭한 요소가 INPUT이 아닐 때만 기본 동작을 막아 입력창은 그대로 쓸 수 있게 함
           if (event.target.tagName !== "INPUT") {
             event.preventDefault();
           }
@@ -1141,7 +1141,7 @@ export default function WriteHeader() {
             true
           )}
         </Popover>
-        {/* 들여쓰기·내어쓰기 버튼 */}
+        {/* #들여쓰기·내어쓰기 버튼 부분 */}
         {renderBtn(
           editor,
           PiTextOutdentFill,

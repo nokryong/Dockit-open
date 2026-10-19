@@ -69,7 +69,7 @@ export default function TitleEditor({
     }
   }, [value, editor]);
 
-  // 언마운트 때 정리해 메모리 누수를 막는다.
+  // 언마운트 때 정리해 메모리 누수를 막을 수 있게 함
   useEffect(() => {
     return () => {
       if (editor) {

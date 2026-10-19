@@ -12,7 +12,7 @@ const { _electron: electron, expect: baseExpect } = require('@playwright/test');
 const { LocalStore } = require('../electron/local-store.cjs');
 const exec = promisify(execFile);
 const expect = baseExpect.configure({ timeout: 60000 });
-// Each step is logged so a hosted-runner timeout shows where the run stopped.
+// 단계마다 기록을 남겨 GitHub 실행기에서 시간이 초과돼도 어디서 멈췄는지 알 수 있게 함
 const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
 
 (async () => {
@@ -144,7 +144,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     console.error('installed processes:', JSON.stringify(await settle(processes())));
     throw error;
   } finally {
-    // Cleanup must not hang on an app that never finished starting.
+    // 앱이 다 뜨지 못했어도 정리 단계에서 멈추지 않게 함
     const settle = promise => Promise.race([promise.catch(() => {}), new Promise(resolve => setTimeout(resolve, 15000))]);
     try {
       if (application) {
@@ -154,7 +154,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
         if (child.exitCode === null) child.kill();
       }
     } finally {
-      // A connection left open by the app or installer must not keep the run alive after a failure.
+      // 앱이나 설치 프로그램이 남긴 연결 때문에 실패 뒤에도 검사가 끝나지 않는 일을 막을 수 있게 함
       server.closeAllConnections();
       await new Promise(resolve => server.close(resolve));
     }

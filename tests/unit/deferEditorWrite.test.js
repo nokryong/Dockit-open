@@ -69,7 +69,7 @@ describe("deferEditorWrite", () => {
 
   it("keeps ContentEditor's external value sync deferred and cancellable", () => {
     const source = fs.readFileSync(path.join(process.cwd(), "app/LIB/components/write/ContentEditor.js"), "utf8").replace(/\r\n/g, "\n");
-    const start = source.indexOf("// 외부 value 변경 시 동기화");
+    const start = source.indexOf("// #외부 value가 바뀌면 동기화하는 부분");
     const effect = source.slice(start, source.indexOf("}, [value, editor, onNotePersistenceRejected, onNotePersistenceStatus]);", start));
     expect(start).toBeGreaterThan(-1);
     expect(effect).toMatch(/return deferEditorWrite\(editor, \(\) => \{[\s\S]*restoreValidatedNotePersistenceHtml\(editor, value\)/);

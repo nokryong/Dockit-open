@@ -16,7 +16,7 @@ export function PanelProvider({ children }) {
   const {
     data, // 변수명 명확화를 위해 data 그대로 사용 (실제로는 panels 전체 객체)
     setData: setPanelsData,
-    saveData: savePanels, // 수동 저장
+    saveData: savePanels, // 수동으로 저장할 수 있게 함
     loading,
     isSaving,
     error,
