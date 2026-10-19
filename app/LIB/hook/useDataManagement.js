@@ -51,7 +51,7 @@ export function useDataManagement(endpoint, defaultData, localStorageKey, autoSa
         if (!stored) {
           try { stored = (await createData(endpoint, null, defaultData)).content; }
           catch (failure) {
-            // Another window can create the shared default record at the same time.
+            // 다른 창이 같은 기본 레코드를 동시에 만들 수 있음
             stored = (await fetchDataList(endpoint)).content[0];
             if (!stored) throw failure;
           }

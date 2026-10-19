@@ -3,7 +3,7 @@ import { Step, StepResult, StepMap } from '@tiptap/pm/transform';
 import { closeHistory } from '@tiptap/pm/history';
 import { TextSelection } from '@tiptap/pm/state';
 
-// A metadata step participates in the same history event as the HTML replacement.
+// 메타데이터 step을 HTML 교체와 같은 히스토리 이벤트로 묶음
 export class DocumentMetadataStep extends Step {
   constructor(before, after) { super(); this.before = before; this.after = after; }
   apply(doc) { return StepResult.ok(doc); }
@@ -13,7 +13,7 @@ export class DocumentMetadataStep extends Step {
   toJSON() { return { stepType: 'dockitDocumentMetadata', before: this.before, after: this.after }; }
   static fromJSON(_schema, json) { return new DocumentMetadataStep(json.before, json.after); }
 }
-// Vite can reload this module without restarting ProseMirror's step registry.
+// Vite가 ProseMirror step 등록을 다시 시작하지 않고 이 모듈을 다시 불러올 수 있음
 try { Step.jsonID('dockitDocumentMetadata', DocumentMetadataStep); } catch { /* already registered */ }
 
 export const documentMetadata = value => Object.fromEntries(
@@ -22,8 +22,8 @@ export const documentMetadata = value => Object.fromEntries(
 
 const copyState = (value, fields) => Object.assign(Object.create(Object.getPrototypeOf(value)), value, fields);
 function rebindHistory(history, schema) {
-  // ProseMirror history keeps Steps containing schema-owned nodes. Rehydrate only
-  // those Steps when Tiptap recreates its schema for changed page settings.
+  // ProseMirror 히스토리는 스키마 소유 노드가 든 Step을 보관
+  // (페이지 설정 변경으로 Tiptap이 스키마를 다시 만들 때 해당 Step만 다시 연결)
   const branch = value => copyState(value, {
     items: value.items.slice(0, 0).append(value.items.map(item => item.step
       ? copyState(item, { step: Step.fromJSON(schema, item.step.toJSON()) }) : item))
@@ -35,8 +35,8 @@ export function commitCodexHistory(editor, before, afterDoc, afterMetadata, sour
   const lock = editor.storage.codexDocumentLock;
   lock.applying = true;
   try {
-    // Preview transactions leave history untouched. Return to its original coordinate
-    // space before recording one ordinary, undoable transaction.
+    // 미리보기 트랜잭션은 히스토리를 건드리지 않음
+    // (원래 좌표계로 돌아간 뒤 되돌릴 수 있는 일반 트랜잭션 하나로 기록)
     editor.view.dispatch(editor.state.tr.replaceWith(0, editor.state.doc.content.size, before.doc.content)
       .setMeta('dockitCodexPreview', true).setMeta('preventUpdate', true));
     lock.locked = false;

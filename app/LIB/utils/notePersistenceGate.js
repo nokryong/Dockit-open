@@ -30,7 +30,7 @@ const validateDocument = (document) => {
   return validation.valid
     ? { ok: true, validation }
     : rejected(NOTE_PERSISTENCE_ERROR_CODES.SEMANTIC_INVALID, {
-        // Persistence diagnostics must not expose document-derived values.
+        // 저장 진단 정보에 문서에서 나온 값 노출 금지
         semanticCodes: [...new Set(validation.errors.map(({ code }) => code))]
       });
 };
@@ -55,8 +55,8 @@ const acceptLegacyHtmlWithoutEditor = (html) =>
     : null;
 
 /**
- * Captures JSON and HTML from one synchronous editor state, then validates that
- * exact ProseMirror document. Callers must persist only the returned HTML.
+ * 한 번의 동기 에디터 상태에서 JSON과 HTML을 함께 가져와 그 ProseMirror 문서를 검증
+ * (호출 쪽은 반환한 HTML만 저장)
  */
 export const captureNotePersistenceSnapshot = (editor, fallbackHtml) => {
   if (!isEditorReady(editor)) {
@@ -85,8 +85,8 @@ export const captureNotePersistenceSnapshot = (editor, fallbackHtml) => {
 };
 
 /**
- * Parses persisted HTML with the currently active editor schema. Invalid note
- * nodes are retained by the note extensions and rejected by semantic validation.
+ * 저장된 HTML을 현재 활성 에디터 스키마로 파싱
+ * (잘못된 주석 노드는 주석 확장이 보존하고 의미 검증에서 거부)
  */
 export const parseNotePersistenceHtml = (
   editor,
@@ -116,8 +116,8 @@ export const parseNotePersistenceHtml = (
 };
 
 /**
- * Replaces editor content only after the active schema has parsed and validated
- * the candidate. A rejected candidate leaves the current editor document intact.
+ * 활성 스키마가 후보를 파싱·검증한 뒤에만 에디터 내용 교체
+ * (거부된 후보는 현재 에디터 문서를 그대로 둠)
  */
 export const restoreValidatedNotePersistenceHtml = (editor, html) => {
   const candidate = parseNotePersistenceHtml(editor, html);

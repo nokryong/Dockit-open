@@ -20,7 +20,7 @@ const expect = baseExpect.configure({ timeout: 30000 });
     if (await fs.stat(file).catch(() => null)) { executablePath = file; break; }
   }
   assert.ok(executablePath, 'Build the desktop package before running this smoke test');
-  // #빌드된 앱에서 실행 패키지를 직접 불러 보는 부분 (테스트 모드는 업데이트 기능을 불러오지 않아서 따로 확인할 수 있게 함)
+  // 빌드된 앱에서 실행 패키지 직접 로드 (테스트 모드는 업데이트 기능을 불러오지 않으므로 따로 확인)
   const appDir = process.platform === 'darwin' ? path.join(path.dirname(executablePath), '..', 'Resources', 'app') : path.join(path.dirname(executablePath), 'resources', 'app');
   const loadCheck = `const p = require('node:path'), app = ${JSON.stringify(appDir)}, from = { paths: [p.join(app, 'electron')] };
     for (const name of ['electron-updater', 'fflate', 'react-dom/server', 'react-icons']) require(require.resolve(name, from));
@@ -48,7 +48,7 @@ const expect = baseExpect.configure({ timeout: 30000 });
     await page.waitForURL(url => url.protocol === 'dockit:' && url.hostname === 'app', { waitUntil: 'domcontentloaded' });
     await app.evaluate(({ BrowserWindow, screen }) => BrowserWindow.getAllWindows().forEach(window => {
       window.webContents.setBackgroundThrottling(false);
-      // IntersectionObserver-based content needs a mapped window under Xvfb.
+      // IntersectionObserver 기반 내용은 Xvfb에서 창이 매핑돼야 표시
       if (process.env.CI) window.setBounds(screen.getPrimaryDisplay().workArea);
       else window.setPosition(-10000, -10000);
       window.showInactive();

@@ -31,9 +31,8 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/unit/**/*.test.js"],
-    // Keep the native `canvas` addon out of worker forks: it segfaults
-    // (0xC0000005) at process exit and fails the release gate despite a
-    // fully green suite. See tests/helpers/blockNativeCanvas.cjs.
+    // 네이티브 `canvas` 애드온은 워커 프로세스에서 제외
+    // (종료 시 0xC0000005로 죽어서 테스트가 다 통과해도 릴리즈 검사가 실패함, tests/helpers/blockNativeCanvas.cjs 참고)
     execArgv: [
       "--require",
       fileURLToPath(new URL("./tests/helpers/blockNativeCanvas.cjs", import.meta.url))

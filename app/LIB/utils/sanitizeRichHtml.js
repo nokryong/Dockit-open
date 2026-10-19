@@ -54,9 +54,8 @@ const isAllowedHref = (href) => {
   }
 };
 
-// Untrusted rich HTML is only rendered through this DOM-based allowlist boundary.
-// Current callers receive content after client-side state/fetch updates. The fallback
-// remains safe if this utility is ever reached while DOMParser is unavailable.
+// 신뢰할 수 없는 서식 HTML은 이 DOM 기반 허용 목록 경계로만 표시
+// (현재는 클라이언트 상태·요청 갱신 뒤에 호출되고, DOMParser가 없는 환경에서도 대체 경로는 안전)
 export const sanitizeRichHtml = (html) => {
   if (typeof DOMParser === "undefined") {
     return escapeHtml(html || "");

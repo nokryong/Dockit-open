@@ -1,4 +1,4 @@
-// Loaded explicitly by the Electron test runner, never imported by the application.
+// Electron 테스트 실행기가 명시적으로만 불러옴 (앱에서는 가져오지 않음)
 const { generateKeyPairSync } = require('node:crypto');
 const { pathToFileURL } = require('node:url');
 const { ChatGPTClient } = require('../../electron/chatgpt-client.cjs');
@@ -34,7 +34,7 @@ async function install({ shell }) {
             controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify(events.shift())}\n\n`));
             if (events.length) timer = setTimeout(send, 100); else controller.close();
           };
-          // "slow" keeps the pending indicator visible long enough to observe the elapsed time.
+          // "slow"는 대기 표시를 경과 시간을 확인할 만큼 오래 유지
           timer = setTimeout(send, mode === 'slow' ? 4000 : 40);
         }, cancel() { clearTimeout(timer); }
       }), { headers: { 'Content-Type': 'text/event-stream' } });

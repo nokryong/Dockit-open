@@ -94,9 +94,8 @@ const sectionProtectedBlockIds = (content) => Array.isArray(content)
   : [];
 
 /**
- * A rollback operation is derived only from persisted, validated snapshot
- * evidence. This keeps its identity stable across remounts and prevents a
- * later document state from silently changing the approved rollback target.
+ * 되돌리기 작업은 저장·검증된 스냅샷 증거에서만 생성
+ * (다시 마운트돼도 식별자가 유지되고, 이후 문서 상태가 승인된 되돌리기 대상을 몰래 바꾸지 못하도록 처리)
  */
 export const createDocumentOperationRollbackOperation = ({ actor, snapshot } = {}) => {
   const approvalActor = snapshot?.approvalActor ?? snapshot?.originalOperation?.actor;

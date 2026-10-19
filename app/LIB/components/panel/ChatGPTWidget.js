@@ -147,7 +147,7 @@ function ReasoningEffortSlider({
     const finish = () => {
       if (dragging.current) {
         dragging.current = false;
-        // Reset sud-ui internal dragging even if mouseup arrived while disabled.
+        // 비활성 상태에서 mouseup이 와도 sud-ui 내부 드래그 상태 초기화
         setDragSession((previous) => previous + 1);
       }
       commit.current();

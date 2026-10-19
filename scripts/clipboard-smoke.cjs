@@ -17,7 +17,7 @@ if (!process.versions.electron) {
     assert.equal(typeof clipboard.write, 'function');
     const source = nativeImage.createFromPath(path.join(__dirname, '../public/logo/symbol-square.png'));
     let writes = 0;
-    // Use the runtime's ClipboardItem and decoder without replacing the user's clipboard.
+    // 사용자 클립보드를 바꾸지 않고 실행 환경의 ClipboardItem과 디코더 사용
     const sink = { write: async items => {
       assert.equal(items.length, 1);
       assert.ok(items[0] instanceof ClipboardItem);

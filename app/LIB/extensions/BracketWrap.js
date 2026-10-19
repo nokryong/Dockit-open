@@ -2,7 +2,7 @@ import { Extension } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 /**
- * BracketWrap Extension
+ * BracketWrap 확장
  *
  * 텍스트를 선택한 상태에서 괄호, 따옴표 등을 입력하면
  * 선택된 텍스트를 감싸는 기능 (VSCode와 동일한 동작)

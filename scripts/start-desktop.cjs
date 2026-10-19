@@ -7,8 +7,8 @@ function getDevServerOptions(rootDirectory = root, port = 5173) {
     root: rootDirectory,
     server: {
       host: '127.0.0.1', port, strictPort: true,
-      // Generated files can number in the tens of thousands. Vite does not
-      // apply .gitignore to its watcher, so keep them out of the startup crawl.
+      // 생성 파일이 수만 개가 될 수 있는데 Vite 감시는 .gitignore를 적용하지 않음
+      // (시작할 때 훑지 않도록 제외)
       watch: { ignored: ['**/.cache/**', '**/.dockit/**', '**/release/**'] },
     },
   };

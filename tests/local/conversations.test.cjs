@@ -33,7 +33,7 @@ test('legacy migration, per-window selection, retained threads, restart and tras
   await restarted.remove(3, recent);
   assert.equal(trash.length, 1); assert.deepEqual(await restarted.history(3), []);
   await restarted.remove(3, old);
-  assert.deepEqual(await (new Conversations(options)).list(), []); // no resurrection from legacy buffer
+  assert.deepEqual(await (new Conversations(options)).list(), []); // 예전 버퍼에서 되살아나지 않음
   await assert.rejects(restarted.select(3, '../account-b/index'));
   account = 'account-b'; buffer = { messages: [] };
   assert.deepEqual(await restarted.list(), []);

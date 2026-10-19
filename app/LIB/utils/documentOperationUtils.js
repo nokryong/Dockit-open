@@ -3,13 +3,12 @@ import { Selection } from "@tiptap/pm/state";
 import { SEMANTIC_ATTRIBUTE_TYPE_SET } from "./semanticAttributes";
 
 /**
- * DocumentOperation v1 is the common local boundary for editor mutations.
+ * DocumentOperation v1: 에디터 변경의 공통 로컬 경계
  *
- * C1 retains the stable document-root compatibility boundary. C2 adds a strict
- * paragraph/heading block-range subset. C3 binds post-apply proof, compensation,
- * and durable save acknowledgement without promoting pending local evidence.
- * E1d-D3 adds a heading-identified multi-block section range while preserving
- * the same outside-range proof and exact snapshot compensation contract.
+ * C1: 안정적인 문서 루트 호환 경계 유지
+ * C2: 엄격한 문단·제목 블록 범위 추가
+ * C3: 적용 후 증명·보상·영구 저장 확인을 묶되 대기 중인 로컬 증거는 올리지 않음
+ * E1d-D3: 범위 밖 증명과 정확한 스냅샷 보상 계약을 유지하면서 제목 기준 여러 블록 구간 추가
  */
 export const DOCUMENT_OPERATION_SCHEMA_VERSION = 1;
 export const DOCUMENT_ROOT_STABLE_ID = "document-root";
@@ -77,9 +76,8 @@ const canonicalScope = (scope) =>
 
 let documentOperationNonceFallbackSequence = 0;
 
-// Operation and acknowledgement identities must not be reset with a component
-// remount. Prefer the platform CSPRNG and retain a monotonic, non-Math.random
-// fallback for older or restricted browser environments.
+// 작업·확인 식별자는 컴포넌트를 다시 마운트해도 초기화되면 안 됨
+// (플랫폼 CSPRNG를 우선 쓰고, 오래되거나 제한된 브라우저용으로 Math.random을 쓰지 않는 단조 증가 대체값 유지)
 export const createDocumentOperationNonce = ({
   crypto = typeof globalThis !== "undefined" ? globalThis.crypto : undefined,
   now = Date.now,
@@ -101,8 +99,7 @@ export const createDocumentOperationNonce = ({
       return Array.from(values, (value) => value.toString(16).padStart(8, "0")).join("");
     }
   } catch {
-    // Continue to the deterministic fallback when a browser exposes a broken
-    // crypto implementation (for example, a restricted web view).
+    // 브라우저 crypto 구현이 깨져 있으면 결정적 대체값으로 진행 (예: 제한된 웹뷰)
   }
 
   documentOperationNonceFallbackSequence += 1;
@@ -142,9 +139,8 @@ export const canonicalDocumentOperationInput = (operation = {}) => {
   );
 };
 
-// Four independent 32-bit FNV-1a lanes produce a compact deterministic ID.
-// The executor also compares the full canonical input before replaying a result,
-// so an ID collision can never replay a different logical operation.
+// 32비트 FNV-1a 네 갈래로 짧은 결정적 ID 생성
+// (실행기가 결과를 재사용하기 전에 전체 정규 입력도 비교하므로, ID가 겹쳐도 다른 작업을 재실행하지 않음)
 const hashCanonicalValue = (value) =>
   [0x811c9dc5, 0x9e3779b9, 0x85ebca6b, 0xc2b2ae35]
     .map((seed, lane) => {
@@ -163,10 +159,8 @@ export const getDocumentSemanticFingerprint = (document) => {
   return `fp-v1-${hashCanonicalValue(JSON.stringify(canonicalize(semanticDocument ?? null)))}`;
 };
 
-// Editor identity plugins and known paragraph/heading defaults are runtime
-// plumbing, not part of an approved document's semantic output. Keep this
-// allowlist node-specific so an unknown null attribute cannot disappear from
-// the approved output contract.
+// 에디터 식별 플러그인과 알려진 문단·제목 기본값은 실행용 부속이라 승인된 문서의 의미 출력에 포함하지 않음
+// (허용 목록은 노드별로 두어서, 모르는 null 속성이 승인된 출력 계약에서 빠지지 않도록 처리)
 const OUTPUT_RUNTIME_IDENTITY_ATTRS = Object.freeze({
   heading: new Set(["blockId", "headingId"]),
   paragraph: new Set(["blockId"])
@@ -514,11 +508,9 @@ const replaceTargetContentInJson = (
   };
 };
 
-// C2's proof redacts only the selected inline range from the complete document
-// tree. Consequently every other byte of semantic JSON remains comparable:
-// target prefix/suffix and attrs, parent/order structure, tables, charts,
-// diagrams, and nodes without a block ID are all covered. Stable identities are
-// still validated separately so a duplicate/missing paragraph ID fails closed.
+// C2 증명은 전체 문서 트리에서 선택한 인라인 범위만 가림
+// (대상 앞뒤 내용과 속성, 부모·순서 구조, 표, 차트, 도식, 블록 ID 없는 노드까지 나머지 의미 JSON은 모두 비교 대상)
+// (고정 식별자는 따로 검증해서 문단 ID 중복·누락 시 실패 처리)
 export const captureDocumentOperationSemanticRegions = (
   document,
   target,
@@ -734,9 +726,8 @@ const getEditorHistoryBinding = (editor) => {
 
 export const captureEditorDocumentOperationSnapshot = (editor, document) => {
   const history = getEditorHistoryBinding(editor);
-  // ProseMirror history states are immutable persistent values. Keeping this
-  // opaque runtime reference lets compensation restore both the undo and redo
-  // branches exactly; it is deliberately not a serializable recovery format.
+  // ProseMirror 히스토리 상태는 변경 불가 값
+  // (이 런타임 참조를 그대로 들고 있어서 보상 때 실행 취소·다시 실행 갈래를 정확히 복원, 직렬화용 복구 형식은 아님)
   return {
     document: (document ?? editor?.state?.doc)?.toJSON?.() ?? document ?? null,
     historyDepth: history?.state.done.eventCount ?? null,
@@ -773,9 +764,8 @@ export const restoreEditorDocumentOperationSnapshot = (editor, snapshot) => {
 
   try {
     const restoredDocument = editor.schema.nodeFromJSON(snapshot.document);
-    // A normal setContent would clear redo by creating a new undo event. The
-    // history plugin's own transaction metadata instead reinstalls the exact
-    // pre-apply state while this document replacement stays outside history.
+    // 일반 setContent는 새 실행 취소 이벤트를 만들어 다시 실행 기록을 지움
+    // (대신 히스토리 플러그인의 트랜잭션 메타데이터로 적용 전 상태를 그대로 되돌리고, 이 문서 교체는 히스토리 밖에서 처리)
     const transaction = editor.state.tr
       .replaceWith(0, editor.state.doc.content.size, restoredDocument.content)
       .setMeta("addToHistory", false)
@@ -916,8 +906,8 @@ export const createDocumentOperationExecutor = ({
           throw new DocumentOperationError(DOCUMENT_OPERATION_ERROR_CODES.TARGET_MISMATCH);
         }
       } else if (targetKind === "block-range") {
-        // C2 deliberately validates the semantic block rather than the entire
-        // document, so edits before the identified block do not stale the range.
+        // C2는 문서 전체가 아니라 의미 블록만 검증
+        // (지정한 블록 앞의 편집 때문에 범위가 낡지 않도록 처리)
         if (operation.baseRevision !== operation.target.blockFingerprint) {
           throw new DocumentOperationError(DOCUMENT_OPERATION_ERROR_CODES.REVISION_CONFLICT);
         }
@@ -1167,7 +1157,7 @@ export const createDocumentBlockRangeOperation = ({
     stableId: target.stableId,
     toOffset: target.toOffset
   },
-  // C2's target fingerprint is the stable block fingerprint, not a document-wide hash.
+  // C2 대상 지문은 문서 전체 해시가 아니라 고정 블록 지문
   targetFingerprint: target.blockFingerprint,
   type
 });

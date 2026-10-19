@@ -46,8 +46,8 @@ async function embedFont(svg, fontFamily) {
     }
   };
   for (const sheet of document.styleSheets) inspect(sheet, sheet.href || document.baseURI);
-  // Cross-origin stylesheets cannot expose cssRules. Read only the existing
-  // web-font providers through the desktop's restricted font-asset bridge.
+  // 다른 출처 스타일시트는 cssRules를 읽을 수 없음
+  // (기존 웹 글꼴 제공처만 데스크톱의 제한된 글꼴 자원 연결로 읽음)
   while (!faces.length && imports.length) {
     const url = imports.shift();
     if (visited.has(url)) continue;
@@ -61,7 +61,7 @@ async function embedFont(svg, fontFamily) {
     sheet.replaceSync(css);
     inspect(sheet, asset.url);
   }
-  if (!faces.length) return svg; // Installed system fonts need no embedded file.
+  if (!faces.length) return svg; // 설치된 시스템 글꼴은 파일을 넣을 필요 없음
   const embedded = await Promise.all(faces.map(async ({ rule, base }) => {
     const src = rule.style.getPropertyValue('src');
     const urls = [...src.matchAll(/url\(\s*(?:"([^"]+)"|'([^']+)'|([^\s)]+))\s*\)/g)];

@@ -216,7 +216,7 @@ const isSupportedCarrier = (tag, attributes) => {
   );
 };
 
-// This deliberately uses only string parsing so import validation also works in Node.
+// Node에서도 가져오기 검증이 되도록 문자열 파싱만 사용
 export const validateSemanticHtmlPayload = (content) => {
   if (typeof content !== "string") return { hasSemanticData: false, valid: false };
   const { tags, trailingTag } = scanHtmlTags(content);

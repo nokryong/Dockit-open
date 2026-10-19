@@ -185,8 +185,8 @@ export const createPageBreakWidgetElement = ({
     const widget = document.createElement("tr");
     widget.className = "tiptap-table-page-break-row";
 
-    // A collapsed neighbouring cell border adds half its width to this row.
-    // Keep the spacer's total footprint equal to the planned page gap.
+    // 접힌 이웃 칸 테두리가 이 행에 폭의 절반을 더함
+    // (간격 요소의 전체 크기를 계획한 페이지 간격과 같게 맞춤)
     spacerStructure.style.marginTop = `${-Math.max(0, tableBorderHeight)}px`;
 
     const cell = document.createElement("td");

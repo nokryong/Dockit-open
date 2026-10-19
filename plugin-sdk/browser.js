@@ -1,4 +1,4 @@
-// Loaded by Dockit before the toolkit's scripts. The transport is owned by the host.
+// Dockit이 툴킷 스크립트보다 먼저 불러옴 (통신은 호스트가 담당)
 (() => {
   const channel = 'dockit-plugin-v1';
   const pending = new Map();

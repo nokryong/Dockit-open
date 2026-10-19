@@ -7,7 +7,7 @@ function defaultCodexHome(env = process.env) {
 }
 
 async function readGlobalGuidance(home) {
-  // Match Codex's global precedence and default 32 KiB instruction budget.
+  // Codex의 전역 우선순위와 기본 지시 예산(32 KiB)에 맞춤
   for (const name of ['AGENTS.override.md', 'AGENTS.md']) {
     let handle;
     try {

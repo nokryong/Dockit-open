@@ -14,7 +14,7 @@ export function renderMermaidSvg(source, dark = false, fontFamily = "", presenta
     runtime ??= import("mermaid").then((module) => module.default);
     const mermaid = await runtime;
     if (fontFamily) {
-      // Local face aliases must exist before Mermaid measures and caches text.
+      // Mermaid가 글자를 측정·캐시하기 전에 로컬 서체 별칭 준비
       await loadLocalFonts().catch(() => {});
       await document.fonts?.load(`16px ${JSON.stringify(fontFamily)}`, source).catch(() => {});
     }

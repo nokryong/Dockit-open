@@ -133,7 +133,7 @@ export const createSaveQueueController = (
 
     if (immediate) {
       clearScheduledSave(id);
-      // Each caller receives its own batch result, not a later drain result.
+      // 호출한 쪽마다 이후 처리 결과가 아닌 자기 배치 결과를 받음
       void processQueue(id);
       return batchResult;
     }

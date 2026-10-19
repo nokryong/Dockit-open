@@ -32,7 +32,7 @@ class AppUpdates {
         this.set({ percent: Math.max(0, Math.min(100, progress.percent)) });
       }
     });
-    // check/download errors also reject their promises. Installation errors are events only.
+    // 확인·다운로드 오류는 promise도 거부 (설치 오류는 이벤트로만 전달)
     updater.on('error', () => {
       if (this.state.status === 'installing') this.fail(uiText('설치를 시작하지 못했습니다. 다시 시도해 주세요.'));
     });
@@ -63,7 +63,7 @@ class AppUpdates {
         this.set({ status: 'available', version, percent: 0, error: null });
       }
     } catch {
-      // Offline, missing releases and background check failures do not interrupt editing.
+      // 오프라인, 릴리즈 없음, 백그라운드 확인 실패는 편집을 방해하지 않음
     } finally {
       this.checking = false;
     }
@@ -102,7 +102,7 @@ class AppUpdates {
       await this.flush();
       this.set({ status: 'installing', saveRequestId: null });
       this.allowQuit(true);
-      // Keep the native installer visible after the app closes.
+      // 앱이 닫힌 뒤에도 설치 프로그램 창이 보이도록 처리
       this.updater.quitAndInstall(false, true);
     } catch (error) {
       const message = this.openRelease

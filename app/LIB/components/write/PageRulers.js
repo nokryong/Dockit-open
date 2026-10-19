@@ -60,8 +60,8 @@ export default function PageRulers({
     let frame = 0;
     const update = () => {
       frame = 0;
-      // Sticky offsets are calculated before the canvas's zoom transform.
-      // Convert the visible scrollport position back into document coordinates.
+      // sticky 오프셋은 캔버스 확대·축소 변환 전에 계산됨
+      // (보이는 스크롤 위치를 문서 좌표로 다시 변환)
       const scale = ruler.getBoundingClientRect().height / ruler.offsetHeight;
       if (!scale) return;
       const top = scrollport.getBoundingClientRect().top + scrollport.clientTop;

@@ -39,7 +39,7 @@ export default function ChatTranscript({ messages, theme, dark = false, children
   });
   const last = messages.at(-1);
   useEffect(() => {
-    // Streaming changes an existing row, rather than the number of rows.
+    // 스트리밍은 행 개수가 아니라 기존 행 내용을 변경
     if (atBottom.current) virtuoso.current?.autoscrollToBottom();
   }, [last?.text, last?.image, last?.activity]);
   if (!messages.length) return <div aria-label={uiText("AI 대화")} />;

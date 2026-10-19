@@ -282,9 +282,8 @@ export function DocumentProvider({ children }) {
       if (shouldPersistContent) {
         dataForDB.content = dataToSave.content ?? "";
 
-        // Manual and autosaves are both immediate queue entries. Keep the
-        // expensive screenshot capture explicit so manual saves refresh the
-        // preview without running html2canvas on every debounced autosave.
+        // 수동 저장과 자동 저장 모두 즉시 큐에 넣음
+        // (무거운 화면 캡처는 명시적으로만 실행해서 수동 저장 때만 미리보기 갱신, 디바운스된 자동 저장마다 html2canvas를 돌리지 않음)
         if (shouldRefreshThumbnail) {
           const thumbnailBase64 = await generateThumbnail();
           if (thumbnailBase64) {
@@ -452,7 +451,7 @@ export function DocumentProvider({ children }) {
       if (!snapshot.ok) throw new Error(uiText("문서를 저장할 수 없습니다. 문서 형식을 확인해주세요."));
       latestStateRef.current = { ...latestStateRef.current, content: snapshot.html };
       setContent(snapshot.html);
-      // The final immediate entry drains earlier title/settings/autosave entries.
+      // 마지막 즉시 항목이 앞선 제목·설정·자동 저장 항목까지 함께 처리
       const saved = await queueSaveDocument(id, { ...latestStateRef.current, content: snapshot.html, focus: editor.state.selection.anchor }, true);
       if (!saved) throw new Error(uiText("문서를 저장하지 못해 Codex 작업을 시작하지 않았습니다."));
       await window.dockitLocal?.flush();

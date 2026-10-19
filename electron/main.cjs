@@ -419,7 +419,7 @@ else
           return new Response('Not found', { status: 404 });
         }
       });
-      // Permit web-font resources and, in development, the loopback Vite server.
+      // 웹 글꼴 자원과 개발 중 로컬 Vite 서버 허용
       session.defaultSession.webRequest.onBeforeRequest(
         { urls: ['http://*/*', 'https://*/*', 'ws://*/*', 'wss://*/*'] },
         (details, callback) => {
@@ -580,7 +580,7 @@ else
         enabled: app.isPackaged && !testMode,
         updater: app.isPackaged && !testMode ? require('electron-updater').autoUpdater : null,
         currentVersion: app.getVersion(),
-        // Unsigned macOS builds can check for updates, but cannot use Squirrel.Mac to install them.
+        // 서명 없는 macOS 빌드는 업데이트 확인만 가능 (Squirrel.Mac 설치 불가)
         openRelease:
           process.platform === 'darwin'
             ? () => shell.openExternal('https://github.com/nokryong/Dockit-open/releases/latest')
@@ -608,7 +608,7 @@ else
         updates.dismiss();
         return updates.snapshot();
       });
-      // Saving is acknowledged by every window through local:save-ready.
+      // 저장 완료는 모든 창이 local:save-ready로 알림
       handle('app-update:saved', () => {});
 
       Menu.setApplicationMenu(null);
@@ -666,8 +666,8 @@ else
             plugins.closeWindow(mainWindow.webContents.id);
             return;
           }
-          // CSP can reject a subframe navigation before will-frame-navigate fires.
-          // Revoke that frame's capabilities and let the host display a retry action.
+          // CSP는 will-frame-navigate 전에 하위 프레임 이동을 거부할 수 있음
+          // (그 프레임 권한을 회수하고 호스트가 다시 시도 버튼 표시)
           if (details.frame?.url.startsWith('dockit-plugin:')) {
             const sessionId = new URL(details.frame.url).hostname;
             plugins.close(sessionId);
@@ -678,7 +678,7 @@ else
           }
         });
         mainWindow.webContents.on('will-frame-navigate', details => {
-          // Only the trusted main frame may mount a plugin.
+          // 신뢰된 메인 프레임만 플러그인 마운트 가능
           if (
             !details.isMainFrame &&
             (details.initiator !== mainWindow.webContents.mainFrame || !details.url.startsWith('dockit-plugin:'))

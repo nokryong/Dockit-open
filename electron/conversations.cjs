@@ -17,7 +17,7 @@ const summary = record => ({
   updatedAt: record.updatedAt
 });
 
-// A single account connection is shared, but every window has its own selected chat.
+// 계정 연결은 하나를 공유하지만 창마다 선택한 대화는 따로 유지
 class Conversations {
   constructor({ root, provider, trash, account, legacy, activate, snapshot, removeLegacy = async () => {} }) {
     this.workspaceRoot = root;
@@ -61,7 +61,7 @@ class Conversations {
         await atomicJson(indexFile, index);
       }
       if (index.version !== 1 || !Array.isArray(index.items)) throw new Error(uiText('대화 목록을 읽지 못했습니다.'));
-      // Recover a conversation saved just before a crash interrupted the index write.
+      // 인덱스 기록 중 충돌로 끊기기 직전에 저장된 대화 복구
       const files = await fs.readdir(await this.directory(account));
       const known = new Set(index.items.map(item => item.id));
       for (const file of files) {

@@ -159,8 +159,8 @@ const resolveListMarkerText = ({
   return "•";
 };
 
-// offsetHeight rounds every block to whole pixels. The used CSS height keeps
-// fractional layout pixels and is independent of the canvas zoom transform.
+// offsetHeight는 블록 높이를 정수 픽셀로 반올림
+// (실제 CSS 높이는 소수 픽셀을 유지하고 캔버스 확대·축소와도 무관)
 const getLayoutHeight = (dom) => {
   const styles = window.getComputedStyle(dom);
   const height = Number.parseFloat(styles.height);
@@ -627,8 +627,8 @@ export const resolveMeasuredLineSlots = ({
       Number.isFinite(containerRect.top) &&
       Number.isFinite(containerRect.bottom)
     ) {
-      // Ignore oversized container bounds created by injected pagination gaps,
-      // but allow normal single-block bounds to trim minor overflow.
+      // 페이지 나눔 간격 때문에 커진 컨테이너 범위는 무시
+      // (일반 단일 블록 범위는 약간의 넘침을 잘라내도록 허용)
       slotTop = Math.max(slotTop, containerRect.top);
       slotBottom = Math.min(slotBottom, containerRect.bottom);
 
@@ -972,8 +972,8 @@ const collectTableMeasurements = ({
   const rowElements = allRowElements.filter(
     (row) => !row.classList.contains("tiptap-table-page-break-row")
   );
-  // Collapsed outer borders extend beyond the row boxes. Measure only the
-  // outer edges, so injected page-break rows never become document content.
+  // 접힌 바깥 테두리는 행 상자 밖으로 나감
+  // (바깥 가장자리만 측정해서, 끼워 넣은 페이지 나눔 행이 문서 내용이 되지 않도록 처리)
   const tableRect = dom.getBoundingClientRect();
   const layoutHeight = getLayoutHeight(dom);
   const scale = layoutHeight > 0 && tableRect.height > 0

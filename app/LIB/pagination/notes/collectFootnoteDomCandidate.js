@@ -315,9 +315,8 @@ const removeMeasurementStage = (stage) => {
 };
 
 /**
- * Creates a short-lived clone portal outside ProseMirror. Canonical NodeView
- * DOM is never reparented or mutated, so editor DOMObserver state and active
- * selections remain untouched. Portal DOM never leaves this lifecycle.
+ * ProseMirror 밖에 잠깐 쓰는 복제 포털 생성
+ * (원본 NodeView DOM은 옮기거나 바꾸지 않아서 에디터 DOMObserver 상태와 선택 영역 유지, 포털 DOM은 이 생명주기 안에서만 사용)
  */
 export const stageFootnoteBodiesForMeasurement = ({ root, bodies }) => {
   if (!isHtmlElement(root) || !Array.isArray(bodies) || !bodies.length) {
@@ -391,9 +390,8 @@ export const stageFootnoteBodiesForMeasurement = ({ root, bodies }) => {
       if (!isHtmlElement(stagedBody)) fail("FOOTNOTE_STAGING_FAILED");
       copyMeasurementTreeStyles(body, stagedBody);
       normalizeProjectedMeasurementClone(stagedBody);
-      // Keep the source DOM as the only owner of document identifiers while
-      // the off-flow clone is attached. Styles are copied first so an
-      // identifier-based selector cannot change the measured geometry.
+      // 흐름 밖 복제본이 붙어 있는 동안 문서 식별자는 원본 DOM만 보유
+      // (스타일을 먼저 복사해서 식별자 기반 선택자가 측정 결과를 바꾸지 않도록 처리)
       stripMeasurementCloneIdentifiers(stagedBody);
       stagedBody.classList.add("dockit-footnote-measurement-body");
       stagedBody.setAttribute("aria-hidden", "true");
@@ -574,8 +572,8 @@ const createOkCandidate = ({ footnotes = [], excludedBodyPositions = [] }) =>
   });
 
 /**
- * Builds a transient, opt-in footnote candidate. It always restores canonical
- * NodeView DOM before returning and intentionally contains no DOM references.
+ * 필요할 때만 쓰는 임시 각주 후보 생성
+ * (반환 전에 항상 원본 NodeView DOM을 복원하고, DOM 참조는 담지 않음)
  */
 export const collectFootnoteDomCandidate = (view) => {
   let lifecycle = null;

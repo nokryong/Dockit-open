@@ -103,7 +103,7 @@ export default function WorkspacePage() {
     [setRight]
   );
 
-  // --- Custom Hooks ---
+  //■■■■■ 커스텀 훅 ■■■■■
   const actions = useWorkspaceActions({
     user,
     currentFolderId,
@@ -168,7 +168,7 @@ export default function WorkspacePage() {
     setContextMenu({ visible: false, x: 0, y: 0 });
   }, [modalsOpen]);
 
-  // --- Navigation ---
+  //■■■■■ 이동 ■■■■■
   const createWorkspaceUrl = (targetFolderId = null) => {
     if (!targetFolderId) return "/docs";
     return `/docs?folder=${encodeURIComponent(targetFolderId)}`;
@@ -336,7 +336,7 @@ export default function WorkspacePage() {
 
     router.push(createWorkspaceUrl(targetFolder.id));
   };
-  // --- Context Menu ---
+  //■■■■■ 컨텍스트 메뉴 ■■■■■
   const handleContextMenu = (e) => {
     if (modalsOpen) {
       return;
@@ -358,7 +358,7 @@ export default function WorkspacePage() {
     }
   };
 
-  // --- Mobile Long Press Handlers ---
+  //■■■■■ 모바일 길게 누르기 ■■■■■
   const handleTouchStart = (e, item) => {
     if (modalsOpen) {
       return;
@@ -403,7 +403,7 @@ export default function WorkspacePage() {
   const hasWorkspaceItems = folders.length > 0 || documents.length > 0;
   const uploadExtensions = ["dkt", "html", "htm", "docx", "hwpx", "md", "txt"];
 
-  // --- Render ---
+  //■■■■■ 렌더 ■■■■■
   const renderList = (item, type, title, isDragOver) => {
     return (
       <div className={docsWorkspaceStyles.listRow}>
@@ -663,7 +663,7 @@ export default function WorkspacePage() {
         userSelect: selection.isSelecting ? "none" : "auto"
       }}
     >
-      {/* Selection Box */}
+      {/* 선택 박스 */}
       <div style={selection.getSelectionBoxStyle()} />
       <div
         className={cx(
@@ -851,7 +851,7 @@ export default function WorkspacePage() {
         />
 
         {/* 컨텍스트 메뉴 */}
-        {/* Keep the upload input mounted while its file picker is open. */}
+        {/* 파일 선택 창이 열려 있는 동안 업로드 input 유지 */}
         <ContextMenu
           contextMenu={contextMenu}
           setContextMenu={setContextMenu}

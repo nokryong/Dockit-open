@@ -31,7 +31,7 @@ describe("ContentEditor lifecycle regression", () => {
   });
 
   it("does not publish a redundant selected-object update during effect cleanup", () => {
-    const cleanupStart = source.indexOf("// Cleanup Function");
+    const cleanupStart = source.indexOf("// 정리 함수");
     const cleanupEnd = source.indexOf("\n    };", cleanupStart);
     const cleanup = source.slice(cleanupStart, cleanupEnd);
 

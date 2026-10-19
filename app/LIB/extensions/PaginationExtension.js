@@ -160,16 +160,14 @@ export const PaginationExtension = Extension.create({
               return;
             }
 
-            // Print CSS itself changes observable geometry. The print lifecycle
-            // reuses the last complete screen projection synchronously instead
-            // of treating that media switch as a new screen measurement.
+            // 인쇄 CSS 자체가 보이는 위치·크기를 바꿈
+            // (인쇄 단계에서는 새 화면 측정 대신 마지막으로 완성된 화면 투영을 그대로 재사용)
             if (isPrintEnvironment()) {
               return;
             }
 
-            // A cached projection is valid only for the exact screen layout that
-            // produced it. Any scheduled screen remeasurement invalidates it
-            // before print can reuse stale document or font/size geometry.
+            // 캐시한 투영은 그 투영을 만든 화면 배치에서만 유효
+            // (화면 재측정이 예약되면 무효화해서, 인쇄가 오래된 문서·글꼴·크기 정보를 쓰지 않도록 처리)
             if (!isPrintMode) {
               lastCompleteFootnoteProjection = null;
               setPrintReadiness(
@@ -223,9 +221,8 @@ export const PaginationExtension = Extension.create({
             );
             if (isPrintEnvironment() && printHasFootnoteBody) {
               restoreCanonicalBodies();
-              // The stable screen DecorationSet already contains the hidden
-              // print projection. Re-dispatching equivalent widget DOM while
-              // entering print can retain duplicate widgets in ProseMirror.
+              // 안정된 화면 DecorationSet에 숨겨진 인쇄 투영이 이미 들어 있음
+              // (인쇄 진입 때 같은 위젯 DOM을 다시 보내면 ProseMirror에 위젯이 중복으로 남을 수 있음)
               if (lastCompleteFootnoteProjection) {
                 setPrintReadiness("ready");
               } else {
@@ -260,8 +257,8 @@ export const PaginationExtension = Extension.create({
               footnoteAttempt?.paginationInput || null;
             const footnoteIntegration = footnoteAttempt?.integration || null;
             const footnoteProjection = footnoteAttempt?.projection || null;
-            // Only a complete projection is allowed to use the body-excluding
-            // input. Every other result is the exact ordinary legacy path.
+            // 본문 제외 입력은 완성된 투영만 사용
+            // (나머지 결과는 기존 레거시 경로 그대로)
             const activatedProjection =
               footnoteProjection &&
               (projectionHost = footnoteRuntime.activateCanonicalBodyProjection({
@@ -274,9 +271,8 @@ export const PaginationExtension = Extension.create({
             if (activatedProjection) {
               lastCompleteFootnoteProjection = measuredFootnoteAttempt;
             }
-            // A complete candidate measures hidden clones while the current live
-            // projection stays in place. Restore canonical bodies only for the
-            // genuine legacy fallback, avoiding a visible detach/reattach frame.
+            // 완성 후보는 현재 투영을 둔 채 숨긴 복제본으로 측정
+            // (실제 레거시 대체 때만 원본 본문을 되돌려서 화면이 떨어졌다 붙는 프레임 방지)
             let legacyPaginationInput = null;
             if (!activatedProjection) {
               restoreCanonicalBodies();

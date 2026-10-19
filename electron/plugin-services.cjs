@@ -145,7 +145,7 @@ class PluginServices {
     } catch {
       throw new Error(uiText('API에 연결하지 못했습니다. 네트워크를 확인해주세요.'));
     }
-    // Never follow authenticated redirects or return response bodies that may echo credentials.
+    // 인증된 리다이렉트는 따라가지 않고, 인증 정보가 섞일 수 있는 응답 본문도 반환하지 않음
     if ([401, 403].includes(response.status)) throw new Error(uiText('API Key와 접근 권한을 확인해주세요.'));
     if (response.status === 429) throw new Error(uiText('API 사용 한도에 도달했습니다. 잠시 후 다시 시도해주세요.'));
     if (response.status < 200 || response.status >= 300)
@@ -175,7 +175,7 @@ class PluginServices {
         result[name] = allowedUrl(payload[name], manifest.externalOrigins).href;
       }
     if (Number.isSafeInteger(payload.likes) && payload.likes >= 0) result.likes = payload.likes;
-    // Keep the application's own image CSP closed to remote hosts.
+    // 앱 자체 이미지 CSP는 원격 호스트에 닫아 둠
     const [image, avatar] = await Promise.all([
       this.fetchImage(sessionId, result.url),
       result.authorImage ? this.fetchImage(sessionId, result.authorImage).catch(() => null) : null

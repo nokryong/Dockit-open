@@ -43,7 +43,7 @@ function normalizeSource(source) {
   };
 }
 function legacySource(plugin) {
-  // These two official plugins shipped before install receipts were introduced.
+  // 설치 영수증 도입 전에 배포된 공식 플러그인 두 개
   const folder = { 'dockit.dice': 'dice', 'dockit.image-search': 'image-search' }[plugin.id];
   return plugin.publisher === 'nokryong' && folder
     ? { url: `https://github.com/nokryong/dockit-plugins/tree/main/plugins/${folder}`, commit: null }
@@ -77,7 +77,7 @@ class PluginUpdates {
     }
     const errors = [];
     const found = new Map();
-    // One repository snapshot for all installed plugins on the same branch.
+    // 같은 브랜치에 설치된 플러그인은 저장소 스냅샷 하나로 확인
     for (const [url, entries] of groups) {
       try {
         const snapshot = await this.inspect(url, { folders: entries.map(entry => entry.folder) });

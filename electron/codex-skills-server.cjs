@@ -30,8 +30,8 @@ const within = (root, file) => {
 async function readSkill(file, roots) {
   if (typeof file !== 'string' || !path.isAbsolute(file) || !TEXT_EXTENSIONS.has(path.extname(file).toLowerCase()))
     throw new Error('Invalid skill path');
-  // Compare canonical paths: Windows short names and macOS system aliases may
-  // spell the same approved file differently. Links outside the roots stay denied.
+  // 정규 경로로 비교 (Windows 짧은 이름이나 macOS 시스템 별칭은 같은 파일을 다르게 표기할 수 있음)
+  // (루트 밖으로 나가는 링크는 계속 거부)
   const actual = await fs.realpath(path.resolve(file));
   if (!roots.some(root => within(root, actual))) throw new Error('Outside skill roots');
   const handle = await fs.open(actual, 'r');
@@ -105,7 +105,7 @@ async function main() {
       if (path.isAbsolute(directory) && (await fs.stat(directory)).isDirectory())
         roots.push(await fs.realpath(directory));
     } catch {
-      /* A removed skill folder is simply unavailable. */
+      /* 삭제된 스킬 폴더는 사용 불가로 처리 */
     }
   }
   const handle = createSkillHandler(roots);

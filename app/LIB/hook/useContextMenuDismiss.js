@@ -12,7 +12,7 @@ export default function useContextMenuDismiss(open, onClose) {
     const close = () => closeRef.current();
     const onClick = (event) => {
       if (event.button !== 0) return;
-      // Capture clicks even when widgets stop propagation, but let menu actions run first.
+      // 위젯이 전파를 막아도 클릭을 잡되, 메뉴 동작이 먼저 실행되도록 처리
       clearTimeout(timer);
       timer = setTimeout(close, 0);
     };

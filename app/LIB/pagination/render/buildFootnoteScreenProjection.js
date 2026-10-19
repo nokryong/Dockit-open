@@ -75,8 +75,8 @@ const isSafeExternalHref = (href) => {
   }
 };
 
-// Print keeps readable rich inline content and ordinary safe links, but never
-// clones a live NodeView's controls, identity, or editing affordances.
+// 인쇄에는 읽을 수 있는 서식 있는 인라인 내용과 안전한 일반 링크만 유지
+// (살아 있는 NodeView의 컨트롤·식별 정보·편집 요소는 복제하지 않음)
 const sanitizePrintClone = (root) => {
   [root, ...root.querySelectorAll("*")].forEach((element) => {
     element.removeAttribute("id");
@@ -114,8 +114,8 @@ const fragmentOffsets = (fragments = []) => {
 };
 
 /**
- * Transient screen-only data. Unlike candidates/PageMaps it intentionally
- * holds a complete sanitized visual body clone, never serialised or planned.
+ * 화면 전용 임시 데이터
+ * (후보·PageMap과 달리 정리된 본문 전체 복제본을 담지만, 직렬화하거나 계획에 쓰지 않음)
  */
 export const buildFootnoteScreenProjection = ({ view, candidate, footnoteLayout }) => {
   if (candidate?.status !== "ok" || !footnoteLayout?.segments?.length || !view?.dom?.querySelectorAll) return null;

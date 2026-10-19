@@ -55,7 +55,7 @@ async function findCodex(env = process.env) {
       try {
         if ((await fs.stat(file)).isFile()) return file;
       } catch {
-        /* next installed location */
+        /* 다음 설치 위치 */
       }
     }
   }
@@ -63,7 +63,7 @@ async function findCodex(env = process.env) {
 }
 function childEnvironment(home, workspace, source = process.env) {
   const env = { ...source, CODEX_HOME: home, PWD: workspace };
-  // This child owns its login; never inherit an API key, SIWC token, or parent session identity.
+  // 이 자식 프로세스는 자기 로그인만 사용 (API 키, SIWC 토큰, 부모 세션 정보를 물려받지 않음)
   const privateKeys = new Set([
     'OPENAI_API_KEY',
     'CODEX_API_KEY',
@@ -115,7 +115,7 @@ class CodexTransport {
     );
     this.child.stdout.setEncoding('utf8');
     this.child.stdout.on('data', chunk => this.read(chunk));
-    this.child.stderr.on('data', () => {}); // Drain without exposing credential-bearing diagnostics.
+    this.child.stderr.on('data', () => {}); // 인증 정보가 담긴 진단은 노출하지 않고 비움
     this.child.stdin.on('error', () => this.stop());
     this.child.on('error', () => this.stop());
     this.child.on('exit', () => this.stop());
@@ -165,7 +165,7 @@ class CodexTransport {
             });
           continue;
         }
-        // No implicit shell/file access or unattended approvals from the document UI.
+        // 문서 화면에서는 암묵적인 셸·파일 접근이나 무인 승인 금지
         if (/requestApproval$/.test(message.method)) this.write({ id: message.id, result: { decision: 'decline' } });
         else this.write({ id: message.id, error: { code: -32601, message: 'Unsupported client request' } });
       } else this.notify(message.method, message.params || {});
@@ -341,7 +341,7 @@ class CodexClient {
       const { account } = await this.transport.request('account/read', { refreshToken: false });
       let identity = '';
       if (account?.type === 'chatgpt') {
-        // Only use the account identifier to partition history; tokens never leave Codex's home.
+        // 계정 식별자는 기록 구분에만 사용 (토큰은 Codex 홈 밖으로 나가지 않음)
         const auth = JSON.parse(
           await fs.readFile(await contained(this.home, path.join(this.home, 'auth.json')), 'utf8')
         );
@@ -781,8 +781,8 @@ ${textContent(file.bytes)}`
       const migrateChat = kind === 'chat' && this.documents && this.data.documentToolsVersion !== 1;
       const previousThreadId = threadId;
       if (migrateChat) {
-        // Old threads have a permanent chat-only instruction and no document tools.
-        // Keep their rollouts and UI history; carry the conversation into the new tool-enabled thread.
+        // 예전 스레드는 채팅 전용 지시가 고정되어 있고 문서 도구가 없음
+        // (기존 실행 기록과 화면 기록은 두고, 대화를 도구가 있는 새 스레드로 이어감)
         previousContext = this.data.chat
           .filter(message => message.id !== user.id && message.id !== assistant.id && message.text)
           .map(message => `${message.role}: ${message.text}`)
@@ -809,8 +809,8 @@ ${textContent(file.bytes)}`
         run.finish('cancelled');
         return completed;
       }
-      // Existing native threads can retain their original developer instructions on resume.
-      // Supply current global guidance at user priority so both old and new threads receive it.
+      // 기존 스레드는 재개할 때 원래 개발자 지시를 유지할 수 있음
+      // (현재 전역 지침을 사용자 우선순위로 넣어 예전·새 스레드 모두 받도록 처리)
       const projectGuidance =
         this.documents && kind === 'chat'
           ? await fs.readFile(await contained(this.root, path.join(this.root, 'AGENTS.md')), 'utf8')

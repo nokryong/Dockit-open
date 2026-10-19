@@ -33,7 +33,7 @@ const TABLE_PART_TYPES = new Set([
   "table_header"
 ]);
 
-// 커서가 표 칸 안에 있으면 선택 개체가 칸이라서, 감싸는 표를 찾아 쓸 수 있게 함
+// 커서가 표 칸 안에 있으면 선택 개체가 칸이므로 감싸는 표를 찾아서 사용
 function findSelectedTable(editor, selectedObject) {
   const node = selectedObject?.node;
   if (!node || !TABLE_PART_TYPES.has(node.type?.name)) return null;
@@ -79,7 +79,7 @@ export default function ChartPanel({ dragHandleProps }) {
 
   const shadow = isDarkMode ? newShadowDarkSm : newShadowLightSm;
 
-  // Chart state
+  // 차트 상태
   const [tableData, setTableData] = useState([
     [uiText("구분"), uiText("항목1")],
     [uiText("데이터1"), "10"]
@@ -411,8 +411,8 @@ export default function ChartPanel({ dragHandleProps }) {
                       }
                       color={color}
                       onChange={(c) => {
-                        // 색상 선택기는 화면에 그려질 때도 현재 색으로 onChange를 부름
-                        // 같은 색이면 상태를 바꾸지 않아 무한 갱신이 생기지 않게 함
+                        // 색상 선택기는 그려질 때도 현재 색으로 onChange 호출
+                        // (같은 색이면 상태를 바꾸지 않아 무한 갱신 방지)
                         if (c.hex.toLowerCase() === String(color).toLowerCase()) return;
                         setChartColors((prev) => {
                           const next = [...prev];

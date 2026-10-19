@@ -67,7 +67,7 @@ class ChatAttachments {
     this.provider = provider;
   }
   validateFileSize(kind, size, total) {
-    // Responses input_file limits do not apply to input_image or Codex local inputs.
+    // Responses input_file 제한은 input_image나 Codex 로컬 입력에는 적용되지 않음
     if (
       this.provider === 'chatgpt' &&
       kind !== 'image' &&
@@ -86,7 +86,7 @@ class ChatAttachments {
     if (!Array.isArray(paths) || !paths.length) throw fail(uiText('첨부할 파일을 선택해주세요.'));
     const files = [];
     let total = 0;
-    // Validate the whole selection before making local copies.
+    // 로컬 복사본을 만들기 전에 선택 전체 검증
     for (const source of paths) {
       if (typeof source !== 'string' || !path.isAbsolute(source)) throw fail(uiText('첨부 파일 경로를 확인해주세요.'));
       const name = path.basename(source);

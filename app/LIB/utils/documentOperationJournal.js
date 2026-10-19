@@ -1,5 +1,5 @@
-// C3a stores only operation audit metadata. Document content, selection text,
-// prompts, provider output, and mutation payloads are deliberately excluded.
+// C3a는 작업 감사 메타데이터만 저장
+// (문서 내용·선택 텍스트·프롬프트·제공자 출력·변경 내용은 일부러 제외)
 export const DOCUMENT_OPERATION_JOURNAL_VERSION = 1;
 export const DOCUMENT_OPERATION_JOURNAL_MAX_EVENTS = 96;
 
@@ -246,9 +246,8 @@ const readJournalState = (uid, documentId, storage) => {
   }
 };
 
-// A valid event shape is not enough on reopen: an append-only sequence must
-// also be a history the C3a state machine could have produced. In particular,
-// an attempt is never durable evidence by itself.
+// 다시 열 때는 이벤트 모양이 맞는 것만으로는 부족함
+// (추가 전용 순서가 C3a 상태 기계가 만들 수 있는 이력이어야 하고, 시도 기록만으로는 영구 증거가 되지 않음)
 const hasValidOperationHistories = (events) => {
   const compensationEvents = events.filter((event) => event.kind === "compensation");
   const groups = new Map();
@@ -578,9 +577,8 @@ export const appendRejectedDocumentOperation = ({
   return writeEvents(state, uid, documentId, [...events, event]);
 };
 
-// Compensation is a separate immutable record. It can only follow a rejected
-// original operation whose document restoration was independently verified.
-// No content snapshot or mutation payload is serialized here.
+// 보상 기록은 별도의 변경 불가 기록
+// (문서 복원을 따로 검증한 거부된 원래 작업 뒤에만 올 수 있고, 내용 스냅샷이나 변경 내용은 직렬화하지 않음)
 export const appendCompensatingDocumentOperation = ({
   uid,
   documentId,
@@ -667,9 +665,8 @@ export const appendDocumentOperationResult = ({
 const createResultRetryKey = (uid, documentId, operationId) =>
   JSON.stringify([uid, documentId, operationId]);
 
-// A result can fail to append after the editor mutation already succeeded.
-// Keep that metadata in component memory only and retry it before a later
-// content checkpoint. The queue is scoped and is never serialized.
+// 에디터 변경이 성공한 뒤에도 결과 추가가 실패할 수 있음
+// (그 메타데이터는 컴포넌트 메모리에만 두고 다음 내용 체크포인트 전에 재시도, 큐는 범위가 정해져 있고 직렬화하지 않음)
 export const enqueueDocumentOperationResultRetry = (
   retryQueue,
   { uid, documentId, operation, result } = {}
@@ -826,9 +823,8 @@ const getDocumentOperationJournalEventAtSequence = (
   );
 };
 
-// The exact HTML remains component-local. A draft may persist only the cursor
-// sequence and event identity needed to prove which journal prefix that HTML
-// covered.
+// 정확한 HTML은 컴포넌트 안에만 보관
+// (초안에는 그 HTML이 어느 저널 구간까지 반영했는지 증명할 커서 순서와 이벤트 식별자만 저장)
 export const createDocumentOperationContentCheckpoint = ({
   uid,
   documentId,
@@ -933,8 +929,8 @@ const classifyOperationHistory = (history) => {
   return status;
 };
 
-// Classify persisted operation metadata only. This never replays an operation
-// or promotes an attempt to durable without an explicit persistence transition.
+// 저장된 작업 메타데이터 분류만 수행
+// (작업을 다시 실행하거나, 명시적인 저장 전환 없이 시도를 영구로 올리지 않음)
 export const classifyDocumentOperationRecovery = ({
   uid,
   documentId,
@@ -990,9 +986,8 @@ export const classifyDocumentOperationRecovery = ({
   };
 };
 
-// A restored checkpoint may acknowledge only its exact journal cursor. A
-// missing, future, or corrupt cursor cannot be replaced with the latest cursor
-// because that would make unrelated later operations look durable.
+// 복원한 체크포인트는 자기 저널 커서만 인정
+// (없거나 미래이거나 손상된 커서를 최신 커서로 바꾸면 무관한 이후 작업이 영구로 보이므로 대체하지 않음)
 export const createRestoredDocumentOperationContentCheckpoint = ({
   uid,
   documentId,

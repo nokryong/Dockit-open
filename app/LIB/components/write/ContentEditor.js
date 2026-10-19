@@ -505,8 +505,7 @@ export default function ContentEditor({
       ],
       content: "",
       editable: Boolean(editable),
-      // The body editor must never steal focus from the title or another
-      // control when it mounts or is recreated.
+      // 본문 에디터가 마운트·재생성될 때 제목이나 다른 컨트롤의 포커스를 가져가지 않도록 처리
       autofocus: false,
       immediatelyRender: false,
       editorProps: {
@@ -558,7 +557,7 @@ export default function ContentEditor({
       },
       onUnmount: ({ editor: currentEditor }) => {
         if (editorRef.current === currentEditor) editorRef.current = null;
-        // A previous view can unmount after its replacement has already mounted.
+        // 이전 뷰가 새 뷰 마운트 이후에 언마운트될 수 있음
         setEditor(activeEditor => activeEditor === currentEditor ? null : activeEditor);
       },
       onUpdate: () => {
@@ -575,11 +574,8 @@ export default function ContentEditor({
         }
       }
     },
-    // Tiptap forwards lifecycle callbacks through its latest options ref. Keep
-    // this recreation boundary limited to structural editor configuration.
-    // Callback identities can change when EditorContext publishes the mounted
-    // editor; including them here creates a destroy -> context update -> destroy
-    // loop.
+    // Tiptap은 생명주기 콜백을 최신 options ref로 전달하므로 재생성 기준은 에디터 구조 설정으로만 제한
+    // (콜백은 EditorContext가 마운트된 에디터를 알릴 때 바뀔 수 있어서, 여기 넣으면 파괴 → 컨텍스트 갱신 → 파괴 반복)
     [viewPage, pageMetrics, pageNumber]
   );
 
@@ -643,8 +639,8 @@ export default function ContentEditor({
     return registerTrackedNoteExecutor(trackedNoteExecutor.execute);
   }, [registerTrackedNoteExecutor, trackedNoteExecutor]);
 
-  // Successful-operation rollback is a separate private editor host. It can
-  // mutate only through validated local snapshot and append-only journal proof.
+  // 성공한 작업의 되돌리기는 별도의 비공개 에디터 호스트에서 처리
+  // (검증된 로컬 스냅샷과 추가 전용 저널 증거로만 변경 가능)
   useEffect(() => {
     if (!editor || editor.isDestroyed || !isEditable || !noteActor ||
       !documentOwnerUid || !documentId) return undefined;
@@ -766,7 +762,7 @@ export default function ContentEditor({
     selectedObjectRef.current = selectedObject;
   }, [selectedObject]);
 
-  // #1. 선택 위치의 객체 정보를 추출하는 부분 (텍스트 입력 중에도 도형을 감지할 수 있게 함)
+  // 1. 객체 정보 추출 (텍스트 입력 중에도 도형 감지)
   const getObjectInfoFromSelection = useCallback(() => {
     if (!editor) return null;
     const { selection } = editor.state;
@@ -790,7 +786,7 @@ export default function ContentEditor({
         const node = selection.$from.node(depth);
         const name = node.type.name;
 
-        // 테이블과 shapeBlock을 부모로 감지할 수 있게 함
+        // 테이블과 shapeBlock을 부모로 감지
         if (
           name === "table" ||
           name === "tableRow" ||
@@ -815,7 +811,7 @@ export default function ContentEditor({
     }
   }, [editor]);
 
-  // #2. 선택 변경을 처리하는 부분 (원클릭 동작)
+  // 2. 선택 변경 핸들러 (원클릭 동작)
   const handleSelectionUpdate = useCallback(() => {
     if (!editor) return;
 
@@ -872,7 +868,7 @@ export default function ContentEditor({
     setSelectedObject
   ]);
 
-  // #3. 더블 클릭을 처리하는 부분 (도형 선택)
+  // 3. 더블 클릭 핸들러 (도형 선택 트리거)
   const handleDoubleClick = useCallback(
     (event) => {
       if (!isEditable) {
@@ -1357,7 +1353,7 @@ export default function ContentEditor({
     };
   }, [viewPage]);
 
-  // #에디터 생명주기를 관리하는 부분
+  // 에디터 생명주기 관리
   useEffect(() => {
     // editor가 없거나 이미 파괴되었다면 중단, focus가 없을 때는 중단
     const editorView = getEditorViewSafely(editor);
@@ -1377,7 +1373,7 @@ export default function ContentEditor({
     // transaction 핸들러
     const handleTransaction = ({ transaction }) => {
       if (transaction.docChanged) {
-        // External document restores can suppress the editor's update event.
+        // 외부 문서 복원 시 에디터 update 이벤트가 생략될 수 있음
         throttledSyncHeadingStyles();
         mapRememberedTextSelection(transaction);
         handleSelectionUpdate();
@@ -1441,7 +1437,7 @@ export default function ContentEditor({
     syncHeadingStyles();
     handleSelectionUpdate();
 
-    // Cleanup Function
+    // 정리 함수
     return () => {
       // 이벤트 리스너 제거
       editor.off("update", throttledSyncHeadingStyles);
@@ -1575,9 +1571,8 @@ export default function ContentEditor({
       });
   }, [editor, isEditable]);
 
-  // #외부 value가 바뀌면 동기화하는 부분
-  // setContent가 React 노드 뷰를 flushSync로 그리므로 커밋 중에 실행하지 않고 마이크로태스크로 미룬다.
-  // 새 value가 오거나 언마운트되면 대기 중인 동기화를 취소한다.
+  // 외부 value 변경 시 동기화
+  // (setContent가 React 노드 뷰를 flushSync로 그리므로 커밋 중이 아닌 마이크로태스크로 지연, 새 value가 오거나 언마운트되면 대기 중인 동기화 취소)
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
 
@@ -1598,7 +1593,7 @@ export default function ContentEditor({
           onNotePersistenceRejected?.(restored.error);
           return;
         }
-        lastContentRef.current = restored.html; // normalized persisted baseline
+        lastContentRef.current = restored.html; // 정규화한 저장 기준값
         onNotePersistenceStatus?.({ source: "external-restore", status: "valid" });
 
         // 선택적으로 커서 위치 복구 (필요한 경우)
