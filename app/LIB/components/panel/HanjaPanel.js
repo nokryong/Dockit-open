@@ -50,7 +50,7 @@ export default function HanjaPanel({ dragHandleProps }) {
     // 텍스트가 없으면 리턴
     if (len === 0) return;
 
-    // ✨ 조건별 분기 처리
+    // 조건별 분기
     if (len === 1) {
       // 1. 한 글자이고 한글인 경우 -> 음독(kor)
       if (/[가-힣]/.test(trimmedText)) {

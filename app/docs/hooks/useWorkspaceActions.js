@@ -310,23 +310,6 @@ export function useWorkspaceActions({
 
   const handleCreateContent = async (type) => {
     if (type === "documents") {
-      const countDocumentsInTree = (items) => {
-        let count = 0;
-        for (const item of items) {
-          if (item.content_type === "documents") count++;
-          if (item.children?.length > 0)
-            count += countDocumentsInTree(item.children);
-        }
-        return count;
-      };
-
-      // if (countDocumentsInTree(folderTree) >= 10) {
-      //   toast.danger("베타버전에서 문서는 최대 10개까지만 생성할 수 있습니다.");
-      //   return;
-      // }
-    }
-
-    if (type === "documents") {
       return handleCreateDocument({ title: uiText("새 문서") }, { openAfterCreate: true });
     }
 

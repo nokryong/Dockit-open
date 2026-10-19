@@ -254,39 +254,132 @@ export default function DiagramBlockView({ node, updateAttributes, editor, getPo
   }, []);
 
   return (
-    <NodeViewWrapper className="not-prose diagram-block-wrapper" style={wrapperStyle}>
-      <div ref={frameRef} className="not-prose diagram-frame-container" style={frameStyle} contentEditable={false}>
+    <NodeViewWrapper
+      className="not-prose diagram-block-wrapper"
+      style={wrapperStyle}
+    >
+      <div
+        ref={frameRef}
+        className="not-prose diagram-frame-container"
+        style={frameStyle}
+        contentEditable={false}
+      >
         <div data-diagram-chrome style={selectionFrameStyle} />
-        <div className="diagram-preview" data-editing={isEditing || undefined} data-preview-theme={isDarkMode ? "dark" : "light"}>
-          {previewUrl ? <img className="diagram-preview-image" src={previewUrl} alt={uiText("다이어그램")} /> : (
-            <div className="diagram-preview-status" role={errorMessage ? "alert" : "status"}>
-              {!code.trim() ? (canEdit ? uiText("더블클릭하여 도식 작성") : uiText("빈 다이어그램")) : errorMessage || "도식 그리는 중…"}
+        <div
+          className="diagram-preview"
+          data-editing={isEditing || undefined}
+          data-preview-theme={isDarkMode ? "dark" : "light"}
+        >
+          {previewUrl ? (
+            <img
+              className="diagram-preview-image"
+              src={previewUrl}
+              alt={uiText("다이어그램")}
+            />
+          ) : (
+            <div
+              className="diagram-preview-status"
+              role={errorMessage ? "alert" : "status"}
+            >
+              {!code.trim()
+                ? canEdit
+                  ? uiText("더블클릭하여 도식 작성")
+                  : uiText("빈 다이어그램")
+                : errorMessage || "도식 그리는 중…"}
             </div>
           )}
-          {canInteract && <button ref={triggerRef} type="button" className="diagram-edit-trigger" aria-label={uiText("다이어그램 선택")} onMouseDown={(event) => event.preventDefault()} onClick={selectDiagram} onDoubleClick={editDiagram} onKeyDown={(event) => { if (event.key === "Enter") editDiagram(event); }} />}
+          {canInteract && (
+            <button
+              ref={triggerRef}
+              type="button"
+              className="diagram-edit-trigger"
+              aria-label={uiText("다이어그램 선택")}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={selectDiagram}
+              onDoubleClick={editDiagram}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") editDiagram(event);
+              }}
+            />
+          )}
         </div>
         {isEditing && (
-          <div className="diagram-code-editor h-full w-full" data-mermaid-editor data-workspace-shortcuts="ignore"
+          <div
+            className="diagram-code-editor h-full w-full"
+            data-mermaid-editor
+            data-workspace-shortcuts="ignore"
             onMouseDown={(event) => event.stopPropagation()}
             onClick={(event) => event.stopPropagation()}
             onDoubleClick={(event) => event.stopPropagation()}
             onKeyDown={(event) => {
               event.stopPropagation();
-              if (event.key === "Escape") { event.preventDefault(); finishEditing(true); triggerRef.current?.focus({ preventScroll: true }); }
+              if (event.key === "Escape") {
+                event.preventDefault();
+                finishEditing(true);
+                triggerRef.current?.focus({ preventScroll: true });
+              }
             }}
-            onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) finishEditing(); }}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                finishEditing();
+            }}
           >
-            <Textarea value={draft} onChange={(event) => { draftRef.current = event.target.value; setDraft(event.target.value); }}
-              autoFocus ariaLabel={uiText("Mermaid 코드")} spellCheck={false} resizable={false} autoSize={false}
-              background="white-10" color="black-9" border={false} shadow="none"
+            <Textarea
+              value={draft}
+              onChange={(event) => {
+                draftRef.current = event.target.value;
+                setDraft(event.target.value);
+              }}
+              autoFocus
+              ariaLabel={uiText("Mermaid 코드")}
+              spellCheck={false}
+              resizable={false}
+              autoSize={false}
+              background="white-10"
+              color="black-9"
+              border={false}
+              shadow="none"
               className="h-full w-full [&_textarea]:h-full! [&_textarea]:font-mono [&_textarea]:text-sm"
               style={{ width: "100%", height: "100%" }}
             />
           </div>
         )}
-        <div data-diagram-handle="x" onMouseDown={(event) => startResize(event, "x")} style={edgeHandleStyle({ right: -HANDLE_SIZE / 2, top: "50%", transform: "translateY(-50%)", width: HANDLE_SIZE, height: EDGE_HANDLE_LENGTH, cursor: "ew-resize", ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {}) })} />
-        <div data-diagram-handle="y" onMouseDown={(event) => startResize(event, "y")} style={edgeHandleStyle({ bottom: -HANDLE_SIZE / 2, left: "50%", transform: "translateX(-50%)", width: EDGE_HANDLE_LENGTH, height: HANDLE_SIZE, cursor: "ns-resize", ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {}) })} />
-        <div data-diagram-handle="xy" onMouseDown={(event) => startResize(event, "xy")} style={cornerHandleStyle({ right: -CORNER_HANDLE_SIZE / 2, bottom: -CORNER_HANDLE_SIZE / 2, cursor: "nwse-resize", ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {}) })} />
+        <div
+          data-diagram-handle="x"
+          onMouseDown={(event) => startResize(event, "x")}
+          style={edgeHandleStyle({
+            right: -HANDLE_SIZE / 2,
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: HANDLE_SIZE,
+            height: EDGE_HANDLE_LENGTH,
+            cursor: "ew-resize",
+            ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {})
+          })}
+        />
+        <div
+          data-diagram-handle="y"
+          onMouseDown={(event) => startResize(event, "y")}
+          style={edgeHandleStyle({
+            bottom: -HANDLE_SIZE / 2,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: EDGE_HANDLE_LENGTH,
+            height: HANDLE_SIZE,
+            cursor: "ns-resize",
+            ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {})
+          })}
+        />
+        <div
+          data-diagram-handle="xy"
+          onMouseDown={(event) => startResize(event, "xy")}
+          style={cornerHandleStyle({
+            right: -CORNER_HANDLE_SIZE / 2,
+            bottom: -CORNER_HANDLE_SIZE / 2,
+            cursor: "nwse-resize",
+            ...(isEditing ? { pointerEvents: "none", opacity: 0 } : {})
+          })}
+        />
       </div>
     </NodeViewWrapper>
   );

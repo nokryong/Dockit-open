@@ -15,8 +15,8 @@ class WindowsPrintService {
   }
 
   async print(options = {}) {
-    if (this.printing) throw new Error(uiText("인쇄창이 이미 열려 있습니다."));
-    if (process.platform !== 'win32') throw new Error(uiText("Windows 인쇄 기능입니다."));
+    if (this.printing) throw new Error(uiText('인쇄창이 이미 열려 있습니다.'));
+    if (process.platform !== 'win32') throw new Error(uiText('Windows 인쇄 기능입니다.'));
     this.printing = true;
     const window = this.getWindow();
     let directory;
@@ -31,8 +31,11 @@ class WindowsPrintService {
         })));
       })()`);
       const pdf = await window.webContents.printToPDF({
-        printBackground: true, displayHeaderFooter: false, preferCSSPageSize: true,
-        pageSize: 'A4', margins: { top: 0, bottom: 0, left: 0, right: 0 }
+        printBackground: true,
+        displayHeaderFooter: false,
+        preferCSSPageSize: true,
+        pageSize: 'A4',
+        margins: { top: 0, bottom: 0, left: 0, right: 0 }
       });
       await fs.mkdir(this.root, { recursive: true });
       directory = await fs.mkdtemp(path.join(this.root, 'job-'));
@@ -41,10 +44,20 @@ class WindowsPrintService {
       const handle = window.getNativeWindowHandle();
       const owner = handle.length === 8 ? handle.readBigUInt64LE().toString() : handle.readUInt32LE().toString();
       await fs.writeFile(pdfPath, pdf);
-      await fs.writeFile(requestPath, JSON.stringify({ pdfPath, owner, title: typeof options.title === 'string' ? options.title : 'Dockit Open' }));
-      if (window.isEnabled()) { window.setEnabled(false); disabled = true; }
+      await fs.writeFile(
+        requestPath,
+        JSON.stringify({ pdfPath, owner, title: typeof options.title === 'string' ? options.title : 'Dockit Open' })
+      );
+      if (window.isEnabled()) {
+        window.setEnabled(false);
+        disabled = true;
+      }
       return await new Promise((resolve, reject) => {
-        const child = this.spawnProcess(executable, [requestPath], { windowsHide: true, shell: false, stdio: ['ignore', 'pipe', 'pipe'] });
+        const child = this.spawnProcess(executable, [requestPath], {
+          windowsHide: true,
+          shell: false,
+          stdio: ['ignore', 'pipe', 'pipe']
+        });
         let pending = '';
         let failure;
         let completion;
@@ -55,7 +68,11 @@ class WindowsPrintService {
           pending = lines.pop();
           for (const line of lines) {
             let event;
-            try { event = JSON.parse(line); } catch { continue; }
+            try {
+              event = JSON.parse(line);
+            } catch {
+              continue;
+            }
             if (event.phase === 'error') failure = new Error(event.value);
             if (event.phase === 'completed') completion = event.value;
           }
@@ -63,12 +80,15 @@ class WindowsPrintService {
         child.stderr.on('data', () => {});
         child.once('error', reject);
         child.once('close', code => {
-          if (failure || code !== 0) reject(failure || new Error(uiText("Windows 인쇄창을 열지 못했습니다.")));
+          if (failure || code !== 0) reject(failure || new Error(uiText('Windows 인쇄창을 열지 못했습니다.')));
           else resolve({ cancelled: completion === 'Canceled' });
         });
       });
     } finally {
-      if (disabled && !window.isDestroyed()) { window.setEnabled(true); window.focus(); }
+      if (disabled && !window.isDestroyed()) {
+        window.setEnabled(true);
+        window.focus();
+      }
       if (directory) {
         await Promise.allSettled(['document.pdf', 'request.json'].map(name => fs.unlink(path.join(directory, name))));
         await fs.rmdir(directory).catch(() => {});
