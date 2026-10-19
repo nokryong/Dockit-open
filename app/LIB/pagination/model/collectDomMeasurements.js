@@ -113,7 +113,7 @@ const resolveTaskListMarkerState = (listItemDom) =>
   listItemDom instanceof HTMLElement &&
   listItemDom.getAttribute("data-checked") === "true";
 
-const resolveTaskMarkerGutterWidth = (listItemDom) => {
+const resolveTaskMarkerGutterWidth = (listItemDom, scale = 1) => {
   if (!(listItemDom instanceof HTMLElement)) {
     return 18;
   }
@@ -129,7 +129,7 @@ const resolveTaskMarkerGutterWidth = (listItemDom) => {
 
   return Math.max(
     18,
-    labelRect.width + parsePixelValue(labelStyles.marginRight)
+    labelRect.width / scale + parsePixelValue(labelStyles.marginRight)
   );
 };
 
@@ -159,6 +159,31 @@ const resolveListMarkerText = ({
   return "•";
 };
 
+// offsetHeight rounds every block to whole pixels. The used CSS height keeps
+// fractional layout pixels and is independent of the canvas zoom transform.
+const getLayoutHeight = (dom) => {
+  const styles = window.getComputedStyle(dom);
+  const height = Number.parseFloat(styles.height);
+
+  if (!Number.isFinite(height)) {
+    return dom.getBoundingClientRect().height / getCanvasScale(dom);
+  }
+
+  return height + (styles.boxSizing === "border-box" ? 0 :
+    parsePixelValue(styles.paddingTop) + parsePixelValue(styles.paddingBottom) +
+    parsePixelValue(styles.borderTopWidth) + parsePixelValue(styles.borderBottomWidth));
+};
+
+const getCanvasScale = (dom) => {
+  const canvas = dom.closest(".zoom-container");
+  if (!canvas) return 1;
+  const transform = window.getComputedStyle(canvas).transform;
+  if (!transform || transform === "none") return 1;
+  const matrix = new window.DOMMatrixReadOnly(transform);
+  const scale = Math.hypot(matrix.a, matrix.b);
+  return Number.isFinite(scale) && scale > 0 ? scale : 1;
+};
+
 const pushMeasurement = (measurements, measurement) => {
   const { dom } = measurement;
 
@@ -168,7 +193,7 @@ const pushMeasurement = (measurements, measurement) => {
 
   measurements.push({
     ...measurement,
-    offsetHeight: measurement.offsetHeight ?? dom.offsetHeight,
+    offsetHeight: measurement.offsetHeight ?? getLayoutHeight(dom),
     renderWidth:
       measurement.renderWidth ??
       dom.getBoundingClientRect?.().width ??
@@ -340,7 +365,8 @@ const createInlineTagGroup = ({
   tagIndex,
   blockPos,
   view,
-  excludedElements = []
+  excludedElements = [],
+  scale = 1
 }) => {
   const textNodes = resolveElementTextNodes(tagElement, excludedElements);
   const pmRanges = textNodes
@@ -367,9 +393,9 @@ const createInlineTagGroup = ({
         right: rect.right,
         lineHeight: getEffectiveLineHeight({
           styles,
-          fallbackHeight: Math.max(fontSize, rect.height)
-        }),
-        fontSize
+          fallbackHeight: Math.max(fontSize, rect.height / scale)
+        }) * scale,
+        fontSize: fontSize * scale
       };
     });
 
@@ -402,7 +428,8 @@ const collectInlineTagGroups = ({
   rootElement,
   view,
   blockPos,
-  excludedElements = []
+  excludedElements = [],
+  scale = 1
 }) =>
   resolveInlineTagElements(rootElement, excludedElements)
     .map((tagElement, tagIndex) =>
@@ -411,7 +438,8 @@ const collectInlineTagGroups = ({
         tagIndex,
         blockPos,
         view,
-        excludedElements
+        excludedElements,
+        scale
       })
     )
     .filter(Boolean);
@@ -459,7 +487,7 @@ const resolveInlineTagGroupsForLine = (line, inlineTagGroups = []) =>
     })
     .filter(Boolean);
 
-const resolveLineFragmentsFromTextNodes = (textNodes = []) => {
+const resolveLineFragmentsFromTextNodes = (textNodes = [], scale = 1) => {
   const rectFragments = [];
 
   textNodes.forEach((textNode) => {
@@ -492,8 +520,8 @@ const resolveLineFragmentsFromTextNodes = (textNodes = []) => {
           bottom: rect.bottom,
           left: rect.left,
           right: rect.right,
-          lineHeight: effectiveLineHeight,
-          fontSize
+          lineHeight: effectiveLineHeight * scale,
+          fontSize: fontSize * scale
         });
       });
   });
@@ -632,14 +660,16 @@ const collectParagraphMeasurements = ({
   }
 
   const styles = window.getComputedStyle(dom);
+  const scale = rootRect.scale || 1;
   const { extraLeft, extraRight } = getHorizontalOffsets(view, dom, rootRect);
   const inlineTagGroups = collectInlineTagGroups({
     rootElement: dom,
     view,
-    blockPos: blockContext.pos
+    blockPos: blockContext.pos,
+    scale
   });
   const rawLineFragments = resolveLineFragmentsFromTextNodes(
-    resolveTextNodes({ rootElement: dom })
+    resolveTextNodes({ rootElement: dom }), scale
   );
   const lineFragments = resolveMeasuredLineSlots({
     rawLineFragments,
@@ -647,9 +677,9 @@ const collectParagraphMeasurements = ({
     lineHeight: getEffectiveLineHeight({
       styles,
       fallbackHeight: rawLineFragments[0]?.bottom
-        ? rawLineFragments[0].bottom - rawLineFragments[0].top
+        ? (rawLineFragments[0].bottom - rawLineFragments[0].top) / scale
         : 0
-    })
+    }) * scale
   });
 
   if (!lineFragments.length) {
@@ -689,8 +719,8 @@ const collectParagraphMeasurements = ({
         blockPos: blockContext.pos,
         blockType: blockContext.type,
         dom,
-        offsetHeight: Math.max(1, line.bottom - line.top),
-        renderWidth: Math.max(1, line.right - line.left),
+        offsetHeight: Math.max(1, (line.bottom - line.top) / scale),
+        renderWidth: Math.max(1, (line.right - line.left) / scale),
         marginTop: index === 0 ? parsePixelValue(styles.marginTop) : 0,
         marginBottom:
           index === lineFragments.length - 1
@@ -728,6 +758,7 @@ const collectListItemLineMeasurements = ({
   }
 
   const nestedListElements = getNestedListElements(listItemDom);
+  const scale = rootRect.scale || 1;
   const listTextHost =
     Array.from(listItemDom.children).find(
       (child) =>
@@ -755,8 +786,8 @@ const collectListItemLineMeasurements = ({
   const textHostRect = listTextHost.getBoundingClientRect();
   const listMarkerGutterWidth =
     listType === "task"
-      ? resolveTaskMarkerGutterWidth(listItemDom)
-      : Math.max(18, textHostRect.left - listItemRect.left);
+      ? resolveTaskMarkerGutterWidth(listItemDom, scale)
+      : Math.max(18, (textHostRect.left - listItemRect.left) / scale);
   const directTextNodes = resolveTextNodes({
     rootElement: listTextHost,
     excludedElements: nestedListElements
@@ -765,9 +796,10 @@ const collectListItemLineMeasurements = ({
     rootElement: listTextHost,
     view,
     blockPos: blockContext.pos,
-    excludedElements: nestedListElements
+    excludedElements: nestedListElements,
+    scale
   });
-  const rawLineFragments = resolveLineFragmentsFromTextNodes(directTextNodes);
+  const rawLineFragments = resolveLineFragmentsFromTextNodes(directTextNodes, scale);
 
   if (!rawLineFragments.length) {
     return false;
@@ -784,9 +816,9 @@ const collectListItemLineMeasurements = ({
     lineHeight: getEffectiveLineHeight({
       styles: textHostStyles,
       fallbackHeight: rawLineFragments[0]?.bottom
-        ? rawLineFragments[0].bottom - rawLineFragments[0].top
+        ? (rawLineFragments[0].bottom - rawLineFragments[0].top) / scale
         : 0
-    })
+    }) * scale
   });
   const nodeStart = listItemPos + 1;
   const nodeEnd = listItemPos + listItemNode.nodeSize - 1;
@@ -811,8 +843,8 @@ const collectListItemLineMeasurements = ({
       blockPos: blockContext.pos,
       blockType: blockContext.type,
       dom: listItemDom,
-      offsetHeight: Math.max(1, line.bottom - line.top),
-      renderWidth: Math.max(1, line.right - line.left),
+      offsetHeight: Math.max(1, (line.bottom - line.top) / scale),
+      renderWidth: Math.max(1, (line.right - line.left) / scale),
       marginTop:
         listItemIndex === 0 && lineIndex === 0 ? listMarginTop : 0,
       marginBottom:
@@ -878,7 +910,7 @@ const createRepeatedTableHeaderMarkup = (rowElements) => {
       .map((row) => row.outerHTML)
       .join("")}</tbody></table>`,
     repeatHeaderHeight: headerRows.reduce(
-      (sum, row) => sum + row.offsetHeight,
+      (sum, row) => sum + getLayoutHeight(row),
       0
     ),
     tableHeaderRowCount: headerRows.length
@@ -934,9 +966,28 @@ const collectTableMeasurements = ({
   const tableMarginTop = parsePixelValue(tableStyles.marginTop);
   const tableMarginBottom = parsePixelValue(tableStyles.marginBottom);
   const { extraLeft, extraRight } = getHorizontalOffsets(view, dom, rootRect);
-  const rowElements = Array.from(
+  const allRowElements = Array.from(
     tableElement.querySelectorAll(":scope > tbody > tr")
-  ).filter((row) => !row.classList.contains("tiptap-table-page-break-row"));
+  );
+  const rowElements = allRowElements.filter(
+    (row) => !row.classList.contains("tiptap-table-page-break-row")
+  );
+  // Collapsed outer borders extend beyond the row boxes. Measure only the
+  // outer edges, so injected page-break rows never become document content.
+  const tableRect = dom.getBoundingClientRect();
+  const layoutHeight = getLayoutHeight(dom);
+  const scale = layoutHeight > 0 && tableRect.height > 0
+    ? tableRect.height / layoutHeight : 1;
+  const firstRowRect = allRowElements[0]?.getBoundingClientRect();
+  const lastRowRect = allRowElements.at(-1)?.getBoundingClientRect();
+  const tableTopInset = firstRowRect
+    ? Math.max(0, (firstRowRect.top - tableRect.top) / scale) : 0;
+  const tableBottomInset = lastRowRect
+    ? Math.max(0, (tableRect.bottom - lastRowRect.bottom) / scale) : 0;
+  const collapsedBorders = window.getComputedStyle(tableElement).borderCollapse === "collapse";
+  const halfRowBorder = (row, side) => !row || !collapsedBorders ? 0 :
+    Math.max(0, ...Array.from(row.cells, cell =>
+      parsePixelValue(window.getComputedStyle(cell)[side]))) / 2;
   const tableColSpan = getTableColumnSpan(tableElement);
   const repeatedHeader = createRepeatedTableHeaderMarkup(rowElements);
 
@@ -957,12 +1008,17 @@ const collectTableMeasurements = ({
         blockPos: blockContext.pos,
         blockType: blockContext.type,
         dom: rowDom,
+        offsetHeight: getLayoutHeight(rowDom) +
+          (rowIndex === 0 ? tableTopInset : 0) +
+          (rowIndex === node.childCount - 1 ? tableBottomInset : 0),
         renderWidth: rowDom.getBoundingClientRect().width,
         marginTop: rowIndex === 0 ? tableMarginTop : 0,
         marginBottom: rowIndex === node.childCount - 1 ? tableMarginBottom : 0,
         extraLeft,
         extraRight,
         kind: "tableRow",
+        tableBreakEndBorderHeight: halfRowBorder(rowElements[rowIndex - 1], "borderBottomWidth"),
+        tableBreakStartBorderHeight: halfRowBorder(rowDom, "borderTopWidth"),
         tableColSpan,
         tableRowIndex: rowIndex,
         tableHeaderRowCount: repeatedHeader.tableHeaderRowCount,
@@ -1020,7 +1076,7 @@ const collectListMeasurements = ({
       });
       const nestedListElements = getNestedListElements(childDom);
       const nestedListsHeight = nestedListElements.reduce(
-        (sum, nestedListElement) => sum + nestedListElement.offsetHeight,
+        (sum, nestedListElement) => sum + getLayoutHeight(nestedListElement),
         0
       );
 
@@ -1030,7 +1086,7 @@ const collectListMeasurements = ({
           blockPos: blockContext.pos,
           blockType: blockContext.type,
           dom: childDom,
-          offsetHeight: Math.max(0, childDom.offsetHeight - nestedListsHeight),
+          offsetHeight: Math.max(0, getLayoutHeight(childDom) - nestedListsHeight),
           marginTop: childIndex === 0 ? listMarginTop : 0,
           marginBottom:
             childIndex === node.childCount - 1 ? listMarginBottom : 0,
@@ -1157,6 +1213,7 @@ export const collectPaginationDomModel = (view, options = undefined) => {
   const measurements = [];
   const blocks = [];
   const rootRect = view.dom.getBoundingClientRect();
+  rootRect.scale = getCanvasScale(view.dom);
   const excludedFootnoteBodyPositions =
     resolveCandidateExcludedFootnoteBodyPositions(options);
 

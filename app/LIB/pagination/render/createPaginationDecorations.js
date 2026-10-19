@@ -154,7 +154,8 @@ export const createPageBreakWidgetElement = ({
   pageNumberPosition = "none",
   includeHeader = true,
   includePageBreakBoundary = true,
-  structureClassName = ""
+  structureClassName = "",
+  tableBorderHeight = 0
 }) => {
   const spacerStructure = createPaginationSpacerStructure({
     fillerHeight,
@@ -184,6 +185,10 @@ export const createPageBreakWidgetElement = ({
     const widget = document.createElement("tr");
     widget.className = "tiptap-table-page-break-row";
 
+    // A collapsed neighbouring cell border adds half its width to this row.
+    // Keep the spacer's total footprint equal to the planned page gap.
+    spacerStructure.style.marginTop = `${-Math.max(0, tableBorderHeight)}px`;
+
     const cell = document.createElement("td");
     cell.className = "tiptap-table-page-break-cell";
     cell.colSpan = tableColSpan || 1;
@@ -202,7 +207,8 @@ export const createPageBreakHeaderWidgetElement = ({
   marginLeft,
   marginRight,
   kind,
-  tableColSpan
+  tableColSpan,
+  tableBorderHeight = 0
 }) => {
   const spacerStructure = createPaginationSpacerStructure({
     headerHeight: pageMetrics?.padding?.top || 0,
@@ -225,6 +231,7 @@ export const createPageBreakHeaderWidgetElement = ({
   if (kind === "tableRow") {
     const widget = document.createElement("tr");
     widget.className = "tiptap-table-page-break-row";
+    spacerStructure.style.marginBottom = `${-Math.max(0, tableBorderHeight)}px`;
 
     const cell = document.createElement("td");
     cell.className = "tiptap-table-page-break-cell";
@@ -414,6 +421,7 @@ export const createPaginationDecorations = ({
       marginLeft: pageBreak.marginLeft,
       marginRight: pageBreak.marginRight,
       kind: pageBreak.kind,
+      tableBorderHeight: pageBreak.tableBreakEndBorderHeight,
       tableColSpan: pageBreak.tableColSpan,
       pageNumber: pageBreak.footerPageNumber,
       pageNumberPosition: normalizedPageNumberPosition,
@@ -435,6 +443,7 @@ export const createPaginationDecorations = ({
       marginLeft: pageBreak.marginLeft,
       marginRight: pageBreak.marginRight,
       kind: pageBreak.kind,
+      tableBorderHeight: pageBreak.tableBreakStartBorderHeight,
       tableColSpan: pageBreak.tableColSpan
     });
 

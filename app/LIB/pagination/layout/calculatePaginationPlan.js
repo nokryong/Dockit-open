@@ -351,6 +351,10 @@ const createPageBreakEntry = ({
     marginRight: -(measurement.extraRight || 0),
     kind: breakKind,
     tableColSpan: measurement.tableColSpan,
+    ...(breakKind === "tableRow" && measurement.tableBreakEndBorderHeight > 0
+      ? { tableBreakEndBorderHeight: measurement.tableBreakEndBorderHeight } : {}),
+    ...(breakKind === "tableRow" && measurement.tableBreakStartBorderHeight > 0
+      ? { tableBreakStartBorderHeight: measurement.tableBreakStartBorderHeight } : {}),
     footerPageNumber,
     repeatedHeaderHeight: continuationHeader.repeatedHeaderHeight,
     repeatedHeaderHtml: continuationHeader.repeatedHeaderHtml,
