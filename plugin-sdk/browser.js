@@ -16,15 +16,33 @@
     for (const listener of languageListeners) listener(language);
   };
   let resolveReady;
-  const ready = new Promise(resolve => { resolveReady = resolve; });
+  const ready = new Promise(resolve => {
+    resolveReady = resolve;
+  });
   const send = message => window.parent.postMessage({ channel, ...message }, '*');
-  const request = (method, payload) => ready.then(() => new Promise((resolve, reject) => {
-    const requestId = String(++serial);
-    const timer = ['credentials.configure', 'images.download'].includes(method) ? null : setTimeout(() => { pending.delete(requestId); reject(new Error(language === 'en' ? 'Dockit did not respond in time.' : 'Dockit 응답 시간이 초과되었습니다.')); }, 45000);
-    pending.set(requestId, { resolve, reject, timer });
-    send({ type: 'request', requestId, method, payload });
-  }));
-  const subscribe = (listeners, callback) => { listeners.add(callback); return () => listeners.delete(callback); };
+  const request = (method, payload) =>
+    ready.then(
+      () =>
+        new Promise((resolve, reject) => {
+          const requestId = String(++serial);
+          const timer = ['credentials.configure', 'images.download'].includes(method)
+            ? null
+            : setTimeout(() => {
+                pending.delete(requestId);
+                reject(
+                  new Error(
+                    language === 'en' ? 'Dockit did not respond in time.' : 'Dockit 응답 시간이 초과되었습니다.'
+                  )
+                );
+              }, 45000);
+          pending.set(requestId, { resolve, reject, timer });
+          send({ type: 'request', requestId, method, payload });
+        })
+    );
+  const subscribe = (listeners, callback) => {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  };
 
   window.addEventListener('message', event => {
     if (event.source !== window.parent || event.data?.channel !== channel) return;
@@ -52,8 +70,12 @@
   window.Dockit = Object.freeze({
     version: 2,
     ready,
-    get theme() { return theme; },
-    get language() { return language; },
+    get theme() {
+      return theme;
+    },
+    get language() {
+      return language;
+    },
     onLanguageChange: callback => subscribe(languageListeners, callback),
     onThemeChange: callback => subscribe(themeListeners, callback),
     onAction: callback => subscribe(actionListeners, callback),
@@ -63,32 +85,39 @@
     openExternal: url => request('external.open', { url }),
     credentials: Object.freeze({
       status: service => request('credentials.status', { service }),
-      configure: service => request('credentials.configure', { service }),
+      configure: service => request('credentials.configure', { service })
     }),
     network: Object.freeze({ get: (service, params) => request('network.get', { service, params }) }),
     images: Object.freeze({
       load: url => request('images.load', { url }),
       preview: details => request('images.preview', details),
-      download: (url, filename) => request('images.download', { url, filename }),
+      download: (url, filename) => request('images.download', { url, filename })
     }),
     storage: Object.freeze({
       get: key => request('storage.get', { key }),
       set: (key, value) => request('storage.set', { key, value }),
-      remove: key => request('storage.remove', { key }),
-    }),
+      remove: key => request('storage.remove', { key })
+    })
   });
   const announce = () => send({ type: 'ready' });
   window.addEventListener('error', () => send({ type: 'error' }));
   window.addEventListener('unhandledrejection', () => send({ type: 'error' }));
   announce();
-  window.addEventListener('DOMContentLoaded', () => {
-    announce();
-    let lastHeight = 0;
-    const resize = () => {
-      const height = Math.ceil(document.body.getBoundingClientRect().height);
-      if (height !== lastHeight) { lastHeight = height; send({ type: 'resize', height }); }
-    };
-    new ResizeObserver(resize).observe(document.body);
-    resize();
-  }, { once: true });
+  window.addEventListener(
+    'DOMContentLoaded',
+    () => {
+      announce();
+      let lastHeight = 0;
+      const resize = () => {
+        const height = Math.ceil(document.body.getBoundingClientRect().height);
+        if (height !== lastHeight) {
+          lastHeight = height;
+          send({ type: 'resize', height });
+        }
+      };
+      new ResizeObserver(resize).observe(document.body);
+      resize();
+    },
+    { once: true }
+  );
 })();
