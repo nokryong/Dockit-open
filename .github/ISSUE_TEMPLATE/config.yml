@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 플러그인 문의·등록 / Plugins
+    url: https://github.com/nokryong/dockit-plugins
+    about: 공식 플러그인의 버그와 등록은 플러그인 저장소에서 받습니다. / Official plugin issues and submissions go to the plugin repository.
