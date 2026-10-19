@@ -27,8 +27,8 @@ const isNonEmptyArtifact = (artifactPath) =>
   existsSync(artifactPath) && statSync(artifactPath).isFile() && statSync(artifactPath).size > 0;
 
 /**
- * Reads renderer output that was produced out-of-process.
- * A future renderer adapter can implement the same request/result contract directly.
+ * 다른 프로세스에서 만든 렌더러 결과 읽기
+ * (이후 렌더러 어댑터가 같은 요청·결과 계약을 직접 구현 가능)
  *
  * @param {HWPXVisualRenderRequest} request
  * @returns {HWPXVisualRenderResult}

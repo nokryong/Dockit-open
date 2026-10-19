@@ -123,7 +123,7 @@ function FixtureApp() {
 }
 
 createRoot(document.querySelector("#app")).render(
-  // DarkModeProvider reads the theme from settings, so it needs SettingProvider.
+  // DarkModeProvider가 설정에서 테마를 읽으므로 SettingProvider 필요
   React.createElement(
     SettingProvider,
     null,

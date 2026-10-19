@@ -33,7 +33,7 @@ describe("deferEditorWrite", () => {
     expect(destroyed).not.toHaveBeenCalled();
   });
 
-  // Tiptap's React node views call flushSync while setContent runs, like the write below.
+  // 아래 쓰기처럼 setContent 중에 Tiptap React 노드 뷰가 flushSync 호출
   const renderProbe = async defer => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => {});
     const seen = [];
@@ -69,7 +69,7 @@ describe("deferEditorWrite", () => {
 
   it("keeps ContentEditor's external value sync deferred and cancellable", () => {
     const source = fs.readFileSync(path.join(process.cwd(), "app/LIB/components/write/ContentEditor.js"), "utf8").replace(/\r\n/g, "\n");
-    const start = source.indexOf("// #외부 value가 바뀌면 동기화하는 부분");
+    const start = source.indexOf("// 외부 value 변경 시 동기화");
     const effect = source.slice(start, source.indexOf("}, [value, editor, onNotePersistenceRejected, onNotePersistenceStatus]);", start));
     expect(start).toBeGreaterThan(-1);
     expect(effect).toMatch(/return deferEditorWrite\(editor, \(\) => \{[\s\S]*restoreValidatedNotePersistenceHtml\(editor, value\)/);

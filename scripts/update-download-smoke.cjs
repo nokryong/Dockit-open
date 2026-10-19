@@ -33,7 +33,7 @@ if (!process.versions.electron) {
     const output = path.resolve(process.argv[2] || 'release');
     const metadata = load(await fsp.readFile(path.join(output, 'latest.yml'), 'utf8'));
     const assetName = path.basename(decodeURIComponent(metadata.files[0].url));
-    // GitHub publishing replaces spaces in asset names; local NSIS output keeps them.
+    // GitHub 게시는 자산 이름의 공백을 바꾸지만 로컬 NSIS 결과물은 그대로 둠
     let installer = path.join(output, assetName);
     if (!fs.existsSync(installer)) {
       const localName = (await fsp.readdir(output)).find(name => name.replaceAll(' ', '-') === assetName);
@@ -75,7 +75,7 @@ if (!process.versions.electron) {
         updater.setFeedURL(feed);
         updater.disableDifferentialDownload = true;
         updater.logger = { info() {}, warn() {}, error() {}, debug() {} };
-        // Exercise real install argument construction without launching an installer.
+        // 설치 프로그램을 실행하지 않고 실제 설치 인자 구성만 확인
         updater.spawnLog = async (file, args) => {
           assert.equal(await fsp.readFile(path.join(folder, 'document.dkt'), 'utf8'), 'saved-before-install');
           assert.ok(calls.includes('flush'));
@@ -102,7 +102,7 @@ if (!process.versions.electron) {
         assert.equal(service.snapshot().status, 'available', JSON.stringify(failures));
         assert.equal(calls.length, 0);
         await service.install();
-        // spawnLog validates asynchronously, while the updater schedules quit with setImmediate.
+        // spawnLog는 비동기로 검증하고, 업데이터는 setImmediate로 종료 예약
         for (let i = 0; i < 100 && !bad && !calls.includes('installer'); i++) await new Promise(resolve => setTimeout(resolve, 10));
         if (bad) {
           assert.equal(service.snapshot().status, 'error');

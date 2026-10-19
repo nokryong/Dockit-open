@@ -32,7 +32,7 @@ test('explicit original-file grant edits that file without importing or granting
   await atomicJson(file, source);
   await atomicJson(path.join(external, 'sibling.dkt'), source);
   const record = await store.run(() => store.openOriginal(file));
-  assert.notEqual(record._id, doc._id); // copied embedded IDs cannot alias another window
+  assert.notEqual(record._id, doc._id); // 복사한 내장 ID가 다른 창과 겹치지 않음
   const session = await documents.begin({ id: record._id, revision: record.revision });
   await documents.edit(session, { expectedRevision: record.revision, updates: { title: 'Changed', content: '<p>Original edited</p>' } });
   await documents.end(session);

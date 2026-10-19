@@ -115,7 +115,7 @@ const { LocalStore, atomicJson } = require('../electron/local-store.cjs');
     await expect(list.getByText('두 번째 대화', { exact: true })).toHaveCount(0);
     assert.equal(await list.evaluate(element => element.scrollWidth > element.clientWidth + 1), false);
     await first.setViewportSize({ width: 640, height: 640 });
-    await expect(chat).toHaveCount(0); // Existing mobile layout hides the tool panels.
+    await expect(chat).toHaveCount(0); // 기존 모바일 배치는 도구 패널을 숨김
     await capture(first, 'conversation-list-narrow.png');
     await first.setViewportSize({ width: 1240, height: 800 });
     await chat.getByRole('button', { name: '채팅 목록 보기', exact: true }).click();

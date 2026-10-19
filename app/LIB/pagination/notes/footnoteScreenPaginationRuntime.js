@@ -40,9 +40,8 @@ export const activateCanonicalBodyProjection = ({ view, candidate, projection })
     candidateIds.has(body.getAttribute("data-dockit-note-id"))
   );
 
-  // Never hide a canonical body unless every measured footnote has a
-  // corresponding projection. The host stays outside ProseMirror's observed
-  // NodeView DOM so activation cannot mutate persisted editor content.
+  // 측정한 모든 각주에 대응하는 투영이 있을 때만 원본 본문 숨김
+  // (호스트는 ProseMirror가 관찰하는 NodeView DOM 밖에 둬서, 활성화가 저장되는 에디터 내용을 바꾸지 않도록 처리)
   if (projectedBodies.length !== candidateIds.size) return null;
 
   const host = view.dom.parentElement;

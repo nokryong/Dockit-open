@@ -69,7 +69,7 @@ const root = path.join(__dirname, '..');
     await expect(page.getByText('중첩 문서', { exact: true }).first()).toBeVisible();
     await page.evaluate(id => { location.hash = '/docs/' + id; }, documentId);
     await expect(page.locator('.tiptap-main-canvas')).toContainText('로컬 문서 저장 검증');
-    // Enable the existing panels through the same persisted settings IPC used by the UI.
+    // 화면과 같은 설정 저장 IPC로 기존 패널 켜기
     await page.evaluate(() => window.dockitLocal.data('update', { type: 'panels', data: { panels: { left: ['memo'], right: ['specialChar'] } } }));
     await page.reload();
     await page.getByRole('button', { name: '특수문자 즐겨찾기 편집', exact: true }).click();
@@ -99,7 +99,7 @@ const root = path.join(__dirname, '..');
     await page.locator('[data-widget-type="aiChat"]').scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(artifacts, 'ai-widgets.png'), fullPage: true, animations: 'disabled' });
     await page.locator('.tiptap-main-canvas[contenteditable="true"]').fill('로컬 문서 저장 검증 — 이동 직전 수정');
-    // The titlebar logo is the document list entry point.
+    // 제목 표시줄 로고가 문서 목록 진입점
     await page.locator('.titlebar-logo[role="button"]').click();
     await page.waitForURL('dockit://app/index.html#/docs');
     await page.evaluate(id => { location.hash = '/docs/' + id; }, documentId);
@@ -143,7 +143,7 @@ const root = path.join(__dirname, '..');
     await expect(page.locator('html')).toHaveClass(/dark/);
     await expect(page.locator('[data-widget-type="aiChat"]')).toBeAttached();
     assert.deepEqual(errors, []);
-    // Web fonts from the allowlisted origins are the only permitted network traffic.
+    // 허용된 출처의 웹 글꼴만 네트워크 통신 허용
     const allowedOrigins = new Set([...FONT_ORIGINS, ...STYLE_ORIGINS]);
     assert.deepEqual(requests.filter(url => !allowedOrigins.has(new URL(url).origin)), []);
     assert.deepEqual(consoleErrors, []);

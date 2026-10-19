@@ -124,9 +124,8 @@ const isAlreadyNormalized = (documentNode, normalizedNodes) => {
 };
 
 /**
- * Moves every canonical root noteBody behind the main flow and orders the bodies
- * by their noteReference positions. It mutates only the supplied transaction so
- * typed note operations and clipboard validation still observe one candidate.
+ * 모든 원본 noteBody를 본문 흐름 뒤로 옮기고 noteReference 위치 순서로 정렬
+ * (전달받은 트랜잭션만 변경해서, 주석 작업과 클립보드 검증이 같은 후보 하나를 보도록 처리)
  */
 export const normalizeNoteBodyOrderInTransaction = (transaction) => {
   if (!transaction?.doc) return false;

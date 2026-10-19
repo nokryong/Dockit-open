@@ -16,7 +16,7 @@ const fail = message => Object.assign(new Error(message), { code: 'PluginError' 
 function reactIcon(reference) {
   const match = /^react-icons\/([a-z0-9]+)\/([A-Z][a-zA-Z0-9]*)$/.exec(reference);
   if (!match || !families.has(match[1])) throw fail('React Icons 이름을 확인해주세요.');
-  // Resolve only the SDK's installed icon library, never plugin JavaScript.
+  // SDK에 설치된 아이콘 라이브러리만 사용 (플러그인 JavaScript는 불러오지 않음)
   const icons = require(`react-icons/${match[1]}`);
   if (!Object.hasOwn(icons, match[2]) || typeof icons[match[2]] !== 'function')
     throw fail(`아이콘을 찾을 수 없습니다: ${reference}`);

@@ -266,7 +266,7 @@ export default function WritePage() {
   const blockNotePersistence = useCallback((error) => {
     notePersistenceBlockedRef.current = true;
     setNotePersistenceBlocked(true);
-    // Typed diagnostics intentionally exclude document HTML/content.
+    // 진단 정보에는 문서 HTML·내용을 일부러 넣지 않음
     if (error?.code === NOTE_PERSISTENCE_ERROR_CODES.INVALID_EDITOR) {
       console.warn("Note persistence gate rejected a document boundary:", error);
     } else {
@@ -369,9 +369,8 @@ export default function WritePage() {
             })
           : { flushed: 0, pending: 0 };
 
-      // Advance an exact-content checkpoint only when no newer journal event
-      // existed before the retry. This prevents an older debounced save from
-      // acknowledging a later editor mutation.
+      // 재시도 전에 더 새로운 저널 이벤트가 없을 때만 정확한 내용 체크포인트 진행
+      // (오래된 디바운스 저장이 이후 에디터 변경을 확인 처리하는 문제 방지)
       if (
         retryResult.flushed > 0 &&
         checkpointCursorBeforeRetry > 0 &&
@@ -515,7 +514,7 @@ export default function WritePage() {
         return false;
       }
       const savedContent = snapshot.html;
-      // #현재 에디터의 커서 위치(숫자)를 가져오는 부분
+      // 현재 에디터의 커서 위치(숫자) 가져오기
       const currentPos = editor.state.selection.anchor;
       const saveContext = beginContentSave(savedContent);
       let saveSettled = false;
@@ -526,7 +525,7 @@ export default function WritePage() {
           currentDocument._id,
           {
             content: savedContent,
-            focus: currentPos, // 'end' 대신 실제 위치로 저장할 수 있게 함
+            focus: currentPos, // 'end' 대신 실제 숫자 위치 저장
             refreshThumbnail: true
           },
           true
@@ -1081,7 +1080,7 @@ export default function WritePage() {
         handleSave(); // 저장 함수 호출
       }
 
-      // #서식 복사/붙여넣기 단축키 부분
+      // 서식 복사/붙여넣기 단축키
       if (isCtrlOrCmd && event.shiftKey) {
         // 서식 복사: Ctrl + Shift + C
         if (event.key.toLowerCase() === "c") {
@@ -1094,7 +1093,7 @@ export default function WritePage() {
           event.preventDefault();
           editor?.commands.pasteFormat();
         }
-      } // #Ctrl+P 인쇄 단축키 부분
+      } // Ctrl+P 인쇄 단축키
       if (isCtrlOrCmd && event.key.toLowerCase() === "p") {
         event.preventDefault(); // 브라우저의 기본 인쇄 동작을 막습니다.
         handlePrint();

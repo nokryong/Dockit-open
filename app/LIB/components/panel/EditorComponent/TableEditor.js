@@ -542,9 +542,8 @@ export default function TableEditor({
         return;
       }
 
-      // Number inputs must retain their DOM focus while a transaction updates
-      // the selected cell. Controls whose pointer handling intentionally keeps
-      // the editor active can still opt into the previous focus behavior.
+      // 트랜잭션이 선택 칸을 갱신하는 동안 숫자 입력칸의 DOM 포커스 유지
+      // (포인터 처리상 에디터를 활성 상태로 두는 컨트롤은 이전 포커스 동작 선택 가능)
       const chain = focusEditor ? editor.chain().focus() : editor.chain();
 
       Object.entries(attrs).forEach(([key, value]) => {

@@ -76,7 +76,7 @@ function safeFailure(error) {
       message: uiText('ChatGPT 계정 인증을 검증하지 못했습니다. 잠시 후 다시 시도해주세요.'),
       code: 'identity_verification_failed'
     };
-  // Only app-authored messages cross IPC. Network/SDK exceptions can contain request data.
+  // IPC로는 앱이 만든 메시지만 전달 (네트워크·SDK 예외에는 요청 데이터가 들어 있을 수 있음)
   if (error?.message && (error.dockit || isLocalizedMessage(error.message)))
     return { message: error.message, code: error.code, detail: error.detail };
   return {
@@ -224,7 +224,7 @@ class ChatGPTClient {
             profile = { id: randomUUID(), clientId, label: `ChatGPT ${this.state.profiles.length + 1}` };
             this.state.profiles.push(profile);
             if (!this.state.activeId) this.state.pendingProfileId = profile.id;
-            // Retain a new registration even if its one-time code exchange fails.
+            // 일회용 코드 교환이 실패해도 새 등록 정보는 유지
             await this.save();
           }
         }
@@ -305,7 +305,7 @@ class ChatGPTClient {
         refresh_token: profile.tokens.refresh_token,
         resource: RESOURCE
       });
-      // Persist rotated credentials before JWKS validation; never consume the old refresh token twice.
+      // JWKS 검증 전에 갱신된 인증 정보 저장 (이전 refresh token을 두 번 쓰지 않음)
       profile.pendingTokens = { tokens, expiresAt: Date.now() + Number(tokens.expires_in) * 1000 };
       await this.save();
       await this.verifyPending(profile);
@@ -466,12 +466,12 @@ class ChatGPTClient {
               confirmed = response.status === 200;
               if (response.status < 500) break;
             } catch {
-              /* Bounded retry, then report unconfirmed remote revocation. */
+              /* 횟수 제한 재시도 뒤 원격 해지 미확인 알림 */
             }
             if (!confirmed && attempt === 0) await new Promise(resolve => setTimeout(resolve, 500));
           }
         } catch {
-          /* Still clear local credentials, with a visible warning. */
+          /* 그래도 로컬 인증 정보는 지우고 경고 표시 */
         }
       } else confirmed = !profile.tokens?.access_token && !profile.pendingTokens;
       delete profile.tokens;

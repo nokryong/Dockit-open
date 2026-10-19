@@ -149,7 +149,7 @@ class CodexDocuments {
     if (createHash('sha256').update(raw).digest('hex') !== record.revision)
       throw fail(uiText('읽는 중 문서가 변경됐습니다. 다시 읽어주세요.'), 'RevisionConflict');
     const value = JSON.parse(raw);
-    // The thumbnail is an app-maintained cache, not editable document content.
+    // 썸네일은 앱이 관리하는 캐시라 편집 대상 문서 내용이 아님
     delete value.thumbnail;
     return { path: session.file, revision: record.revision, document: value };
   }

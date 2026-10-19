@@ -14,7 +14,7 @@ import {
 } from "./utils/resizeHandleUtils";
 
 /**
- * ShapeBlockView Component
+ * ShapeBlockView 컴포넌트
  *
  * 사각형 도형을 렌더링하는 React 컴포넌트
  * - 배경색, 테두리, 그림자, 패딩, 회전 등 스타일 지원

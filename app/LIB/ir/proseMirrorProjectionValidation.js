@@ -45,9 +45,8 @@ const CustomDocument = Document.extend({
   content: "(block | columnBlock | noteBody)+"
 });
 
-// These schema-only nodes mirror the document node names and content groups
-// owned by ContentEditor without importing React node views or widget runtime
-// dependencies into conversion/composer validation.
+// ContentEditor가 가진 문서 노드 이름과 콘텐츠 그룹을 그대로 옮긴 스키마 전용 노드
+// (React 노드 뷰나 위젯 런타임 의존성을 변환·작성 검증으로 끌어오지 않음)
 const ChartBlockSchemaOnly = Node.create({
   name: "chartBlock",
   group: "block",

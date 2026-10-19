@@ -114,7 +114,7 @@ const createFixtureContent = () => {
   return [
     "<h1>A4 다중 페이지 미주 인쇄 검증</h1>",
     ...paragraphs,
-    // Bodies deliberately arrive in reverse reference order.
+    // 본문을 참조 순서의 반대로 일부러 배치
     endnoteBody(
       noteIds[2],
       "<p>세 번째 미주 본문: 역순으로 저장된 본문입니다.</p>"

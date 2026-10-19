@@ -217,11 +217,9 @@ const createPage = (
 };
 
 /**
- * Pure N4a/N4b1b-A contract. `contentHeightsByPage` is the caller's measured
- * main-flow height before footnote reservation. Optional body fragments are
- * allocated only at validated whole-fragment boundaries. The caller reruns its
- * page map when a returned `reservedHeight` moves a reference; this module
- * never touches DOM, canonical HTML, or pagination state.
+ * N4a/N4b1b-A 순수 계약
+ * (`contentHeightsByPage`는 각주 자리를 빼기 전 호출 쪽이 측정한 본문 높이, 선택적 본문 조각은 검증된 조각 경계에서만 배정)
+ * (반환한 `reservedHeight`로 참조 위치가 바뀌면 호출 쪽이 페이지 맵을 다시 계산, 이 모듈은 DOM·원본 HTML·페이지 상태를 건드리지 않음)
  */
 export const planFootnoteLayout = (input) => {
   const {
@@ -478,7 +476,7 @@ const cloneFootnoteLayoutInput = (input) => ({
   }))
 });
 
-/** Bounded caller-driven rerun helper. Non-stable results intentionally omit a plan. */
+/** 호출 쪽이 돌리는 횟수 제한 재실행 도우미 (불안정한 결과에는 계획을 넣지 않음) */
 export const convergeFootnoteLayout = ({
   input,
   resolveLayout,

@@ -18,9 +18,8 @@ const failPageMainFlowCapacity = (code) => {
 };
 
 /**
- * Optional pure capacity contract used by the footnote PageMap bridge.  It is
- * deliberately inert unless a caller supplies it so the legacy plan stays
- * byte-for-byte shape compatible.
+ * 각주 PageMap 연결에서 쓰는 선택적 순수 용량 계약
+ * (호출하는 쪽이 넘겨줄 때만 동작해서 기존 계획 결과의 모양을 그대로 유지)
  */
 const createPageMainFlowConfig = ({
   pageMainFlowByPage,

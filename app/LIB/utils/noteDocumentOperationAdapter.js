@@ -29,9 +29,8 @@ const privacySafePayload = (operation) => ({
 });
 
 /**
- * N2b's only manual-note mutation bridge.  It deliberately journals operation
- * shape, never note IDs or body/document content, and decorates the exact
- * single transaction created by N1b.
+ * N2b의 유일한 수동 주석 변경 연결
+ * (주석 ID나 본문·문서 내용이 아닌 작업 모양만 저널에 남기고, N1b가 만든 단일 트랜잭션에 정보를 덧붙임)
  */
 export const createNoteDocumentOperationAdapter = ({
   actor,
@@ -108,8 +107,8 @@ export const createNoteDocumentOperationAdapter = ({
     try {
       onDocumentOperationSettled({ operation, result: executorResult });
     } catch {
-      // The C3 result remains authoritative even when durable-result delivery
-      // is temporarily unavailable; page-level retry owns that recovery path.
+      // 영구 결과 전달이 잠시 안 돼도 C3 결과가 기준
+      // (복구는 페이지 단위 재시도가 담당)
     }
     return executorResult?.ok === true && noteResult?.ok === true
       ? noteResult

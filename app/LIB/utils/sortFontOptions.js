@@ -13,7 +13,7 @@ const koreanOrder = new Intl.Collator("ko");
 const englishOrder = new Intl.Collator("en");
 
 export function sortFontOptions(options) {
-  // Compute each name's sort key once, instead of parsing it on every comparison.
+  // 비교할 때마다 파싱하지 않도록 이름별 정렬 키를 한 번만 계산
   return options.map((option) => {
     const label = String(option.label);
     const group = hanjaValues.has(option.value) ? 3 : label.includes("(Eng)") ? 2 : /^[A-Za-z]/.test(label) ? 0 : 1;

@@ -3,7 +3,7 @@ import { columnResizingPluginKey, TableMap, updateColumnsOnResize } from "@tipta
 
 const number = value => parseFloat(value) || 0;
 
-// Measure in document pixels, independently of the editor's zoom level.
+// 에디터 확대·축소와 상관없이 문서 픽셀 기준으로 측정
 export function getTableResizeGeometry(view, tablePos) {
   const wrapper = view.nodeDOM(tablePos);
   const table = wrapper?.nodeName === "TABLE" ? wrapper : wrapper?.querySelector("table");
@@ -12,7 +12,7 @@ export function getTableResizeGeometry(view, tablePos) {
   const scale = tableRect.width / table.offsetWidth;
   if (!scale) return null;
   let right = Infinity;
-  // Include parent cells/indents as well as the document's own right padding.
+  // 부모 칸·들여쓰기와 문서 자체 오른쪽 여백까지 포함
   for (let parent = table.parentElement; parent; parent = parent.parentElement) {
     const style = getComputedStyle(parent);
     right = Math.min(right, parent.getBoundingClientRect().right -

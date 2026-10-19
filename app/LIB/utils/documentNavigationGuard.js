@@ -17,7 +17,7 @@ export function requestDocumentNavigation(destination) {
         return true;
       }
     } catch {
-      // Let the router validate malformed destinations after the guard request.
+      // 잘못된 이동 주소는 가드 요청 뒤 라우터가 검증
     }
   }
 

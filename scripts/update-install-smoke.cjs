@@ -1,4 +1,4 @@
-// Real NSIS installation changes registry entries and file associations: hosted CI only.
+// 실제 NSIS 설치는 레지스트리와 파일 연결을 바꿈 (GitHub 실행기 전용)
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const { createReadStream } = require('node:fs');
@@ -12,7 +12,7 @@ const { _electron: electron, expect: baseExpect } = require('@playwright/test');
 const { LocalStore } = require('../electron/local-store.cjs');
 const exec = promisify(execFile);
 const expect = baseExpect.configure({ timeout: 60000 });
-// 단계마다 기록을 남겨 GitHub 실행기에서 시간이 초과돼도 어디서 멈췄는지 알 수 있게 함
+// 단계별 기록 (GitHub 실행기에서 시간이 초과돼도 멈춘 위치 확인용)
 const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
 
 (async () => {
@@ -46,7 +46,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
   const appOutput = [];
   const env = { ...process.env };
   delete env.ELECTRON_RUN_AS_NODE;
-  // Restrict all process observations/termination to this test's exact installation path.
+  // 프로세스 관찰·종료는 이 테스트의 설치 경로로만 한정
   const processes = async () => {
     const command = "@(Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -eq $env:DOCKIT_INSTALL_SMOKE_EXE } | Select-Object ProcessId,CommandLine) | ConvertTo-Json -Compress";
     const { stdout } = await exec('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', command], {
@@ -66,7 +66,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     step('initial install finished');
     const installed = JSON.parse(await fs.readFile(packageFile, 'utf8'));
     assert.equal(installed.version, metadata.version);
-    // Simulate the installed previous version; the new installer must restore these files.
+    // 설치된 이전 버전 흉내 (새 설치 프로그램이 이 파일들을 되돌려야 함)
     await fs.writeFile(packageFile, JSON.stringify({ ...installed, version: '0.0.0' }));
     await fs.writeFile(path.join(installDir, 'resources/app-update.yml'), dump({ provider: 'generic', url: `http://127.0.0.1:${server.address().port}/` }));
     const store = new LocalStore({ home: os.homedir(), trash: async () => {} });
@@ -88,7 +88,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     const dialog = page.getByRole('dialog', { name: '앱 업데이트' });
     await expect(dialog).toBeVisible();
     await expect(dialog).toContainText(`0.0.0 → ${metadata.version}`);
-    // Change the open document while the update notice is visible; no explicit Save.
+    // 업데이트 안내가 떠 있는 동안 열린 문서 수정 (직접 저장하지 않음)
     await page.locator('.tiptap-main-canvas').fill('업데이트 후에도 남아 있는 문서', { force: true });
     const closed = application.waitForEvent('close', { timeout: 180000 });
     step('click install');
@@ -144,7 +144,7 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
     console.error('installed processes:', JSON.stringify(await settle(processes())));
     throw error;
   } finally {
-    // 앱이 다 뜨지 못했어도 정리 단계에서 멈추지 않게 함
+    // 앱이 다 뜨지 못해도 정리 단계가 멈추지 않도록 처리
     const settle = promise => Promise.race([promise.catch(() => {}), new Promise(resolve => setTimeout(resolve, 15000))]);
     try {
       if (application) {
@@ -154,10 +154,10 @@ const step = label => console.log(`[${new Date().toISOString()}] ${label}`);
         if (child.exitCode === null) child.kill();
       }
     } finally {
-      // 앱이나 설치 프로그램이 남긴 연결 때문에 실패 뒤에도 검사가 끝나지 않는 일을 막을 수 있게 함
+      // 앱이나 설치 프로그램이 남긴 연결 정리 (실패 뒤에도 검사가 끝나지 않는 문제 방지)
       server.closeAllConnections();
       await new Promise(resolve => server.close(resolve));
     }
-    // The hosted VM is discarded after the job; keep its installer evidence until then.
+    // 작업이 끝나면 VM은 버려지므로 그때까지 설치 증거 유지
   }
 })().catch(error => { console.error(error); process.exitCode = 1; });

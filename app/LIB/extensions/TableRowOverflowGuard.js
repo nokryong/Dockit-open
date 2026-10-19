@@ -52,7 +52,7 @@ const restorePreviousDocument = (view, previousState) => {
 
     tr = tr.setSelection(Selection.near(tr.doc.resolve(selectionPos)));
   } catch {
-    // Selection restore is best-effort; document rollback is the important part.
+    // 선택 복원은 가능한 만큼만 (문서 되돌리기가 핵심)
   }
 
   view.dispatch(tr);

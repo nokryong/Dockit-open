@@ -43,8 +43,8 @@ const collectValidatedEndnotes = (document) => {
       throw createProjectionError("INVALID_ENDNOTE_ID", noteId);
     }
 
-    // Attribute comparison deliberately happens after broad marker collection;
-    // note IDs are never interpolated into selectors.
+    // 속성 비교는 표식을 넓게 모은 뒤에 수행
+    // (주석 ID는 선택자에 넣지 않음)
     const matchingReferences = references.filter(
       (element) => getNoteId(element) === noteId
     );
@@ -110,9 +110,8 @@ const createProjectedBody = (document, body, noteId, number) => {
 };
 
 /**
- * Builds a print-only endnote projection from canonical editor HTML.
- * The input string is never modified. Invalid endnote pairs fail before a
- * partial projection is returned, while footnote markup remains untouched.
+ * 원본 에디터 HTML로 인쇄 전용 미주 투영 생성
+ * (입력 문자열은 바꾸지 않고, 잘못된 미주 쌍은 부분 투영을 반환하기 전에 실패 처리, 각주 마크업은 그대로 둠)
  */
 export const projectEndnotesForPrint = (html) => {
   if (typeof html !== "string") {

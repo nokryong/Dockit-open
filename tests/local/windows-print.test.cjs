@@ -10,7 +10,7 @@ const { WindowsPrintService } = require('../../electron/windows-print.cjs');
 async function fixture(t, events = [{ phase: 'completed', value: 'Canceled' }], status = 0) {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'dockit-print-test-'));
   t.after(async () => {
-    // The service removes its generated job files; only known empty folders remain.
+    // 서비스가 만든 작업 파일은 지우고, 알려진 빈 폴더만 남음
     await fs.rmdir(path.join(root, 'print-cache')).catch(() => {});
     await fs.rmdir(root);
   });

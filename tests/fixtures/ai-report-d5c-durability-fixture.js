@@ -62,8 +62,8 @@ export const createAiReportD5cApprovedSectionText = (index) => {
   }`.trim();
 };
 
-// Final F3c state: the first AI section apply was explicitly rolled back while
-// every human edit and the other nine approved AI section edits survived.
+// F3c 최종 상태: 첫 AI 섹션 적용만 명시적으로 되돌림
+// (사람이 한 편집과 나머지 승인된 AI 섹션 편집 9개는 그대로 유지)
 export const createAiReportD5cFinalRollbackHtml = () => {
   const humanParagraphs = humanMarkers.slice(4).map((marker, index) =>
     index === 0

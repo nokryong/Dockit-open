@@ -231,9 +231,8 @@ const invalidResult = (error) =>
   });
 
 /**
- * Pure N4b1a PageMap bridge. It accepts semantic note measurements and block
- * or segment positions only; it never reads DOM, editor, renderer, or print
- * state. Non-stable outcomes intentionally contain no pagination plan.
+ * N4b1a PageMap 순수 연결 함수
+ * (의미 단위 주석 측정값과 블록·세그먼트 위치만 받고 DOM·에디터·렌더러·인쇄 상태는 읽지 않음, 불안정한 결과에는 페이지 계획을 넣지 않음)
  */
 export const calculateFootnotePaginationPlan = ({
   paginationInput,
@@ -267,7 +266,7 @@ export const calculateFootnotePaginationPlan = ({
       footnotes: withResolvedReferencePages(footnotes, initialReferencePages)
     };
 
-    // Keep the no-note path indistinguishable from an ordinary PageMap plan.
+    // 주석이 없는 경우는 일반 PageMap 계획과 똑같이 처리
     if (footnotes.length === 0) {
       planFootnoteLayout(footnoteInput);
       return freezeResult({

@@ -74,7 +74,7 @@ async function atomicJson(file, value, { exclusive = false } = {}) {
       await handle.close();
     }
     if (exclusive) {
-      // link fails if another writer created the destination; never overwrite it.
+      // 다른 쓰기가 대상을 먼저 만들면 link 실패 (덮어쓰지 않음)
       await fs.link(temporary, file);
       await fs.unlink(temporary);
     } else await fs.rename(temporary, file);
@@ -94,7 +94,7 @@ class LocalStore {
     this.queue = Promise.resolve();
     this.documentPaths = new Map();
     this.documentLocks = new Map();
-    // Exact files granted by a native open action; never persisted as directory access.
+    // 네이티브 열기로 허락된 파일만 (폴더 접근 권한으로 저장하지 않음)
     this.externalDocuments = new Map();
     this.indexDirty = false;
   }
@@ -139,7 +139,7 @@ class LocalStore {
       throw fail(uiText('config.json의 버전, 설정 또는 문서 경로가 올바르지 않습니다.'));
     await fs.mkdir(config.documentsPath, { recursive: true });
     await contained(config.documentsPath, config.documentsPath);
-    // This is a rebuildable path cache, not document content.
+    // 다시 만들 수 있는 경로 캐시라 문서 내용이 아님
     const index = await readJson(await contained(this.root, path.join(this.root, 'document-index.json')), null).catch(
       () => ({ value: null })
     );

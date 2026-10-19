@@ -123,8 +123,8 @@ const validateBodyContent = (body, errors) => {
 };
 
 /**
- * Validates Dockit's N1a note-pair invariant without changing the input.
- * It accepts a Tiptap/ProseMirror JSON value or an object with toJSON().
+ * 입력을 바꾸지 않고 Dockit N1a 주석 쌍 불변 조건 검증
+ * (Tiptap/ProseMirror JSON 값이나 toJSON()이 있는 객체 허용)
  */
 export const validateNoteSemantics = (document) => {
   const source = toJson(document);

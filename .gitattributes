@@ -1,6 +1,6 @@
-# 저장소 안의 텍스트 파일은 LF로 저장하고, 작업 사본의 줄 끝은 각자 Git 설정을 따를 수 있게 함
+# 저장소 안 텍스트 파일은 LF로 저장 (작업 사본 줄 끝은 각자 Git 설정을 따름)
 * text=auto
-# 테스트 고정 자료와 문서 파일은 바이트 그대로 비교할 수 있게 변환하지 않음
+# 테스트 고정 자료와 .dkt 문서는 변환 제외 (바이트 그대로 비교)
 tests/fixtures/** -text
 *.dkt -text
 /package-lock.json text eol=lf

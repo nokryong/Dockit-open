@@ -13,7 +13,7 @@ const equal = (a, b) =>
   Buffer.byteLength(a) === Buffer.byteLength(b) &&
   timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
-// The listener exists only for an explicit sign-in attempt and never binds to LAN interfaces.
+// 리스너는 명시적인 로그인 시도 때만 열고 LAN 인터페이스에는 연결하지 않음
 async function beginAuthorization({
   hostId,
   profile,
@@ -36,7 +36,7 @@ async function beginAuthorization({
     settle = resolve;
     reject = failAttempt;
   });
-  // Opening the browser can take time; attach a handler before any callback may reject.
+  // 브라우저 열기는 시간이 걸릴 수 있으므로 콜백이 거부하기 전에 처리기 연결
   result.catch(() => {});
   const finish = (error, value) => {
     if (settled) return;

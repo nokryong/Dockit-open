@@ -177,7 +177,7 @@ const sliceSignatures = (slice) => {
   ].sort();
 };
 
-/** Rejects raw note HTML that the schema parser would otherwise silently drop. */
+/** 스키마 파서가 조용히 버릴 원시 주석 HTML 거부 */
 export const preflightRawNoteClipboardHtml = ({ html, slice }) => {
   if (typeof html !== "string" || !RAW_NOTE_MARKER_PATTERN.test(html)) {
     return { ok: true, result: "not-note-html" };
@@ -227,7 +227,7 @@ export const preflightRawNoteClipboardHtml = ({ html, slice }) => {
   }
 };
 
-/** Pure, deterministic remap/preflight. It does not dispatch or mutate the input slice. */
+/** 순수·결정적 재매핑과 사전 검사 (입력 slice를 보내거나 바꾸지 않음) */
 export const preflightNoteClipboardSlice = ({ slice, destinationDocument, preserveIds = false }) => {
   const current = validateNoteSemantics(destinationDocument);
   if (!current.valid) {
@@ -256,7 +256,7 @@ export const preflightNoteClipboardSlice = ({ slice, destinationDocument, preser
   };
 };
 
-/** Session-only provenance. HTML attributes are intentionally never considered provenance. */
+/** 세션 한정 출처 정보 (HTML 속성은 출처로 보지 않음) */
 export const createNoteClipboardProvenance = () => {
   let pendingAction = null;
   let cutRecord = null;

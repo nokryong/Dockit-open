@@ -44,7 +44,7 @@ export default function ChatMermaidDiagram({ source, dark, theme, fallback }) {
     let url;
     renderMermaidSvg(source, dark, "", presentation).then((svg) => {
       if (!current) return;
-      // Display as an image so diagram markup never becomes executable page DOM.
+      // 도식 마크업이 실행 가능한 페이지 DOM이 되지 않도록 이미지로 표시
       url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
       const document = new DOMParser().parseFromString(svg, "image/svg+xml");
       const width = Number(document.documentElement.getAttribute("viewBox")?.split(/[\s,]+/)[2]);

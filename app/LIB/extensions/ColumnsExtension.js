@@ -6,7 +6,7 @@ import {
   TextSelection
 } from "@tiptap/pm/state";
 
-// Local TipTap 3-compatible replacement for @tiptap-extend/columns.
+// @tiptap-extend/columns를 대신하는 TipTap 3 호환 로컬 구현
 const buildNode = ({ type, content }) => (content ? { type, content } : { type });
 const buildParagraph = ({ content } = {}) =>
   buildNode({ type: "paragraph", content });

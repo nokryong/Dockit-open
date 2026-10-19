@@ -66,7 +66,7 @@ const fixture = path.join(root, 'tests/helpers/codex-electron-fixture.cjs');
     await page.reload();
     const chat = page.locator('[data-widget-type="aiChat"]');
     const providerSwitch = chat.getByRole('switch', { name: 'GPT/Codex 전환' });
-    // The native input is visually hidden; users press the surrounding label.
+    // 실제 input은 화면에서 숨겨져 있어서 사용자는 감싼 label을 누름
     const providerToggle = chat.locator('label.sud-switch', { has: page.getByRole('switch', { name: 'GPT/Codex 전환' }) });
     if (!(await providerSwitch.isChecked())) await providerToggle.click();
     await expect(providerSwitch).toBeChecked();
@@ -74,7 +74,7 @@ const fixture = path.join(root, 'tests/helpers/codex-electron-fixture.cjs');
     await chat.locator('textarea').fill('CLI 테스트'); await chat.getByRole('button', { name: 'ChatGPT 전송', exact: true }).click();
     await expect(chat.getByText('CLI 대화 테스트 응답입니다.')).toBeVisible({ timeout: 20000 });
     await capture('widgets.png');
-    // Switching to ChatGPT asks for its own connection; the CLI login is independent.
+    // ChatGPT로 바꾸면 별도 연결 요청 (CLI 로그인과는 별개)
     await providerToggle.click();
     await expect(providerSwitch).not.toBeChecked();
     await expect(chat.getByText('설정에서 ChatGPT를 연결해주세요.')).toBeVisible();
@@ -96,7 +96,7 @@ const fixture = path.join(root, 'tests/helpers/codex-electron-fixture.cjs');
     await page.getByRole('button', { name: '설정', exact: true }).click();
     await section.scrollIntoViewIfNeeded(); await capture('settings-narrow.png');
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 2), false);
-    // Web fonts from the allowlisted origins are the only permitted network traffic.
+    // 허용된 출처의 웹 글꼴만 네트워크 통신 허용
     const allowedOrigins = new Set([...FONT_ORIGINS, ...STYLE_ORIGINS]);
     assert.deepEqual(errors, []); assert.deepEqual(requests.filter(url => !allowedOrigins.has(new URL(url).origin)), []);
     console.log('PASS: separate CLI login/cancel/logout, usage, independent provider selection, chat/stop/history, light/dark/narrow settings. Synthetic auth and inference; no live account used.');

@@ -713,8 +713,8 @@ describe("document operation journal", () => {
     appendOperation({ storage });
     const key = createDocumentOperationJournalKey("user-a", "doc-a");
     const forged = JSON.parse(storage.getItem(key));
-    // Each forged event has a valid allowlisted shape, but two applied
-    // results after an attempt-only recovery transition are impossible.
+    // 위조한 이벤트는 모두 허용 목록상 모양은 맞음
+    // (하지만 시도 전용 복구 전환 뒤 적용 결과가 두 개인 것은 불가능)
     forged.events = [
       forged.events[0],
       {

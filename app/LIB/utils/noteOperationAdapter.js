@@ -45,7 +45,7 @@ const defaultIdFactory = () => {
       return `${NOTE_ID_PREFIX}${Array.from(values, (value) => value.toString(36)).join("_")}`;
     }
   } catch {
-    // A monotonic fallback remains collision-resistant within this runtime.
+    // 단조 증가 대체값은 이 런타임 안에서 충돌 가능성이 낮음
   }
   fallbackSequence += 1;
   return `${NOTE_ID_PREFIX}fallback_${Date.now().toString(36)}_${fallbackSequence.toString(36)}`;
@@ -214,9 +214,8 @@ const dispatchCandidate = (editor, transaction, previousDocument, transactionDec
 };
 
 /**
- * Executes one N1b typed note operation through exactly one ProseMirror transaction.
- * Preflight/candidate rejections do not dispatch. Post-dispatch anomalies are
- * returned as recovery-required failures and are never reported as success.
+ * N1b 주석 작업 하나를 ProseMirror 트랜잭션 하나로 실행
+ * (사전 검사·후보 단계에서 거부되면 실행하지 않고, 실행 뒤 이상은 복구 필요 실패로 반환하며 성공으로 보고하지 않음)
  */
 export const executeNoteOperation = (editor, operation, options = {}) => {
   const idFactory = options?.idFactory === undefined

@@ -1,4 +1,4 @@
-// Pagination widgets must not change an item's selector when page breaks move.
+// 페이지 나눔이 움직여도 페이지 위젯이 항목 선택자를 바꾸면 안 됨
 const getItemSelector = (item, editorElement) => {
   const path = [];
   for (let element = item; element && element !== editorElement; element = element.parentElement) {
@@ -11,7 +11,7 @@ const getItemSelector = (item, editorElement) => {
   return `.tiptap-container .tiptap-main-canvas > ${path.join(" > ")}`;
 };
 
-// Keep these rules outside the editable DOM: ProseMirror restores node attributes.
+// 규칙은 편집 가능한 DOM 밖에 둠 (ProseMirror가 노드 속성을 복원함)
 export function getListMarkerStyles(editorElement) {
   const document = editorElement.ownerDocument;
   const view = document.defaultView;
@@ -22,7 +22,7 @@ export function getListMarkerStyles(editorElement) {
     const paragraph = item.querySelector(":scope > p");
     if (!paragraph) return;
 
-    // Read this item's first text, never text belonging to a nested list or a page spacer.
+    // 이 항목의 첫 텍스트만 읽음 (중첩 목록이나 페이지 간격 요소의 텍스트 제외)
     const walker = document.createTreeWalker(paragraph, view.NodeFilter.SHOW_TEXT);
     let text = walker.nextNode();
     while (text && (!text.textContent.trim() || text.parentElement.closest(".ProseMirror-widget"))) {

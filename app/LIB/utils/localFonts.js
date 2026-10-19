@@ -12,8 +12,8 @@ export const unquoteFontFamily = value => {
   });
 };
 
-// Font names are CSS strings, never markup or URLs. Escape '<' as well because
-// the same style element is included in standalone HTML exports.
+// 글꼴 이름은 CSS 문자열로만 사용 (마크업·URL 아님)
+// (같은 style 요소가 단독 HTML 내보내기에도 들어가므로 '<'도 이스케이프)
 export const quoteFontFamily = value => `"${String(value).replace(/[\\"\x00-\x1f\x7f<>]/g,
   char => `\\${char.codePointAt(0).toString(16)} `)}"`;
 
@@ -30,8 +30,8 @@ export function createLocalFontOptions(fonts) {
 
 export function registerLocalFontFaces(fonts, target = document) {
   const existingFamilies = new Set(Array.from(target.fonts || [], face => unquoteFontFamily(face.family)));
-  // Native family names already work in CSS. Do not shadow their other weights
-  // or any existing web-font family; aliases are only needed for individual faces.
+  // 기본 글꼴 이름은 CSS에서 그대로 동작
+  // (다른 굵기나 기존 웹 글꼴을 가리지 않도록, 별칭은 개별 서체에만 사용)
   const nativeFamilies = new Set(fonts.map(font => font.family));
   const css = fonts
     .filter(
@@ -74,6 +74,6 @@ export function includeSelectedFont(options, selectedFont) {
   const name = unquoteFontFamily(selectedFont);
   const index = options.findIndex(option => option.value === name);
   if (index >= 0) return options.map((option, i) => i === index ? { ...option, value: selectedFont } : option);
-  // Keep the stored font name selectable even when it is no longer installed.
+  // 설치가 지워진 글꼴도 저장된 이름은 선택 가능하게 유지
   return [...options, { value: selectedFont, label: name, fontFamily: selectedFont }];
 }

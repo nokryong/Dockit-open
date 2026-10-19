@@ -14,7 +14,7 @@ import {
 } from "./utils/resizeHandleUtils";
 
 /**
- * LazyImageView Component
+ * LazyImageView 컴포넌트
  *
  * 일반 문서 모드에서 이미지를 렌더링하는 React 컴포넌트
  * - textAlign 지원 (left, center, right)

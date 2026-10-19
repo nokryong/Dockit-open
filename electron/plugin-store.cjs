@@ -162,7 +162,7 @@ class PluginStore {
         this.warnings = this.warnings.filter(warning => !warning.startsWith(`${manifest.id}:`));
         return installed;
       } finally {
-        // Only this operation's staging directory, never an installed package.
+        // 이번 작업의 임시 폴더만 대상 (설치된 패키지는 건드리지 않음)
         await contained(this.root, temporary);
         await fs.rm(temporary, { recursive: true, force: true });
       }
@@ -210,7 +210,7 @@ class PluginStore {
         committed = true;
         return installed;
       } finally {
-        // Retain the previous package for startup recovery if rollback itself failed.
+        // 되돌리기 자체가 실패하면 시작 시 복구용으로 이전 패키지 보관
         if (!moved || committed)
           await fs.rm(await contained(this.packages, temporary), { recursive: true, force: true }).catch(() => {});
       }

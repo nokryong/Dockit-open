@@ -32,8 +32,8 @@ export const restoreCanonicalFootnoteBodies = (editorRoot) => {
   [...placements.values()].forEach((restore) => restore());
 };
 
-// Keep the live NodeView in ProseMirror's DOM. Moving it into React's page
-// shell would make DOMObserver treat ordinary editing as an external mutation.
+// 살아 있는 NodeView는 ProseMirror DOM 안에 유지
+// (React 페이지 틀로 옮기면 DOMObserver가 일반 편집을 외부 변경으로 처리함)
 export const mountCanonicalFootnoteBody = (
   host,
   projection,
