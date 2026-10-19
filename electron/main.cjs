@@ -362,6 +362,9 @@ else app.whenReady().then(async () => {
   if (process.platform === 'darwin' && !app.isPackaged) app.dock?.setIcon(appIcon);
   const createWindow = async (documentId = null) => {
   const mainWindow = new BrowserWindow({ width: 1440, height: 960, minWidth: 640, minHeight: 500, title: 'Dockit Open', icon: appIcon, frame: false, show: false, backgroundColor: '#ffffff', webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
+  mainWindow.once('ready-to-show', () => {
+    if (!testMode) { mainWindow.show(); mainWindow.focus(); }
+  });
   windows.add(mainWindow, documentId);
   const windowContext = windows.context(mainWindow);
   mainWindow.webContents.on('did-navigate-in-page', (_event, url, isMainFrame) => {
@@ -411,7 +414,6 @@ else app.whenReady().then(async () => {
   mainWindow.once('closed', () => { chatgptChats.selections.delete(windowId); codexChats.selections.delete(windowId); });
   mainWindow.once('closed', () => { if (windowContext.documentId) store.externalDocuments.delete(windowContext.documentId); });
   await mainWindow.loadURL(`${devOrigin || 'dockit://app'}/index.html#/docs${documentId ? '/' + encodeURIComponent(documentId) : ''}`);
-  if (!testMode) { mainWindow.show(); mainWindow.focus(); }
   return mainWindow;
   };
   const focusWindow = window => { if (window.isMinimized()) window.restore(); if (!testMode) window.show(); window.focus(); };

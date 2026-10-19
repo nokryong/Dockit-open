@@ -5,6 +5,7 @@ import Workspace from '../app/docs/page';
 import { usePathname } from './navigation';
 import { flushLocalData } from '../app/LIB/utils/localBridge';
 import { loadLocalFonts } from '../app/LIB/utils/localFonts';
+import { loadBackgroundFontStyles } from './background-fonts';
 import '../app/globals.css';
 import '../app/LIB/css/koreaWebFont.css';
 import '../app/LIB/css/tiptap.css';
@@ -34,6 +35,7 @@ class ErrorBoundary extends React.Component {
   render() { return this.state.error ? <div role="alert">앱을 열지 못했습니다: {this.state.error.message}</div> : this.props.children; }
 }
 createRoot(document.getElementById('root')).render(<ErrorBoundary><ClientLayout><Routes /></ClientLayout></ErrorBoundary>);
+loadBackgroundFontStyles();
 
 const warmLocalFonts = () => loadLocalFonts().catch(error => console.warn('로컬 글꼴 목록을 불러오지 못했습니다.', error));
 if (typeof window.requestIdleCallback === 'function') {

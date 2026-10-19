@@ -7,7 +7,7 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: 7afb58466dae82ac73ad26eccd765a4d58fd2a18a006e116a3a810322a37e40b
+package-lock.json SHA-256: e8c2df80e902fad367b54904d93642970b76c1f57efc30567c92c115665e132c
 Included non-dev lock entries: 466
 Unique third-party package name/version pairs: 454
 Owner-controlled lock entries excluded from this notice: 1
