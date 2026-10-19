@@ -35,7 +35,15 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
     credentialReply.current = null;
     setCredentialPrompt(null);
   };
-  const theme = useMemo(() => ({ name: setting.theme, isDarkMode, colors: currentColors, fontFamily: setting.fontFamily || 'Pretendard' }), [setting.theme, setting.fontFamily, isDarkMode, currentColors]);
+  const theme = useMemo(
+    () => ({
+      name: setting.theme,
+      isDarkMode,
+      colors: currentColors,
+      fontFamily: setting.fontFamily || "Pretendard"
+    }),
+    [setting.theme, setting.fontFamily, isDarkMode, currentColors]
+  );
   const themeRef = useRef(theme);
   themeRef.current = theme;
   const language = setting.language === 'en' ? 'en' : 'ko';
@@ -109,7 +117,19 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
           if (typeof text !== 'string' || text.length > 1000 || !['danger', 'warning', 'info'].includes(type)) throw new Error(uiText("잘못된 알림입니다."));
           toast[type](text);
         } else if (message.method === 'actions') {
-          if (!Array.isArray(message.payload) || message.payload.length > 5 || message.payload.some(action => !action || typeof action.id !== 'string' || action.id.length > 64 || typeof action.label !== 'string' || action.label.length > 60)) throw new Error(uiText("잘못된 툴킷 버튼입니다."));
+          if (
+            !Array.isArray(message.payload) ||
+            message.payload.length > 5 ||
+            message.payload.some(
+              (action) =>
+                !action ||
+                typeof action.id !== "string" ||
+                action.id.length > 64 ||
+                typeof action.label !== "string" ||
+                action.label.length > 60
+            )
+          )
+            throw new Error(uiText("잘못된 툴킷 버튼입니다."));
           setActions(message.payload.map(action => ({ id: action.id, label: action.label, icon: action.icon, disabled: action.disabled === true })));
         } else if (message.method === 'footer') {
           if (typeof message.payload !== 'string' || message.payload.length > 200) throw new Error(uiText("잘못된 툴킷 하단 내용입니다."));
@@ -128,20 +148,90 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
 
   return (
     <WidgetCard
-      icon={getPluginIcon(widget.iconAsset || widget.icon)} title={widget.title} widgetType={id} dragHandleProps={dragHandleProps}
-      titleBtn={<div className="flex items-center gap-1">{actions.map(action => {
-        const Icon = actionIcons[action.icon];
-        return <Button key={action.id} size="sm" ariaLabel={action.label} color={`${setting.theme}-8`} background="transparent" border={false} disabled={action.disabled} icon={Icon ? <Icon size={16} /> : undefined} onClick={() => post(frameRef.current, { type: 'action', id: action.id })}>{!Icon && action.label}</Button>;
-      })}</div>}
+      icon={getPluginIcon(widget.iconAsset || widget.icon)}
+      title={widget.title}
+      widgetType={id}
+      dragHandleProps={dragHandleProps}
+      titleBtn={
+        <div className="flex items-center gap-1">
+          {actions.map((action) => {
+            const Icon = actionIcons[action.icon];
+            return (
+              <Button
+                key={action.id}
+                size="sm"
+                ariaLabel={action.label}
+                color={`${setting.theme}-8`}
+                background="transparent"
+                border={false}
+                disabled={action.disabled}
+                icon={Icon ? <Icon size={16} /> : undefined}
+                onClick={() =>
+                  post(frameRef.current, { type: "action", id: action.id })
+                }
+              >
+                {!Icon && action.label}
+              </Button>
+            );
+          })}
+        </div>
+      }
       footer={footer ? <Typography size="xs">{footer}</Typography> : undefined}
     >
-      {preview ? <div className="h-16" /> : <>
-        {error && <div role="alert" className="flex flex-col items-start gap-2"><Typography size="sm">{translateMessage(error)}</Typography><SmallButton onClick={() => setAttempt(value => value + 1)}>{uiText("다시 시도")}</SmallButton></div>}
-        {!ready && !error && <Typography size="sm">{uiText("불러오는 중…")}</Typography>}
-        {session && <iframe ref={frameRef} title={uiText("{0} 플러그인", widget.title)} src={session.url} sandbox="allow-scripts" referrerPolicy="no-referrer" onLoad={() => post(frameRef.current, { type: 'init', theme: themeRef.current, language: languageRef.current })} className="block w-full border-0" style={{ height, display: error ? 'none' : undefined }} />}
-        {session && credentialPrompt && <PluginCredentialDialog key={`${session.sessionId}/${credentialPrompt.id}`} prompt={credentialPrompt} sessionId={session.sessionId} theme={setting.theme} onClose={closeCredentials} />}
-        {session && imagePreview && <PluginImageDialog key={imagePreview.url} image={imagePreview} sessionId={session.sessionId} theme={setting.theme} isDarkMode={isDarkMode} onClose={() => setImagePreview(null)} />}
-      </>}
+      {preview ? (
+        <div className="h-16" />
+      ) : (
+        <>
+          {error && (
+            <div role="alert" className="flex flex-col items-start gap-2">
+              <Typography size="sm">{translateMessage(error)}</Typography>
+              <SmallButton onClick={() => setAttempt((value) => value + 1)}>
+                {uiText("다시 시도")}
+              </SmallButton>
+            </div>
+          )}
+          {!ready && !error && (
+            <Typography size="sm">{uiText("불러오는 중…")}</Typography>
+          )}
+          {session && (
+            <iframe
+              ref={frameRef}
+              title={uiText("{0} 플러그인", widget.title)}
+              src={session.url}
+              sandbox="allow-scripts"
+              referrerPolicy="no-referrer"
+              onLoad={() =>
+                post(frameRef.current, {
+                  type: "init",
+                  theme: themeRef.current,
+                  language: languageRef.current
+                })
+              }
+              className="block w-full border-0"
+              style={{ height, display: error ? "none" : undefined }}
+            />
+          )}
+          {session && credentialPrompt && (
+            <PluginCredentialDialog
+              key={`${session.sessionId}/${credentialPrompt.id}`}
+              prompt={credentialPrompt}
+              sessionId={session.sessionId}
+              theme={setting.theme}
+              onClose={closeCredentials}
+            />
+          )}
+          {session && imagePreview && (
+            <PluginImageDialog
+              key={imagePreview.url}
+              image={imagePreview}
+              sessionId={session.sessionId}
+              theme={setting.theme}
+              isDarkMode={isDarkMode}
+              onClose={() => setImagePreview(null)}
+            />
+          )}
+        </>
+      )}
     </WidgetCard>
   );
 }
