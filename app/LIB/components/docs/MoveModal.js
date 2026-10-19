@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Card, Div, Menu, Typography } from "sud-ui";
 import { useState, useEffect } from "react";
 import { newShadowDarkSm, newShadowLightSm } from "../../constant/uiProps";
@@ -19,6 +20,7 @@ export default function MoveModal({
   folderTree,
   isDarkMode
 }) {
+  useI18n();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const { setting } = useSetting();
   const { fetchFolderTree } = useFolderTree();
@@ -82,7 +84,7 @@ export default function MoveModal({
         ),
         onClick: () => { setSelectedFolderId(folder._id); if (!folder.childrenLoaded) fetchFolderTree(folder._id); },
         ...(!folder.childrenLoaded
-          ? { children: [{ key: `load-${folder._id}`, label: '불러오는 중…' }] }
+          ? { children: [{ key: `load-${folder._id}`, label: uiText("불러오는 중…") }] }
           : childFolders.length > 0
           ? { children: buildMenuItems(folder.children) }
           : {})
@@ -95,8 +97,7 @@ export default function MoveModal({
       key: "home",
       label: (
         <Typography pretendard="SB" color="white-1">
-          홈
-        </Typography>
+          {uiText("홈")}</Typography>
       ),
       onClick: () => setSelectedFolderId(null)
     },
@@ -112,13 +113,12 @@ export default function MoveModal({
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <Typography pretendard="SB" size="lg">
-            {isMultiple ? `${selectedItems.length}개 항목 이동` : "폴더 이동"}
+            {isMultiple ? uiText("{0}개 항목 이동", selectedItems.length) : uiText("폴더 이동")}
           </Typography>
           {isMultiple ? (
             <div>
               <Typography size="sm" color="cool-gray-6">
-                선택된 항목들을 이동할 폴더을 선택하세요.
-              </Typography>
+                {uiText("선택된 항목들을 이동할 폴더을 선택하세요.")}</Typography>
               <div
                 className="mt-2"
                 style={{ maxHeight: "60px", overflowY: "auto" }}
@@ -132,8 +132,7 @@ export default function MoveModal({
             </div>
           ) : (
             <Typography size="sm" color="cool-gray-6">
-              &quot;{selectedItem?.title}&quot;을(를) 이동할 폴더를 선택하세요.
-            </Typography>
+              &quot;{selectedItem?.title}{uiText("\"을(를) 이동할 폴더를 선택하세요.")}</Typography>
           )}
         </div>
         <Card
@@ -160,16 +159,14 @@ export default function MoveModal({
             onClick={handleSubmit}
             disabled={selectedFolderId === undefined}
           >
-            이동
-          </ModalActionButton>
+            {uiText("이동")}</ModalActionButton>
           <ModalActionButton
             isDarkMode={isDarkMode}
             onClick={handleCancel}
             color="white-1"
             background="white-10"
           >
-            취소
-          </ModalActionButton>
+            {uiText("취소")}</ModalActionButton>
         </div>
       </div>
     </ModalFrame>

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { Div, Input, toast, Typography } from "sud-ui";
 import { createPortal } from "react-dom";
@@ -81,6 +82,7 @@ export default function TypeBubble({
   onDocumentOperationSettled,
   onDocumentOperationWillApply
 }) {
+  useI18n();
   const { editor } = useEditor();
   const { setting } = useSetting();
   const { isDarkMode, currentColors } = useDarkMode();
@@ -321,7 +323,7 @@ export default function TypeBubble({
     const { selection } = editor.state;
 
     if (selection.empty || selection.node) {
-      toast.danger("먼저 링크를 걸 텍스트를 선택해 주세요.");
+      toast.danger(uiText("먼저 링크를 걸 텍스트를 선택해 주세요."));
       return;
     }
 
@@ -344,7 +346,7 @@ export default function TypeBubble({
     const normalizedUrl = normalizeExternalUrl(linkUrl);
 
     if (!normalizedUrl) {
-      toast.danger("http 또는 https 링크를 입력해 주세요.");
+      toast.danger(uiText("http 또는 https 링크를 입력해 주세요."));
       return;
     }
 
@@ -357,11 +359,11 @@ export default function TypeBubble({
       .run();
 
     if (!didSetLink) {
-      toast.danger("링크를 적용할 수 없습니다.");
+      toast.danger(uiText("링크를 적용할 수 없습니다."));
       return;
     }
 
-    toast.success("링크를 적용했습니다.");
+    toast.success(uiText("링크를 적용했습니다."));
     closeLinkPrompt();
   };
 
@@ -379,11 +381,11 @@ export default function TypeBubble({
       .run();
 
     if (!didUnsetLink) {
-      toast.danger("링크를 제거할 수 없습니다.");
+      toast.danger(uiText("링크를 제거할 수 없습니다."));
       return;
     }
 
-    toast.success("링크를 제거했습니다.");
+    toast.success(uiText("링크를 제거했습니다."));
     closeLinkPrompt();
   };
 
@@ -534,8 +536,8 @@ export default function TypeBubble({
     >
       <Typography size="xs" color="cool-gray-8">
         {linkHadActiveMark
-          ? "선택한 링크를 수정하거나 제거합니다."
-          : "선택한 텍스트에 외부 링크를 추가합니다."}
+          ? uiText("선택한 링크를 수정하거나 제거합니다.")
+          : uiText("선택한 텍스트에 외부 링크를 추가합니다.")}
       </Typography>
       <Input
         {...inputProps}
@@ -553,8 +555,7 @@ export default function TypeBubble({
       />
       <div className="flex justify-end w-full">
         <Typography size="xs" color="cool-gray-8">
-          Enter로 적용, Escape로 닫기
-        </Typography>
+          {uiText("Enter로 적용, Escape로 닫기")}</Typography>
       </div>
     </Div>
   ) : null;

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Input } from "sud-ui";
 import WidgetCard from "./WidgetCard";
 import { TbMath } from "react-icons/tb";
@@ -7,6 +8,7 @@ import { useState } from "react";
 import { useSetting } from "../../context/SettingContext";
 
 export default function LatexPanel({ dragHandleProps }) {
+  useI18n();
   const { editor } = useEditor();
   const { setting } = useSetting();
   const [latex, setLatex] = useState("");
@@ -31,7 +33,7 @@ export default function LatexPanel({ dragHandleProps }) {
           onEnter={() => insertLatex(latex)}
           value={latex}
           onChange={(e) => setLatex(e.target.value)}
-          placeholder="LATEX 수식 입력 후 Enter"
+          placeholder={uiText("LATEX 수식 입력 후 Enter")}
           background={`${setting.theme}-1`}
         />
       </div>

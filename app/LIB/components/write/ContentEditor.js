@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { EditorContent, useEditor as useTiptapEditor } from "@tiptap/react";
 import { useEditor } from "../../context/EditorContext";
@@ -69,7 +70,7 @@ const EditorBlockDeleteModal = dynamic(
 const PageRulers = dynamic(() => import("./PageRulers"), { ssr: false });
 
 const documentPlaceholderExtension = Placeholder.configure({
-  placeholder: "첫 문장을 입력해 문서를 시작하세요.",
+  placeholder: () => uiText("첫 문장을 입력해 문서를 시작하세요."),
   emptyEditorClass: "is-editor-empty"
 });
 
@@ -162,6 +163,7 @@ const resolveDeleteRangeFromObjectId = (doc, target) => {
 };
 
 const FootnoteProjectionContent = ({ editor, projection }) => {
+  useI18n();
   const hostRef = useRef(null);
   useLayoutEffect(
     () => (projection.canonical
@@ -194,6 +196,7 @@ export default function ContentEditor({
   showRulers = false,
   pagesId = "pages"
 }) {
+  const uiLanguage = useI18n();
   const editorContainerRef = useRef(null);
   const [isEditable, setIsEditable] = useState(editable);
   const {
@@ -579,6 +582,11 @@ export default function ContentEditor({
     // loop.
     [viewPage, pageMetrics, pageNumber]
   );
+
+  useLayoutEffect(() => {
+    if (!editor || editor.isDestroyed) return;
+    editor.view.dispatch(editor.state.tr.setMeta("uiLanguage", uiLanguage).setMeta("addToHistory", false));
+  }, [editor, uiLanguage]);
 
   useLayoutEffect(() => {
     if (!editor || editor.isDestroyed) return;
@@ -1734,8 +1742,7 @@ export default function ContentEditor({
                         )}
                         {segment.showMergedGroupBadge && (
                           <span className="tiptap-page-shell__segment-flag">
-                            병합 행 묶음
-                          </span>
+                            {uiText("병합 행 묶음")}</span>
                         )}
                       </div>
                     ))}
@@ -1752,7 +1759,7 @@ export default function ContentEditor({
                       data-footnote-id={segment.noteId}
                       data-footnote-fragment={segment.segmentIndex}
                       data-footnote-canonical={segment.canonical ? "true" : "false"}
-                      title={segment.canonical ? undefined : "각주 시작 위치로 이동"}
+                      title={segment.canonical ? undefined : uiText("각주 시작 위치로 이동")}
                       onMouseDown={segment.canonical ? undefined : (event) => {
                         if (event.button !== 0) return;
                         event.preventDefault();

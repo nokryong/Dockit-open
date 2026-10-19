@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Menu, Upload } from "sud-ui";
 import { createPortal } from "react-dom";
 import { newShadowDarkMd, newShadowLightMd } from "../../constant/uiProps";
@@ -19,6 +20,7 @@ import {
 } from "react-icons/pi";
 
 function ContextMenuLabel({ icon, title, description, danger = false }) {
+  useI18n();
   return (
     <span className={contextMenuStyles.itemLabel}>
       <span
@@ -63,6 +65,7 @@ export default function ContextMenu({
   isDarkMode,
   layoutMode
 }) {
+  useI18n();
   const [mounted, setMounted] = useState(false);
   const closeMenu = () => setContextMenu({ visible: false, x: 0, y: 0 });
   useContextMenuDismiss(contextMenu.visible, closeMenu);
@@ -83,8 +86,8 @@ export default function ContextMenu({
             label: (
               <ContextMenuLabel
                 icon={<PiCheckSquare size={18} />}
-                title={`${selectedItems.length}개 선택됨`}
-                description="선택 항목 작업"
+                title={uiText("{0}개 선택됨", selectedItems.length)}
+                description={uiText("선택 항목 작업")}
               />
             ),
             disabled: true
@@ -96,8 +99,8 @@ export default function ContextMenu({
             label: (
               <ContextMenuLabel
                 icon={<PiPencilSimpleLine size={18} />}
-                title="이름 변경"
-                description="문서 또는 폴더 이름 수정"
+                title={uiText("이름 변경")}
+                description={uiText("문서 또는 폴더 이름 수정")}
               />
             ),
             onClick: () => {
@@ -111,8 +114,8 @@ export default function ContextMenu({
       label: (
         <ContextMenuLabel
           icon={<PiFolderOpen size={18} />}
-          title={multipleSelected ? `${selectedItems.length}개 이동` : "폴더로 이동"}
-          description="다른 폴더로 정리"
+          title={multipleSelected ? uiText("{0}개 이동", selectedItems.length) : uiText("폴더로 이동")}
+          description={uiText("다른 폴더로 정리")}
         />
       ),
       onClick: () => {
@@ -125,8 +128,8 @@ export default function ContextMenu({
       label: (
         <ContextMenuLabel
           icon={<PiTrash size={18} />}
-          title={multipleSelected ? `${selectedItems.length}개 삭제` : "삭제"}
-          description="선택 항목 제거"
+          title={multipleSelected ? uiText("{0}개 삭제", selectedItems.length) : uiText("삭제")}
+          description={uiText("선택 항목 제거")}
           danger
         />
       ),
@@ -143,8 +146,8 @@ export default function ContextMenu({
       label: (
         <ContextMenuLabel
           icon={<PiFilePlus size={18} />}
-          title="새 문서 만들기"
-          description="빈 문서로 시작"
+          title={uiText("새 문서 만들기")}
+          description={uiText("빈 문서로 시작")}
         />
       ),
       onClick: () => {
@@ -164,7 +167,7 @@ export default function ContextMenu({
         >
           <ContextMenuLabel
             icon={<PiUploadSimple size={18} />}
-            title="파일 불러오기"
+            title={uiText("파일 불러오기")}
             description="dkt, docx, hwpx, md, txt"
           />
         </Upload>
@@ -175,8 +178,8 @@ export default function ContextMenu({
       label: (
         <ContextMenuLabel
           icon={<PiFolderPlus size={18} />}
-          title="새 폴더 만들기"
-          description="작업 공간 정리"
+          title={uiText("새 폴더 만들기")}
+          description={uiText("작업 공간 정리")}
         />
       ),
       onClick: () => {

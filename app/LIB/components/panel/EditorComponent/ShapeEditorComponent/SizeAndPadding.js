@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import {
   panelInputProps,
   panelSelectProps
@@ -20,6 +21,7 @@ export default function SizeAndPadding({
   isImage = false,
   setting
 }) {
+  useI18n();
   const themedInputProps = panelInputProps(setting.theme);
   const themedSelectProps = panelSelectProps(setting.theme);
 
@@ -27,8 +29,7 @@ export default function SizeAndPadding({
     <div className="flex flex-col gap-2 w-full">
       <div className="flex flex-col gap-2">
         <Typography pretendard="SB" color="white-1">
-          크기
-        </Typography>
+          {uiText("크기")}</Typography>
         <div className="flex flex-col gap-2">
           {/* 높이 */}
           <div
@@ -40,8 +41,7 @@ export default function SizeAndPadding({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              높이
-            </Typography>
+              {uiText("높이")}</Typography>
             <Input
               {...themedInputProps}
               type="number"
@@ -64,8 +64,7 @@ export default function SizeAndPadding({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              너비
-            </Typography>
+              {uiText("너비")}</Typography>
             <Input
               {...themedInputProps}
               type="number"
@@ -89,8 +88,7 @@ export default function SizeAndPadding({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              모서리
-            </Typography>
+              {uiText("모서리")}</Typography>
             <Input
               {...themedInputProps}
               type="number"
@@ -113,15 +111,13 @@ export default function SizeAndPadding({
       {!isImage && (
         <div className="flex flex-col gap-2">
           <Typography pretendard="SB" color="white-1">
-            상자 속성
-          </Typography>
+            {uiText("상자 속성")}</Typography>
           <div className="flex flex-col gap-2">
             {/* 세로 맞춤 */}
             <div onMouseDown={(event) => event.preventDefault()}>
               <div className="flex items-center gap-8">
                 <Typography size="sm" className="flex-shrink-0" color="white-1">
-                  세로 맞춤
-                </Typography>
+                  {uiText("세로 맞춤")}</Typography>
                 <Select
                   value={justifyContent}
                   onChange={(value) =>
@@ -129,9 +125,9 @@ export default function SizeAndPadding({
                   }
                   {...themedSelectProps}
                   options={[
-                    { label: "상단", value: "start" },
-                    { label: "중앙", value: "center" },
-                    { label: "하단", value: "end" }
+                    { label: uiText("상단"), value: "start" },
+                    { label: uiText("중앙"), value: "center" },
+                    { label: uiText("하단"), value: "end" }
                   ]}
                 />
               </div>
@@ -146,8 +142,7 @@ export default function SizeAndPadding({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                상단 여백
-              </Typography>
+                {uiText("상단 여백")}</Typography>
               <Input
                 {...themedInputProps}
                 type="number"
@@ -169,8 +164,7 @@ export default function SizeAndPadding({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                하단 여백
-              </Typography>
+                {uiText("하단 여백")}</Typography>
               <Input
                 {...themedInputProps}
                 type="number"
@@ -195,8 +189,7 @@ export default function SizeAndPadding({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                왼쪽 여백
-              </Typography>
+                {uiText("왼쪽 여백")}</Typography>
               <Input
                 {...themedInputProps}
                 type="number"
@@ -218,8 +211,7 @@ export default function SizeAndPadding({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                오른쪽 여백
-              </Typography>
+                {uiText("오른쪽 여백")}</Typography>
               <Input
                 {...themedInputProps}
                 type="number"

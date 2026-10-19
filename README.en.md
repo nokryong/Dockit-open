@@ -16,7 +16,7 @@
 
 Dockit Open is an open-source document editor for Windows, macOS, and Linux. Your documents stay on your computer without an account or a server, and you can optionally connect ChatGPT or the Codex CLI to help with your writing.
 
-The interface is in Korean.
+The interface supports Korean and English. Choose your language in Settings → Language.
 
 ## Features
 

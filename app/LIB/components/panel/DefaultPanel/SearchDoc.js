@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import { useState } from "react";
 import { usePathname } from "@/desktop/navigation";
 import { Div, Input, Typography } from "sud-ui";
@@ -11,6 +12,7 @@ import { PiGridFourBold, PiListBulletsBold } from "react-icons/pi";
 import { useDarkMode } from "@/app/LIB/context/DarkModeContext";
 
 export default function SearchDoc({ dragHandleProps }) {
+  useI18n();
   const { setting, saveSetting } = useSetting();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearch, setIsSearch] = useState(false);
@@ -58,9 +60,9 @@ export default function SearchDoc({ dragHandleProps }) {
   };
 
   const sortOptions = [
-    { value: "updated_at", label: "최근 수정순" },
-    { value: "created_at", label: "생성일순" },
-    { value: "title", label: "제목순" }
+    { value: "updated_at", label: uiText("최근 수정순") },
+    { value: "created_at", label: uiText("생성일순") },
+    { value: "title", label: uiText("제목순") }
   ];
 
   const renderSortButton = (option) => {
@@ -86,7 +88,7 @@ export default function SearchDoc({ dragHandleProps }) {
         </Typography>
         {active && (
           <Typography size="xs" color={`${setting.theme}-7`}>
-            {isAscending ? "오름차순" : "내림차순"}
+            {isAscending ? uiText("오름차순") : uiText("내림차순")}
           </Typography>
         )}
       </button>
@@ -102,8 +104,7 @@ export default function SearchDoc({ dragHandleProps }) {
               <Search size={18} />
             </Div>
             <Typography pretendard="SB" size="sm" color="white-1">
-              제목으로 검색
-            </Typography>
+              {uiText("제목으로 검색")}</Typography>
           </div>
           <Input
             {...inputProps}
@@ -117,15 +118,14 @@ export default function SearchDoc({ dragHandleProps }) {
             }
             background={`${setting.theme}-1`}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="제목 검색"
+            placeholder={uiText("제목 검색")}
             onEnter={handleSearch}
           />
         </section>
 
         <section className="flex flex-col gap-3">
           <Typography pretendard="SB" size="sm" color="white-1">
-            정렬 옵션
-          </Typography>
+            {uiText("정렬 옵션")}</Typography>
           <div className="flex flex-col gap-2">
             {sortOptions.map(renderSortButton)}
           </div>
@@ -133,12 +133,11 @@ export default function SearchDoc({ dragHandleProps }) {
 
         <section className="flex flex-col gap-3">
           <Typography pretendard="SB" size="sm" color="white-1">
-            보기 방식
-          </Typography>
+            {uiText("보기 방식")}</Typography>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { value: "grid", label: "그리드", icon: PiGridFourBold },
-              { value: "list", label: "목록", icon: PiListBulletsBold }
+              { value: "grid", label: uiText("그리드"), icon: PiGridFourBold },
+              { value: "list", label: uiText("목록"), icon: PiListBulletsBold }
             ].map((option) => {
               const Icon = option.icon;
               const active = viewMode === option.value;
@@ -178,7 +177,7 @@ export default function SearchDoc({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={Search}
-      title="제목으로 검색"
+      title={uiText("제목으로 검색")}
       dragHandleProps={dragHandleProps}
       widgetType="searchDoc"
     >
@@ -195,7 +194,7 @@ export default function SearchDoc({ dragHandleProps }) {
           }
           background={`${setting.theme}-1`}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="제목 검색"
+          placeholder={uiText("제목 검색")}
           onEnter={handleSearch}
         />
       </div>

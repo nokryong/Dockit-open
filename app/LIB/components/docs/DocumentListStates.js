@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { useMemo } from "react";
 import dynamic from "@/desktop/dynamic";
@@ -14,6 +15,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import useColorizedLottie from "../../hook/useColorizedLottie";
 
 export const LoadingAnimation = () => {
+  useI18n();
   const { setting } = useSetting();
   const { currentColors } = useDarkMode();
   const theme = setting.theme || "mint";
@@ -63,14 +65,13 @@ export const LoadingAnimation = () => {
 };
 
 export const EmptyList = ({ message }) => {
+  useI18n();
   return (
     <div className="flex justify-center w-full text-center py-12">
       <Typography color="cool-gray-7">
         {message ?? (
           <>
-            컨텐츠가 없습니다.
-            <br /> 마우스 우클릭으로 새 문서 또는 폴더를 만들어주세요.
-          </>
+            {uiText("컨텐츠가 없습니다.")}<br /> {uiText(" 마우스 우클릭으로 새 문서 또는 폴더를 만들어주세요.")}</>
         )}
       </Typography>
     </div>

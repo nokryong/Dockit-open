@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { Button, Typography, Upload } from "sud-ui";
 import { PiFilePlus, PiUploadSimple } from "react-icons/pi";
@@ -10,6 +11,7 @@ export default function WorkspaceStarter({
   onCreateDocument,
   onUploadFile
 }) {
+  useI18n();
   return (
     <section
       aria-labelledby="workspace-starter-title"
@@ -19,13 +21,12 @@ export default function WorkspaceStarter({
         <h2 id="workspace-starter-title" className="text-balance">
           <Typography pretendard="SB" size="xl" color="white-1">
             {isFirstWorkspace
-              ? "첫 문서를 시작해 보세요"
-              : "이 폴더에서 새 작업을 시작해 보세요"}
+              ? uiText("첫 문서를 시작해 보세요")
+              : uiText("이 폴더에서 새 작업을 시작해 보세요")}
           </Typography>
         </h2>
         <Typography className="text-pretty" size="sm" color="cool-gray-7">
-          새 문서를 만들거나 파일을 가져오세요.
-        </Typography>
+          {uiText("새 문서를 만들거나 파일을 가져오세요.")}</Typography>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -38,8 +39,7 @@ export default function WorkspaceStarter({
           className="min-h-10"
           onClick={onCreateDocument}
         >
-          새 문서
-        </Button>
+          {uiText("새 문서")}</Button>
         <Upload listType="none" onChange={onUploadFile} ext={uploadExtensions}>
           <Button
             icon={<PiUploadSimple size={16} />}
@@ -49,8 +49,7 @@ export default function WorkspaceStarter({
             color={`${theme}-7`}
             className="min-h-10"
           >
-            파일 가져오기
-          </Button>
+            {uiText("파일 가져오기")}</Button>
         </Upload>
       </div>
 

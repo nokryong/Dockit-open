@@ -1,10 +1,11 @@
+const { t: uiText } = require('./i18n.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const { contained, atomicJson, readJson } = require('./local-store.cjs');
 
 const valid = value => typeof value === 'string' && /^[\w-]{1,100}$/.test(value);
-const summary = record => ({ id: record.id, title: record.messages.find(message => message.role === 'user')?.text?.replace(/\s+/g, ' ').trim().slice(0, 100) || '새 대화', documentId: record.documentId, updatedAt: record.updatedAt });
+const summary = record => ({ id: record.id, title: record.messages.find(message => message.role === 'user')?.text?.replace(/\s+/g, ' ').trim().slice(0, 100) || uiText("새 대화"), documentId: record.documentId, updatedAt: record.updatedAt });
 
 // A single account connection is shared, but every window has its own selected chat.
 class Conversations {
@@ -16,13 +17,13 @@ class Conversations {
     this.indexes = new Map(); this.initializing = new Map(); this.selections = new Map(); this.tail = Promise.resolve(); this.active = null;
   }
   async directory(account) {
-    if (!valid(account)) throw new Error('연결 계정을 확인해주세요.');
+    if (!valid(account)) throw new Error(uiText("연결 계정을 확인해주세요."));
     const directory = await contained(this.workspaceRoot, path.join(this.root, account));
     await fs.mkdir(directory, { recursive: true });
     return directory;
   }
   async file(account, id) {
-    if (!valid(id)) throw new Error('대화를 찾을 수 없습니다.');
+    if (!valid(id)) throw new Error(uiText("대화를 찾을 수 없습니다."));
     return contained(await this.directory(account), path.join(this.root, account, `${id}.json`));
   }
   async initialize(account) {
@@ -41,7 +42,7 @@ class Conversations {
         }
         await atomicJson(indexFile, index);
       }
-      if (index.version !== 1 || !Array.isArray(index.items)) throw new Error('대화 목록을 읽지 못했습니다.');
+      if (index.version !== 1 || !Array.isArray(index.items)) throw new Error(uiText("대화 목록을 읽지 못했습니다."));
       // Recover a conversation saved just before a crash interrupted the index write.
       const files = await fs.readdir(await this.directory(account));
       const known = new Set(index.items.map(item => item.id));
@@ -60,13 +61,13 @@ class Conversations {
   }
   async context() {
     const account = await this.account();
-    if (!account) throw new Error('먼저 로그인해주세요.');
+    if (!account) throw new Error(uiText("먼저 로그인해주세요."));
     await this.initialize(account);
     return account;
   }
   async read(account, id) {
     const record = (await readJson(await this.file(account, id))).value;
-    if (record.id !== id || !Array.isArray(record.messages)) throw new Error('대화를 읽지 못했습니다.');
+    if (record.id !== id || !Array.isArray(record.messages)) throw new Error(uiText("대화를 읽지 못했습니다."));
     return record;
   }
   async selected(owner, documentId = null) {
@@ -83,16 +84,16 @@ class Conversations {
   async list() { const account = await this.context(); await this.tail; return [...this.indexes.get(account).items].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)); }
   async history(owner, documentId) { return (await this.selected(owner, documentId)).record.messages; }
   async select(owner, id) {
-    if (this.active?.owner === owner) throw new Error('응답이 끝난 뒤 대화를 선택해주세요.');
+    if (this.active?.owner === owner) throw new Error(uiText("응답이 끝난 뒤 대화를 선택해주세요."));
     const account = await this.context();
     await this.tail;
-    if (!this.indexes.get(account).items.some(item => item.id === id)) throw new Error('대화를 찾을 수 없습니다.');
+    if (!this.indexes.get(account).items.some(item => item.id === id)) throw new Error(uiText("대화를 찾을 수 없습니다."));
     const record = await this.read(account, id);
     this.selections.set(owner, { account, record });
     return this.history(owner);
   }
   async create(owner, documentId = null) {
-    if (this.active?.owner === owner) throw new Error('응답이 끝난 뒤 새 대화를 시작해주세요.');
+    if (this.active?.owner === owner) throw new Error(uiText("응답이 끝난 뒤 새 대화를 시작해주세요."));
     const account = await this.context();
     this.selections.set(owner, { account, record: { id: randomUUID(), documentId, messages: [] } });
     return [];
@@ -113,9 +114,9 @@ class Conversations {
     return job;
   }
   async run(owner, documentId, work) {
-    if (this.active) throw new Error('응답이 끝난 뒤 다시 시도해주세요.');
+    if (this.active) throw new Error(uiText("응답이 끝난 뒤 다시 시도해주세요."));
     const selected = await this.selected(owner, documentId);
-    if (this.active) throw new Error('응답이 끝난 뒤 다시 시도해주세요.');
+    if (this.active) throw new Error(uiText("응답이 끝난 뒤 다시 시도해주세요."));
     this.active = { ...selected, owner, record: structuredClone(selected.record) };
     try {
       await this.activate(this.active.record);
@@ -131,11 +132,11 @@ class Conversations {
   }
   async remove(owner, id) {
     const account = await this.context();
-    if (this.active?.account === account && this.active.record.id === id) throw new Error('응답 중인 대화는 삭제할 수 없습니다.');
+    if (this.active?.account === account && this.active.record.id === id) throw new Error(uiText("응답 중인 대화는 삭제할 수 없습니다."));
     let removed;
     const job = this.tail.then(async () => {
       const index = this.indexes.get(account);
-      if (!index.items.some(item => item.id === id)) throw new Error('대화를 찾을 수 없습니다.');
+      if (!index.items.some(item => item.id === id)) throw new Error(uiText("대화를 찾을 수 없습니다."));
       removed = await this.read(account, id);
       await this.trash(await this.file(account, id));
       index.items = index.items.filter(item => item.id !== id);

@@ -1,3 +1,4 @@
+import { t as uiText, getLanguage } from "../i18n";
 import { Node } from "@tiptap/core";
 import { deriveNoteReferenceNumbers } from "../utils/noteSemanticUtils";
 
@@ -100,16 +101,17 @@ const NoteReference = Node.create({
           currentNode.attrs.noteId,
           currentNode.attrs.kind,
           number,
-          editable
+          editable,
+          getLanguage()
         ].join("|");
         if (renderKey === nextRenderKey) return;
         renderKey = nextRenderKey;
-        const kindLabel = currentNode.attrs.kind === "endnote" ? "미주" : "각주";
+        const kindLabel = currentNode.attrs.kind === "endnote" ? uiText("미주") : uiText("각주");
         const numberText = number ? String(number) : "?";
         dom.textContent = numberText;
         dom.setAttribute(
           "aria-label",
-          `${kindLabel} ${number ?? "번호 없음"} 내용으로 이동`
+          uiText("{0} {1} 내용으로 이동", kindLabel, number ?? uiText("번호 없음"))
         );
         dom.classList.toggle("is-read-only", !editable);
         dom.dataset.dockitNoteId = currentNode.attrs.noteId ?? "";

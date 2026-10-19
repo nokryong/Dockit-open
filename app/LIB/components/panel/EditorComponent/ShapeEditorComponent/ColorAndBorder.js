@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import {
   newShadowDarkSm,
   newShadowLightSm,
@@ -35,6 +36,7 @@ export default function ColorAndBorder({
   backgroundRepeat = "no-repeat",
   isDarkMode
 }) {
+  useI18n();
   const fileInputRef = useRef(null);
   const themedInputProps = panelInputProps(setting.theme);
   const themedSelectProps = panelSelectProps(setting.theme, isDarkMode);
@@ -143,8 +145,7 @@ export default function ColorAndBorder({
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <Typography pretendard="SB" color="white-1">
-                배경색
-              </Typography>
+                {uiText("배경색")}</Typography>
               <Switch
                 size="sm"
                 checked={isBgEnabled}
@@ -159,8 +160,7 @@ export default function ColorAndBorder({
                 <>
                   <div className="flex items-center justify-between">
                     <Typography size="sm" color="white-1">
-                      배경색
-                    </Typography>
+                      {uiText("배경색")}</Typography>
                     <ColorPicker
                       open={bgColorPickerOpen}
                       setOpen={setBgColorPickerOpen}
@@ -193,8 +193,7 @@ export default function ColorAndBorder({
                       className="flex-shrink-0"
                       color="white-1"
                     >
-                      투명도
-                    </Typography>
+                      {uiText("투명도")}</Typography>
                     <Input
                       {...themedInputProps}
                       type="number"
@@ -218,8 +217,7 @@ export default function ColorAndBorder({
           {/* 배경 이미지 */}
           <div className="flex flex-col gap-2">
             <Typography pretendard="SB" color="white-1">
-              배경 이미지
-            </Typography>
+              {uiText("배경 이미지")}</Typography>
             <div className="flex flex-col gap-2">
               <input
                 ref={fileInputRef}
@@ -252,7 +250,7 @@ export default function ColorAndBorder({
                   background={"white-10"}
                   icon={<PhotoOutline size={20} />}
                 >
-                  {backgroundImage ? "변경" : "업로드"}
+                  {backgroundImage ? uiText("변경") : uiText("업로드")}
                 </Button>
                 {backgroundImage && (
                   <Button
@@ -263,8 +261,7 @@ export default function ColorAndBorder({
                     color={"white-1"}
                     background={"white-10"}
                   >
-                    제거
-                  </Button>
+                    {uiText("제거")}</Button>
                 )}
               </div>
               {backgroundImage && (
@@ -276,8 +273,7 @@ export default function ColorAndBorder({
                         className="shrink-0"
                         color="white-1"
                       >
-                        크기
-                      </Typography>
+                        {uiText("크기")}</Typography>
                       <Select
                         value={backgroundSize}
                         onChange={(value) =>
@@ -285,10 +281,10 @@ export default function ColorAndBorder({
                         }
                         {...themedSelectProps}
                         options={[
-                          { label: "채우기", value: "cover" },
-                          { label: "맞추기", value: "contain" },
-                          { label: "원본", value: "auto" },
-                          { label: "늘리기", value: "100% 100%" }
+                          { label: uiText("채우기"), value: "cover" },
+                          { label: uiText("맞추기"), value: "contain" },
+                          { label: uiText("원본"), value: "auto" },
+                          { label: uiText("늘리기"), value: "100% 100%" }
                         ]}
                       />
                     </div>
@@ -300,8 +296,7 @@ export default function ColorAndBorder({
                         className="shrink-0"
                         color="white-1"
                       >
-                        위치
-                      </Typography>
+                        {uiText("위치")}</Typography>
                       <Select
                         value={backgroundPosition}
                         onChange={(value) =>
@@ -309,11 +304,11 @@ export default function ColorAndBorder({
                         }
                         {...themedSelectProps}
                         options={[
-                          { label: "가운데", value: "center" },
-                          { label: "상단", value: "top center" },
-                          { label: "하단", value: "bottom center" },
-                          { label: "왼쪽", value: "center left" },
-                          { label: "오른쪽", value: "center right" }
+                          { label: uiText("가운데"), value: "center" },
+                          { label: uiText("상단"), value: "top center" },
+                          { label: uiText("하단"), value: "bottom center" },
+                          { label: uiText("왼쪽"), value: "center left" },
+                          { label: uiText("오른쪽"), value: "center right" }
                         ]}
                       />
                     </div>
@@ -325,8 +320,7 @@ export default function ColorAndBorder({
                         className="shrink-0"
                         color="white-1"
                       >
-                        반복
-                      </Typography>
+                        {uiText("반복")}</Typography>
                       <Select
                         value={backgroundRepeat}
                         onChange={(value) =>
@@ -334,10 +328,10 @@ export default function ColorAndBorder({
                         }
                         {...themedSelectProps}
                         options={[
-                          { label: "없음", value: "no-repeat" },
-                          { label: "전체", value: "repeat" },
-                          { label: "가로", value: "repeat-x" },
-                          { label: "세로", value: "repeat-y" }
+                          { label: uiText("없음"), value: "no-repeat" },
+                          { label: uiText("전체"), value: "repeat" },
+                          { label: uiText("가로"), value: "repeat-x" },
+                          { label: uiText("세로"), value: "repeat-y" }
                         ]}
                       />
                     </div>
@@ -352,8 +346,7 @@ export default function ColorAndBorder({
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <Typography pretendard="SB" color="white-1">
-            테두리
-          </Typography>
+            {uiText("테두리")}</Typography>
           <Switch
             size="sm"
             checked={isBorderEnabled}
@@ -366,8 +359,7 @@ export default function ColorAndBorder({
             <>
               <div className="flex items-center justify-between">
                 <Typography size="sm" color="white-1">
-                  선색
-                </Typography>
+                  {uiText("선색")}</Typography>
                 <ColorPicker
                   open={borderColorPickerOpen}
                   setOpen={setBorderColorPickerOpen}
@@ -393,8 +385,7 @@ export default function ColorAndBorder({
                 }}
               >
                 <Typography size="sm" className="flex-shrink-0" color="white-1">
-                  투명도
-                </Typography>
+                  {uiText("투명도")}</Typography>
                 <Input
                   {...themedInputProps}
                   type="number"
@@ -417,8 +408,7 @@ export default function ColorAndBorder({
                 }}
               >
                 <Typography size="sm" className="flex-shrink-0" color="white-1">
-                  선 두께
-                </Typography>
+                  {uiText("선 두께")}</Typography>
                 <Input
                   {...themedInputProps}
                   type="number"
@@ -438,18 +428,17 @@ export default function ColorAndBorder({
                     className="flex-shrink-0"
                     color="white-1"
                   >
-                    선 타입
-                  </Typography>
+                    {uiText("선 타입")}</Typography>
                   <Select
                     value={borderStyle}
                     onChange={(value) => onUpdateStyle({ borderStyle: value })}
                     {...themedSelectProps}
                     options={[
-                      { label: "실선", value: "solid" },
-                      { label: "대시선", value: "dashed" },
-                      { label: "점선", value: "dotted" },
-                      { label: "이중선", value: "double" },
-                      { label: "없음", value: "none" }
+                      { label: uiText("실선"), value: "solid" },
+                      { label: uiText("대시선"), value: "dashed" },
+                      { label: uiText("점선"), value: "dotted" },
+                      { label: uiText("이중선"), value: "double" },
+                      { label: uiText("없음"), value: "none" }
                     ]}
                   />
                 </div>

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import WidgetCard from "./WidgetCard";
 import { PiImageFill, PiListNumbersFill, PiTableFill } from "react-icons/pi";
 import { RiBarChartFill } from "react-icons/ri";
@@ -25,27 +26,27 @@ const counterStyleMap = {
 const TOC_TAB_CONFIGS = [
   {
     key: "heading",
-    label: "문서",
+    get label() { return uiText("문서"); },
     icon: PiListNumbersFill,
-    emptyText: "문서 목차가 없습니다"
+    get emptyText() { return uiText("문서 목차가 없습니다"); }
   },
   {
     key: "image",
-    label: "그림",
+    get label() { return uiText("그림"); },
     icon: PiImageFill,
-    emptyText: "그림 목차가 없습니다"
+    get emptyText() { return uiText("그림 목차가 없습니다"); }
   },
   {
     key: "table",
-    label: "표",
+    get label() { return uiText("표"); },
     icon: PiTableFill,
-    emptyText: "표 목차가 없습니다"
+    get emptyText() { return uiText("표 목차가 없습니다"); }
   },
   {
     key: "chartBlock",
-    label: "차트",
+    get label() { return uiText("차트"); },
     icon: RiBarChartFill,
-    emptyText: "차트 목차가 없습니다"
+    get emptyText() { return uiText("차트 목차가 없습니다"); }
   },
 ];
 
@@ -273,7 +274,7 @@ export const buildCaptionEntriesFromHtml = (html) => {
         targetGroup,
         targetId,
         numberText,
-        text: text || "빈 캡션"
+        text: text || uiText("빈 캡션")
       };
     })
     .filter(Boolean);
@@ -296,6 +297,7 @@ const renderTabLabel = (setting, tabConfig, count) => {
 };
 
 export default function TableOfContentsPanel({ dragHandleProps }) {
+  const uiLanguage = useI18n();
   const { content, bulletStyle } = useDocument();
   const { setting } = useSetting();
   const [collapsedIds, setCollapsedIds] = useState(() => new Set());
@@ -329,22 +331,24 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
   }, [content, bulletStyle]);
 
   const headingEntries = useMemo(() => {
+    void uiLanguage;
     try {
       return buildHeadingEntriesFromHtml(finalContent, finalBulletStyle);
     } catch (error) {
-      console.error("문서 목차 파싱 실패:", error);
+      console.error(uiText("문서 목차 파싱 실패:"), error);
       return [];
     }
-  }, [finalContent, finalBulletStyle]);
+  }, [finalContent, finalBulletStyle, uiLanguage]);
 
   const captionEntries = useMemo(() => {
+    void uiLanguage;
     try {
       return buildCaptionEntriesFromHtml(finalContent);
     } catch (error) {
-      console.error("캡션 목차 파싱 실패:", error);
+      console.error(uiText("캡션 목차 파싱 실패:"), error);
       return [];
     }
-  }, [finalContent]);
+  }, [finalContent, uiLanguage]);
 
   const captionEntriesByType = useMemo(
     () =>
@@ -363,7 +367,7 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
     <>
       {headingEntries.length === 0 ? (
         <div className="flex justify-center py-5">
-          <Typography color={"cool-gray-7"}>문서 목차가 없습니다</Typography>
+          <Typography color={"cool-gray-7"}>{uiText("문서 목차가 없습니다")}</Typography>
         </div>
       ) : (
         <Div
@@ -432,7 +436,7 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
                       }
 
                       if (!element) {
-                        console.warn("요소를 찾을 수 없습니다:", heading.id);
+                        console.warn(uiText("요소를 찾을 수 없습니다:"), heading.id);
                         return;
                       }
 
@@ -491,7 +495,7 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
       return (
         <div className="flex justify-center py-5">
           <Typography color={"cool-gray-7"}>
-            {tabConfig?.emptyText || "캡션 목차가 없습니다"}
+            {tabConfig?.emptyText || uiText("캡션 목차가 없습니다")}
           </Typography>
         </div>
       );
@@ -512,7 +516,7 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
                 const element = window.document.querySelector(selector);
 
                 if (!(element instanceof Element)) {
-                  console.warn("캡션 요소를 찾을 수 없습니다:", entry.targetId);
+                  console.warn(uiText("캡션 요소를 찾을 수 없습니다:"), entry.targetId);
                   return;
                 }
 
@@ -573,7 +577,7 @@ export default function TableOfContentsPanel({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={PiListNumbersFill}
-      title="목차"
+      title={uiText("목차")}
       dragHandleProps={dragHandleProps}
       widgetType="index"
     >

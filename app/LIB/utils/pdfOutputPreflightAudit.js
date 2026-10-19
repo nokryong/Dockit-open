@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 export const PDF_OUTPUT_PREFLIGHT_STATUSES = Object.freeze({
   READY: "ready",
   WARNING: "warning",
@@ -19,48 +20,48 @@ export const PDF_OUTPUT_PREFLIGHT_ISSUE_CODES = Object.freeze({
 const ISSUE_CATALOG = Object.freeze({
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.OUTPUT_SURFACE_UNAVAILABLE]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.BLOCKED,
-    title: "출력할 문서를 확인할 수 없음",
-    message: "문서 편집기가 준비된 뒤 다시 시도해 주세요."
+    get title() { return uiText("출력할 문서를 확인할 수 없음"); },
+    get message() { return uiText("문서 편집기가 준비된 뒤 다시 시도해 주세요."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.NOTE_SEMANTIC_INVALID]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.BLOCKED,
-    title: "각주·미주 구조 확인 필요",
-    message: "참조와 본문이 안전하게 연결된 상태에서만 출력할 수 있습니다."
+    get title() { return uiText("각주·미주 구조 확인 필요"); },
+    get message() { return uiText("참조와 본문이 안전하게 연결된 상태에서만 출력할 수 있습니다."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.FOOTNOTE_LAYOUT_BLOCKED]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.BLOCKED,
-    title: "각주 페이지 배치 준비 실패",
-    message: "각주 페이지 배치를 다시 계산한 뒤 출력해 주세요."
+    get title() { return uiText("각주 페이지 배치 준비 실패"); },
+    get message() { return uiText("각주 페이지 배치를 다시 계산한 뒤 출력해 주세요."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.TABLE_ROW_TOO_TALL]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.BLOCKED,
-    title: "한 페이지보다 큰 표 행",
-    message: "잘릴 수 있는 표 행을 나누거나 내용을 줄인 뒤 출력해 주세요."
+    get title() { return uiText("한 페이지보다 큰 표 행"); },
+    get message() { return uiText("잘릴 수 있는 표 행을 나누거나 내용을 줄인 뒤 출력해 주세요."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.IMAGE_LOAD_FAILED]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.BLOCKED,
-    title: "불러오지 못한 이미지",
-    message: "이미지 원본을 다시 연결한 뒤 출력해 주세요."
+    get title() { return uiText("불러오지 못한 이미지"); },
+    get message() { return uiText("이미지 원본을 다시 연결한 뒤 출력해 주세요."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.IMAGE_LOAD_PENDING]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.WARNING,
-    title: "불러오는 중인 이미지",
-    message: "이미지가 출력에 포함되지 않을 수 있습니다."
+    get title() { return uiText("불러오는 중인 이미지"); },
+    get message() { return uiText("이미지가 출력에 포함되지 않을 수 있습니다."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.FONT_LOAD_FAILED]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.WARNING,
-    title: "불러오지 못한 글꼴",
-    message: "대체 글꼴로 출력되어 줄바꿈이나 페이지 배치가 달라질 수 있습니다."
+    get title() { return uiText("불러오지 못한 글꼴"); },
+    get message() { return uiText("대체 글꼴로 출력되어 줄바꿈이나 페이지 배치가 달라질 수 있습니다."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.FONT_LOAD_PENDING]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.WARNING,
-    title: "불러오는 중인 글꼴",
-    message: "글꼴 로드가 끝나기 전에 출력하면 줄바꿈이나 페이지 배치가 달라질 수 있습니다."
+    get title() { return uiText("불러오는 중인 글꼴"); },
+    get message() { return uiText("글꼴 로드가 끝나기 전에 출력하면 줄바꿈이나 페이지 배치가 달라질 수 있습니다."); }
   }),
   [PDF_OUTPUT_PREFLIGHT_ISSUE_CODES.HORIZONTAL_OVERFLOW]: Object.freeze({
     severity: PDF_OUTPUT_PREFLIGHT_STATUSES.WARNING,
-    title: "페이지 너비를 벗어난 내용",
-    message: "표, 차트, 이미지 또는 긴 텍스트의 오른쪽이 잘릴 수 있습니다."
+    get title() { return uiText("페이지 너비를 벗어난 내용"); },
+    get message() { return uiText("표, 차트, 이미지 또는 긴 텍스트의 오른쪽이 잘릴 수 있습니다."); }
   })
 });
 

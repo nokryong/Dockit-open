@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import {
   TbColumnInsertLeft,
   TbColumnInsertRight,
@@ -52,18 +53,18 @@ const MIN_ROW_HEIGHT_PX = 12;
 const MIN_ROW_HEIGHT_MM = pxToMm(MIN_ROW_HEIGHT_PX);
 const CELL_BORDER_SIDES = ["top", "right", "bottom", "left"];
 const CELL_BORDER_SIDE_OPTIONS = [
-  { label: "전체", value: "all" },
-  { label: "위", value: "top" },
-  { label: "오른쪽", value: "right" },
-  { label: "아래", value: "bottom" },
-  { label: "왼쪽", value: "left" }
+  { get label() { return uiText("전체"); }, value: "all" },
+  { get label() { return uiText("위"); }, value: "top" },
+  { get label() { return uiText("오른쪽"); }, value: "right" },
+  { get label() { return uiText("아래"); }, value: "bottom" },
+  { get label() { return uiText("왼쪽"); }, value: "left" }
 ];
 const CELL_BORDER_STYLE_OPTIONS = [
-  { label: "실선", value: "solid" },
-  { label: "파선", value: "dashed" },
-  { label: "점선", value: "dotted" },
-  { label: "이중선", value: "double" },
-  { label: "없음", value: "none" }
+  { get label() { return uiText("실선"); }, value: "solid" },
+  { get label() { return uiText("파선"); }, value: "dashed" },
+  { get label() { return uiText("점선"); }, value: "dotted" },
+  { get label() { return uiText("이중선"); }, value: "double" },
+  { get label() { return uiText("없음"); }, value: "none" }
 ];
 
 const capitalizeCellBorderSide = (side) =>
@@ -244,6 +245,7 @@ export default function TableEditor({
   isDarkMode,
   setting
 }) {
+  useI18n();
   // ■■■■■■■■■■■ 버튼 헬퍼 ■■■■■■■■■■■■■
   const renderBtn = (icon, onClick, key, tooltip) => {
     const Icon = icon;
@@ -628,22 +630,22 @@ export default function TableEditor({
   const columnBtnList = [
     {
       icon: TbColumnInsertLeft,
-      tooltip: "왼쪽에 열 추가",
+      tooltip: uiText("왼쪽에 열 추가"),
       onClick: () => editor.chain().focus().addColumnBefore().run()
     },
     {
       icon: TbColumnInsertRight,
-      tooltip: "오른쪽에 열 추가",
+      tooltip: uiText("오른쪽에 열 추가"),
       onClick: () => editor.chain().focus().addColumnAfter().run()
     },
     {
       icon: TbColumnRemove,
-      tooltip: "열 삭제",
+      tooltip: uiText("열 삭제"),
       onClick: () => editor.chain().focus().deleteColumn().run()
     },
     {
       icon: TbFreezeColumn,
-      tooltip: "열 제목 토글",
+      tooltip: uiText("열 제목 토글"),
       onClick: () => editor.chain().focus().toggleHeaderColumn().run()
     }
   ];
@@ -651,22 +653,22 @@ export default function TableEditor({
   const rowBtnList = [
     {
       icon: TbRowInsertBottom,
-      tooltip: "아래에 행 추가",
+      tooltip: uiText("아래에 행 추가"),
       onClick: () => editor.chain().focus().addRowAfter().run()
     },
     {
       icon: TbRowInsertTop,
-      tooltip: "위에 행 추가",
+      tooltip: uiText("위에 행 추가"),
       onClick: () => editor.chain().focus().addRowBefore().run()
     },
     {
       icon: TbRowRemove,
-      tooltip: "행 삭제",
+      tooltip: uiText("행 삭제"),
       onClick: () => editor.chain().focus().deleteRow().run()
     },
     {
       icon: TbFreezeRow,
-      tooltip: "행 제목 토글",
+      tooltip: uiText("행 제목 토글"),
       onClick: () => editor.chain().focus().toggleHeaderRow().run()
     }
   ];
@@ -674,26 +676,26 @@ export default function TableEditor({
   const cellBtnList = [
     {
       icon: LuTableCellsMerge,
-      tooltip: "셀 병합",
+      tooltip: uiText("셀 병합"),
       onClick: () => editor.chain().focus().mergeCells().run()
     },
     {
       icon: LuTableCellsSplit,
-      tooltip: "셀 나누기",
+      tooltip: uiText("셀 나누기"),
       onClick: () => editor.chain().focus().splitCell().run()
     },
     {
       icon: LuTable2,
-      tooltip: "셀 헤더 토글",
+      tooltip: uiText("셀 헤더 토글"),
       onClick: () => editor.chain().focus().toggleHeaderCell().run()
     }
   ];
 
   // ■■■■■■■■■■■ 세로 정렬 버튼 ■■■■■■■■■■■
   const alignBtnList = [
-    { icon: MdVerticalAlignTop, value: "top", tooltip: "위 정렬" },
-    { icon: MdVerticalAlignCenter, value: "middle", tooltip: "가운데 정렬" },
-    { icon: MdVerticalAlignBottom, value: "bottom", tooltip: "아래 정렬" }
+    { icon: MdVerticalAlignTop, value: "top", tooltip: uiText("위 정렬") },
+    { icon: MdVerticalAlignCenter, value: "middle", tooltip: uiText("가운데 정렬") },
+    { icon: MdVerticalAlignBottom, value: "bottom", tooltip: uiText("아래 정렬") }
   ];
 
   // ■■■■■■■■■■■ 탭 구성 ■■■■■■■■■■■■■
@@ -712,8 +714,7 @@ export default function TableEditor({
               pretendard="B"
               color={"white-1"}
             >
-              <TbColumns3 /> 열(Column)
-            </Typography>
+              <TbColumns3 /> {uiText(" 열(Column)")}</Typography>
             <Card
               shadow="none"
               width="100%"
@@ -736,8 +737,7 @@ export default function TableEditor({
               pretendard="B"
               color={"white-1"}
             >
-              <MdOutlineTableRows /> 행(Row)
-            </Typography>
+              <MdOutlineTableRows /> {uiText(" 행(Row)")}</Typography>
             <Card
               shadow="none"
               width="100%"
@@ -760,8 +760,7 @@ export default function TableEditor({
               pretendard="B"
               color={"white-1"}
             >
-              <PiRectangleDuotone /> 셀(Cell)
-            </Typography>
+              <PiRectangleDuotone /> {uiText(" 셀(Cell)")}</Typography>
             <Card
               shadow="none"
               width="100%"
@@ -784,8 +783,7 @@ export default function TableEditor({
             color={"white-1"}
             background={"white-10"}
           >
-            테이블 삭제
-          </Button>
+            {uiText("테이블 삭제")}</Button>
         </div>
       )
     },
@@ -797,12 +795,10 @@ export default function TableEditor({
           {/* 헤더 */}
           <div className="flex flex-col gap-2">
             <Typography pretendard="SB" color={"white-1"}>
-              헤더
-            </Typography>
+              {uiText("헤더")}</Typography>
             <div className="flex items-center justify-between">
               <Typography size="sm" color={"white-1"}>
-                배경색
-              </Typography>
+                {uiText("배경색")}</Typography>
               <div onMouseDown={(e) => e.preventDefault()}>
                 {renderColorPicker(
                   headerColor,
@@ -821,8 +817,7 @@ export default function TableEditor({
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <Typography pretendard="SB" color={"white-1"}>
-                테두리
-              </Typography>
+                {uiText("테두리")}</Typography>
               <Switch
                 size="sm"
                 checked={borderWidth > 0}
@@ -838,8 +833,7 @@ export default function TableEditor({
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <Typography size="sm" color={"white-1"}>
-                    선색
-                  </Typography>
+                    {uiText("선색")}</Typography>
                   <div onMouseDown={(e) => e.preventDefault()}>
                     {renderColorPicker(
                       borderColor,
@@ -859,8 +853,7 @@ export default function TableEditor({
                   }}
                 >
                   <Typography size="sm" className="shrink-0" color={"white-1"}>
-                    선 두께
-                  </Typography>
+                    {uiText("선 두께")}</Typography>
                   <Input
                     {...inputProps}
                     type="number"
@@ -885,8 +878,7 @@ export default function TableEditor({
                       className="shrink-0"
                       color={"white-1"}
                     >
-                      선 타입
-                    </Typography>
+                      {uiText("선 타입")}</Typography>
                     <Select
                       value={borderStyle}
                       onChange={(value) => {
@@ -895,10 +887,10 @@ export default function TableEditor({
                       }}
                       {...inputProps}
                       options={[
-                        { label: "실선", value: "solid" },
-                        { label: "대시선", value: "dashed" },
-                        { label: "점선", value: "dotted" },
-                        { label: "이중선", value: "double" }
+                        { label: uiText("실선"), value: "solid" },
+                        { label: uiText("대시선"), value: "dashed" },
+                        { label: uiText("점선"), value: "dotted" },
+                        { label: uiText("이중선"), value: "double" }
                       ]}
                       dropdownStyle={withOverlayShadow({}, isDarkMode)}
                       background={`${setting.theme}-1`}
@@ -919,8 +911,7 @@ export default function TableEditor({
           {/* 셀 배경색 */}
           <div className="flex flex-col gap-2">
             <Typography pretendard="SB" size="sm" color={"white-1"}>
-              셀 배경색
-            </Typography>
+              {uiText("셀 배경색")}</Typography>
             <div
               className="flex items-center justify-between gap-2"
               onMouseDown={(e) => e.preventDefault()}
@@ -937,7 +928,7 @@ export default function TableEditor({
                   }}
                 />
                 <Typography size="xs" color={"white-3"}>
-                  {cellBackgroundColor || "없음"}
+                  {cellBackgroundColor || uiText("없음")}
                 </Typography>
               </div>
               <div className="flex items-center gap-2">
@@ -955,8 +946,7 @@ export default function TableEditor({
                   background={"white-10"}
                   onClick={() => applyCellBackgroundColor(null)}
                 >
-                  해제
-                </Button>
+                  {uiText("해제")}</Button>
               </div>
             </div>
           </div>
@@ -965,13 +955,11 @@ export default function TableEditor({
 
           <div className="flex flex-col gap-2">
             <Typography pretendard="SB" size="sm" color={"white-1"}>
-              셀 테두리
-            </Typography>
+              {uiText("셀 테두리")}</Typography>
             <div onMouseDown={(e) => e.preventDefault()}>
               <div className="flex items-center gap-2">
                 <Typography size="sm" className="shrink-0" color={"white-1"}>
-                  방향
-                </Typography>
+                  {uiText("방향")}</Typography>
                 <Select
                   value={cellBorderSide}
                   onChange={setCellBorderSide}
@@ -984,8 +972,7 @@ export default function TableEditor({
             </div>
             <div className="flex items-center justify-between gap-2">
               <Typography size="sm" color={"white-1"}>
-                색상
-              </Typography>
+                {uiText("색상")}</Typography>
               <div
                 className="flex items-center gap-2"
                 onMouseDown={(e) => e.preventDefault()}
@@ -1015,11 +1002,10 @@ export default function TableEditor({
               }}
             >
               <Typography size="sm" className="shrink-0" color={"white-1"}>
-                두께
-              </Typography>
+                {uiText("두께")}</Typography>
               <Input
                 {...inputProps}
-                aria-label="셀 테두리 두께"
+                aria-label={uiText("셀 테두리 두께")}
                 type="number"
                 value={cellBorderWidth}
                 onChange={(e) => {
@@ -1036,8 +1022,7 @@ export default function TableEditor({
             <div onMouseDown={(e) => e.preventDefault()}>
               <div className="flex items-center gap-8">
                 <Typography size="sm" className="shrink-0" color={"white-1"}>
-                  선 스타일
-                </Typography>
+                  {uiText("선 스타일")}</Typography>
                 <Select
                   value={cellBorderStyle}
                   onChange={(value) => applyCellBorder({ style: value })}
@@ -1057,8 +1042,7 @@ export default function TableEditor({
               onMouseDown={(e) => e.preventDefault()}
               onClick={clearCellBorder}
             >
-              테두리 지우기
-            </Button>
+              {uiText("테두리 지우기")}</Button>
           </div>
 
           <Divider />
@@ -1066,8 +1050,7 @@ export default function TableEditor({
           {/* 세로 정렬 */}
           <div className="flex flex-col gap-2">
             <Typography pretendard="SB" size="sm" color={"white-1"}>
-              세로 정렬
-            </Typography>
+              {uiText("세로 정렬")}</Typography>
             <div className="flex gap-2">
               {alignBtnList.map(({ icon: Icon, value, tooltip }) => (
                 <Tooltip
@@ -1116,8 +1099,7 @@ export default function TableEditor({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color={"white-1"}>
-              열 너비
-            </Typography>
+              {uiText("열 너비")}</Typography>
             <Input
               {...inputProps}
               type="number"
@@ -1152,7 +1134,7 @@ export default function TableEditor({
               suffix="mm"
               min={MIN_COLUMN_WIDTH_MM}
               max={500}
-              placeholder="자동"
+              placeholder={uiText("자동")}
               background={`${setting.theme}-1`}
             />
           </div>
@@ -1166,8 +1148,7 @@ export default function TableEditor({
             onMouseDown={(e) => e.preventDefault()}
             onClick={equalizeSelectedColumnWidths}
           >
-            열 너비 같게
-          </Button>
+            {uiText("열 너비 같게")}</Button>
 
           {/* 행 높이 */}
           <div
@@ -1177,8 +1158,7 @@ export default function TableEditor({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color={"white-1"}>
-              행 높이
-            </Typography>
+              {uiText("행 높이")}</Typography>
             <Input
               {...inputProps}
               type="number"
@@ -1202,7 +1182,7 @@ export default function TableEditor({
               suffix="mm"
               min={MIN_ROW_HEIGHT_MM}
               max={500}
-              placeholder="자동"
+              placeholder={uiText("자동")}
               background={`${setting.theme}-1`}
             />
           </div>
@@ -1216,8 +1196,7 @@ export default function TableEditor({
             onMouseDown={(e) => e.preventDefault()}
             onClick={equalizeSelectedRowHeights}
           >
-            행 높이 같게
-          </Button>
+            {uiText("행 높이 같게")}</Button>
         </div>
       )
     }

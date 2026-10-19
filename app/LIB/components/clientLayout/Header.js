@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import {
   GridFourDiaOutline,
   MenuHamburger,
@@ -49,6 +50,7 @@ export default function Header({
   currentDocument,
   isDesktop
 }) {
+  const uiLanguage = useI18n();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -130,7 +132,7 @@ export default function Header({
 
       setOpenTabs(normalizeOpenTabs(JSON.parse(storedTabs)));
     } catch (error) {
-      console.error("문서 탭 복원 실패:", error);
+      console.error(uiText("문서 탭 복원 실패:"), error);
     } finally {
       hasRestoredTabsRef.current = true;
     }
@@ -187,7 +189,7 @@ export default function Header({
 
     const nextTab = {
       id: currentDocument._id,
-      title: `${title || currentDocument.title || "제목 없는 문서"}`,
+      title: `${title || currentDocument.title || uiText("제목 없는 문서")}`,
       parentId: currentDocument.parent_id ?? null
     };
 
@@ -196,8 +198,8 @@ export default function Header({
 
       if (existingIndex === -1) {
         if (prev.length >= MAX_OPEN_DOCUMENT_TABS) {
-          const closedTabTitle = prev[0]?.title || "이전 문서";
-          toast.info(`열려있는 탭이 많아 가장 오래된 탭('${closedTabTitle}')을 닫고 새 탭을 엽니다.`);
+          const closedTabTitle = prev[0]?.title || uiText("이전 문서");
+          toast.info(uiText("열려있는 탭이 많아 가장 오래된 탭('{0}')을 닫고 새 탭을 엽니다.", closedTabTitle));
         }
         return [...prev, nextTab].slice(-MAX_OPEN_DOCUMENT_TABS);
       }
@@ -218,7 +220,7 @@ export default function Header({
     if (codexDocumentLock) return;
     if (!currentDocument?._id || !editor || editor.isDestroyed) return;
 
-    const currentTitle = `${title || currentDocument.title || "제목 없는 문서"}`;
+    const currentTitle = `${title || currentDocument.title || uiText("제목 없는 문서")}`;
     const currentContent = editor.getHTML();
     const currentPos = editor.state.selection.anchor;
     const hasTitleChanged = currentTitle !== `${currentDocument.title || ""}`;
@@ -278,15 +280,16 @@ export default function Header({
     router.push(destination);
   };
 
-  const leftNavItems = useMemo(() => [{
-    label: "내 문서", onClick: () => { if (navigateWithDraftGuard("/docs")) exitBook(); },
+  const leftNavItems = useMemo(() => { void uiLanguage; return ([{
+    label: uiText("내 문서"), onClick: () => { if (navigateWithDraftGuard("/docs")) exitBook(); },
     active: pathname.startsWith("/docs"), disabled: pathname === "/docs" && !docsFolderId
-  }], [pathname, docsFolderId, exitBook, navigateWithDraftGuard]);
+  }]); }, [pathname, docsFolderId, exitBook, navigateWithDraftGuard, uiLanguage]);
 
   const rightIcons = useMemo(() => {
+    void uiLanguage;
     const icons = [
       {
-        tooltip: "테마 변경",
+        tooltip: uiText("테마 변경"),
         onClick: () => setIsDarkMode(!isDarkMode),
         icon: isDarkMode ? SunOutline : MoonOutline
       }
@@ -295,22 +298,22 @@ export default function Header({
     if (user) {
       icons.push(
         {
-          tooltip: "메뉴",
+          tooltip: uiText("메뉴"),
           onClick: () => setOpenTreeDrawer(true),
           icon: MenuHamburger
         },
         {
-          tooltip: "툴킷 설정",
+          tooltip: uiText("툴킷 설정"),
           onClick: () => setOpenWidgetDrawer(true),
           icon: GridFourDiaOutline
         },
         {
-          tooltip: "플러그인",
+          tooltip: uiText("플러그인"),
           onClick: () => setOpenPluginDrawer(true),
           icon: TbPuzzle
         },
         {
-          tooltip: "설정", onClick: () => setOpenSettingsDrawer(true), icon: UserOutline
+          tooltip: uiText("설정"), onClick: () => setOpenSettingsDrawer(true), icon: UserOutline
         }
       );
     }
@@ -325,19 +328,19 @@ export default function Header({
         },
         {
           tooltip: null,
-          label: "창 최소화",
+          label: uiText("창 최소화"),
           onClick: () => window.dockitLocal.window.minimize(),
           icon: MdMinimize
         },
         {
           tooltip: null,
-          label: isMaximized ? "창 복원" : "창 최대화",
+          label: isMaximized ? uiText("창 복원") : uiText("창 최대화"),
           onClick: () => window.dockitLocal.window.maximize(),
           icon: isMaximized ? MdFilterNone : MdCropSquare
         },
         {
           tooltip: null,
-          label: "창 닫기",
+          label: uiText("창 닫기"),
           onClick: () => window.dockitLocal.window.close(),
           icon: MdClose
         }
@@ -355,7 +358,7 @@ export default function Header({
     setOpenPluginDrawer,
     setOpenSettingsDrawer,
     setOpenWidgetDrawer
-  ]);
+  , uiLanguage]);
 
   const renderBtn = (data, left = false, index = 0, keyValue) => {
     const Icon = data.icon;
@@ -620,7 +623,7 @@ export default function Header({
                   <button
                     type="button"
                     onClick={(event) => handleTabClose(event, tab.id)}
-                    title={`${tab.title} 닫기`}
+                    title={uiText("{0} 닫기", tab.title)}
                     className="flex items-center justify-center bg-transparent border-none cursor-pointer"
                     style={{
                       position: "relative",

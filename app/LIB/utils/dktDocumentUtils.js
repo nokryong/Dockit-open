@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { validateSemanticHtmlPayload } from "./semanticAttributes";
 
 export const DKT_SCHEMA_VERSION = 1;
@@ -29,40 +30,40 @@ const normalizeTitle = (value) => {
 
 const assertCurrentSchema = (data) => {
   if (typeof data.title !== "string" || data.title.length > 500) {
-    throw new Error("Dockit 문서 제목이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 문서 제목이 올바르지 않습니다."));
   }
   if (typeof data.content !== "string") {
-    throw new Error("Dockit 문서 본문이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 문서 본문이 올바르지 않습니다."));
   }
   if (!isPlainObject(data.docSetting) || !isPlainObject(data.bulletStyle)) {
-    throw new Error("Dockit 문서 설정이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 문서 설정이 올바르지 않습니다."));
   }
   if (typeof data.viewPage !== "boolean") {
-    throw new Error("Dockit 페이지 보기 설정이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 페이지 보기 설정이 올바르지 않습니다."));
   }
   if (!SUPPORTED_PAGE_NUMBERS.has(data.pageNumber)) {
-    throw new Error("Dockit 쪽 번호 설정이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 쪽 번호 설정이 올바르지 않습니다."));
   }
   if (data.focus !== null && normalizeFocus(data.focus) === null) {
-    throw new Error("Dockit 커서 위치가 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 커서 위치가 올바르지 않습니다."));
   }
 };
 
 export const normalizeDockitDocumentForImport = (data) => {
   if (!isPlainObject(data)) {
-    throw new Error("Dockit 문서가 JSON 객체가 아닙니다.");
+    throw new Error(uiText("Dockit 문서가 JSON 객체가 아닙니다."));
   }
   if (!DOCKIT_DOCUMENT_FILE_TYPES.has(data.fileType)) {
-    throw new Error("잘못된 Dockit 파일 형식입니다.");
+    throw new Error(uiText("잘못된 Dockit 파일 형식입니다."));
   }
 
   const schemaVersion = data.schemaVersion ?? 0;
   if (!Number.isInteger(schemaVersion) || schemaVersion < 0) {
-    throw new Error("Dockit schema version이 올바르지 않습니다.");
+    throw new Error(uiText("Dockit schema version이 올바르지 않습니다."));
   }
   if (schemaVersion > DKT_MAX_SCHEMA_VERSION) {
     throw new Error(
-      `이 앱이 지원하지 않는 Dockit schema version입니다: ${schemaVersion}`
+      uiText("이 앱이 지원하지 않는 Dockit schema version입니다: {0}", schemaVersion)
     );
   }
   if (
@@ -78,7 +79,7 @@ export const normalizeDockitDocumentForImport = (data) => {
     (schemaVersion === DKT_SEMANTIC_SCHEMA_VERSION &&
       (!semanticPayload.valid || !semanticPayload.hasSemanticData))
   ) {
-    throw new Error("Dockit 의미 정보가 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 의미 정보가 올바르지 않습니다."));
   }
 
   const normalized = {
@@ -123,7 +124,7 @@ export const createDockitDocumentSnapshot = ({
   };
   const semanticPayload = validateSemanticHtmlPayload(snapshot.content);
   if (!semanticPayload.valid) {
-    throw new Error("Dockit 의미 정보가 올바르지 않습니다.");
+    throw new Error(uiText("Dockit 의미 정보가 올바르지 않습니다."));
   }
   if (semanticPayload.hasSemanticData) {
     snapshot.schemaVersion = DKT_SEMANTIC_SCHEMA_VERSION;
@@ -144,12 +145,12 @@ export const getCreatedDockitDocumentId = (response) => {
 
 export const validateDockitImportFile = (file) => {
   if (!file) {
-    return { valid: false, message: "Dockit 파일을 선택해 주세요." };
+    return { valid: false, message: uiText("Dockit 파일을 선택해 주세요.") };
   }
   if (Number(file.size) > MAX_DKT_BYTES) {
     return {
       valid: false,
-      message: "50MB를 초과하는 Dockit 문서는 불러올 수 없습니다."
+      message: uiText("50MB를 초과하는 Dockit 문서는 불러올 수 없습니다.")
     };
   }
   return { valid: true, message: "" };

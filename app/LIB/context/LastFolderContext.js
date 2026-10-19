@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText } from "../i18n";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
@@ -6,7 +7,7 @@ const LastFolderContext = createContext(null);
 
 const DEFAULT_LAST_FOLDER = {
   id: "home",
-  title: "홈",
+  get title() { return uiText("홈"); },
   path: [],
 };
 

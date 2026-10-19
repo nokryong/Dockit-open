@@ -1,3 +1,4 @@
+import { t as uiText, translateMessage } from "../../LIB/i18n";
 import { useRef, useState } from "react";
 import {
   createData,
@@ -78,14 +79,14 @@ export function useWorkspaceActions({
     const detail = getApiErrorDetail(error);
 
     if (error?.status === 400) {
-      return detail || "지원하지 않는 파일 형식입니다.";
+      return detail || uiText("지원하지 않는 파일 형식입니다.");
     }
 
     if (error?.status >= 500) {
-      return "파일을 불러오는 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      return uiText("파일을 불러오는 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
 
-    return detail || error?.message || "파일을 읽는 중 오류가 발생했습니다.";
+    return detail || error?.message || uiText("파일을 읽는 중 오류가 발생했습니다.");
   };
 
   const extractImportHtml = (htmlString) => {
@@ -121,7 +122,7 @@ export function useWorkspaceActions({
       }
 
       toast.danger(
-        "다른 문서 생성이 진행 중입니다. 완료된 뒤 다시 선택해 주세요."
+        uiText("다른 문서 생성이 진행 중입니다. 완료된 뒤 다시 선택해 주세요.")
       );
       return null;
     }
@@ -135,7 +136,7 @@ export function useWorkspaceActions({
         pending.commandKey !== commandKey
       ) {
         toast.danger(
-          "이전에 생성된 문서 처리가 끝나지 않았습니다. 먼저 다시 시도해 주세요."
+          uiText("이전에 생성된 문서 처리가 끝나지 않았습니다. 먼저 다시 시도해 주세요.")
         );
         return null;
       }
@@ -159,13 +160,13 @@ export function useWorkspaceActions({
             document
           );
         } catch (error) {
-          console.error("문서 생성 실패:", error);
+          console.error(uiText("문서 생성 실패:"), error);
           setDocumentCreationState({
             status: "failed",
             documentId: null,
             failurePhase: "create"
           });
-          toast.danger("문서 생성에 실패했습니다.");
+          toast.danger(uiText("문서 생성에 실패했습니다."));
           return null;
         }
 
@@ -217,7 +218,7 @@ export function useWorkspaceActions({
 
           refreshFailed = true;
           console.error(
-            `문서 생성 후 ${key} 갱신 실패:`,
+            uiText("문서 생성 후 {0} 갱신 실패:", key),
             result.reason
           );
         });
@@ -229,7 +230,7 @@ export function useWorkspaceActions({
             failurePhase: "refresh"
           });
           toast.danger(
-            "문서는 생성되었지만 목록을 갱신하지 못했습니다. 다시 시도해 주세요."
+            uiText("문서는 생성되었지만 목록을 갱신하지 못했습니다. 다시 시도해 주세요.")
           );
           return pending.createdDocument;
         }
@@ -238,7 +239,7 @@ export function useWorkspaceActions({
       try {
         if (pending.widgetId && !pending.widgetOpened) {
           if (!openDocumentWidget) {
-            throw new Error("문서 위젯 열기 callback이 없습니다.");
+            throw new Error(uiText("문서 위젯 열기 callback이 없습니다."));
           }
           await openDocumentWidget(pending.widgetId);
           pending.widgetOpened = true;
@@ -246,22 +247,22 @@ export function useWorkspaceActions({
 
         if (pending.openAfterCreate) {
           if (!pending.documentId) {
-            throw new Error("생성된 문서 ID를 확인할 수 없습니다.");
+            throw new Error(uiText("생성된 문서 ID를 확인할 수 없습니다."));
           }
           if (!navigateToDocument) {
-            throw new Error("문서 이동 callback이 없습니다.");
+            throw new Error(uiText("문서 이동 callback이 없습니다."));
           }
           await navigateToDocument(pending.documentId);
         }
       } catch (error) {
-        console.error("문서 생성 후 열기 실패:", error);
+        console.error(uiText("문서 생성 후 열기 실패:"), error);
         setDocumentCreationState({
           status: "retryable",
           documentId: pending.documentId,
           failurePhase: "navigation"
         });
         toast.danger(
-          "문서는 생성되었지만 열지 못했습니다. 다시 시도해 주세요."
+          uiText("문서는 생성되었지만 열지 못했습니다. 다시 시도해 주세요.")
         );
         return pending.createdDocument;
       }
@@ -272,7 +273,7 @@ export function useWorkspaceActions({
         documentId: null,
         failurePhase: null
       });
-      toast.success("문서가 생성되었습니다.");
+      toast.success(uiText("문서가 생성되었습니다."));
       return pending.createdDocument;
     })();
 
@@ -326,21 +327,21 @@ export function useWorkspaceActions({
     }
 
     if (type === "documents") {
-      return handleCreateDocument({ title: "새 문서" }, { openAfterCreate: true });
+      return handleCreateDocument({ title: uiText("새 문서") }, { openAfterCreate: true });
     }
 
     try {
       await createData(type, currentFolderId, {
-        title: type === "documents" ? "새 문서" : "새 폴더"
+        title: type === "documents" ? uiText("새 문서") : uiText("새 폴더")
       });
       await fetchContent(currentFolderId);
       await fetchFolderTree();
       toast.success(
-        `${type === "documents" ? "문서" : "폴더"}가 생성되었습니다.`
+        uiText("{0}가 생성되었습니다.", type === "documents" ? uiText("문서") : uiText("폴더"))
       );
     } catch (error) {
-      console.error("콘텐츠 생성 실패:", error);
-      toast.danger("생성에 실패했습니다");
+      console.error(uiText("콘텐츠 생성 실패:"), error);
+      toast.danger(uiText("생성에 실패했습니다"));
     }
   };
 
@@ -372,7 +373,7 @@ export function useWorkspaceActions({
               reject(error);
             }
           };
-          reader.onerror = () => reject(new Error("파일 읽기 실패"));
+          reader.onerror = () => reject(new Error(uiText("파일 읽기 실패")));
           reader.readAsText(file);
         });
       } else if (["docx", "hwpx"].includes(ext)) {
@@ -386,7 +387,7 @@ export function useWorkspaceActions({
 
         if (result.warningTotal > 0) {
           toast.info(
-            `일부 서식이 단순화되었을 수 있습니다. 확인할 항목 ${result.warningTotal}개`
+            uiText("일부 서식이 단순화되었을 수 있습니다. 확인할 항목 {0}개", result.warningTotal)
           );
         }
       } else if (ext === "txt") {
@@ -398,7 +399,7 @@ export function useWorkspaceActions({
               content: convertPlainTextToHtml(e.target.result)
             });
           };
-          reader.onerror = () => reject(new Error("파일 읽기 실패"));
+          reader.onerror = () => reject(new Error(uiText("파일 읽기 실패")));
           reader.readAsText(file);
         });
       } else if (ext === "md") {
@@ -410,7 +411,7 @@ export function useWorkspaceActions({
               content: convertMarkdownToHtml(e.target.result)
             });
           };
-          reader.onerror = () => reject(new Error("파일 읽기 실패"));
+          reader.onerror = () => reject(new Error(uiText("파일 읽기 실패")));
           reader.readAsText(file);
         });
       } else if (["html", "htm"].includes(ext)) {
@@ -423,20 +424,20 @@ export function useWorkspaceActions({
               content
             });
           };
-          reader.onerror = () => reject(new Error("파일 읽기 실패"));
+          reader.onerror = () => reject(new Error(uiText("파일 읽기 실패")));
           reader.readAsText(file);
         });
       } else {
-        toast.danger("지원하지 않는 파일 형식입니다.");
+        toast.danger(uiText("지원하지 않는 파일 형식입니다."));
         return;
       }
       await createData("documents", currentFolderId, newDoc);
       await fetchContent(currentFolderId);
       await fetchFolderTree();
-      toast.success(`'${newDoc.title}'을 불러왔습니다.`);
+      toast.success(uiText("'{0}'을 불러왔습니다.", newDoc.title));
     } catch (error) {
       console.error(error);
-      toast.danger(getUploadErrorMessage(error, ext));
+      toast.danger(translateMessage(getUploadErrorMessage(error, ext)));
     } finally {
       setOnUpload(false);
     }
@@ -452,8 +453,8 @@ export function useWorkspaceActions({
       await fetchContent(currentFolderId);
       await fetchFolderTree();
     } catch (error) {
-      console.error("삭제 실패:", error);
-      toast.danger("삭제에 실패했습니다.");
+      console.error(uiText("삭제 실패:"), error);
+      toast.danger(uiText("삭제에 실패했습니다."));
     } finally { setOnDelete(false); }
   };
 
@@ -469,8 +470,8 @@ export function useWorkspaceActions({
       await fetchContent(currentFolderId);
       await fetchFolderTree();
     } catch (error) {
-      console.error("삭제 실패:", error);
-      toast.danger("삭제에 실패했습니다.");
+      console.error(uiText("삭제 실패:"), error);
+      toast.danger(uiText("삭제에 실패했습니다."));
     } finally { setOnDelete(false); }
   };
 
@@ -490,18 +491,18 @@ export function useWorkspaceActions({
           : { title: newTitle }
       );
       await fetchContent(currentFolderId);
-      toast.success("이름이 변경되었습니다.");
+      toast.success(uiText("이름이 변경되었습니다."));
       setRenameModalOpen(false);
       setSelectedItem(null);
     } catch (error) {
-      console.error("이름 변경 실패:", error);
+      console.error(uiText("이름 변경 실패:"), error);
       if (error?.code === "RevisionConflict") {
         await fetchContent(currentFolderId).catch(() => {});
         toast.danger(
-          "다른 창에서 문서가 변경되었습니다. 목록을 새로 확인해 주세요."
+          uiText("다른 창에서 문서가 변경되었습니다. 목록을 새로 확인해 주세요.")
         );
       } else {
-        toast.danger("이름 변경에 실패했습니다.");
+        toast.danger(uiText("이름 변경에 실패했습니다."));
       }
     }
   };
@@ -517,13 +518,13 @@ export function useWorkspaceActions({
       await moveData(type, contentId, newParentId);
       await fetchContent(currentFolderId);
       await fetchFolderTree();
-      toast.success("이동되었습니다.");
+      toast.success(uiText("이동되었습니다."));
       setMoveModalOpen(false);
       setSelectedItem(null);
       clearSelection();
     } catch (error) {
-      console.error("이동 실패:", error);
-      toast.danger("이동에 실패했습니다.");
+      console.error(uiText("이동 실패:"), error);
+      toast.danger(uiText("이동에 실패했습니다."));
     }
   };
 
@@ -539,13 +540,13 @@ export function useWorkspaceActions({
       }
       await fetchContent(currentFolderId);
       await fetchFolderTree();
-      toast.success(`${selectedItems.length}개 항목이 이동되었습니다.`);
+      toast.success(uiText("{0}개 항목이 이동되었습니다.", selectedItems.length));
       setMoveModalOpen(false);
       setSelectedItem(null);
       clearSelection();
     } catch (error) {
-      console.error("이동 실패:", error);
-      toast.danger("이동에 실패했습니다.");
+      console.error(uiText("이동 실패:"), error);
+      toast.danger(uiText("이동에 실패했습니다."));
     }
   };
 

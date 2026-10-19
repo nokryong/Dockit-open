@@ -1,9 +1,11 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import { Button, Div, Typography } from "sud-ui";
 import { TbChevronDown, TbChevronUp, TbPaperclip } from "react-icons/tb";
 import ChatMarkdown from "./ChatMarkdown";
 
 export default function ChatMessage({ message, theme, dark, expanded, onToggle }) {
+  useI18n();
   const isUser = message.role === "user";
   const contentId = useId();
   const content = useRef(null);
@@ -67,15 +69,15 @@ export default function ChatMessage({ message, theme, dark, expanded, onToggle }
             onClick={onToggle}
           >
             <span className="flex items-center gap-1">
-              <Typography size="sm" pretendard="SB">{expanded ? "간략히 보기" : "더 보기"}</Typography>
+              <Typography size="sm" pretendard="SB">{expanded ? uiText("간략히 보기") : uiText("더 보기")}</Typography>
               {expanded ? <TbChevronUp /> : <TbChevronDown />}
             </span>
           </Button>
         )}
-        {message.image && <img src={message.image} alt="생성된 이미지" className="mt-2 max-w-full rounded-lg" />}
+        {message.image && <img src={message.image} alt={uiText("생성된 이미지")} className="mt-2 max-w-full rounded-lg" />}
         {!isUser && ["failed", "cancelled"].includes(message.status) && (
           <div className="chatgpt-message-status">
-            {message.status === "cancelled" ? "응답 중지됨" : "응답 미완료"}
+            {message.status === "cancelled" ? uiText("응답 중지됨") : uiText("응답 미완료")}
           </div>
         )}
       </Div>

@@ -1,6 +1,6 @@
 {
   "name": "dockit-open",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "로컬 문서 편집기 Dockit Open",
   "author": "nokryong",
   "license": "AGPL-3.0-only",
@@ -35,6 +35,7 @@
     "security:audit-live": "node scripts/live-audit-policy.mjs",
     "test:local": "node --test tests/local/*.test.cjs",
     "test:desktop": "node scripts/desktop-smoke.cjs",
+    "test:i18n": "node --test tests/local/i18n.test.cjs && node scripts/i18n-smoke.cjs",
     "test:document-windows": "node scripts/document-windows-smoke.cjs",
     "test:chatgpt": "node scripts/chatgpt-smoke.cjs",
     "test:codex": "node scripts/codex-smoke.cjs",

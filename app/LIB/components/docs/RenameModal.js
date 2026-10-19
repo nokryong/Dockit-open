@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Input, Typography } from "sud-ui";
 import { useState, useEffect } from "react";
 import { inputProps } from "../../constant/uiProps";
@@ -14,6 +15,7 @@ export default function RenameModal({
   handleRenameContent,
   isDarkMode
 }) {
+  useI18n();
   const { setting } = useSetting();
   const [newName, setNewName] = useState("");
 
@@ -49,13 +51,11 @@ export default function RenameModal({
     >
       <div className="flex flex-col">
         <Typography pretendard="SB" size="lg">
-          이름 변경
-        </Typography>
+          {uiText("이름 변경")}</Typography>
         <Typography size="sm" color="cool-gray-6" className="mt-2">
-          새로운 이름을 입력해주세요.
-        </Typography>
+          {uiText("새로운 이름을 입력해주세요.")}</Typography>
         <Input
-          placeholder="이름을 입력하세요"
+          placeholder={uiText("이름을 입력하세요")}
           shadow="none"
           size="sm"
           style={{ width: "100%" }}
@@ -79,16 +79,14 @@ export default function RenameModal({
             onClick={handleSubmit}
             disabled={!newName.trim()}
           >
-            변경
-          </ModalActionButton>
+            {uiText("변경")}</ModalActionButton>
           <ModalActionButton
             isDarkMode={isDarkMode}
             onClick={handleCancel}
             color="white-1"
             background="white-10"
           >
-            취소
-          </ModalActionButton>
+            {uiText("취소")}</ModalActionButton>
         </div>
       </div>
     </ModalFrame>

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import { inputProps } from "@/app/LIB/constant/uiProps";
 import { Input, Typography } from "sud-ui";
 
@@ -9,6 +10,7 @@ export default function ImageEffects({
   onUpdateStyle,
   setting
 }) {
+  useI18n();
   // 1. 통합 필터 업데이트 핸들러
   // 하나의 값만 바뀌어도 전체 filter 문자열을 다시 조합해야 함
   const handleFilterChange = (key, value) => {
@@ -37,8 +39,7 @@ export default function ImageEffects({
       {/* ■■■■■■■■ 섹션 1: 이미지 색감 조정 ■■■■■■■■ */}
       <div className="flex flex-col gap-2">
         <Typography pretendard="SB" color="white-1">
-          이미지 조정
-        </Typography>
+          {uiText("이미지 조정")}</Typography>
 
         {/* 필터 입력창들 (활성화된 경우에만 표시하거나, 비활성 시 흐리게 처리) */}
         <div className="flex flex-col gap-2">
@@ -52,8 +53,7 @@ export default function ImageEffects({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              밝기
-            </Typography>
+              {uiText("밝기")}</Typography>
             <Input
               {...inputProps}
               type="number"
@@ -77,8 +77,7 @@ export default function ImageEffects({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              대비
-            </Typography>
+              {uiText("대비")}</Typography>
             <Input
               {...inputProps}
               type="number"
@@ -102,8 +101,7 @@ export default function ImageEffects({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              흑백
-            </Typography>
+              {uiText("흑백")}</Typography>
             <Input
               {...inputProps}
               type="number"
@@ -127,8 +125,7 @@ export default function ImageEffects({
             }}
           >
             <Typography size="sm" className="flex-shrink-0" color="white-1">
-              투명도
-            </Typography>
+              {uiText("투명도")}</Typography>
             <Input
               {...inputProps}
               type="number"

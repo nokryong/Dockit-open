@@ -1,3 +1,4 @@
+import { t as uiText } from "../../LIB/i18n";
 import { useState } from "react";
 import { moveData } from "../../LIB/utils/dataUtils";
 import { toast } from "sud-ui";
@@ -52,7 +53,7 @@ export function useWorkspaceDragDrop({
         (folder) => folder.id === draggedItem._id
       );
       if (isSubFolder) {
-        toast.danger("폴더를 자신의 하위 폴더로 이동할 수 없습니다.");
+        toast.danger(uiText("폴더를 자신의 하위 폴더로 이동할 수 없습니다."));
         setDragOverItem(null);
         return;
       }
@@ -63,10 +64,10 @@ export function useWorkspaceDragDrop({
       await fetchContent(currentFolderId);
       await fetchFolderTree();
       toast.success(
-        `${draggedItem.title}이(가) ${targetItem.title} 폴더로 이동되었습니다.`
+        uiText("{0}이(가) {1} 폴더로 이동되었습니다.", draggedItem.title, targetItem.title)
       );
     } catch (error) {
-      console.error("이동 실패:", error);
+      console.error(uiText("이동 실패:"), error);
     }
 
     setDragOverItem(null);

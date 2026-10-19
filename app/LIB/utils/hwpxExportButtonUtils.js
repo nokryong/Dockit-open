@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { getWarningCatalogEntry, pickWarningCatalogEntries } from "../ir/warningCatalog.js";
 
 export const HWPX_V0_MIME_TYPE = "application/hwp+zip";
@@ -27,19 +28,19 @@ export const HWPX_V0_WARNING_DETAIL_COPY = pickWarningCatalogEntries([
 });
 
 const HWPX_V0_WARNING_SEVERITY_LABELS = Object.freeze({
-  warning: "확인 필요",
-  blocked: "제한됨"
+  get warning() { return uiText("확인 필요"); },
+  get blocked() { return uiText("제한됨"); }
 });
 
 const HWPX_V0_BLOCK_TYPE_LABELS = Object.freeze({
-  paragraph: "문단",
+  get paragraph() { return uiText("문단"); },
   heading: "제목",
-  list: "목록",
-  table: "표",
-  object: "이미지/객체",
-  unsupported: "지원하지 않는 블록",
+  get list() { return uiText("목록"); },
+  get table() { return uiText("표"); },
+  get object() { return uiText("이미지/객체"); },
+  get unsupported() { return uiText("지원하지 않는 블록"); },
   section: "섹션",
-  document: "문서"
+  get document() { return uiText("문서"); }
 });
 
 const DEFAULT_PAGE_SETTINGS = Object.freeze({
@@ -92,7 +93,7 @@ export const createHWPXV0PageSettingsFromDocSetting = (docSetting) => ({
   lineHeight: toFiniteNumber(docSetting?.lineHeight, DEFAULT_PAGE_SETTINGS.lineHeight)
 });
 
-export const sanitizeHWPXV0FileName = (title, fallback = "문서") => {
+export const sanitizeHWPXV0FileName = (title, fallback = uiText("문서")) => {
   const baseName = `${title ?? ""}`.trim() || fallback;
   const sanitized = baseName
     .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")
@@ -114,7 +115,7 @@ export const createHWPXV0DownloadFileName = (title) => {
   const safeBase =
     withoutExtension && !RESERVED_WINDOWS_FILE_NAME.test(withoutExtension)
       ? withoutExtension
-      : "문서";
+      : uiText("문서");
 
   return `${safeBase}.hwpx`;
 };
@@ -142,20 +143,20 @@ export const buildHWPXV0ExportNotice = ({
   if (total <= 0) {
     return {
       toastType: "success",
-      message: "HWPX v0 파일을 다운로드했습니다."
+      message: uiText("HWPX v0 파일을 다운로드했습니다.")
     };
   }
 
   if (blockedCount > 0 || visiblePlaceholderCount > 0) {
     return {
       toastType: "warning",
-      message: `HWPX v0 파일을 다운로드했습니다. 일부 내용은 자리표시자로 보일 수 있습니다. (${total}개 항목)`
+      message: uiText("HWPX v0 파일을 다운로드했습니다. 일부 내용은 자리표시자로 보일 수 있습니다. ({0}개 항목)", total)
     };
   }
 
   return {
     toastType: "info",
-    message: `HWPX v0 파일을 다운로드했습니다. 일부 서식은 단순화될 수 있습니다. (${total}개 항목)`
+    message: uiText("HWPX v0 파일을 다운로드했습니다. 일부 서식은 단순화될 수 있습니다. ({0}개 항목)", total)
   };
 };
 
@@ -174,8 +175,8 @@ const createAffectedBlockDetail = (warning) => {
   const sectionNumber = toDisplayIndex(warning?.sectionIndex);
   const blockNumber = toDisplayIndex(warning?.blockIndex);
   const blockTypeLabel = getBlockTypeLabel(warning?.blockType);
-  const sectionLabel = sectionNumber ? `${sectionNumber}번째 섹션` : "문서";
-  const blockLabel = blockNumber ? `${blockNumber}번째 블록` : "섹션 정보";
+  const sectionLabel = sectionNumber ? uiText("{0}번째 섹션", sectionNumber) : uiText("문서");
+  const blockLabel = blockNumber ? uiText("{0}번째 블록", blockNumber) : uiText("섹션 정보");
 
   return {
     label: `${sectionLabel} · ${blockLabel}`,
@@ -187,9 +188,9 @@ const createAffectedBlockDetail = (warning) => {
 };
 
 const createIrWarningDetail = (message, index) => ({
-  label: `문서 변환 단계 · ${index + 1}번째 경고`,
+  label: uiText("문서 변환 단계 · {0}번째 경고", index + 1),
   blockType: "document",
-  blockTypeLabel: "편집기 구조",
+  blockTypeLabel: uiText("편집기 구조"),
   path: "",
   message: `${message || ""}`
 });

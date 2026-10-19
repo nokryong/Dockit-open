@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { Table } from "@tiptap/extension-table";
 import { mergeAttributes } from "@tiptap/core";
 import { Plugin, PluginKey, Selection } from "@tiptap/pm/state";
@@ -512,7 +513,7 @@ function runTableAutofill(view, tableContext) {
   const linearSelection = getLinearCellSelection(state, tableContext);
 
   if (!linearSelection || linearSelection.cells.length <= TABLE_AUTOFILL_MIN_SEED_COUNT) {
-    toast.danger("자동채우기를 실패했습니다.");
+    toast.danger(uiText("자동채우기를 실패했습니다."));
     return false;
   }
 
@@ -520,7 +521,7 @@ function runTableAutofill(view, tableContext) {
   const autofillSeed = getAutofillSeedValues(selectedValues);
 
   if (!autofillSeed) {
-    toast.danger("자동채우기를 실패했습니다.");
+    toast.danger(uiText("자동채우기를 실패했습니다."));
     return false;
   }
 
@@ -530,7 +531,7 @@ function runTableAutofill(view, tableContext) {
   );
 
   if (!generatedValues) {
-    toast.danger("자동채우기를 실패했습니다.");
+    toast.danger(uiText("자동채우기를 실패했습니다."));
     return false;
   }
 
@@ -551,7 +552,7 @@ function runTableSelectionSum(view, tableContext) {
   const linearSelection = getLinearCellSelection(state, tableContext);
 
   if (!linearSelection || linearSelection.cells.length < 2) {
-    toast.danger("합계 계산을 실패했습니다.");
+    toast.danger(uiText("합계 계산을 실패했습니다."));
     return false;
   }
 

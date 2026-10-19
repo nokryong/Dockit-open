@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const { ChatActivity } = require('./chat-activity.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
@@ -11,14 +12,14 @@ const { DOCUMENT_TOOLS } = require('./codex-documents.cjs');
 const fail = (message, code = 'codex_failed') => Object.assign(new Error(message), { code, dockit: true });
 const safeFailure = error => error?.dockit
   ? { message: error.message, code: error.code }
-  : { message: 'Codex 요청을 완료하지 못했습니다. 연결 상태를 확인하고 다시 시도해주세요.', code: 'codex_failed' };
+  : { message: uiText("Codex 요청을 완료하지 못했습니다. 연결 상태를 확인하고 다시 시도해주세요."), code: 'codex_failed' };
 const fresh = () => ({ model: '', reasoningEffort: null, serviceTier: null, threads: {}, documentToolsVersion: 1, chat: [], image: [] });
 const MAX_IMAGE = 30 * 1024 * 1024;
 function imageExtension(bytes) {
   if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return 'png';
   if (bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) return 'jpg';
   if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') return 'webp';
-  throw fail('지원하지 않는 이미지 형식입니다.', 'invalid_image');
+  throw fail(uiText("지원하지 않는 이미지 형식입니다."), 'invalid_image');
 }
 async function findCodex(env = process.env) {
   const dirs = [...new Set((env.PATH || env.Path || '').split(path.delimiter).filter(Boolean))];
@@ -77,14 +78,14 @@ class CodexTransport {
         const pending = this.pending.get(message.id);
         if (!pending) continue;
         clearTimeout(pending.timer); this.pending.delete(message.id);
-        if (message.error) pending.reject(fail('Codex 요청이 실패했습니다. CLI 연결과 사용 한도를 확인해주세요.', 'rpc_failed'));
+        if (message.error) pending.reject(fail(uiText("Codex 요청이 실패했습니다. CLI 연결과 사용 한도를 확인해주세요."), 'rpc_failed'));
         else pending.resolve(message.result);
       } else if (message.id !== undefined) {
         if (message.method === 'item/tool/call' && this.clientRequest) {
           Promise.resolve().then(() => this.clientRequest(message.params || {})).then(result => {
             if (!this.closed) this.write({ id: message.id, result });
           }).catch(() => {
-            if (!this.closed) this.write({ id: message.id, result: { success: false, contentItems: [{ type: 'inputText', text: '문서 작업을 완료하지 못했습니다.' }] } });
+            if (!this.closed) this.write({ id: message.id, result: { success: false, contentItems: [{ type: 'inputText', text: uiText("문서 작업을 완료하지 못했습니다.") }] } });
           });
           continue;
         }
@@ -95,13 +96,13 @@ class CodexTransport {
     }
   }
   write(message) {
-    if (this.closed) throw fail('Codex 연결이 종료됐습니다. 다시 시도해주세요.', 'disconnected');
+    if (this.closed) throw fail(uiText("Codex 연결이 종료됐습니다. 다시 시도해주세요."), 'disconnected');
     this.child.stdin.write(JSON.stringify(message) + '\n');
   }
   request(method, params = {}, timeout = 45_000) {
     return new Promise((resolve, reject) => {
       const id = ++this.sequence;
-      const timer = setTimeout(() => { this.pending.delete(id); reject(fail('Codex 응답 시간이 지났습니다. 다시 시도해주세요.', 'timeout')); }, timeout);
+      const timer = setTimeout(() => { this.pending.delete(id); reject(fail(uiText("Codex 응답 시간이 지났습니다. 다시 시도해주세요."), 'timeout')); }, timeout);
       this.pending.set(id, { resolve, reject, timer });
       try { this.write({ id, method, params }); } catch (error) { clearTimeout(timer); this.pending.delete(id); reject(error); }
     });
@@ -109,7 +110,7 @@ class CodexTransport {
   stop() {
     if (this.closed) return;
     this.closed = true;
-    for (const { reject, timer } of this.pending.values()) { clearTimeout(timer); reject(fail('Codex 연결이 종료됐습니다. 다시 시도해주세요.', 'disconnected')); }
+    for (const { reject, timer } of this.pending.values()) { clearTimeout(timer); reject(fail(uiText("Codex 연결이 종료됐습니다. 다시 시도해주세요."), 'disconnected')); }
     this.pending.clear(); this.exited();
   }
   dispose() { this.stop(); this.child.kill(); }
@@ -148,18 +149,18 @@ class CodexClient {
   }
   async start() {
     await this.ready;
-    if (this.disposed) throw fail('Codex 연결이 종료됐습니다.', 'disconnected');
+    if (this.disposed) throw fail(uiText("Codex 연결이 종료됐습니다."), 'disconnected');
     if (this.starting) return this.starting;
     if (this.transport && !this.transport.closed) return;
     this.starting = (async () => {
       this.command = await this.resolveCommand();
-      if (!this.command) throw fail('Codex CLI를 설치한 뒤 다시 시도해주세요. 설치 명령: npm install -g @openai/codex', 'cli_missing');
+      if (!this.command) throw fail(uiText("Codex CLI를 설치한 뒤 다시 시도해주세요. 설치 명령: npm install -g @openai/codex"), 'cli_missing');
       const transport = this.createTransport({ command: this.command, home: this.home, workspace: this.workspace,
         clientRequest: params => this.toolCall(params),
         notify: (method, params) => this.notification(method, params), exited: () => {
           this.transport = null; this.loaded.clear(); this.account = null; this.usage = null;
-          this.login?.reject(fail('CLI 로그인 연결이 종료됐습니다. 다시 시도해주세요.', 'disconnected'));
-          for (const run of this.runs.values()) run.finish('failed', fail('Codex 연결이 종료됐습니다. 다시 시도해주세요.', 'disconnected'));
+          this.login?.reject(fail(uiText("CLI 로그인 연결이 종료됐습니다. 다시 시도해주세요."), 'disconnected'));
+          for (const run of this.runs.values()) run.finish('failed', fail(uiText("Codex 연결이 종료됐습니다. 다시 시도해주세요."), 'disconnected'));
           this.changed();
         }
       });
@@ -195,7 +196,7 @@ class CodexClient {
               documentToolsVersion: stored.documentToolsVersion || 0, previousChatThreads: stored.previousChatThreads || [],
               chat: Array.isArray(stored.chat) ? stored.chat : [], image: Array.isArray(stored.image) ? stored.image : [] };
             for (const kind of ['chat', 'image']) for (const message of this.data[kind]) if (message.status === 'streaming') message.status = 'cancelled';
-          } catch (error) { if (error.code !== 'ENOENT') throw fail('CLI 대화 기록을 읽지 못했습니다.', 'history_failed'); }
+          } catch (error) { if (error.code !== 'ENOENT') throw fail(uiText("CLI 대화 기록을 읽지 못했습니다."), 'history_failed'); }
         }
       }
       this.account = key ? { id: key, email: account.email || '', planType: account.planType || '' } : null;
@@ -204,7 +205,7 @@ class CodexClient {
     try { return await this.refreshing; } finally { this.refreshing = null; }
   }
   async signIn() {
-    if (this.login || this.runs.size || this.accountOperation) throw fail('진행 중인 CLI 요청을 먼저 마쳐주세요.', 'busy');
+    if (this.login || this.runs.size || this.accountOperation) throw fail(uiText("진행 중인 CLI 요청을 먼저 마쳐주세요."), 'busy');
     this.accountOperation = true;
     try {
       await this.start();
@@ -216,13 +217,13 @@ class CodexClient {
       const result = await this.transport.request('account/login/start', { type: 'chatgpt' });
       this.login.id = result.loginId;
       const url = new URL(result.authUrl);
-      if (url.protocol !== 'https:' || !['auth.openai.com', 'chatgpt.com'].includes(url.hostname) || url.username || url.password) throw fail('CLI 로그인 주소를 확인하지 못했습니다.', 'invalid_login_url');
+      if (url.protocol !== 'https:' || !['auth.openai.com', 'chatgpt.com'].includes(url.hostname) || url.username || url.password) throw fail(uiText("CLI 로그인 주소를 확인하지 못했습니다."), 'invalid_login_url');
       if (this.login.cancel) await this.cancelSignIn();
       else await this.openExternal(url.href);
-      const timer = setTimeout(() => { this.cancelSignIn().catch(() => {}); reject(fail('CLI 로그인 시간이 지났습니다. 다시 시도해주세요.', 'timeout')); }, 10 * 60_000);
+      const timer = setTimeout(() => { this.cancelSignIn().catch(() => {}); reject(fail(uiText("CLI 로그인 시간이 지났습니다. 다시 시도해주세요."), 'timeout')); }, 10 * 60_000);
       try { await completed; } finally { clearTimeout(timer); }
       await this.refreshAccount();
-      if (!this.account) throw fail('CLI 로그인을 확인하지 못했습니다. 다시 시도해주세요.', 'login_failed');
+      if (!this.account) throw fail(uiText("CLI 로그인을 확인하지 못했습니다. 다시 시도해주세요."), 'login_failed');
       return this.snapshot();
     } catch (error) {
       if (this.login?.id) await this.transport?.request('account/login/cancel', { loginId: this.login.id }).catch(() => {});
@@ -235,18 +236,18 @@ class CodexClient {
     login.cancel = true;
     if (login.id) {
       await this.transport?.request('account/login/cancel', { loginId: login.id });
-      login.reject(fail('CLI 로그인을 취소했습니다.', 'cancelled'));
+      login.reject(fail(uiText("CLI 로그인을 취소했습니다."), 'cancelled'));
     }
   }
   async signOut() {
-    if (this.login || this.runs.size || this.accountOperation) throw fail('진행 중인 CLI 요청을 먼저 마쳐주세요.', 'busy');
+    if (this.login || this.runs.size || this.accountOperation) throw fail(uiText("진행 중인 CLI 요청을 먼저 마쳐주세요."), 'busy');
     this.accountOperation = true;
     try {
       await this.start(); await this.transport.request('account/logout'); await this.persistTail;
       this.account = null; this.key = null; this.data = fresh(); this.models = []; this.usage = null; this.loaded.clear();
     } finally { this.accountOperation = false; this.changed(); }
   }
-  requireAccount() { if (!this.account || this.login || this.accountOperation) throw fail('설정에서 CLI로 로그인해주세요.', 'signin'); }
+  requireAccount() { if (!this.account || this.login || this.accountOperation) throw fail(uiText("설정에서 CLI로 로그인해주세요."), 'signin'); }
   async listModels() {
     await this.status(); this.requireAccount();
     let cursor = null; const models = [];
@@ -269,25 +270,25 @@ class CodexClient {
     return models;
   }
   async selectModel(slug) {
-    this.requireAccount(); if (this.runs.size) throw fail('응답이 끝난 뒤 모델을 변경해주세요.', 'busy');
-    if (!this.models.some(m => m.slug === slug)) throw fail('사용 가능한 모델을 선택해주세요.', 'invalid_model');
+    this.requireAccount(); if (this.runs.size) throw fail(uiText("응답이 끝난 뒤 모델을 변경해주세요."), 'busy');
+    if (!this.models.some(m => m.slug === slug)) throw fail(uiText("사용 가능한 모델을 선택해주세요."), 'invalid_model');
     if (this.data.model !== slug) this.data.reasoningEffort = null;
     this.data.model = slug;
     if (this.data.serviceTier === "priority" && !this.models.find(model => model.slug === slug)?.serviceTiers?.some(tier => tier.id === "priority" || tier.id === "fast")) this.data.serviceTier = "default";
     await this.save(); this.changed();
   }
   async selectReasoningEffort(effort) {
-    this.requireAccount(); if (this.runs.size) throw fail('응답이 끝난 뒤 추론 강도를 변경해주세요.', 'busy');
+    this.requireAccount(); if (this.runs.size) throw fail(uiText("응답이 끝난 뒤 추론 강도를 변경해주세요."), 'busy');
     const model = this.models.find(model => model.slug === this.data.model);
-    if (!model) throw fail('사용 가능한 모델을 먼저 선택해주세요.', 'invalid_model');
-    if (effort !== null && (typeof effort !== 'string' || !(model?.supportedReasoningEfforts?.length ? model.supportedReasoningEfforts.some(option => (typeof option === 'string' ? option : option.effort) === effort) : /^(none|minimal|low|medium|high|xhigh|max|ultra)$/.test(effort)))) throw fail('지원하지 않는 추론 강도입니다.', 'invalid_reasoning_effort');
+    if (!model) throw fail(uiText("사용 가능한 모델을 먼저 선택해주세요."), 'invalid_model');
+    if (effort !== null && (typeof effort !== 'string' || !(model?.supportedReasoningEfforts?.length ? model.supportedReasoningEfforts.some(option => (typeof option === 'string' ? option : option.effort) === effort) : /^(none|minimal|low|medium|high|xhigh|max|ultra)$/.test(effort)))) throw fail(uiText("지원하지 않는 추론 강도입니다."), 'invalid_reasoning_effort');
     this.data.reasoningEffort = effort; await this.save(); this.changed();
   }
   async selectServiceTier(tier) {
-    this.requireAccount(); if (this.runs.size) throw fail("응답이 끝난 뒤 Fast 모드를 변경해주세요.", "busy");
+    this.requireAccount(); if (this.runs.size) throw fail(uiText("응답이 끝난 뒤 Fast 모드를 변경해주세요."), "busy");
     const model = this.models.find(model => model.slug === this.data.model);
-    if (!model) throw fail("사용 가능한 모델을 먼저 선택해주세요.", "invalid_model");
-    if (tier !== "default" && (tier !== "priority" || !model.serviceTiers?.some(option => option.id === "priority" || option.id === "fast"))) throw fail("이 모델은 Fast 모드를 지원하지 않습니다.", "invalid_service_tier");
+    if (!model) throw fail(uiText("사용 가능한 모델을 먼저 선택해주세요."), "invalid_model");
+    if (tier !== "default" && (tier !== "priority" || !model.serviceTiers?.some(option => option.id === "priority" || option.id === "fast"))) throw fail(uiText("이 모델은 Fast 모드를 지원하지 않습니다."), "invalid_service_tier");
     this.data.serviceTier = tier; await this.save(); this.changed();
   }
   async readUsage() {
@@ -296,10 +297,10 @@ class CodexClient {
     this.usage = normalizeUsage(result); this.changed(); return this.usage;
   }
   history(kind = 'chat') { this.validateKind(kind); return this.account ? this.data[kind] : []; }
-  validateKind(kind) { if (!['chat', 'image'].includes(kind)) throw fail('잘못된 요청입니다.', 'invalid_input'); }
+  validateKind(kind) { if (!['chat', 'image'].includes(kind)) throw fail(uiText("잘못된 요청입니다."), 'invalid_input'); }
   async clearHistory(kind = 'chat') {
     this.validateKind(kind); this.requireAccount();
-    if (this.runs.has(kind)) throw fail('응답이 끝난 뒤 새 대화를 시작해주세요.', 'busy');
+    if (this.runs.has(kind)) throw fail(uiText("응답이 끝난 뒤 새 대화를 시작해주세요."), 'busy');
     this.data[kind] = []; delete this.data.threads[kind]; await this.save(); this.messages(kind);
   }
   save() {
@@ -317,45 +318,46 @@ class CodexClient {
     let bytes;
     if (value.savedPath) {
       const file = await contained(this.home, path.resolve(value.savedPath));
-      if ((await fs.stat(file)).size > MAX_IMAGE) throw fail('이미지 파일이 너무 큽니다.', 'invalid_image');
+      if ((await fs.stat(file)).size > MAX_IMAGE) throw fail(uiText("이미지 파일이 너무 큽니다."), 'invalid_image');
       bytes = await fs.readFile(file);
     } else {
       let encoded = value.result || '';
-      if (encoded.length > MAX_IMAGE * 1.4) throw fail('이미지 파일이 너무 큽니다.', 'invalid_image');
+      if (encoded.length > MAX_IMAGE * 1.4) throw fail(uiText("이미지 파일이 너무 큽니다."), 'invalid_image');
       encoded = encoded.replace(/^data:image\/(png|jpeg|webp);base64,/, '');
-      if (!encoded || !/^[A-Za-z0-9+/=\r\n]+$/.test(encoded)) throw fail('생성된 이미지를 읽지 못했습니다.', 'invalid_image');
+      if (!encoded || !/^[A-Za-z0-9+/=\r\n]+$/.test(encoded)) throw fail(uiText("생성된 이미지를 읽지 못했습니다."), 'invalid_image');
       bytes = Buffer.from(encoded, 'base64');
     }
-    if (bytes.length > MAX_IMAGE) throw fail('이미지 파일이 너무 큽니다.', 'invalid_image');
+    if (bytes.length > MAX_IMAGE) throw fail(uiText("이미지 파일이 너무 큽니다."), 'invalid_image');
     const id = `${randomUUID()}.${imageExtension(bytes)}`;
     const file = await contained(this.dataRoot, path.join(this.dataRoot, 'images', id));
     await fs.writeFile(file, bytes, { flag: 'wx', mode: 0o600 });
     return { imageId: id, image: `dockit://app/codex-image/${id}` };
   }
   async imagePath(id) {
-    if (typeof id !== 'string' || !/^[\da-f-]{36}\.(png|jpg|webp)$/.test(id)) throw fail('잘못된 이미지입니다.', 'invalid_image');
-    if (!this.account || (!([...this.data.chat, ...this.data.image].some(m => m.imageId === id)) && !(await this.historyImageAllowed?.(id)))) throw fail('이미지를 찾을 수 없습니다.', 'image_missing');
+    if (typeof id !== 'string' || !/^[\da-f-]{36}\.(png|jpg|webp)$/.test(id)) throw fail(uiText("잘못된 이미지입니다."), 'invalid_image');
+    if (!this.account || (!([...this.data.chat, ...this.data.image].some(m => m.imageId === id)) && !(await this.historyImageAllowed?.(id)))) throw fail(uiText("이미지를 찾을 수 없습니다."), 'image_missing');
     return contained(this.dataRoot, path.join(this.dataRoot, 'images', id));
   }
   async attachFiles(paths) {
     await this.ready; this.requireAccount();
-    if (this.runs.size) throw fail('응답이 끝난 뒤 파일을 첨부해주세요.', 'busy');
+    if (this.runs.size) throw fail(uiText("응답이 끝난 뒤 파일을 첨부해주세요."), 'busy');
     return this.attachments.add(this.key, paths);
   }
   async send(text, kind = 'chat', reference, attachments = [], target = null) {
     this.validateKind(kind); this.requireAccount();
-    if (typeof text !== 'string' || (!text.trim() && !attachments?.length) || text.length > 100_000) throw fail('보낼 내용을 입력하거나 파일을 첨부해주세요.', 'invalid_input');
-    if (reference && (kind !== 'image' || typeof reference !== 'string' || !/^data:image\/(png|jpeg|webp);base64,/.test(reference))) throw fail('지원하지 않는 이미지 형식입니다.', 'invalid_image');
-    if (this.runs.has(kind)) throw fail('응답이 진행 중입니다.', 'busy');
+    if (typeof text !== 'string' || (!text.trim() && !attachments?.length) || text.length > 100_000) throw fail(uiText("보낼 내용을 입력하거나 파일을 첨부해주세요."), 'invalid_input');
+    if (reference && (kind !== 'image' || typeof reference !== 'string' || !/^data:image\/(png|jpeg|webp);base64,/.test(reference))) throw fail(uiText("지원하지 않는 이미지 형식입니다."), 'invalid_image');
+    if (this.runs.has(kind)) throw fail(uiText("응답이 진행 중입니다."), 'busy');
     const accountKey = this.key;
     const files = await this.attachments.read(accountKey, attachments);
-    const texts = files.filter(file => file.kind === 'text').map(file => `첨부 파일: ${file.name}\n${textContent(file.bytes)}`);
+    const texts = files.filter(file => file.kind === 'text').map(file => `첨부 파일: ${file.name}
+${textContent(file.bytes)}`);
     this.requireAccount();
-    if (this.key !== accountKey) throw fail('계정이 변경됐습니다. 파일을 다시 첨부해주세요.', 'account_changed');
-    if (this.runs.has(kind)) throw fail('응답이 진행 중입니다.', 'busy');
+    if (this.key !== accountKey) throw fail(uiText("계정이 변경됐습니다. 파일을 다시 첨부해주세요."), 'account_changed');
+    if (this.runs.has(kind)) throw fail(uiText("응답이 진행 중입니다."), 'busy');
     let resolve;
     const completed = new Promise(ok => { resolve = ok; });
-    const assistant = { id: randomUUID(), role: 'assistant', text: '', status: 'streaming', activity: '응답 준비 중' };
+    const assistant = { id: randomUUID(), role: 'assistant', text: '', status: 'streaming', activity: uiText("응답 준비 중") };
     const run = { kind, threadId: null, turnId: null, tail: Promise.resolve(), toolsTail: Promise.resolve(), parts: new Map(), activity: new ChatActivity(), assistant, cancelled: false };
     run.finish = (status, error) => {
       if (run.finishing) return;
@@ -369,10 +371,10 @@ class CodexClient {
         try { document = await this.documents?.end(run.document); }
         catch (failure) { error = failure; }
         assistant.status = status;
-        if (kind === 'image' && status === 'completed' && !run.hasImage) error = fail('이미지가 생성되지 않았습니다. 요청을 바꿔 다시 시도해주세요.', 'no_image');
+        if (kind === 'image' && status === 'completed' && !run.hasImage) error = fail(uiText("이미지가 생성되지 않았습니다. 요청을 바꿔 다시 시도해주세요."), 'no_image');
         if (error) assistant.status = status === 'cancelled' ? 'cancelled' : 'failed';
         assistant.activity = run.activity.complete(error ? 'failed' : assistant.status);
-        try { await this.save(); } catch { error = fail('CLI 대화 기록을 저장하지 못했습니다.', 'save_failed'); assistant.activity = run.activity.complete('failed'); }
+        try { await this.save(); } catch { error = fail(uiText("CLI 대화 기록을 저장하지 못했습니다."), 'save_failed'); assistant.activity = run.activity.complete('failed'); }
         this.runs.delete(kind); this.messages(kind); this.changed();
         resolve({ messages: this.data[kind], document, error: error ? safeFailure(error) : null });
         this.readUsage().catch(() => {});
@@ -381,7 +383,7 @@ class CodexClient {
     this.runs.set(kind, run); this.changed();
     try {
       if (kind === 'chat' && target) {
-        if (!this.documents) throw fail('문서 연결을 사용할 수 없습니다.', 'document_access');
+        if (!this.documents) throw fail(uiText("문서 연결을 사용할 수 없습니다."), 'document_access');
         run.preparing = this.documents.begin(target).then(session => { run.document = session; });
         await run.preparing;
         this.changed();
@@ -389,7 +391,7 @@ class CodexClient {
       if (run.finishing) return completed;
       if (run.cancelled) { run.finish('cancelled'); return completed; }
       if (!this.models.length) await this.listModels();
-      if (!this.data.model) throw fail('사용 가능한 CLI 모델이 없습니다.', 'no_model');
+      if (!this.data.model) throw fail(uiText("사용 가능한 CLI 모델이 없습니다."), 'no_model');
       const user = { id: randomUUID(), role: 'user', text: text.trim(), ...(files.length ? { attachments: files.map(metadata) } : {}) };
       if (reference) Object.assign(user, await this.storeImage({ result: reference }));
       this.data[kind].push(user, assistant); await this.save(); this.messages(kind);
@@ -429,9 +431,13 @@ class CodexClient {
       // Supply current global guidance at user priority so both old and new threads receive it.
       const projectGuidance = this.documents && kind === 'chat' ? await fs.readFile(await contained(this.root, path.join(this.root, 'AGENTS.md')), 'utf8') : '';
       const documentContext = !this.documents || kind !== 'chat' ? '' : run.document
-        ? `현재 문서 경로: ${JSON.stringify(run.document.file)}\n문서 ID: ${run.document.id}\n이번 요청에서는 이 파일만 편집할 수 있습니다. 수정 전에 dockit_read_document로 최신 내용을 읽으세요.`
-        : '현재 연결된 문서가 없습니다. 이전 요청에 연결됐던 문서를 수정하지 마세요.';
-      const context = [guidance, projectGuidance && `# 프로젝트 AGENTS.md\n${projectGuidance}`, documentContext, previousContext && `이전 대화 참고 자료(현재 요청 아님):\n${previousContext}`, this.skillRoots.length ? 'Read local skill instructions and their text references with the dockit_skills read_skill tool before applying a skill. Scripts must not be executed.' : ''].filter(Boolean).join('\n\n');
+        ? `현재 문서 경로: ${JSON.stringify(run.document.file)}
+문서 ID: ${run.document.id}
+이번 요청에서는 이 파일만 편집할 수 있습니다. 수정 전에 dockit_read_document로 최신 내용을 읽으세요.`
+        : "현재 연결된 문서가 없습니다. 이전 요청에 연결됐던 문서를 수정하지 마세요.";
+      const context = [guidance, projectGuidance && `# 프로젝트 AGENTS.md
+${projectGuidance}`, documentContext, previousContext && `이전 대화 참고 자료(현재 요청 아님):
+${previousContext}`, this.skillRoots.length ? 'Read local skill instructions and their text references with the dockit_skills read_skill tool before applying a skill. Scripts must not be executed.' : ''].filter(Boolean).join('\n\n');
       const input = context ? [{ type: 'text', text: context }] : [];
       if (text.trim()) input.push({ type: 'text', text: text.trim() });
       for (const value of texts) input.push({ type: 'text', text: value });
@@ -440,7 +446,7 @@ class CodexClient {
       const result = await this.transport.request('turn/start', { threadId, cwd: this.workspace, ...(kind === 'chat' && this.documents ? { environments: [] } : {}), sandboxPolicy: { type: 'readOnly', networkAccess: false }, approvalPolicy: 'never', model: this.data.model, serviceTier: this.data.serviceTier ?? 'default', ...(this.snapshot().reasoningEffort ? { effort: this.snapshot().reasoningEffort } : {}), input });
       run.turnId = result.turn.id;
       if (run.cancelled) await this.cancelResponse(kind);
-      if (!run.finishing) run.timer = setTimeout(() => { this.cancelResponse(kind).catch(() => {}); run.finish('failed', fail('Codex 응답 시간이 지났습니다.', 'timeout')); }, 15 * 60_000);
+      if (!run.finishing) run.timer = setTimeout(() => { this.cancelResponse(kind).catch(() => {}); run.finish('failed', fail(uiText("Codex 응답 시간이 지났습니다."), 'timeout')); }, 15 * 60_000);
     } catch (error) { run.finish('failed', error); }
     return completed;
   }
@@ -458,14 +464,14 @@ class CodexClient {
   async toolCall(params) {
     const run = [...this.runs.values()].find(candidate => candidate.threadId === params.threadId);
     const respond = (value, success = true) => ({ success, contentItems: [{ type: 'inputText', text: JSON.stringify(value) }] });
-    if (!run || run.finishing || run.cancelled || (run.turnId && params.turnId !== run.turnId) || !this.documents) return respond({ error: '현재 작업에서 사용할 수 없는 도구입니다.' }, false);
+    if (!run || run.finishing || run.cancelled || (run.turnId && params.turnId !== run.turnId) || !this.documents) return respond({ error: uiText("현재 작업에서 사용할 수 없는 도구입니다.") }, false);
     const task = run.toolsTail.then(async () => {
-      if (run.cancelled || run.finishing) throw fail('작업이 종료됐습니다.');
+      if (run.cancelled || run.finishing) throw fail(uiText("작업이 종료됐습니다."));
       if (params.tool === 'dockit_read_history') return this.documents.history(params.arguments);
-      if (!run.document) throw fail('현재 연결된 문서가 없습니다.');
+      if (!run.document) throw fail(uiText("현재 연결된 문서가 없습니다."));
       if (params.tool === 'dockit_read_document') return this.documents.read(run.document);
       if (params.tool === 'dockit_edit_document') return this.documents.edit(run.document, params.arguments);
-      throw fail('허용하지 않는 도구입니다.');
+      throw fail(uiText("허용하지 않는 도구입니다."));
     });
     run.toolsTail = task.catch(() => {});
     try { return respond(await task); }
@@ -477,7 +483,7 @@ class CodexClient {
   }
   notification(method, params) {
     if (method === 'account/login/completed' && this.login && (!this.login.id || this.login.id === params.loginId)) {
-      if (params.success) this.login.resolve(); else this.login.reject(fail(this.login.cancel ? 'CLI 로그인을 취소했습니다.' : 'CLI 로그인에 실패했습니다. 다시 시도해주세요.', this.login.cancel ? 'cancelled' : 'login_failed'));
+      if (params.success) this.login.resolve(); else this.login.reject(fail(this.login.cancel ? uiText("CLI 로그인을 취소했습니다.") : uiText("CLI 로그인에 실패했습니다. 다시 시도해주세요."), this.login.cancel ? 'cancelled' : 'login_failed'));
     }
     if (method === 'account/updated' && !this.accountOperation) this.refreshAccount().catch(() => {});
     if (method === 'account/rateLimits/updated' && this.account) { this.usage = normalizeUsage(params); this.changed(); }
@@ -497,7 +503,7 @@ class CodexClient {
     }
     if (method === 'item/completed' && params.item?.type === 'imageGeneration') {
       run.tail = run.tail.then(async () => {
-        if (params.item.status !== 'completed') throw fail(params.item.failure?.type === 'usageLimitExceeded' ? '이미지 생성 사용 한도에 도달했습니다.' : '이미지를 생성하지 못했습니다.', 'image_failed');
+        if (params.item.status !== 'completed') throw fail(params.item.failure?.type === 'usageLimitExceeded' ? uiText("이미지 생성 사용 한도에 도달했습니다.") : uiText("이미지를 생성하지 못했습니다."), 'image_failed');
         const image = await this.storeImage(params.item);
         this.data[run.kind].push({ id: randomUUID(), role: 'assistant', text: '', status: 'completed', ...image });
         run.hasImage = true; this.messages(run.kind);
@@ -506,14 +512,14 @@ class CodexClient {
     if (method === 'turn/completed') {
       const status = params.turn?.status;
       run.tail = run.tail.then(() => {
-        const failure = run.error || (status === 'failed' ? fail('Codex 응답에 실패했습니다. 모델과 사용 한도를 확인해주세요.', 'turn_failed') : null);
+        const failure = run.error || (status === 'failed' ? fail(uiText("Codex 응답에 실패했습니다. 모델과 사용 한도를 확인해주세요."), 'turn_failed') : null);
         run.finish(status === 'completed' ? 'completed' : status === 'interrupted' ? 'cancelled' : 'failed', failure);
       });
     }
   }
   async dispose() {
     this.disposed = true;
-    this.login?.reject(fail('CLI 로그인을 취소했습니다.', 'cancelled'));
+    this.login?.reject(fail(uiText("CLI 로그인을 취소했습니다."), 'cancelled'));
     this.transport?.dispose();
     await Promise.all([...this.runs.values()].map(run => run.tail)); await this.persistTail;
   }

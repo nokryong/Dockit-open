@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import React, { useRef, useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css"; // ★ 스타일 필수
@@ -14,6 +15,7 @@ export default function ImageCrop({
   onCropCompleteRaw,
   isDarkMode
 }) {
+  useI18n();
   const { setting } = useSetting();
   const cropperRef = useRef(null);
 
@@ -99,7 +101,7 @@ export default function ImageCrop({
             { value: 1, label: <Typography size="xs">1:1</Typography> },
             { value: 4 / 3, label: <Typography size="xs">4:3</Typography> },
             { value: 16 / 9, label: <Typography size="xs">16:9</Typography> },
-            { value: NaN, label: <Typography size="xs">자유</Typography> }
+            { value: NaN, label: <Typography size="xs">{uiText("자유")}</Typography> }
           ]}
           value={ratioValue}
           onChange={(value) => {
@@ -118,7 +120,7 @@ export default function ImageCrop({
           <Button
             size="sm"
             onClick={() => rotate(-90)}
-            title="왼쪽 회전"
+            title={uiText("왼쪽 회전")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
             background={"white-10"}
@@ -129,7 +131,7 @@ export default function ImageCrop({
           <Button
             size="sm"
             onClick={() => rotate(90)}
-            title="오른쪽 회전"
+            title={uiText("오른쪽 회전")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
             background={"white-10"}
@@ -140,7 +142,7 @@ export default function ImageCrop({
           <Button
             size="sm"
             onClick={flipX}
-            title="좌우 반전"
+            title={uiText("좌우 반전")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
             background={"white-10"}
@@ -151,7 +153,7 @@ export default function ImageCrop({
           <Button
             size="sm"
             onClick={flipY}
-            title="상하 반전"
+            title={uiText("상하 반전")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
             background={"white-10"}
@@ -170,11 +172,10 @@ export default function ImageCrop({
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           >
-            편집 완료
-          </Button>
+            {uiText("편집 완료")}</Button>
           <Button
             onClick={reset}
-            title="초기화"
+            title={uiText("초기화")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
             background={"white-10"}

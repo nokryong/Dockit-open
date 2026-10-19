@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { VscOpenai } from "react-icons/vsc";
 import WidgetCard from "./WidgetCard";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -51,10 +52,11 @@ const reasoningEffortLabels = {
 
 export function formatWorkingTime(elapsedMs) {
   const seconds = Math.max(0, Math.floor(elapsedMs / 1000));
-  return `${Math.floor(seconds / 60)}분 ${seconds % 60}초 작업 중`;
+  return uiText("{0}분 {1}초 작업 중", Math.floor(seconds / 60), seconds % 60);
 }
 
 function WorkingTime({ since }) {
+  useI18n();
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     setNow(Date.now());
@@ -76,6 +78,7 @@ function ReasoningEffortSlider({
   disabled,
   onSelect,
 }) {
+  useI18n();
   const efforts = [
     ...new Set(
       options
@@ -213,7 +216,7 @@ function ReasoningEffortSlider({
       >
         <Button
           colorType="text"
-          ariaLabel="모델 목록 열기"
+          ariaLabel={uiText("모델 목록 열기")}
           disabled={disabled}
           onClick={() => {
             setShowModels(true);
@@ -242,7 +245,7 @@ function ReasoningEffortSlider({
           max={Math.max(1, efforts.length - 1)}
           step={1}
           value={Math.max(0, index)}
-          ariaLabel="추론 강도"
+          ariaLabel={uiText("추론 강도")}
           ariaValueText={label}
           disabled={disabled || efforts.length < 2 || index < 0}
           onChange={(position) => {
@@ -272,7 +275,7 @@ function ReasoningEffortSlider({
         }
       >
         <Menu
-          aria-label="모델 목록"
+          aria-label={uiText("모델 목록")}
           expandType="popover"
           selectedKey={modelId}
           selectedColor={`${theme}-2`}
@@ -300,6 +303,7 @@ function ReasoningEffortSlider({
 }
 
 export default function ChatGPTWidget({ dragHandleProps }) {
+  useI18n();
   const chatgpt = useChatGPT();
   const codex = useCodex();
   const { setting, setSetting } = useSetting();
@@ -371,20 +375,20 @@ export default function ChatGPTWidget({ dragHandleProps }) {
   const activity =
     messages.findLast(
       (message) => message.role === "assistant" && message.activity,
-    )?.activity ?? (loading ? "응답 준비 중" : "응답 완료");
+    )?.activity ?? (loading ? uiText("응답 준비 중") : uiText("응답 완료"));
   const chooseAttachments = async () => {
     if (loading || busy || attaching || !connection.active?.sharing) return;
     setAttaching(true);
     setAttachmentError("");
     try {
       if (!window.dockitLocal?.chooseChatAttachments)
-        throw new Error("첨부 기능을 적용하려면 앱을 다시 실행해주세요.");
+        throw new Error(uiText("첨부 기능을 적용하려면 앱을 다시 실행해주세요."));
       const files = await window.dockitLocal.chooseChatAttachments(
         usingCodex ? "codex" : "chatgpt",
       );
       setAttachments((previous) => [...previous, ...files]);
     } catch (failure) {
-      setAttachmentError(failure.message || "파일을 첨부하지 못했습니다.");
+      setAttachmentError(failure.message || uiText("파일을 첨부하지 못했습니다."));
     } finally {
       setAttaching(false);
     }
@@ -429,12 +433,11 @@ export default function ChatGPTWidget({ dragHandleProps }) {
               className="whitespace-nowrap"
               onClick={chatgpt.openUsage}
             >
-              사용량 관리 ↗
-            </SmallButton>
+              {uiText("사용량 관리 ↗")}</SmallButton>
           )}
           <Switch
             size="sm"
-            ariaLabel="GPT/Codex 전환"
+            ariaLabel={uiText("GPT/Codex 전환")}
             checked={usingCodex}
             onText={<Typography size="xs">Codex</Typography>}
             offText={<Typography size="xs">Chat</Typography>}
@@ -459,7 +462,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
         {connection.active?.sharing ? (
             <div className="flex justify-between w-full">
               <SmallButton disabled={loading || busy} onClick={() => { if (!showConversations) refreshConversations(); setShowConversations(value => !value); }}>
-                {showConversations ? '대화로 돌아가기' : '채팅 목록 보기'}
+                {showConversations ? uiText("대화로 돌아가기") : uiText("채팅 목록 보기")}
               </SmallButton>
               <SmallButton
                 disabled={loading || busy}
@@ -468,19 +471,17 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                   if (result !== null && result?.ok !== false) { setShowConversations(false); setInput(''); setAttachments([]); }
                 }}
               >
-                새 대화
-              </SmallButton>
+                {uiText("새 대화")}</SmallButton>
             </div>
         ) : (
           <div className="chatgpt-actions">
             <Typography size="sm">
               {usingCodex
-                ? "설정에서 CLI로 로그인해주세요."
-                : "설정에서 ChatGPT를 연결해주세요."}
+                ? uiText("설정에서 CLI로 로그인해주세요.")
+                : uiText("설정에서 ChatGPT를 연결해주세요.")}
             </Typography>
             <SmallButton onClick={openOnlySettingsDrawer}>
-              설정 열기
-            </SmallButton>
+              {uiText("설정 열기")}</SmallButton>
           </div>
         )}
 
@@ -553,7 +554,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                     background="transparent"
                     color="black-9"
                     className="h-6! w-6! shrink-0 p-0!"
-                    ariaLabel={`${file.name} 첨부 취소`}
+                    ariaLabel={uiText("{0} 첨부 취소", file.name)}
                     icon={<TbX size={14} />}
                     disabled={loading || attaching}
                     onClick={() =>
@@ -592,7 +593,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                 submit();
               }
             }}
-            placeholder="메시지를 입력하세요"
+            placeholder={uiText("메시지를 입력하세요")}
             rows={2}
             shadow="none"
             bottomLeft={
@@ -603,7 +604,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                 background="transparent"
                 color="black-9"
                 className="h-8! w-8! shrink-0 p-0! disabled:opacity-50"
-                ariaLabel="파일 첨부"
+                ariaLabel={uiText("파일 첨부")}
                 icon={<TbPlus size={20} />}
                 disabled={
                   loading || busy || attaching || !connection.active?.sharing
@@ -619,7 +620,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                     size="sm"
                     colorType="text"
                     icon={fastEnabled ? <PiLightningFill /> : <PiLightning />}
-                    ariaLabel="Fast 모드"
+                    ariaLabel={uiText("Fast 모드")}
                     ariaPressed={fastEnabled}
                     color={fastEnabled ? setting.theme + "-7" : "black-7"}
                     disabled={
@@ -677,7 +678,7 @@ export default function ChatGPTWidget({ dragHandleProps }) {
                       <TbArrowUp size={20} />
                     )
                   }
-                  ariaLabel={loading ? "AI 응답 중지" : "ChatGPT 전송"}
+                  ariaLabel={loading ? uiText("AI 응답 중지") : uiText("ChatGPT 전송")}
                   onClick={loading ? () => cancelResponse() : submit}
                   disabled={
                     !loading &&

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import {
   Segmented,
   Button,
@@ -25,6 +26,7 @@ import {
 } from "../../constant/uiProps";
 
 export default function Timer({ dragHandleProps }) {
+  useI18n();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
   const [selected, setSelected] = useState("timer");
@@ -41,8 +43,8 @@ export default function Timer({ dragHandleProps }) {
   const inputTimeRef = useRef(inputTime);
 
   const options = [
-    { value: "timer", label: "타이머" },
-    { value: "stopwatch", label: "스톱워치" }
+    { value: "timer", label: uiText("타이머") },
+    { value: "stopwatch", label: uiText("스톱워치") }
   ];
 
   // 시간 포맷팅 (HH:MM:SS.mmm)
@@ -165,7 +167,7 @@ export default function Timer({ dragHandleProps }) {
         oscillator.stop(startTime + beepDuration);
       }
     } catch (error) {
-      console.error("알람 소리 재생 실패:", error);
+      console.error(uiText("알람 소리 재생 실패:"), error);
     }
   };
 
@@ -191,7 +193,7 @@ export default function Timer({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TimerOutline}
-      title="타이머"
+      title={uiText("타이머")}
       dragHandleProps={dragHandleProps}
       widgetType="timer"
     >
@@ -268,7 +270,7 @@ export default function Timer({ dragHandleProps }) {
               <Input
                 {...inputProps}
                 background={`${setting.theme}-1`}
-                suffix="시간"
+                suffix={uiText("시간")}
                 value={inputTime.hours}
                 onChange={(e) =>
                   setInputTime((prev) => ({
@@ -280,7 +282,7 @@ export default function Timer({ dragHandleProps }) {
               <Input
                 {...inputProps}
                 background={`${setting.theme}-1`}
-                suffix="분"
+                suffix={uiText("분")}
                 value={inputTime.minutes}
                 onChange={(e) =>
                   setInputTime((prev) => ({
@@ -292,7 +294,7 @@ export default function Timer({ dragHandleProps }) {
               <Input
                 {...inputProps}
                 background={`${setting.theme}-1`}
-                suffix="초"
+                suffix={uiText("초")}
                 value={inputTime.seconds}
                 onChange={(e) =>
                   setInputTime((prev) => ({
@@ -345,8 +347,7 @@ export default function Timer({ dragHandleProps }) {
       >
         <div className="flex flex-col gap-2 text-center items-center">
           <Typography size="lg" pretendard="SB">
-            타이머 완료
-          </Typography>
+            {uiText("타이머 완료")}</Typography>
           <Div
             color={`${setting.theme}-7`}
             className="animate-pulse"
@@ -408,8 +409,7 @@ export default function Timer({ dragHandleProps }) {
               size="sm"
               border={false}
             >
-              확인
-            </Button>
+              {uiText("확인")}</Button>
           </div>
         </div>
       </Modal>

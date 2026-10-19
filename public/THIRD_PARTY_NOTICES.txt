@@ -7,9 +7,9 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: 2129ec8545de9f73f62d5a1758a81f811a4a93493ea2ac12f643da88ea05d8f5
-Included non-dev lock entries: 466
-Unique third-party package name/version pairs: 454
+package-lock.json SHA-256: cf7231ed9ba8dba0440ae04a65be77fd634ac3209559621f15c4138ae5d484ba
+Included non-dev lock entries: 469
+Unique third-party package name/version pairs: 455
 Owner-controlled lock entries excluded from this notice: 1
 Fallback/missing-evidence records: 0
 
@@ -2056,6 +2056,13 @@ jszip@3.10.1
   Included files: LICENSE.markdown (602ef1d5d3db1b23ada0b61d4230ef336012de7bc3b773d565f2b27a2757f51d)
 
 katex@0.16.47
+  License: MIT
+  Source: https://github.com/KaTeX/KaTeX
+  Evidence: collected
+  Lockfile instances: 3
+  Included files: LICENSE (d3c8c167dfa0a8a7f2ace9fc23ddfb89e609adc13b113e958bede249592b852d)
+
+katex@0.18.2
   License: MIT
   Source: https://github.com/KaTeX/KaTeX
   Evidence: collected

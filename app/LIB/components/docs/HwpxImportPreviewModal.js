@@ -1,3 +1,4 @@
+import { t as uiText, useI18n, translateMessage } from "../../i18n";
 import { Close, ErrorTriangleOutline } from "sud-icons";
 import { Typography } from "sud-ui";
 import { useDarkMode } from "@/app/LIB/context/DarkModeContext";
@@ -61,6 +62,7 @@ const formatBytes = (bytes) => {
 const asArray = (value) => (Array.isArray(value) ? value : []);
 
 function SummaryItem({ label, value, isDarkMode, tone = "default" }) {
+  useI18n();
   const color =
     tone === "error"
       ? isDarkMode
@@ -92,6 +94,7 @@ function SummaryItem({ label, value, isDarkMode, tone = "default" }) {
 }
 
 function WarningList({ title, description, items, isDarkMode }) {
+  useI18n();
   const visibleItems = asArray(items).slice(0, 5);
   const hiddenCount = Math.max(0, asArray(items).length - visibleItems.length);
 
@@ -134,7 +137,7 @@ function WarningList({ title, description, items, isDarkMode }) {
               {item.code || "warning"}
               {item.severity ? ` · ${item.severity}` : ""}
             </div>
-            {item.message && <div style={{ marginTop: 2 }}>{item.message}</div>}
+            {item.message && <div style={{ marginTop: 2 }}>{translateMessage(item.message)}</div>}
             {item.path && (
               <code
                 style={{
@@ -151,8 +154,7 @@ function WarningList({ title, description, items, isDarkMode }) {
         ))}
         {hiddenCount > 0 && (
           <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-            외 {hiddenCount}개 항목이 더 있습니다.
-          </Typography>
+            {uiText("외 ")}{hiddenCount}{uiText("개 항목이 더 있습니다.")}</Typography>
         )}
       </div>
     </section>
@@ -166,6 +168,7 @@ export default function HwpxImportPreviewModal({
   onApply,
   onClose
 }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
 
   if (!preview) {
@@ -206,11 +209,9 @@ export default function HwpxImportPreviewModal({
         >
           <div>
             <Typography as="h2" pretendard="B" size="lg">
-              HWPX 불러오기 확인
-            </Typography>
+              {uiText("HWPX 불러오기 확인")}</Typography>
             <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-              적용하기 전 dry-run 결과입니다. 승인하기 전에는 현재 문서를 변경하지 않습니다.
-            </Typography>
+              {uiText("적용하기 전 dry-run 결과입니다. 승인하기 전에는 현재 문서를 변경하지 않습니다.")}</Typography>
           </div>
           <ModalActionButton
             isDarkMode={isDarkMode}
@@ -221,8 +222,7 @@ export default function HwpxImportPreviewModal({
           >
             <span className="flex items-center gap-2">
               <Close size={14} />
-              닫기
-            </span>
+              {uiText("닫기")}</span>
           </ModalActionButton>
         </div>
 
@@ -264,27 +264,25 @@ export default function HwpxImportPreviewModal({
                   pretendard="B"
                   style={{ color: statusToneColor(status.tone, isDarkMode) }}
                 >
-                  {status.title}
+                  {translateMessage(status.title)}
                 </Typography>
                 <Typography
                   size="sm"
                   style={{ marginTop: 2, color: mutedTextColor(isDarkMode) }}
                 >
-                  {status.description}
+                  {translateMessage(status.description)}
                 </Typography>
                 <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
                   {summary.fileName}
                 </Typography>
                 <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-                  {formatBytes(preview.fileSize)} · {summary.packageEntryCount}개 package entry ·{" "}
-                  {summary.sectionCount}개 section
-                </Typography>
+                  {formatBytes(preview.fileSize)} · {summary.packageEntryCount}{uiText("개 package entry ·")}{" "}
+                  {summary.sectionCount}{uiText("개 section")}</Typography>
                 <Typography
                   size="sm"
                   style={{ marginTop: 6, color: mutedTextColor(isDarkMode) }}
                 >
-                  원본 한글 문서와 화면이 완전히 동일하게 보장되지는 않습니다.
-                </Typography>
+                  {uiText("원본 한글 문서와 화면이 완전히 동일하게 보장되지는 않습니다.")}</Typography>
               </div>
             </div>
           </section>
@@ -297,30 +295,30 @@ export default function HwpxImportPreviewModal({
             }}
           >
             <SummaryItem
-              label="블록"
+              label={uiText("블록")}
               value={summary.blockCount}
               isDarkMode={isDarkMode}
             />
             <SummaryItem
-              label="분석 경고"
+              label={uiText("분석 경고")}
               value={summary.importWarningCount}
               tone={summary.importErrorCount > 0 ? "error" : summary.importWarningCount > 0 ? "warning" : "default"}
               isDarkMode={isDarkMode}
             />
             <SummaryItem
-              label="지원 제한"
+              label={uiText("지원 제한")}
               value={summary.lossCount}
               tone={summary.lossErrorCount > 0 ? "error" : summary.lossCount > 0 ? "warning" : "default"}
               isDarkMode={isDarkMode}
             />
             <SummaryItem
-              label="변환 경고"
+              label={uiText("변환 경고")}
               value={summary.projectionWarningCount}
               tone={summary.projectionWarningCount > 0 ? "warning" : "default"}
               isDarkMode={isDarkMode}
             />
             <SummaryItem
-              label="적용 오류"
+              label={uiText("적용 오류")}
               value={summary.validationErrorCount}
               tone={summary.validationErrorCount > 0 ? "error" : "default"}
               isDarkMode={isDarkMode}
@@ -336,15 +334,14 @@ export default function HwpxImportPreviewModal({
             }}
           >
             <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
-              포함된 주요 항목
-            </Typography>
+              {uiText("포함된 주요 항목")}</Typography>
             <Typography
               size="sm"
               style={{ marginTop: 6, color: mutedTextColor(isDarkMode) }}
             >
               {summary.featureLabels?.length
-                ? summary.featureLabels.join(", ")
-                : "텍스트 중심 문서"}
+                ? summary.featureLabels.map(translateMessage).join(", ")
+                : uiText("텍스트 중심 문서")}
             </Typography>
           </section>
 
@@ -358,8 +355,7 @@ export default function HwpxImportPreviewModal({
               }}
             >
               <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
-                텍스트 미리보기
-              </Typography>
+                {uiText("텍스트 미리보기")}</Typography>
               <Typography
                 size="sm"
                 style={{ marginTop: 6, color: mutedTextColor(isDarkMode) }}
@@ -372,9 +368,9 @@ export default function HwpxImportPreviewModal({
 
           {warningGroups.map((group) => (
             <WarningList
-              key={group.title}
-              title={group.title}
-              description={group.description}
+              key={translateMessage(group.title)}
+              title={translateMessage(group.title)}
+              description={translateMessage(group.description)}
               items={group.items}
               isDarkMode={isDarkMode}
             />
@@ -395,15 +391,14 @@ export default function HwpxImportPreviewModal({
             border
             onClick={onClose}
           >
-            취소
-          </ModalActionButton>
+            {uiText("취소")}</ModalActionButton>
           <ModalActionButton
             data-testid="hwpx-import-apply-button"
             isDarkMode={isDarkMode}
             onClick={onApply}
             disabled={!summary.canApply || applying}
           >
-            {applying ? "적용 중..." : "불러오기 적용"}
+            {applying ? uiText("적용 중...") : uiText("불러오기 적용")}
           </ModalActionButton>
         </div>
       </div>

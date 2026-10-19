@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ export default function ExternalLinkPreviewPopover({
   onMouseEnter,
   onMouseLeave
 }) {
+  useI18n();
   const { isDarkMode, currentColors } = useDarkMode();
   const [isCopied, setIsCopied] = useState(false);
   const previewHref = preview?.href ?? null;
@@ -44,9 +46,9 @@ export default function ExternalLinkPreviewPopover({
 
       await navigator.clipboard.writeText(preview.href);
       setIsCopied(true);
-      toast.success("링크를 복사했습니다.");
+      toast.success(uiText("링크를 복사했습니다."));
     } catch {
-      toast.danger("링크를 복사하지 못했습니다.");
+      toast.danger(uiText("링크를 복사하지 못했습니다."));
     }
   };
 
@@ -158,7 +160,7 @@ export default function ExternalLinkPreviewPopover({
               }}
             >
               <Typography size="xs" color="cool-gray-7">
-                {isCopied ? "복사됨" : "링크 복사"}
+                {isCopied ? uiText("복사됨") : uiText("링크 복사")}
               </Typography>
             </button>
             <a
@@ -168,8 +170,7 @@ export default function ExternalLinkPreviewPopover({
               style={{ textDecoration: "none" }}
             >
               <Typography size="xs" color="cool-gray-7">
-                새 탭에서 열기
-              </Typography>
+                {uiText("새 탭에서 열기")}</Typography>
             </a>
           </div>
         </div>

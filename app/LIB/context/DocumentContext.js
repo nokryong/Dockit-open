@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText } from "../i18n";
 
 import { createContext, useContext, useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { fetchData, fetchDocumentContent, updateData } from "../utils/dataUtils";
@@ -336,7 +337,7 @@ export function DocumentProvider({ children }) {
           typeof savedDocument.revision !== "string" ||
           !savedDocument.revision
         ) {
-          throw new Error("문서 저장 응답에 revision이 없습니다.");
+          throw new Error(uiText("문서 저장 응답에 revision이 없습니다."));
         }
 
         const nextDocument = {
@@ -435,10 +436,10 @@ export function DocumentProvider({ children }) {
   }, []);
 
   const prepareCodexDocument = useCallback(async editor => {
-    if (codexLockRef.current) throw new Error('Codex가 문서를 작업 중입니다.');
+    if (codexLockRef.current) throw new Error(uiText("Codex가 문서를 작업 중입니다."));
     const id = currentDocumentIdRef.current;
     if (!id) return null;
-    if (!editor || editor.isDestroyed || !editor.storage.codexDocumentLock) throw new Error('문서 편집기가 준비된 뒤 다시 보내주세요.');
+    if (!editor || editor.isDestroyed || !editor.storage.codexDocumentLock) throw new Error(uiText("문서 편집기가 준비된 뒤 다시 보내주세요."));
     editor.view.dispatch(closeHistory(editor.state.tr));
     const lock = { id, editor, before: { doc: editor.state.doc, anchor: editor.state.selection.anchor, metadata: structuredClone(documentMetadata(latestStateRef.current)) } };
     attachDocumentEditor(editor);
@@ -448,12 +449,12 @@ export function DocumentProvider({ children }) {
     editor.setEditable(false, false);
     try {
       const snapshot = captureNotePersistenceSnapshot(editor);
-      if (!snapshot.ok) throw new Error('문서를 저장할 수 없습니다. 문서 형식을 확인해주세요.');
+      if (!snapshot.ok) throw new Error(uiText("문서를 저장할 수 없습니다. 문서 형식을 확인해주세요."));
       latestStateRef.current = { ...latestStateRef.current, content: snapshot.html };
       setContent(snapshot.html);
       // The final immediate entry drains earlier title/settings/autosave entries.
       const saved = await queueSaveDocument(id, { ...latestStateRef.current, content: snapshot.html, focus: editor.state.selection.anchor }, true);
-      if (!saved) throw new Error('문서를 저장하지 못해 Codex 작업을 시작하지 않았습니다.');
+      if (!saved) throw new Error(uiText("문서를 저장하지 못해 Codex 작업을 시작하지 않았습니다."));
       await window.dockitLocal?.flush();
       return { id, revision: documentCacheRef.current.get(id)?.revision };
     } catch (error) { finishCodexDocument(); throw error; }

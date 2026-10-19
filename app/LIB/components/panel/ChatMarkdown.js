@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { createContext, memo, useContext, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -32,6 +33,7 @@ const markdownClassName = [
 ].join(" ");
 
 function CodeBlock({ children }) {
+  useI18n();
   const { dark, streaming, theme } = useContext(RenderContext);
   const [copied, setCopied] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -53,16 +55,16 @@ function CodeBlock({ children }) {
     return (
       <div className="my-3 min-w-0 overflow-hidden rounded-2xl border border-current/15">
         {showCode ? source : streaming ? (
-          <div role="status" className="p-4 text-xs opacity-70">도식 그리는 중…</div>
+          <div role="status" className="p-4 text-xs opacity-70">{uiText("도식 그리는 중…")}</div>
         ) : (
           <ChatMermaidDiagram source={String(code)} dark={dark} theme={theme} fallback={source} />
         )}
         <div className="flex items-center justify-end gap-1 px-2 pb-1">
           {!streaming && <SmallButton aria-pressed={showCode} onClick={() => setShowCode((value) => !value)}>
-            {showCode ? "도식 보기" : "코드 보기"}
+            {showCode ? uiText("도식 보기") : uiText("코드 보기")}
           </SmallButton>}
           <SmallButton onClick={copy}>
-            {failed ? "복사 실패" : copied ? "복사됨" : "코드 복사"}
+            {failed ? uiText("복사 실패") : copied ? uiText("복사됨") : uiText("코드 복사")}
           </SmallButton>
         </div>
       </div>
@@ -74,7 +76,7 @@ function CodeBlock({ children }) {
         <span>{language}</span>
         <div className="flex items-center gap-2">
           <SmallButton onClick={copy}>
-            {failed ? "복사 실패" : copied ? "복사됨" : "코드 복사"}
+            {failed ? uiText("복사 실패") : copied ? uiText("복사됨") : uiText("코드 복사")}
           </SmallButton>
         </div>
       </div>
@@ -86,7 +88,7 @@ function CodeBlock({ children }) {
 const components = {
   pre: CodeBlock,
   table: ({ children }) => (
-    <div className="my-3 max-w-full overflow-x-auto rounded-lg border border-current/15" tabIndex={0} role="region" aria-label="표">
+    <div className="my-3 max-w-full overflow-x-auto rounded-lg border border-current/15" tabIndex={0} role="region" aria-label={uiText("표")}>
       <table>{children}</table>
     </div>
   ),
@@ -96,13 +98,14 @@ const components = {
 };
 
 export default memo(function ChatMarkdown({ text, dark = false, streaming = false, theme = "sky" }) {
+  useI18n();
   return (
     <RenderContext.Provider value={{ dark, streaming, theme }}>
       <div className={markdownClassName}>
       <ReactMarkdown
         remarkPlugins={remarkPlugins}
         rehypePlugins={rehypePlugins}
-        remarkRehypeOptions={{ footnoteLabel: "각주" }}
+        remarkRehypeOptions={{ footnoteLabel: uiText("각주") }}
         components={components}
       >
         {text}

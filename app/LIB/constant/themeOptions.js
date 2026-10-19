@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { Div, Typography } from "sud-ui";
 
 const rawColorList = [
@@ -63,12 +64,12 @@ export const imageSearchColorList = [
 ];
 
 export const imageSearchOption = [
-  { value: "none", label: "전체", hex: "none", iconColor: "none" },
+  { value: "none", get label() { return uiText("전체"); }, hex: "none", iconColor: "none" },
   {
     value: "transparent",
-    label: "투명 배경",
+    get label() { return uiText("투명 배경"); },
     hex: "transparent",
     iconColor: "#000000"
   },
-  { value: "grayscale", label: "흑백", hex: "none", iconColor: "none" }
+  { value: "grayscale", get label() { return uiText("흑백"); }, hex: "none", iconColor: "none" }
 ];

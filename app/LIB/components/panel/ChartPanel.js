@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import WidgetCard from "./WidgetCard";
 import { useEditor } from "../../context/EditorContext";
 import {
@@ -62,6 +63,7 @@ const DEFAULT_COLORS = [
 ];
 
 export default function ChartPanel({ dragHandleProps }) {
+  useI18n();
   const { selectedObject, editor } = useEditor();
   const { isDarkMode, currentColors } = useDarkMode();
   const { setting } = useSetting();
@@ -79,8 +81,8 @@ export default function ChartPanel({ dragHandleProps }) {
 
   // Chart state
   const [tableData, setTableData] = useState([
-    ["구분", "항목1"],
-    ["데이터1", "10"]
+    [uiText("구분"), uiText("항목1")],
+    [uiText("데이터1"), "10"]
   ]);
   const [chartType, setChartType] = useState("bar");
   const [isAxesSwapped, setIsAxesSwapped] = useState(false);
@@ -211,13 +213,12 @@ export default function ChartPanel({ dragHandleProps }) {
     return (
       <WidgetCard
         icon={TbChartDotsFilled}
-        title="차트"
+        title={uiText("차트")}
         dragHandleProps={dragHandleProps}
         widgetType="madeChart"
       >
         <Typography color="cool-gray-7" size="sm">
-          테이블 또는 차트를 선택하세요
-        </Typography>
+          {uiText("테이블 또는 차트를 선택하세요")}</Typography>
       </WidgetCard>
     );
   }
@@ -227,7 +228,7 @@ export default function ChartPanel({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TbChartDotsFilled}
-      title="차트"
+      title={uiText("차트")}
       dragHandleProps={dragHandleProps}
       widgetType="madeChart"
     >
@@ -345,7 +346,7 @@ export default function ChartPanel({ dragHandleProps }) {
                 color="white-1"
                 background="white-10"
               >
-                <Typography size="sm">X/Y 축 전환</Typography>
+                <Typography size="sm">{uiText("X/Y 축 전환")}</Typography>
               </Button>
               <Button
                 size="sm"
@@ -355,7 +356,7 @@ export default function ChartPanel({ dragHandleProps }) {
                 border={false}
                 {...shadow}
               >
-                <Typography size="sm">데이터 값</Typography>
+                <Typography size="sm">{uiText("데이터 값")}</Typography>
               </Button>
               <Button
                 size="sm"
@@ -365,7 +366,7 @@ export default function ChartPanel({ dragHandleProps }) {
                 border={false}
                 {...shadow}
               >
-                <Typography size="sm">Y축 라벨</Typography>
+                <Typography size="sm">{uiText("Y축 라벨")}</Typography>
               </Button>
               <Button
                 size="sm"
@@ -375,7 +376,7 @@ export default function ChartPanel({ dragHandleProps }) {
                 border={false}
                 {...shadow}
               >
-                <Typography size="sm">범례</Typography>
+                <Typography size="sm">{uiText("범례")}</Typography>
               </Button>
             </div>
           </div>
@@ -458,7 +459,7 @@ export default function ChartPanel({ dragHandleProps }) {
             {...shadow}
             style={{ width: "100%" }}
           >
-            <Typography size="xs">문서에 삽입</Typography>
+            <Typography size="xs">{uiText("문서에 삽입")}</Typography>
           </Button>
         )}
         {isChartSelected && (
@@ -469,7 +470,7 @@ export default function ChartPanel({ dragHandleProps }) {
             {...shadow}
             style={{ width: "100%" }}
           >
-            <Typography size="xs">차트 업데이트</Typography>
+            <Typography size="xs">{uiText("차트 업데이트")}</Typography>
           </Button>
         )}
       </div>

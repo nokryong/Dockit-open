@@ -1,3 +1,4 @@
+import { t as uiText, useI18n, translateMessage } from "../../../i18n";
 import { TbArrowBackUp, TbArrowForwardUp, TbBlockquote, TbColumns, TbNumbers, TbPackageExport, TbPageBreak, TbSitemap, TbTag, TbTextCaption, TbTextWrap } from "react-icons/tb";
 import { Code, PhotoOutline, Print } from "sud-icons";
 import { AiFillSave } from "react-icons/ai";
@@ -41,6 +42,7 @@ const withToolbarTestId = (testId, child) =>
   );
 
 export default function WriteHeader() {
+  useI18n();
   const {
     editor,
     editorMounted,
@@ -112,7 +114,7 @@ export default function WriteHeader() {
 
   const getCurrentExportTitle = () => {
     const trimmedTitle = `${title || document?.title || ""}`.trim();
-    return trimmedTitle || "문서";
+    return trimmedTitle || uiText("문서");
   };
 
   const buildCurrentExportHtml = async () =>
@@ -149,7 +151,7 @@ export default function WriteHeader() {
         });
       }
 
-      toast.info("이미 목차가 있습니다.");
+      toast.info(uiText("이미 목차가 있습니다."));
       return;
     }
 
@@ -171,7 +173,7 @@ export default function WriteHeader() {
     ).filter((entry) => entry.text && entry.headingId);
 
     if (headings.length === 0) {
-      toast.info("목차로 만들 제목이 없습니다.");
+      toast.info(uiText("목차로 만들 제목이 없습니다."));
       return;
     }
 
@@ -179,7 +181,7 @@ export default function WriteHeader() {
     const insertPos = $from.depth > 0 ? $from.before(1) : from;
     const tocNodes = createTocNodes(headings, {
       includeTitle: true,
-      titleText: "목차"
+      titleText: uiText("목차")
     });
 
     editor?.chain()?.focus()?.insertContentAt(insertPos, tocNodes)?.run();
@@ -221,7 +223,7 @@ export default function WriteHeader() {
         });
       }
 
-      toast.info(`이미 ${config.tocTitle}가 있습니다.`);
+      toast.info(uiText("이미 {0}가 있습니다.", translateMessage(config.tocTitle)));
       return;
     }
 
@@ -230,7 +232,7 @@ export default function WriteHeader() {
     );
 
     if (entries.length === 0) {
-      toast.info(`${config.tocTitle}로 만들 캡션이 없습니다.`);
+      toast.info(uiText("{0}로 만들 캡션이 없습니다.", translateMessage(config.tocTitle)));
       return;
     }
 
@@ -618,12 +620,12 @@ export default function WriteHeader() {
     const result = toggleCaptionForSelection(editor);
 
     if (!result.ok) {
-      toast.info("캡션을 넣을 객체를 먼저 선택해 주세요.");
+      toast.info(uiText("캡션을 넣을 객체를 먼저 선택해 주세요."));
       return;
     }
 
     if (result.status === "deleted") {
-      toast.info("캡션을 삭제했습니다.");
+      toast.info(uiText("캡션을 삭제했습니다."));
     }
   };
 
@@ -631,10 +633,10 @@ export default function WriteHeader() {
     const result = insertNoteAtRememberedSelection(kind);
     if (result?.ok) return;
     if (result?.error?.code === "NOTE_NESTED_INSERT_BLOCKED") {
-      toast.info("각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다.");
+      toast.info(uiText("각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다."));
       return;
     }
-    toast.info("본문의 글자 위치에 커서를 놓고 다시 시도해 주세요.");
+    toast.info(uiText("본문의 글자 위치에 커서를 놓고 다시 시도해 주세요."));
   };
 
   // 파일 내보내기
@@ -664,7 +666,7 @@ export default function WriteHeader() {
 
   const exportDocxV0 = async () => {
     if (!docxExportAction) {
-      toast.info("DOCX 내보내기를 준비하는 중입니다.");
+      toast.info(uiText("DOCX 내보내기를 준비하는 중입니다."));
       return;
     }
 
@@ -673,7 +675,7 @@ export default function WriteHeader() {
 
   const exportHwpxV0 = async () => {
     if (!hwpxExportAction) {
-      toast.info("HWPX 내보내기를 준비하는 중입니다.");
+      toast.info(uiText("HWPX 내보내기를 준비하는 중입니다."));
       return;
     }
 
@@ -704,7 +706,7 @@ export default function WriteHeader() {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("HTML export error:", error);
-      toast.danger("HTML 내보내기에 실패했습니다.");
+      toast.danger(uiText("HTML 내보내기에 실패했습니다."));
     }
   };
 
@@ -743,14 +745,14 @@ export default function WriteHeader() {
         TbArrowBackUp,
         () => editor?.chain()?.focus()?.undo()?.run(),
         "",
-        "실행취소"
+        uiText("실행취소")
       )}
       {renderBtn(
         editor,
         TbArrowForwardUp,
         () => editor?.chain()?.focus()?.redo()?.run(),
         "",
-        "재실행"
+        uiText("재실행")
       )}
       {/* 인쇄 & 저장 */}
       {renderBtn(
@@ -758,7 +760,7 @@ export default function WriteHeader() {
         Print,
         () => printAction?.(),
         "",
-        "출력",
+        uiText("출력"),
         true,
         true,
         { "data-testid": "write-print-button" }
@@ -768,7 +770,7 @@ export default function WriteHeader() {
         AiFillSave,
         () => saveAction?.(),
         "",
-        "저장",
+        uiText("저장"),
         true,
         true,
         { "data-testid": "write-save-button" }
@@ -800,7 +802,7 @@ export default function WriteHeader() {
           })}
           border={false}
           value={font}
-          ariaLabel="글꼴"
+          ariaLabel={uiText("글꼴")}
           searchable
           onChange={(value) => {
             setFont(value);
@@ -837,7 +839,7 @@ export default function WriteHeader() {
           () => handleFontSize(currentFontSize - 1),
           !editor,
           "",
-          "폰트 작게"
+          uiText("폰트 작게")
         )}
         <div
           ref={fontSizeInputRef}
@@ -937,7 +939,7 @@ export default function WriteHeader() {
           PiTextBBold,
           () => editor?.chain()?.focus()?.toggleBold()?.run(),
           "",
-          "굵게",
+          uiText("굵게"),
           !isEditorActive("bold")
         )}
         {renderBtn(
@@ -945,7 +947,7 @@ export default function WriteHeader() {
           PiTextItalicBold,
           () => editor?.chain()?.focus()?.toggleItalic()?.run(),
           "",
-          "기울임",
+          uiText("기울임"),
           !isEditorActive("italic")
         )}
         {renderBtn(
@@ -953,7 +955,7 @@ export default function WriteHeader() {
           PiTextStrikethroughBold,
           () => editor?.chain()?.focus()?.toggleStrike()?.run(),
           "",
-          "취소선",
+          uiText("취소선"),
           !isEditorActive("strike")
         )}
         {renderBtn(
@@ -961,7 +963,7 @@ export default function WriteHeader() {
           PiTextUnderlineBold,
           () => editor?.chain()?.focus()?.toggleUnderline()?.run(),
           "",
-          "밑줄",
+          uiText("밑줄"),
           !isEditorActive("underline")
         )}
         <div onDoubleClick={handleInlineTagUnset}>
@@ -977,7 +979,7 @@ export default function WriteHeader() {
                 editor={editor}
                 label={TbTag}
                 onClick={handleInlineTagClick}
-                tooltip="태그"
+                tooltip={uiText("태그")}
                 active
                 theme={setting.theme}
               />
@@ -987,7 +989,7 @@ export default function WriteHeader() {
               editor={editor}
               label={TbTag}
               onClick={handleInlineTagClick}
-              tooltip="태그"
+              tooltip={uiText("태그")}
               active={false}
               theme={setting.theme}
             />
@@ -1017,7 +1019,7 @@ export default function WriteHeader() {
             }}
             mode="preset"
           >
-            {renderBtn(editor, MdFormatColorText, () => {}, "", "글자색상")}
+            {renderBtn(editor, MdFormatColorText, () => {}, "", uiText("글자색상"))}
           </ColorPicker>
         </div>
       </>
@@ -1051,7 +1053,7 @@ export default function WriteHeader() {
               MdFormatColorFill,
               () => {},
               "",
-              "글자배경 색상"
+              uiText("글자배경 색상")
             )}
           </ColorPicker>
         </div>
@@ -1076,7 +1078,7 @@ export default function WriteHeader() {
                 PiTextAlignLeftBold,
                 () => applyHeaderTextAlign("left"),
                 "",
-                "왼쪽 정렬",
+                uiText("왼쪽 정렬"),
                 !isAlignLeft
               )}
               {renderBtn(
@@ -1084,7 +1086,7 @@ export default function WriteHeader() {
                 PiTextAlignCenterBold,
                 () => applyHeaderTextAlign("center"),
                 "",
-                "가운데 정렬",
+                uiText("가운데 정렬"),
                 !isAlignCenter
               )}
               {renderBtn(
@@ -1092,7 +1094,7 @@ export default function WriteHeader() {
                 PiTextAlignRightBold,
                 () => applyHeaderTextAlign("right"),
                 "",
-                "오른쪽 정렬",
+                uiText("오른쪽 정렬"),
                 !isAlignRight
               )}
               {renderBtn(
@@ -1100,7 +1102,7 @@ export default function WriteHeader() {
                 PiTextAlignJustifyBold,
                 () => applyHeaderTextAlign("justify"),
                 "",
-                "양쪽 정렬",
+                uiText("양쪽 정렬"),
                 !isAlignJustify
               )}
             </div>
@@ -1111,7 +1113,7 @@ export default function WriteHeader() {
             currentAlignIcon,
             () => {},
             "",
-            "정렬",
+            uiText("정렬"),
             true,
             true
           )}
@@ -1122,21 +1124,21 @@ export default function WriteHeader() {
           PiTextOutdentFill,
           () => editor?.chain()?.focus()?.outdent()?.run(),
           "",
-          "내어쓰기"
+          uiText("내어쓰기")
         )}
         {renderBtn(
           editor,
           PiTextIndentFill,
           () => editor?.chain()?.focus()?.indent()?.run(),
           "",
-          "들여쓰기"
+          uiText("들여쓰기")
         )}
         {renderBtn(
           editor,
           TbColumns,
           () => handleColumnToggle(),
           "",
-          "단 분할"
+          uiText("단 분할")
         )}
         {renderBtn(
           editor,
@@ -1149,7 +1151,7 @@ export default function WriteHeader() {
             );
           },
           "",
-          `단어 잘림 ${paragraphWordBreak === "break-all" ? "해제" : "설정"}`,
+          uiText("단어 잘림 {0}", paragraphWordBreak === "break-all" ? uiText("해제") : uiText("설정")),
           paragraphWordBreak === "break-all"
         )}
       </>
@@ -1166,7 +1168,7 @@ export default function WriteHeader() {
           LuSuperscript,
           () => editor?.chain()?.focus()?.toggleSuperscript()?.run(),
           "",
-          "위 첨자",
+          uiText("위 첨자"),
           !isEditorActive("superscript")
         )}
         {renderBtn(
@@ -1174,7 +1176,7 @@ export default function WriteHeader() {
           LuSubscript,
           () => editor?.chain()?.focus()?.toggleSubscript()?.run(),
           "",
-          "아래 첨자",
+          uiText("아래 첨자"),
           !isEditorActive("subscript")
         )}
       </>
@@ -1199,7 +1201,7 @@ export default function WriteHeader() {
                 PiListBulletsBold,
                 () => editor?.chain()?.focus()?.toggleBulletList()?.run(),
                 "",
-                "기호 리스트",
+                uiText("기호 리스트"),
                 !isBulletListActive
               )}
               {renderBtn(
@@ -1207,7 +1209,7 @@ export default function WriteHeader() {
                 PiListNumbersBold,
                 () => editor?.chain()?.focus()?.toggleOrderedList()?.run(),
                 "",
-                "순서 리스트",
+                uiText("순서 리스트"),
                 !isOrderedListActive
               )}
               {renderBtn(
@@ -1215,7 +1217,7 @@ export default function WriteHeader() {
                 PiListChecksBold,
                 () => editor?.chain()?.focus()?.toggleTaskList()?.run(),
                 "",
-                "체크박스 리스트",
+                uiText("체크박스 리스트"),
                 !isTaskListActive
               )}
             </div>
@@ -1226,7 +1228,7 @@ export default function WriteHeader() {
             currentListIcon,
             () => {},
             "",
-            "리스트",
+            uiText("리스트"),
             !isAnyListActive,
             true
           )}
@@ -1244,7 +1246,7 @@ export default function WriteHeader() {
           TbBlockquote,
           () => editor?.chain()?.focus()?.toggleBlockquote()?.run(),
           "",
-          "인용 블록 삽입",
+          uiText("인용 블록 삽입"),
           !isEditorActive("blockquote")
         )}
         {renderBtn(
@@ -1252,7 +1254,7 @@ export default function WriteHeader() {
           Code,
           () => editor?.chain()?.focus()?.toggleCodeBlock()?.run(),
           "",
-          "코드 블록 삽입",
+          uiText("코드 블록 삽입"),
           !isEditorActive("codeBlock")
         )}
         <Popover
@@ -1264,8 +1266,7 @@ export default function WriteHeader() {
           content={
             <div className="flex flex-col items-center">
               <Typography size="sm" pretendard="SB">
-                테이블 삽입
-              </Typography>
+                {uiText("테이블 삽입")}</Typography>
               <div
                 style={{
                   display: "grid",
@@ -1319,26 +1320,26 @@ export default function WriteHeader() {
               >
                 {tableHover.col > 0 && tableHover.row > 0
                   ? `${tableHover.col} × ${tableHover.row}`
-                  : "셀을 선택하세요"}
+                  : uiText("셀을 선택하세요")}
               </Typography>
             </div>
           }
         >
-          {renderBtn(editor, PiTableFill, () => {}, "", "테이블 삽입")}
+          {renderBtn(editor, PiTableFill, () => {}, "", uiText("테이블 삽입"))}
         </Popover>
         {renderBtn(
           editor,
           RiRectangleLine,
           () => editor?.chain()?.focus()?.insertShapeBlock().run(),
           "",
-          "도형 삽입"
+          uiText("도형 삽입")
         )}
         {renderBtn(
           editor,
           TbSitemap,
           () => editor?.chain()?.focus()?.insertDiagramBlock().run(),
           "",
-          "다이어그램 삽입"
+          uiText("다이어그램 삽입")
         )}
         <Upload
           listType="none"
@@ -1348,43 +1349,43 @@ export default function WriteHeader() {
             handleUploadImg(img);
           }}
         >
-          {renderBtn(editor, PhotoOutline, () => {}, "", "그림 삽입")}
+          {renderBtn(editor, PhotoOutline, () => {}, "", uiText("그림 삽입"))}
         </Upload>
         <ToolbarIconButton
           editor={editor}
           label={TbTextCaption}
           onClick={handleInsertCaption}
           theme={setting.theme}
-          tooltip="캡션 넣기"
+          tooltip={uiText("캡션 넣기")}
           disabled={!captionButtonEnabled}
           buttonStyle={{ padding: "4px 8px" }}
         />
         {renderBtn(
           editor,
-          "각",
+          uiText("각"),
           () => handleInsertNote("footnote"),
           "",
-          "각주 삽입 (Ctrl+N, N / Ctrl/⌘+Alt+F)",
+          uiText("각주 삽입 (Ctrl+N, N / Ctrl/⌘+Alt+F)"),
           true,
           false,
           {
             "data-testid": "insert-footnote-button",
-            "aria-label": "각주 삽입",
+            "aria-label": uiText("각주 삽입"),
             disabled: !editor?.isEditable,
             buttonStyle: { padding: "4px 8px" }
           }
         )}
         {renderBtn(
           editor,
-          "미",
+          uiText("미"),
           () => handleInsertNote("endnote"),
           "",
-          "미주 삽입 (Ctrl+N, E / Ctrl/⌘+Alt+D)",
+          uiText("미주 삽입 (Ctrl+N, E / Ctrl/⌘+Alt+D)"),
           true,
           false,
           {
             "data-testid": "insert-endnote-button",
-            "aria-label": "미주 삽입",
+            "aria-label": uiText("미주 삽입"),
             disabled: !editor?.isEditable,
             buttonStyle: { padding: "4px 8px" }
           }
@@ -1404,14 +1405,14 @@ export default function WriteHeader() {
             const nextViewPage = !viewPage;
             setViewPage(nextViewPage);
             toast.success(
-              nextViewPage
-                ? "페이지 뷰 모드로 전환되었습니다."
-                : "페이지 뷰 모드가 해제되었습니다."
+              translateMessage(nextViewPage
+                ? uiText("페이지 뷰 모드로 전환되었습니다.")
+                : uiText("페이지 뷰 모드가 해제되었습니다."))
             );
             await saveDocument(document._id, { viewPage: nextViewPage }, true);
           },
           "",
-          "페이지 뷰",
+          uiText("페이지 뷰"),
           !viewPage,
           true
         )}
@@ -1429,16 +1430,16 @@ export default function WriteHeader() {
               const next = rotation[pageNumber] || "center";
               setPageNumber(next);
               const labels = {
-                center: "가운데",
-                left: "왼쪽",
-                right: "오른쪽",
-                none: "없음"
+                center: uiText("가운데"),
+                left: uiText("왼쪽"),
+                right: uiText("오른쪽"),
+                none: uiText("없음")
               };
-              toast.success(`쪽 번호: ${labels[next]}`);
+              toast.success(uiText("쪽 번호: {0}", labels[next]));
               await saveDocument(document._id, { pageNumber: next }, true);
             },
             "",
-            `쪽 번호 (${pageNumber === "none" ? "없음" : pageNumber === "center" ? "가운데" : pageNumber === "left" ? "왼쪽" : "오른쪽"})`,
+            uiText("쪽 번호 ({0})", pageNumber === "none" ? uiText("없음") : pageNumber === "center" ? uiText("가운데") : pageNumber === "left" ? uiText("왼쪽") : uiText("오른쪽")),
             pageNumber === "none",
             true
           )}
@@ -1447,7 +1448,7 @@ export default function WriteHeader() {
           GrDocumentConfig,
           () => setDocSettingModalOpen(true),
           "",
-          "문서 설정",
+          uiText("문서 설정"),
           true,
           true
         )}
@@ -1456,8 +1457,7 @@ export default function WriteHeader() {
         <Tooltip
           content={
             <Typography size="xs" pretendard="M">
-              내보내기
-            </Typography>
+              {uiText("내보내기")}</Typography>
           }
           placement="bottom"
           background={`${setting.theme}-7`}
@@ -1516,8 +1516,7 @@ export default function WriteHeader() {
         <Tooltip
           content={
             <Typography size="xs" pretendard="M">
-              목차 삽입
-            </Typography>
+              {uiText("목차 삽입")}</Typography>
           }
           placement="bottom"
           background={`${setting.theme}-7`}
@@ -1545,8 +1544,7 @@ export default function WriteHeader() {
                     size="xs"
                     className="font-anja-eliane tracking-tighter"
                   >
-                    목차
-                  </Typography>
+                    {uiText("목차")}</Typography>
                 </Button>
                 {captionTocMenuItems.map((targetType) => {
                   const config = getCaptionTargetConfig(targetType);
@@ -1569,7 +1567,7 @@ export default function WriteHeader() {
                         size="xs"
                         className="font-anja-eliane tracking-tighter"
                       >
-                        {config.tocTitle}
+                        {translateMessage(config.tocTitle)}
                       </Typography>
                     </Button>
                   );

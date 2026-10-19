@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import WidgetCard from "./WidgetCard";
 import { Typography } from "sud-ui";
 import { useDocMemo } from "../../context/MemoContext";
@@ -8,6 +9,7 @@ import { TbNote } from "react-icons/tb";
 import { editorExtensions } from "../../constant/editorExtensions";
 
 export default function Memo({ dragHandleProps }) {
+  useI18n();
   const [mounted, setMounted] = useState(false);
   const { memo, setMemo, memoLoading, error } = useDocMemo();
 
@@ -51,12 +53,12 @@ export default function Memo({ dragHandleProps }) {
     return (
       <WidgetCard
         icon={TbNote}
-        title="메모"
+        title={uiText("메모")}
         dragHandleProps={dragHandleProps}
         widgetType="memo"
       >
         <div className="w-full flex flex-col gap-2">
-          <Typography color={"cool-gray-7"} size="sm">로딩 중...</Typography>
+          <Typography color={"cool-gray-7"} size="sm">{uiText("로딩 중...")}</Typography>
         </div>
       </WidgetCard>
     );
@@ -66,7 +68,7 @@ export default function Memo({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TbNote}
-      title="메모"
+      title={uiText("메모")}
       dragHandleProps={dragHandleProps}
       widgetType="memo"
     >
@@ -74,8 +76,7 @@ export default function Memo({ dragHandleProps }) {
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2">
             <Typography color="red-7" size="sm">
-              메모 저장 상태를 확인하지 못했습니다. 로컬 편집 내용은 유지됩니다.
-            </Typography>
+              {uiText("메모 저장 상태를 확인하지 못했습니다. 로컬 편집 내용은 유지됩니다.")}</Typography>
           </div>
         )}
         <div style={{ flex: 1 }} className="tiptap-container">

@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n, translateMessage } from "../../i18n";
 
 import { Close, ErrorTriangleOutline, EyeOutline } from "sud-icons";
 import { Typography } from "sud-ui";
@@ -31,6 +32,7 @@ const borderColor = (isDarkMode) => (isDarkMode ? "#374151" : "#e5e7eb");
 const softBackground = (isDarkMode) => (isDarkMode ? "#1f2937" : "#f9fafb");
 
 function WarningGroup({ group, isDarkMode }) {
+  useI18n();
   const tone = severityTone(group.severity, isDarkMode);
   const visibleBlocks = group.affectedBlocks.slice(0, 5);
   const hiddenCount = Math.max(0, group.affectedBlocks.length - visibleBlocks.length);
@@ -48,7 +50,7 @@ function WarningGroup({ group, isDarkMode }) {
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
-              {group.title}
+              {translateMessage(group.title)}
             </Typography>
             <span
               style={{
@@ -79,7 +81,7 @@ function WarningGroup({ group, isDarkMode }) {
             </code>
           </div>
           <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-            {group.description}
+            {translateMessage(group.description)}
           </Typography>
         </div>
         <span
@@ -89,8 +91,7 @@ function WarningGroup({ group, isDarkMode }) {
             fontSize: 13
           }}
         >
-          {group.count}개
-        </span>
+          {group.count}{uiText("개")}</span>
       </div>
 
       <div
@@ -103,20 +104,19 @@ function WarningGroup({ group, isDarkMode }) {
           fontSize: 13
         }}
       >
-        <strong>내보낸 방식</strong>
+        <strong>{uiText("내보낸 방식")}</strong>
         <div style={{ marginTop: 4, color: mutedTextColor(isDarkMode) }}>
-          {group.fallback}
+          {translateMessage(group.fallback)}
         </div>
       </div>
 
       {visibleBlocks.length > 0 && (
         <div className="flex flex-col gap-2" style={{ marginTop: 12 }}>
           <Typography size="sm" pretendard="B" style={{ color: textColor(isDarkMode) }}>
-            영향 위치
-          </Typography>
+            {uiText("영향 위치")}</Typography>
           {visibleBlocks.map((block, index) => (
             <div
-              key={`${group.code}-${block.label}-${index}`}
+              key={`${group.code}-${translateMessage(block.label)}-${index}`}
               style={{
                 borderLeft: `3px solid ${tone.border}`,
                 paddingLeft: 10,
@@ -125,10 +125,10 @@ function WarningGroup({ group, isDarkMode }) {
               }}
             >
               <div style={{ color: textColor(isDarkMode) }}>
-                {block.label} · {block.blockTypeLabel}
+                {translateMessage(block.label)} · {translateMessage(block.blockTypeLabel)}
               </div>
               {block.message && (
-                <div style={{ marginTop: 2 }}>{block.message}</div>
+                <div style={{ marginTop: 2 }}>{translateMessage(block.message)}</div>
               )}
               {block.path && (
                 <code
@@ -146,8 +146,7 @@ function WarningGroup({ group, isDarkMode }) {
           ))}
           {hiddenCount > 0 && (
             <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-              외 {hiddenCount}개 위치가 더 있습니다.
-            </Typography>
+              {uiText("외 ")}{hiddenCount}{uiText("개 위치가 더 있습니다.")}</Typography>
           )}
         </div>
       )}
@@ -156,6 +155,7 @@ function WarningGroup({ group, isDarkMode }) {
 }
 
 export function HwpxWarningDetailTrigger({ details, onOpen }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
 
   if (!details?.hasWarnings) {
@@ -166,7 +166,7 @@ export function HwpxWarningDetailTrigger({ details, onOpen }) {
     <button
       type="button"
       onClick={onOpen}
-      aria-label="HWPX 내보내기 상세 보기"
+      aria-label={uiText("HWPX 내보내기 상세 보기")}
       style={{
         position: "fixed",
         right: 24,
@@ -189,8 +189,7 @@ export function HwpxWarningDetailTrigger({ details, onOpen }) {
       }}
     >
       <EyeOutline size={17} />
-      HWPX 상세 보기
-      <span
+      {uiText("HWPX 상세 보기")}<span
         style={{
           borderRadius: 999,
           padding: "1px 7px",
@@ -206,6 +205,7 @@ export function HwpxWarningDetailTrigger({ details, onOpen }) {
 }
 
 export default function HwpxWarningDetailModal({ open, details, onClose }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
 
   if (!details?.hasWarnings) {
@@ -256,12 +256,9 @@ export default function HwpxWarningDetailModal({ open, details, onClose }) {
             </span>
             <div>
               <Typography as="h2" pretendard="B" size="lg">
-                HWPX 내보내기 상세
-              </Typography>
+                {uiText("HWPX 내보내기 상세")}</Typography>
               <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-                파일은 다운로드되었고, 아래 {details.total}개 항목은 대체 방식으로
-                처리되었습니다.
-              </Typography>
+                {uiText("파일은 다운로드되었고, 아래 ")}{details.total}{uiText("개 항목은 대체 방식으로 처리되었습니다.")}</Typography>
             </div>
           </div>
           <ModalActionButton
@@ -273,8 +270,7 @@ export default function HwpxWarningDetailModal({ open, details, onClose }) {
           >
             <span className="flex items-center gap-2">
               <Close size={14} />
-              닫기
-            </span>
+              {uiText("닫기")}</span>
           </ModalActionButton>
         </div>
 

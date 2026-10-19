@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const { parseGitHubUrl, inspectGitHubPlugins, downloadGitHubPlugin } = require('./plugin-github.cjs');
 const { fail } = require('../plugin-sdk/manifest.cjs');
 
@@ -26,7 +27,7 @@ function sourceFor(snapshot, folder) {
 }
 function normalizeSource(source) {
   const parsed = parseGitHubUrl(source?.url);
-  if (source.commit !== null && !/^[a-f0-9]{40}$/.test(source.commit || '')) throw fail('플러그인 설치 출처를 확인해주세요.');
+  if (source.commit !== null && !/^[a-f0-9]{40}$/.test(source.commit || '')) throw fail(uiText("플러그인 설치 출처를 확인해주세요."));
   return { url: repositoryUrl(parsed) + (parsed.folder ? '/' + parsed.folder.split('/').map(encodeURIComponent).join('/') : ''), commit: source.commit };
 }
 function legacySource(plugin) {
@@ -78,7 +79,7 @@ class PluginUpdates {
 
   async update(id) {
     const entry = this.available.get(id);
-    if (!entry || this.store.installed.get(id)?.version !== entry.fromVersion) throw fail('플러그인 목록을 다시 열어 업데이트를 확인해주세요.');
+    if (!entry || this.store.installed.get(id)?.version !== entry.fromVersion) throw fail(uiText("플러그인 목록을 다시 열어 업데이트를 확인해주세요."));
     const bytes = await this.download(entry.snapshot, entry.latest.path);
     const plugin = await this.store.updateBytes(id, bytes, entry.source);
     this.available.delete(id);

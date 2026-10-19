@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n, translateMessage } from "../../i18n";
 
 import { Typography } from "sud-ui";
 import { useDarkMode } from "@/app/LIB/context/DarkModeContext";
@@ -22,14 +23,14 @@ const STATUS_PRIORITY = Object.freeze({
 });
 
 const STATUS_LABELS = Object.freeze({
-  "유지": "그대로 유지",
-  "부분 유지": "부분 유지",
-  "생략·대체": "자리만 표시"
+  get "유지"() { return uiText("그대로 유지"); },
+  get "부분 유지"() { return uiText("부분 유지"); },
+  get "생략·대체"() { return uiText("자리만 표시"); }
 });
 
 const VARIANT_LABELS = Object.freeze({
-  import: "가져오기",
-  export: "내보내기"
+  get import() { return uiText("가져오기"); },
+  get export() { return uiText("내보내기"); }
 });
 
 const surfaceColor = (isDarkMode) => (isDarkMode ? "#111827" : "#ffffff");
@@ -62,14 +63,14 @@ const normalizeWarnings = (warnings) =>
 
 const getHeaderMessage = (totalWarnings, hasBlockedWarnings) => {
   if (totalWarnings <= 0) {
-    return "바로 적용";
+    return uiText("바로 적용");
   }
 
   if (hasBlockedWarnings) {
-    return `적용 전 해결 필요 ${totalWarnings}개 항목`;
+    return uiText("적용 전 해결 필요 {0}개 항목", totalWarnings);
   }
 
-  return `⚠ ${totalWarnings}개 항목 주의`;
+  return uiText("⚠ {0}개 항목 주의", totalWarnings);
 };
 
 const summarizeWarningsByArea = (warnings) => {
@@ -129,6 +130,7 @@ function ActionButton({
   isDarkMode,
   ...rest
 }) {
+  useI18n();
   const isPrimary = emphasis === "primary";
 
   return (
@@ -182,6 +184,7 @@ function ActionButton({
 }
 
 function ReadinessRow({ label, count, status, copy, isDarkMode, blocked = false }) {
+  useI18n();
   const hasWarnings = count > 0;
   const tone = severityTone(blocked ? "blocked" : "warning", isDarkMode);
 
@@ -201,7 +204,7 @@ function ReadinessRow({ label, count, status, copy, isDarkMode, blocked = false 
       <div className="flex flex-col gap-1">
         <div className="flex flex-wrap items-center gap-2">
           <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
-            {hasWarnings ? "⚠" : "✓"} {label}
+            {hasWarnings ? "⚠" : "✓"} {translateMessage(label)}
             {hasWarnings ? ` (${count})` : ""}
           </Typography>
           <span
@@ -223,7 +226,7 @@ function ReadinessRow({ label, count, status, copy, isDarkMode, blocked = false 
           </span>
         </div>
         <Typography size="sm" style={{ color: mutedTextColor(isDarkMode) }}>
-          {copy}
+          {translateMessage(copy)}
         </Typography>
       </div>
     </div>
@@ -238,10 +241,11 @@ export default function ConversionReadinessCard({
   onApply,
   onClose
 }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
   const resolvedVariant = normalizeVariant(variant);
   const summary = summarizeWarningsByArea(warnings);
-  const title = `${VARIANT_LABELS[resolvedVariant]} 준비 완료`;
+  const title = uiText("{0} 준비 완료", VARIANT_LABELS[resolvedVariant]);
 
   return (
     <section
@@ -283,9 +287,9 @@ export default function ConversionReadinessCard({
         {summary.stableAreas.length > 0 ? (
           <div data-testid="conversion-readiness-stable-areas">
             <ReadinessRow
-              label={summary.stableAreas.join("·")}
-              status="유지"
-              copy="문서 내용과 구조를 그대로 유지합니다."
+              label={summary.stableAreas.map(translateMessage).join("·")}
+              status={uiText("유지")}
+              copy={uiText("문서 내용과 구조를 그대로 유지합니다.")}
               isDarkMode={isDarkMode}
             />
           </div>
@@ -317,8 +321,7 @@ export default function ConversionReadinessCard({
           onClick={onViewDetails}
           data-testid="conversion-readiness-details"
         >
-          자세히 보기
-        </ActionButton>
+          {uiText("자세히 보기")}</ActionButton>
 
         {resolvedVariant === "import" ? (
           <div className="flex flex-wrap items-center gap-2">
@@ -327,8 +330,7 @@ export default function ConversionReadinessCard({
               onClick={onCancel}
               data-testid="conversion-readiness-cancel"
             >
-              취소
-            </ActionButton>
+              {uiText("취소")}</ActionButton>
             <ActionButton
               isDarkMode={isDarkMode}
               emphasis="primary"
@@ -336,8 +338,7 @@ export default function ConversionReadinessCard({
               onClick={onApply}
               data-testid="conversion-readiness-apply"
             >
-              적용
-            </ActionButton>
+              {uiText("적용")}</ActionButton>
           </div>
         ) : (
           <ActionButton
@@ -345,8 +346,7 @@ export default function ConversionReadinessCard({
             onClick={onClose}
             data-testid="conversion-readiness-close"
           >
-            닫기
-          </ActionButton>
+            {uiText("닫기")}</ActionButton>
         )}
       </div>
     </section>

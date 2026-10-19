@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import React, { useMemo } from "react";
 import dynamic from "@/desktop/dynamic";
@@ -14,6 +15,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import useColorizedLottie from "../../hook/useColorizedLottie";
 
 export default function SettingsSavingIndicator() {
+  useI18n();
   const { setting } = useSetting();
   const { currentColors } = useDarkMode();
   const theme = setting.theme || "mint";
@@ -51,9 +53,7 @@ export default function SettingsSavingIndicator() {
         pretendard="SB"
         style={{ textAlign: "center" }}
       >
-        문서 설정을
-        <br /> 변경 중입니다.
-      </Typography>
+        {uiText("문서 설정을")}<br /> {uiText(" 변경 중입니다.")}</Typography>
     </div>
   );
 }

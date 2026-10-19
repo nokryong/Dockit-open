@@ -1,3 +1,4 @@
+import { t as uiText, translateMessage } from "../i18n";
 import { Extension } from "@tiptap/core";
 import { Plugin, PluginKey, TextSelection } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
@@ -87,7 +88,7 @@ const requestNoteInsertion = (editor, kind, onInsertRequest) => {
         kind,
         error: {
           code: "NOTE_NESTED_INSERT_BLOCKED",
-          message: "각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다."
+          message: uiText("각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다.")
         }
       }
     : { kind };
@@ -118,7 +119,7 @@ const createPlaceholderDecorations = (documentNode) => {
         paragraphPosition + paragraph.nodeSize,
         {
           class: "dockit-note-body-placeholder",
-          "data-placeholder": "내용 입력"
+          "data-placeholder": uiText("내용 입력")
         }
       ));
     }
@@ -393,15 +394,15 @@ export const installNoteInteraction = (editor, options) => {
   editor.storage.noteInteraction = { focusNoteBody, focusNoteReference };
   const handleInsertRequest = ({ kind, error }) => {
     if (error?.code === "NOTE_NESTED_INSERT_BLOCKED") {
-      toast.info(error.message);
+      toast.info(translateMessage(error.message));
       return;
     }
     const result = insertNote?.(kind);
     if (result?.ok) return;
     toast.info(
-      result?.error?.code === "NOTE_NESTED_INSERT_BLOCKED"
-        ? "각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다."
-        : "본문의 글자 위치에 커서를 놓고 다시 시도해 주세요."
+      translateMessage(result?.error?.code === "NOTE_NESTED_INSERT_BLOCKED"
+        ? uiText("각주·미주 본문 안에는 다른 각주나 미주를 넣을 수 없습니다.")
+        : uiText("본문의 글자 위치에 커서를 놓고 다시 시도해 주세요."))
     );
   };
   editor.registerPlugin(

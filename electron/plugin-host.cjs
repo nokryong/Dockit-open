@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const { PluginStore } = require('./plugin-store.cjs');
 const { pluginProtocol } = require('./plugin-protocol.cjs');
 const { randomUUID } = require('node:crypto');
@@ -12,7 +13,7 @@ async function registerPluginHost({ root, handle, protocol, shell, getWindow, br
   const updates = new PluginUpdates({ store: plugins });
   const changed = () => broadcast ? broadcast('plugins:changed', plugins.list()) : getWindow()?.webContents.send('plugins:changed', plugins.list());
   const owners = new Map();
-  const owned = sessionId => { if (owners.get(sessionId) !== getWindow()?.webContents.id) throw new Error('이 창의 플러그인만 접근할 수 있습니다.'); };
+  const owned = sessionId => { if (owners.get(sessionId) !== getWindow()?.webContents.id) throw new Error(uiText("이 창의 플러그인만 접근할 수 있습니다.")); };
   plugins.closeWindow = windowId => {
     for (const [sessionId, owner] of owners) if (owner === windowId) { plugins.close(sessionId); owners.delete(sessionId); }
   };
@@ -27,7 +28,7 @@ async function registerPluginHost({ root, handle, protocol, shell, getWindow, br
   });
   handle('plugins:install', async (token, folder) => {
     const preview = previews.get(token);
-    if (!preview || preview.expires < Date.now()) throw new Error('플러그인 주소를 다시 확인해주세요.');
+    if (!preview || preview.expires < Date.now()) throw new Error(uiText("플러그인 주소를 다시 확인해주세요."));
     const installed = await plugins.installBytes(await downloadGitHubPlugin(preview.snapshot, folder), sourceFor(preview.snapshot, folder));
     previews.delete(token);
     changed();

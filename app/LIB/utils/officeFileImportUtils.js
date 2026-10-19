@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import {
   classifyImportDryRunFailure,
   classifyImportPreviewDisposition
@@ -55,7 +56,7 @@ export const convertOfficeFileToDocument = async (file) => {
   const isHwpx = ext === "hwpx";
 
   if (!isDocx && !isHwpx) {
-    throw new Error("지원하지 않는 오피스 문서 형식입니다.");
+    throw new Error(uiText("지원하지 않는 오피스 문서 형식입니다."));
   }
 
   const [importer, { irToProseMirror }, { validateProseMirrorProjection }] = await Promise.all([

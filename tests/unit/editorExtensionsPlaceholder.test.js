@@ -15,7 +15,7 @@ describe("editor empty-document guidance", () => {
     const contentEditorSource = readFileSync(contentEditorPath, "utf8");
 
     expect(contentEditorSource).toContain(
-      'placeholder: "첫 문장을 입력해 문서를 시작하세요."'
+      'placeholder: () => uiText("첫 문장을 입력해 문서를 시작하세요.")'
     );
     expect(contentEditorSource).toContain("documentPlaceholderExtension");
     expect(contentEditorSource).toMatch(

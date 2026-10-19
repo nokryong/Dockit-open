@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n, translateMessage } from "../../i18n";
 
 import { Typography } from "sud-ui";
 import { useDarkMode } from "@/app/LIB/context/DarkModeContext";
@@ -17,16 +18,17 @@ const severityTone = (severity, isDarkMode) => severity === "blocked"
       background: isDarkMode ? "#4c1d25" : "#fff1f2",
       border: isDarkMode ? "#881337" : "#fecdd3",
       color: isDarkMode ? "#fecdd3" : "#be123c",
-      label: "출력 차단"
+      label: uiText("출력 차단")
     }
   : {
       background: isDarkMode ? "#422006" : "#fffbeb",
       border: isDarkMode ? "#92400e" : "#fde68a",
       color: isDarkMode ? "#fde68a" : "#92400e",
-      label: "확인 필요"
+      label: uiText("확인 필요")
     };
 
 function IssueRow({ issue, isDarkMode }) {
+  useI18n();
   const tone = severityTone(issue.severity, isDarkMode);
 
   return (
@@ -42,7 +44,7 @@ function IssueRow({ issue, isDarkMode }) {
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Typography pretendard="B" style={{ color: textColor(isDarkMode) }}>
-          {issue.title}
+          {translateMessage(issue.title)}
         </Typography>
         <span
           style={{
@@ -55,7 +57,7 @@ function IssueRow({ issue, isDarkMode }) {
             fontWeight: 700
           }}
         >
-          {tone.label}{issue.count > 1 ? ` ${issue.count}개` : ""}
+          {tone.label}{issue.count > 1 ? uiText(" {0}개", issue.count) : ""}
         </span>
       </div>
       <Typography
@@ -63,7 +65,7 @@ function IssueRow({ issue, isDarkMode }) {
         size="sm"
         style={{ marginTop: 6, color: mutedTextColor(isDarkMode) }}
       >
-        {issue.message}
+        {translateMessage(issue.message)}
       </Typography>
     </li>
   );
@@ -76,6 +78,7 @@ export default function PdfOutputPreflightModal({
   onRecheck,
   onConfirm
 }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
   const blocked = report?.status === "blocked";
   const warning = report?.status === "warning";
@@ -89,8 +92,8 @@ export default function PdfOutputPreflightModal({
       isDarkMode={isDarkMode}
       maxWidth="680px"
       ariaLabel={blocked
-        ? "PDF 출력 전에 해결해 주세요"
-        : "PDF 출력 전에 확인해 주세요"}
+        ? uiText("PDF 출력 전에 해결해 주세요")
+        : uiText("PDF 출력 전에 확인해 주세요")}
       style={{
         width: "min(680px, 92vw)",
         maxHeight: "84vh",
@@ -105,7 +108,7 @@ export default function PdfOutputPreflightModal({
       >
         <div style={{ borderBottom: `1px solid ${borderColor(isDarkMode)}`, paddingBottom: 14 }}>
           <Typography as="h2" id="pdf-output-preflight-title" pretendard="B" size="lg">
-            {blocked ? "PDF 출력 전에 해결해 주세요" : "PDF 출력 전에 확인해 주세요"}
+            {blocked ? uiText("PDF 출력 전에 해결해 주세요") : uiText("PDF 출력 전에 확인해 주세요")}
           </Typography>
           <Typography
             as="p"
@@ -114,8 +117,8 @@ export default function PdfOutputPreflightModal({
             style={{ marginTop: 6, color: mutedTextColor(isDarkMode) }}
           >
             {blocked
-              ? `출력을 막는 항목이 ${report.blockers.length}종류 있습니다. 해결 전에는 인쇄 미리 보기를 열지 않습니다.`
-              : `결과가 달라질 수 있는 항목이 ${report.warnings.length}종류 있습니다. 내용을 확인한 경우에만 계속해 주세요.`}
+              ? uiText("출력을 막는 항목이 {0}종류 있습니다. 해결 전에는 인쇄 미리 보기를 열지 않습니다.", report.blockers.length)
+              : uiText("결과가 달라질 수 있는 항목이 {0}종류 있습니다. 내용을 확인한 경우에만 계속해 주세요.", report.warnings.length)}
           </Typography>
         </div>
 
@@ -133,7 +136,7 @@ export default function PdfOutputPreflightModal({
           style={{ borderTop: `1px solid ${borderColor(isDarkMode)}`, paddingTop: 14 }}
         >
           <ModalActionButton isDarkMode={isDarkMode} onClick={onClose}>
-            {blocked ? "닫기" : "취소"}
+            {blocked ? uiText("닫기") : uiText("취소")}
           </ModalActionButton>
           {blocked ? (
             <ModalActionButton
@@ -141,16 +144,14 @@ export default function PdfOutputPreflightModal({
               onClick={onRecheck}
               data-testid="pdf-output-preflight-recheck"
             >
-              다시 확인
-            </ModalActionButton>
+              {uiText("다시 확인")}</ModalActionButton>
           ) : (
             <ModalActionButton
               isDarkMode={isDarkMode}
               onClick={onConfirm}
               data-testid="pdf-output-preflight-confirm"
             >
-              경고 확인 후 인쇄
-            </ModalActionButton>
+              {uiText("경고 확인 후 인쇄")}</ModalActionButton>
           )}
         </div>
       </section>

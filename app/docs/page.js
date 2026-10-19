@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../LIB/i18n";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Div, Image, Upload, Typography } from "sud-ui";
 
@@ -32,6 +33,7 @@ import { PiFilePlus, PiFolderPlus, PiUploadSimple } from "react-icons/pi";
 import { navigateToCreatedDocument } from "./documentNavigation";
 
 export default function WorkspacePage() {
+  useI18n();
   const { layoutMode } = useLayout();
   const { setRight } = usePanels();
   const { user, userLoading } = useUser();
@@ -250,7 +252,7 @@ export default function WorkspacePage() {
 
         hasInitialized.current = true;
       } catch (error) {
-        console.error("Workspace 초기화 중 에러 발생:", error);
+        console.error(uiText("Workspace 초기화 중 에러 발생:"), error);
       }
     };
     init();
@@ -442,9 +444,9 @@ export default function WorkspacePage() {
         <div className={docsWorkspaceStyles.listMeta}>
           <Typography size="xs" color="cool-gray-8">
             {type === "documents" && (
-              <>{formatTime(item.updated_at)} 수정됨, </>
+              <>{formatTime(item.updated_at)} {uiText(" 수정됨, ")}</>
             )}
-            생성일 : {formatTime(item.created_at)}
+            {uiText("생성일 : ")}{formatTime(item.created_at)}
           </Typography>
         </div>
       </div>
@@ -505,8 +507,7 @@ export default function WorkspacePage() {
             {title}
           </Typography>
           <Typography size="xs" color="cool-gray-7">
-            폴더
-          </Typography>
+            {uiText("폴더")}</Typography>
         </div>
       </div>
     );
@@ -696,8 +697,7 @@ export default function WorkspacePage() {
                 color={currentPath.length > 0 ? "cool-gray-7" : "white-1"}
                 pretendard={currentPath.length === 0 && "SB"}
               >
-                홈
-              </Typography>
+                {uiText("홈")}</Typography>
             </Div>
             {currentPath.map((folder, index) => {
               const isCurrent = index === currentPath.length - 1;
@@ -737,8 +737,7 @@ export default function WorkspacePage() {
             onClick={() => actions.handleCreateContent("documents")}
           >
             <Typography size="sm" pretendard="SB">
-              새 문서
-            </Typography>
+              {uiText("새 문서")}</Typography>
           </Button>
           <Button
             icon={<PiFolderPlus size={16} />}
@@ -749,8 +748,7 @@ export default function WorkspacePage() {
             onClick={() => actions.handleCreateContent("folders")}
           >
             <Typography size="sm" pretendard="SB">
-              새 폴더
-            </Typography>
+              {uiText("새 폴더")}</Typography>
           </Button>
           <div className="inline-flex items-center">
             <Upload
@@ -766,8 +764,7 @@ export default function WorkspacePage() {
                 color={`${setting.theme}-7`}
               >
                 <Typography size="sm" pretendard="SB">
-                  가져오기
-                </Typography>
+                  {uiText("가져오기")}</Typography>
               </Button>
             </Upload>
           </div>
@@ -784,7 +781,7 @@ export default function WorkspacePage() {
             uploadExtensions={uploadExtensions}
             onCreateDocument={() =>
               actions.handleCreateDocument(
-                { title: "새 문서" },
+                { title: uiText("새 문서") },
                 { openAfterCreate: true }
               )
             }
@@ -799,7 +796,7 @@ export default function WorkspacePage() {
                 <section className={docsWorkspaceStyles.section}>
                   <div className={docsWorkspaceStyles.sectionHeader}>
                     <Typography pretendard="SB" color="white-1">
-                      폴더 ({folders.length})
+                      {uiText("폴더 (")}{folders.length})
                     </Typography>
                   </div>
                   {renderContentList(folders, "folders")}
@@ -809,7 +806,7 @@ export default function WorkspacePage() {
                 <section className={docsWorkspaceStyles.section}>
                   <div className={docsWorkspaceStyles.sectionHeader}>
                     <Typography pretendard="SB" color="white-1">
-                      문서 ({documents.length})
+                      {uiText("문서 (")}{documents.length})
                     </Typography>
                   </div>
                   {renderContentList(documents, "documents")}

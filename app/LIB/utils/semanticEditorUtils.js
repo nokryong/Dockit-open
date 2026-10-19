@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import {
   SEMANTIC_ATTRIBUTE_TYPE_SET,
   validateSemanticAttributes,
@@ -24,13 +25,13 @@ const TABLE_CONTEXT_TYPES = new Set([
 const TOC_CONTEXT_TYPES = new Set(["tocItem", "captionTocItem"]);
 
 const TARGET_LABELS = {
-  paragraph: "문단",
+  get paragraph() { return uiText("문단"); },
   heading: "제목",
-  image: "이미지",
-  table: "표",
-  chartBlock: "차트",
-  shapeBlock: "도형",
-  diagramBlock: "다이어그램"
+  get image() { return uiText("이미지"); },
+  get table() { return uiText("표"); },
+  get chartBlock() { return uiText("차트"); },
+  get shapeBlock() { return uiText("도형"); },
+  get diagramBlock() { return uiText("다이어그램"); }
 };
 
 const clampPosition = (doc, position) => {
@@ -236,18 +237,18 @@ export const validateSemanticEditorDraft = (doc, target, draft = {}) => {
 export const getSemanticEditorErrorMessage = (code) => {
   switch (code) {
     case "semanticKey_duplicate":
-      return "이 고유 이름은 문서 안에서 이미 사용 중입니다.";
+      return uiText("이 고유 이름은 문서 안에서 이미 사용 중입니다.");
     case "semanticKey_too_long":
-      return "고유 이름은 128자 이내로 입력해 주세요.";
+      return uiText("고유 이름은 128자 이내로 입력해 주세요.");
     case "semanticKey_invalid_identifier":
-      return "고유 이름은 문자나 숫자로 시작하고, 문자·숫자·점·밑줄·하이픈만 사용할 수 있습니다.";
+      return uiText("고유 이름은 문자나 숫자로 시작하고, 문자·숫자·점·밑줄·하이픈만 사용할 수 있습니다.");
     case "semanticRole_too_long":
-      return "역할은 128자 이내로 입력해 주세요.";
+      return uiText("역할은 128자 이내로 입력해 주세요.");
     case "semanticRole_invalid_identifier":
-      return "역할은 문자나 숫자로 시작하고, 문자·숫자·점·밑줄·하이픈만 사용할 수 있습니다.";
+      return uiText("역할은 문자나 숫자로 시작하고, 문자·숫자·점·밑줄·하이픈만 사용할 수 있습니다.");
     case "target_missing":
-      return "편집할 요소를 찾지 못했습니다. 요소를 다시 선택해 주세요.";
+      return uiText("편집할 요소를 찾지 못했습니다. 요소를 다시 선택해 주세요.");
     default:
-      return "의미 정보를 확인한 뒤 다시 시도해 주세요.";
+      return uiText("의미 정보를 확인한 뒤 다시 시도해 주세요.");
   }
 };

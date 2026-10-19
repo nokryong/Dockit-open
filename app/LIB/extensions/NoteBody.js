@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { Node } from "@tiptap/core";
 import { deriveNoteReferenceNumbers } from "../utils/noteSemanticUtils";
 
@@ -64,7 +65,7 @@ const NoteBody = Node.create({
       endnoteHeading.setAttribute("aria-hidden", "true");
       const endnoteTitle = document.createElement("div");
       endnoteTitle.className = "dockit-endnote-section-title";
-      endnoteTitle.textContent = "미주";
+      endnoteTitle.textContent = uiText("미주");
       endnoteHeading.appendChild(endnoteTitle);
 
       const row = document.createElement("div");
@@ -85,8 +86,10 @@ const NoteBody = Node.create({
       };
 
       const render = (currentNode) => {
+        const endnoteLabel = uiText("미주");
+        if (endnoteTitle.textContent !== endnoteLabel) endnoteTitle.textContent = endnoteLabel;
         const kind = currentNode.attrs.kind;
-        const kindLabel = kind === "endnote" ? "미주" : "각주";
+        const kindLabel = kind === "endnote" ? uiText("미주") : uiText("각주");
         const { currentNumber, firstEndnoteId } = getNoteBodyPresentation(
           editor.state.doc,
           currentNode.attrs.noteId
@@ -109,7 +112,7 @@ const NoteBody = Node.create({
           "role",
           kind === "endnote" ? "doc-endnote" : "doc-footnote"
         );
-        setAttributeIfChanged(dom, "aria-label", `${kindLabel} 본문`);
+        setAttributeIfChanged(dom, "aria-label", uiText("{0} 본문", kindLabel));
         dom.classList.toggle("dockit-note-body--endnote", kind === "endnote");
         dom.classList.toggle("dockit-note-body--footnote", kind === "footnote");
 
@@ -125,7 +128,7 @@ const NoteBody = Node.create({
         setAttributeIfChanged(
           numberLabel,
           "aria-label",
-          label ? `${kindLabel} ${label} 참조로 이동` : `${kindLabel} 참조로 이동`
+          label ? uiText("{0} {1} 참조로 이동", kindLabel, label) : uiText("{0} 참조로 이동", kindLabel)
         );
       };
       const refresh = () => render(node);

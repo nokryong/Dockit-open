@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { NodeViewWrapper } from "@tiptap/react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Textarea } from "sud-ui";
@@ -58,7 +59,7 @@ export default function DiagramBlockView({ node, updateAttributes, editor, getPo
       }).setMeta("addToHistory", false));
     }).catch(error => {
       if (!cancelled) setRenderError({ code, fontFamily,
-        message: error.name === "FontLoadError" ? error.message : "Mermaid 문법을 확인해주세요." });
+        message: error.name === "FontLoadError" ? error.message : uiText("Mermaid 문법을 확인해주세요.") });
     });
     return () => { cancelled = true; };
   }, [code, previewCode, previewSvg, fontFamily, previewFontFamily, cachedPreviewMatches, editor, getPos]);
@@ -257,12 +258,12 @@ export default function DiagramBlockView({ node, updateAttributes, editor, getPo
       <div ref={frameRef} className="not-prose diagram-frame-container" style={frameStyle} contentEditable={false}>
         <div data-diagram-chrome style={selectionFrameStyle} />
         <div className="diagram-preview" data-editing={isEditing || undefined} data-preview-theme={isDarkMode ? "dark" : "light"}>
-          {previewUrl ? <img className="diagram-preview-image" src={previewUrl} alt="다이어그램" /> : (
+          {previewUrl ? <img className="diagram-preview-image" src={previewUrl} alt={uiText("다이어그램")} /> : (
             <div className="diagram-preview-status" role={errorMessage ? "alert" : "status"}>
-              {!code.trim() ? (canEdit ? "더블클릭하여 도식 작성" : "빈 다이어그램") : errorMessage || "도식 그리는 중…"}
+              {!code.trim() ? (canEdit ? uiText("더블클릭하여 도식 작성") : uiText("빈 다이어그램")) : errorMessage || "도식 그리는 중…"}
             </div>
           )}
-          {canInteract && <button ref={triggerRef} type="button" className="diagram-edit-trigger" aria-label="다이어그램 선택" onMouseDown={(event) => event.preventDefault()} onClick={selectDiagram} onDoubleClick={editDiagram} onKeyDown={(event) => { if (event.key === "Enter") editDiagram(event); }} />}
+          {canInteract && <button ref={triggerRef} type="button" className="diagram-edit-trigger" aria-label={uiText("다이어그램 선택")} onMouseDown={(event) => event.preventDefault()} onClick={selectDiagram} onDoubleClick={editDiagram} onKeyDown={(event) => { if (event.key === "Enter") editDiagram(event); }} />}
         </div>
         {isEditing && (
           <div className="diagram-code-editor h-full w-full" data-mermaid-editor data-workspace-shortcuts="ignore"
@@ -276,7 +277,7 @@ export default function DiagramBlockView({ node, updateAttributes, editor, getPo
             onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) finishEditing(); }}
           >
             <Textarea value={draft} onChange={(event) => { draftRef.current = event.target.value; setDraft(event.target.value); }}
-              autoFocus ariaLabel="Mermaid 코드" spellCheck={false} resizable={false} autoSize={false}
+              autoFocus ariaLabel={uiText("Mermaid 코드")} spellCheck={false} resizable={false} autoSize={false}
               background="white-10" color="black-9" border={false} shadow="none"
               className="h-full w-full [&_textarea]:h-full! [&_textarea]:font-mono [&_textarea]:text-sm"
               style={{ width: "100%", height: "100%" }}

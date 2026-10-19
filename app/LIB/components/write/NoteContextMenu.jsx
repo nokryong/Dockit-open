@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import React, {
   useEffect,
   useLayoutEffect,
@@ -13,7 +14,7 @@ import {
   floatingSurfaceStyle
 } from "../../constant/uiStyles";
 
-const NoteMenuLabel = ({ danger = false, title }) => (
+const NoteMenuLabel = ({ danger = false, title }) => { useI18n(); return ((
   <span className={contextMenuStyles.itemLabel}>
     <span className={contextMenuStyles.itemText}>
       <span
@@ -27,25 +28,26 @@ const NoteMenuLabel = ({ danger = false, title }) => (
       </span>
     </span>
   </span>
-);
+)); };
 
 export const createNoteContextMenuItemModel = ({ kind, source }) => [
   {
     action: "convert",
-    title: kind === "footnote" ? "미주로 변환" : "각주로 변환"
+    title: kind === "footnote" ? uiText("미주로 변환") : uiText("각주로 변환")
   },
   {
     action: "navigate",
-    title: source === "reference" ? "내용으로 이동" : "참조로 이동"
+    title: source === "reference" ? uiText("내용으로 이동") : uiText("참조로 이동")
   },
   {
     action: "delete",
     danger: true,
-    title: kind === "footnote" ? "각주 삭제" : "미주 삭제"
+    title: kind === "footnote" ? uiText("각주 삭제") : uiText("미주 삭제")
   }
 ];
 
 const NoteContextMenu = ({ kind, onAction, onClose, source, x, y }) => {
+  useI18n();
   const surfaceRef = useRef(null);
   useContextMenuDismiss(true, onClose);
   const items = useMemo(

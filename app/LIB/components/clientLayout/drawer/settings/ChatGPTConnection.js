@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import { Button, Card, Modal, Select, Typography } from "sud-ui";
 import { VscOpenai } from "react-icons/vsc";
 import { useChatGPT } from "@/app/LIB/context/ChatGPTContext";
@@ -8,6 +9,7 @@ import ChatGPTError from "../../../common/ChatGPTError";
 import { SmallButton, TitleComponent } from "./CommonComponents";
 
 export default function ChatGPTConnection() {
+  useI18n();
   const {
     connection,
     loading,
@@ -43,18 +45,16 @@ export default function ChatGPTConnection() {
         <div className="flex min-w-0 flex-col gap-3">
           <div className="flex min-w-0 flex-col">
             <Typography pretendard="SB" size="md">
-              내 ChatGPT 요금제 사용
-            </Typography>
+              {uiText("내 ChatGPT 요금제 사용")}</Typography>
             <Typography size="sm">
-              Dockit Open에서 ChatGPT 요금제를 사용하세요.
-            </Typography>
+              {uiText("Dockit Open에서 ChatGPT 요금제를 사용하세요.")}</Typography>
           </div>
           {profiles.length > 0 && (
             <>
               <Select
                 size="sm"
-                label="현재 계정"
-                aria-label="ChatGPT 연결 계정"
+                label={uiText("현재 계정")}
+                aria-label={uiText("ChatGPT 연결 계정")}
                 value={active?.id || ""}
                 onChange={(value) => selectProfile(value)}
                 disabled={disabled}
@@ -62,7 +62,7 @@ export default function ChatGPTConnection() {
                   ...profiles.map((profile) => ({
                     value: profile.id,
                     label: `${profile.email}${
-                      profile.connected ? "" : " · 연결 필요"
+                      profile.connected ? "" : uiText(" · 연결 필요")
                     }`,
                   })),
                 ]}
@@ -92,8 +92,8 @@ export default function ChatGPTConnection() {
               className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 text-[12px]"
               role="status"
             >
-              <span>브라우저에서 연결을 마쳐주세요.</span>
-              <SmallButton onClick={cancelSignIn}>취소</SmallButton>
+              <span>{uiText("브라우저에서 연결을 마쳐주세요.")}</span>
+              <SmallButton onClick={cancelSignIn}>{uiText("취소")}</SmallButton>
             </div>
           )}
           {profiles.length > 0 && (
@@ -103,8 +103,7 @@ export default function ChatGPTConnection() {
                   disabled={disabled}
                   onClick={() => signIn({ newProfile: true })}
                 >
-                  계정 추가
-                </SmallButton>
+                  {uiText("계정 추가")}</SmallButton>
                 {active?.sharing && (
                   <SmallButton
                     disabled={disabled}
@@ -112,19 +111,17 @@ export default function ChatGPTConnection() {
                       signIn({ consent: error?.detail?.action === "consent" })
                     }
                   >
-                    다시 연결
-                  </SmallButton>
+                    {uiText("다시 연결")}</SmallButton>
                 )}
                 {active?.connected && (
                   <SmallButton disabled={disabled} onClick={signOut}>
-                    연결 해제
-                  </SmallButton>
+                    {uiText("연결 해제")}</SmallButton>
                 )}
                 {!active?.sharing && (
-                  <SmallButton onClick={openUsage}>사용량 관리 ↗</SmallButton>
+                  <SmallButton onClick={openUsage}>{uiText("사용량 관리 ↗")}</SmallButton>
                 )}
               </div>
-              <SmallButton onClick={openUsage}>사용량 관리 ↗</SmallButton>
+              <SmallButton onClick={openUsage}>{uiText("사용량 관리 ↗")}</SmallButton>
             </div>
           )}
           {notice && (
@@ -149,13 +146,10 @@ export default function ChatGPTConnection() {
         <div className="flex flex-col items-center gap-4 p-3 text-center">
           <VscOpenai size={48} className="shrink-0" />
           <Typography as="h2" pretendard="B" size="lg">
-            ChatGPT 요금제를 사용합니다
-          </Typography>
+            {uiText("ChatGPT 요금제를 사용합니다")}</Typography>
           <Typography size="sm">
-            Dockit Open의 AI 채팅에 내 ChatGPT 요금제 또는 크레딧이 사용돼요.
-            ChatGPT 설정에서 사용량과 한도를 관리할 수 있어요.
-          </Typography>
-          <SmallButton onClick={openUsage}>사용량 관리 ↗</SmallButton>
+            {uiText("Dockit Open의 AI 채팅에 내 ChatGPT 요금제 또는 크레딧이 사용돼요. ChatGPT 설정에서 사용량과 한도를 관리할 수 있어요.")}</Typography>
+          <SmallButton onClick={openUsage}>{uiText("사용량 관리 ↗")}</SmallButton>
           <Button
             onClick={acknowledge}
             disabled={busy}
@@ -163,8 +157,7 @@ export default function ChatGPTConnection() {
             color={`${setting.theme}-1`}
             border={false}
           >
-            확인
-          </Button>
+            {uiText("확인")}</Button>
         </div>
       </Modal>
     </section>

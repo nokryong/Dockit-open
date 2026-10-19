@@ -1,8 +1,10 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { useEffect, useMemo, useState } from "react";
 import { useTheme } from "sud-ui";
 import { renderMermaidSvg } from "../../utils/mermaidRenderer";
 
 export default function ChatMermaidDiagram({ source, dark, theme, fallback }) {
+  useI18n();
   const uiTheme = useTheme();
   const presentation = useMemo(() => {
     const colors = uiTheme.colors;
@@ -56,11 +58,11 @@ export default function ChatMermaidDiagram({ source, dark, theme, fallback }) {
     };
   }, [source, dark, presentation]);
   if (rendered?.source !== source || rendered?.presentation !== presentation)
-    return <div role="status" className="p-3 text-xs opacity-70">도식 그리는 중…</div>;
+    return <div role="status" className="p-3 text-xs opacity-70">{uiText("도식 그리는 중…")}</div>;
   if (rendered.error) return fallback;
   return (
-    <div className="max-w-full overflow-x-auto p-4" role="region" aria-label="도식" tabIndex={0}>
-      <img src={rendered.url} alt="Mermaid 도식" className={`mx-auto block h-auto ${rendered.width > 360 ? "max-w-none" : "max-w-full"}`} style={{ width: rendered.width }} />
+    <div className="max-w-full overflow-x-auto p-4" role="region" aria-label={uiText("도식")} tabIndex={0}>
+      <img src={rendered.url} alt={uiText("Mermaid 도식")} className={`mx-auto block h-auto ${rendered.width > 360 ? "max-w-none" : "max-w-full"}`} style={{ width: rendered.width }} />
     </div>
   );
 }

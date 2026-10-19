@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const { app, BrowserWindow, protocol, net, ipcMain, dialog, shell, session, Menu, safeStorage, clipboard, ClipboardItem, nativeImage } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
@@ -16,6 +17,7 @@ const { DocumentWindows, filesFromArguments } = require('./document-windows.cjs'
 const { Conversations } = require('./conversations.cjs');
 const { allowDocumentPermission } = require('./document-permissions.cjs');
 const { writeClipboardImage } = require('./image-clipboard.cjs');
+const { setLanguage } = require('./i18n.cjs');
 
 const testMode = process.argv.includes('--test-mode');
 let devOrigin = null;
@@ -57,13 +59,13 @@ let openDocument;
 const pendingFiles = filesFromArguments(process.argv);
 app.on('open-file', (event, file) => {
   event.preventDefault();
-  if (openDocument) openDocument({ file }).catch(error => dialog.showErrorBox('문서를 열 수 없습니다', error.message));
+  if (openDocument) openDocument({ file }).catch(error => dialog.showErrorBox(uiText("문서를 열 수 없습니다"), error.message));
   else pendingFiles.push(file);
 });
 app.on('second-instance', (_event, argv, cwd) => {
   const files = filesFromArguments(argv, cwd);
   if (!openDocument) { pendingFiles.push(...files); return; }
-  if (files.length) for (const file of files) openDocument({ file }).catch(error => dialog.showErrorBox('문서를 열 수 없습니다', error.message));
+  if (files.length) for (const file of files) openDocument({ file }).catch(error => dialog.showErrorBox(uiText("문서를 열 수 없습니다"), error.message));
   else {
     const window = windows.find(null) || windows.all()[0];
     if (window) { if (window.isMinimized()) window.restore(); window.show(); window.focus(); }
@@ -71,7 +73,7 @@ app.on('second-instance', (_event, argv, cwd) => {
 });
 
 function runAI(work) {
-  if (updates?.blocksWork) throw new Error('앱 업데이트가 끝난 뒤 다시 시도해 주세요.');
+  if (updates?.blocksWork) throw new Error(uiText("앱 업데이트가 끝난 뒤 다시 시도해 주세요."));
   const task = Promise.resolve().then(work);
   activeAI.add(task);
   return task.finally(() => activeAI.delete(task));
@@ -81,7 +83,7 @@ function trusted(event) {
   const url = new URL(event.senderFrame.url);
   const allowedOrigin = devOrigin ? url.origin === devOrigin : url.protocol === 'dockit:' && url.hostname === 'app';
   const window = windows.windows.get(event.sender.id)?.window;
-  if (!window || event.senderFrame !== window.webContents.mainFrame || !allowedOrigin) throw new Error('허용되지 않은 요청입니다.');
+  if (!window || event.senderFrame !== window.webContents.mainFrame || !allowedOrigin) throw new Error(uiText("허용되지 않은 요청입니다."));
   return window;
 }
 function handle(name, callback) {
@@ -98,6 +100,7 @@ else app.whenReady().then(async () => {
     trash: file => shell.trashItem(file)
   });
   await store.init();
+  setLanguage((await store.config()).setting.language);
   const plugins = await registerPluginHost({ root: store.root, handle, protocol, dialog, shell, getWindow: requestWindow, broadcast: (channel, value) => windows.broadcast(channel, value), encryption: safeStorage, downloads: app.getPath('downloads'), clipboard, ClipboardItem, nativeImage });
   chatgpt = new ChatGPTClient({
     root: store.root, encryption: safeStorage,
@@ -120,10 +123,10 @@ else app.whenReady().then(async () => {
     catch (error) { const safe = safeFailure(error); throw Object.assign(new Error(safe.message), safe); }
   });
   chatHandle('status', () => chatgpt.status());
-  chatHandle('sign-in', options => { if (chatOwner) throw new Error('응답이 끝난 뒤 다시 시도해주세요.'); return chatgpt.signIn(options); });
+  chatHandle('sign-in', options => { if (chatOwner) throw new Error(uiText("응답이 끝난 뒤 다시 시도해주세요.")); return chatgpt.signIn(options); });
   chatHandle('cancel-sign-in', () => chatgpt.cancelSignIn());
-  chatHandle('sign-out', () => { if (chatOwner) throw new Error('응답이 끝난 뒤 다시 시도해주세요.'); return chatgpt.signOut(); });
-  chatHandle('select-profile', id => { if (chatOwner) throw new Error('응답이 끝난 뒤 다시 시도해주세요.'); return chatgpt.selectProfile(id); });
+  chatHandle('sign-out', () => { if (chatOwner) throw new Error(uiText("응답이 끝난 뒤 다시 시도해주세요.")); return chatgpt.signOut(); });
+  chatHandle('select-profile', id => { if (chatOwner) throw new Error(uiText("응답이 끝난 뒤 다시 시도해주세요.")); return chatgpt.selectProfile(id); });
   chatHandle('models', () => chatgpt.listModels());
   chatHandle('select-model', slug => chatgpt.selectModel(slug));
   chatHandle('select-reasoning-effort', effort => chatgpt.selectReasoningEffort(effort));
@@ -133,7 +136,7 @@ else app.whenReady().then(async () => {
   chatHandle('history', () => chatgptChats.history(conversationOwner(), conversationDocument()));
   chatHandle('clear-history', () => chatgptChats.create(conversationOwner(), conversationDocument()));
   chatHandle('send', (text, attachments) => runAI(async () => {
-    if (chatOwner) throw new Error('다른 창에서 ChatGPT가 응답 중입니다.');
+    if (chatOwner) throw new Error(uiText("다른 창에서 ChatGPT가 응답 중입니다."));
     chatOwner = requestWindow();
     try { return await chatgptChats.run(conversationOwner(), conversationDocument(), () => chatgpt.send(text, attachments)); }
     finally { chatOwner = null; windows.broadcast('chatgpt:event', { type: 'conversations' }); }
@@ -144,7 +147,7 @@ else app.whenReady().then(async () => {
   const emitCodex = event => { if (codexOwner && !codexOwner.isDestroyed()) codexOwner.webContents.send('codex:event', event); };
   const documents = new CodexDocuments({ store, emit: emitCodex, validate: record => new Promise((resolve, reject) => {
     const requestId = require('node:crypto').randomUUID();
-    const timer = setTimeout(() => { validations.delete(requestId); reject(Object.assign(new Error('문서 편집기의 응답을 확인하지 못했습니다.'), { dockit: true, code: 'document_validation' })); }, 10_000);
+    const timer = setTimeout(() => { validations.delete(requestId); reject(Object.assign(new Error(uiText("문서 편집기의 응답을 확인하지 못했습니다.")), { dockit: true, code: 'document_validation' })); }, 10_000);
     validations.set(requestId, { window: codexOwner, complete: result => { clearTimeout(timer); validations.delete(requestId); resolve(result); } });
     emitCodex({ type: 'document-validate', requestId, document: record });
   }) });
@@ -180,9 +183,9 @@ else app.whenReady().then(async () => {
     catch (error) { const safe = codexFailure(error); throw Object.assign(new Error(safe.message), safe); }
   });
   codexHandle('status', async () => ({ ...await codex.status(), editingDocumentId: codexOwner === requestWindow() ? documents.active?.id || null : null }));
-  codexHandle('sign-in', () => { if (codexOwner) throw new Error('Codex 작업이 끝난 뒤 다시 시도해주세요.'); return codex.signIn(); });
+  codexHandle('sign-in', () => { if (codexOwner) throw new Error(uiText("Codex 작업이 끝난 뒤 다시 시도해주세요.")); return codex.signIn(); });
   codexHandle('cancel-sign-in', () => codex.cancelSignIn());
-  codexHandle('sign-out', () => { if (codexOwner) throw new Error('Codex 작업이 끝난 뒤 다시 시도해주세요.'); return codex.signOut(); });
+  codexHandle('sign-out', () => { if (codexOwner) throw new Error(uiText("Codex 작업이 끝난 뒤 다시 시도해주세요.")); return codex.signOut(); });
   codexHandle('models', () => codex.listModels());
   codexHandle('select-model', slug => codex.selectModel(slug));
   codexHandle('select-reasoning-effort', effort => codex.selectReasoningEffort(effort));
@@ -192,14 +195,14 @@ else app.whenReady().then(async () => {
   codexHandle('clear-history', (kind = 'chat') => kind === 'chat' ? codexChats.create(conversationOwner(), conversationDocument()) : codex.clearHistory(kind));
   codexHandle('send', (text, attachments, document) => runAI(async () => {
     const window = requestWindow();
-    if (document && document.id !== windows.context(window)?.documentId) throw new Error('이 창에 연결된 문서만 수정할 수 있습니다.');
-    if (codexOwner) throw new Error('다른 창에서 Codex가 작업 중입니다.');
+    if (document && document.id !== windows.context(window)?.documentId) throw new Error(uiText("이 창에 연결된 문서만 수정할 수 있습니다."));
+    if (codexOwner) throw new Error(uiText("다른 창에서 Codex가 작업 중입니다."));
     codexOwner = window;
     try { return await codexChats.run(conversationOwner(), conversationDocument(), () => codex.send(text, 'chat', undefined, attachments, document)); }
     finally { codexOwner = null; windows.broadcast('codex:event', { type: 'conversations' }); }
   }));
   codexHandle('generate-image', (text, reference) => runAI(async () => {
-    if (codexOwner) throw new Error('Codex가 작업 중입니다.');
+    if (codexOwner) throw new Error(uiText("Codex가 작업 중입니다."));
     codexOwner = requestWindow();
     try { return await codex.send(text, 'image', reference); } finally { codexOwner = null; }
   }));
@@ -219,7 +222,7 @@ else app.whenReady().then(async () => {
   });
   codexHandle('save-image', async id => {
     const source = await codex.imagePath(id);
-    const result = await dialog.showSaveDialog(requestWindow(), { title: '이미지 저장', defaultPath: path.join((await store.config()).documentsPath, `image.${path.extname(source).slice(1)}`) });
+    const result = await dialog.showSaveDialog(requestWindow(), { title: uiText("이미지 저장"), defaultPath: path.join((await store.config()).documentsPath, `image.${path.extname(source).slice(1)}`) });
     if (result.canceled || !result.filePath) return false;
     await fs.copyFile(source, result.filePath); return true;
   });
@@ -234,7 +237,7 @@ else app.whenReady().then(async () => {
       } else if (url.pathname.startsWith('/local-music/')) {
         const id = url.pathname.split('/')[2];
         const { content } = await store.request('get', { type: 'music', id });
-        if (!/^[\w-]+\.(mp3|wav|ogg|m4a|flac|aac)$/.test(content.fileName)) throw new Error('잘못된 음악 파일입니다.');
+        if (!/^[\w-]+\.(mp3|wav|ogg|m4a|flac|aac)$/.test(content.fileName)) throw new Error(uiText("잘못된 음악 파일입니다."));
         const musicRoot = path.join(store.root, 'music');
         file = await contained(musicRoot, path.join(musicRoot, content.fileName));
       } else {
@@ -253,24 +256,24 @@ else app.whenReady().then(async () => {
   handle('local:paths', async () => ({ dataPath: store.root, documentsPath: (await store.config()).documentsPath }));
   handle('local:font-asset', url => readFontAsset(url));
   handle('local:choose-chat-attachments', async provider => {
-    if (!['chatgpt', 'codex'].includes(provider)) throw new Error('연결 방식을 확인해주세요.');
-    const result = await dialog.showOpenDialog(requestWindow(), { title: '파일 첨부', properties: ['openFile', 'multiSelections'], filters: [{ name: '지원하는 파일', extensions: extensions(provider) }] });
+    if (!['chatgpt', 'codex'].includes(provider)) throw new Error(uiText("연결 방식을 확인해주세요."));
+    const result = await dialog.showOpenDialog(requestWindow(), { title: uiText("파일 첨부"), properties: ['openFile', 'multiSelections'], filters: [{ name: uiText("지원하는 파일"), extensions: extensions(provider) }] });
     if (result.canceled) return [];
     return (provider === 'codex' ? codex : chatgpt).attachFiles(result.filePaths);
   });
   handle('local:data', async (action, args = {}) => {
     const source = requestWindow()?.webContents.id;
-    if (store.externalDocuments.has(args.id) && (windows.context(requestWindow())?.documentId !== args.id || !['get', 'update'].includes(action))) throw new Error('이 창에 연결된 원본 문서만 접근할 수 있습니다.');
+    if (store.externalDocuments.has(args.id) && (windows.context(requestWindow())?.documentId !== args.id || !['get', 'update'].includes(action))) throw new Error(uiText("이 창에 연결된 원본 문서만 접근할 수 있습니다."));
     let affected = [];
     if (['documents', 'folders'].includes(args.type) && ['delete', 'move', 'update'].includes(action) && args.id) {
       const file = args.type === 'folders' ? await store.folderPath(args.id) : await store.documentPath(args.id);
       affected = await windows.affected(store, file);
       const otherWindows = affected.filter(window => window !== requestWindow());
-      if (otherWindows.length && [...store.documentLocks].some(([id]) => affected.some(window => windows.context(window)?.documentId === id))) throw new Error('Codex 작업이 끝난 뒤 다시 시도해주세요.');
+      if (otherWindows.length && [...store.documentLocks].some(([id]) => affected.some(window => windows.context(window)?.documentId === id))) throw new Error(uiText("Codex 작업이 끝난 뒤 다시 시도해주세요."));
       if (otherWindows.length) {
         if (action === 'update' && args.type === 'documents') {
           const current = (await store.request('get', { type: 'documents', id: args.id })).content;
-          if (args.data?.expectedRevision && args.data.expectedRevision !== current.revision) throw Object.assign(new Error('문서가 변경되었습니다. 목록을 새로 확인해주세요.'), { code: 'RevisionConflict' });
+          if (args.data?.expectedRevision && args.data.expectedRevision !== current.revision) throw Object.assign(new Error(uiText("문서가 변경되었습니다. 목록을 새로 확인해주세요.")), { code: 'RevisionConflict' });
         }
         await windows.save(otherWindows);
         if (action === 'update' && args.type === 'documents') {
@@ -280,6 +283,9 @@ else app.whenReady().then(async () => {
       }
     }
     const result = await store.request(action, args);
+    if (args.type === 'setting' && ['create', 'update'].includes(action)) {
+      setLanguage((await store.config()).setting.language);
+    }
     if (action === 'delete') for (const window of affected) { window.dockitClosing = true; window.close(); }
     else if (['update', 'move'].includes(action)) for (const window of affected) {
       if (window === requestWindow()) continue;
@@ -290,17 +296,17 @@ else app.whenReady().then(async () => {
     return result;
   });
   handle('local:choose-documents', async () => {
-    if ([...windows.windows.values()].some(context => context.documentId)) throw new Error('문서 창을 닫은 뒤 기본 폴더를 변경해주세요.');
-    const result = await dialog.showOpenDialog(requestWindow(), { title: '문서 폴더 선택', defaultPath: (await store.config()).documentsPath, properties: ['openDirectory', 'createDirectory'] });
+    if ([...windows.windows.values()].some(context => context.documentId)) throw new Error(uiText("문서 창을 닫은 뒤 기본 폴더를 변경해주세요."));
+    const result = await dialog.showOpenDialog(requestWindow(), { title: uiText("문서 폴더 선택"), defaultPath: (await store.config()).documentsPath, properties: ['openDirectory', 'createDirectory'] });
     return result.canceled ? null : store.changeDocuments(result.filePaths[0]);
   });
   handle('local:music-add', async () => {
-    const result = await dialog.showOpenDialog(requestWindow(), { title: '음악 파일 추가', properties: ['openFile', 'multiSelections'], filters: [{ name: '음악', extensions: ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac'] }] });
+    const result = await dialog.showOpenDialog(requestWindow(), { title: uiText("음악 파일 추가"), properties: ['openFile', 'multiSelections'], filters: [{ name: uiText("음악"), extensions: ['mp3', 'wav', 'ogg', 'm4a', 'flac', 'aac'] }] });
     if (result.canceled) return [];
     const tracks = [];
     for (const source of result.filePaths) {
       const extension = path.extname(source).toLowerCase();
-      if (!['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac'].includes(extension)) throw new Error('지원하지 않는 음악 파일입니다.');
+      if (!['.mp3', '.wav', '.ogg', '.m4a', '.flac', '.aac'].includes(extension)) throw new Error(uiText("지원하지 않는 음악 파일입니다."));
       const id = randomUUID();
       const fileName = `${id}${extension}`;
       const destination = await contained(store.root, path.join(store.root, 'music', fileName));
@@ -313,7 +319,7 @@ else app.whenReady().then(async () => {
   });
   handle('local:music-remove', async id => {
     const { content } = await store.request('get', { type: 'music', id });
-    if (!/^[\w-]+\.(mp3|wav|ogg|m4a|flac|aac)$/.test(content.fileName)) throw new Error('잘못된 음악 파일입니다.');
+    if (!/^[\w-]+\.(mp3|wav|ogg|m4a|flac|aac)$/.test(content.fileName)) throw new Error(uiText("잘못된 음악 파일입니다."));
     const musicRoot = path.join(store.root, 'music');
     await shell.trashItem(await contained(musicRoot, path.join(musicRoot, content.fileName)));
     await store.request('delete', { type: 'music', id });
@@ -329,7 +335,7 @@ else app.whenReady().then(async () => {
   handle('local:print', options => process.platform === 'win32' ? printing.print(options) : new Promise((resolve, reject) => {
     requestWindow().webContents.print({ silent: false, printBackground: true }, (success, reason) => {
       if (success || /cancel/i.test(reason || '')) resolve({ cancelled: !success });
-      else reject(new Error(reason || '인쇄창을 열지 못했습니다.'));
+      else reject(new Error(reason || uiText("인쇄창을 열지 못했습니다.")));
     });
   }));
 
@@ -382,7 +388,7 @@ else app.whenReady().then(async () => {
     if (details.frame?.url.startsWith('dockit-plugin:')) {
       const sessionId = new URL(details.frame.url).hostname;
       plugins.close(sessionId);
-      mainWindow.webContents.send('plugins:stopped', { sessionId, message: '플러그인의 페이지 이동을 차단했습니다.' });
+      mainWindow.webContents.send('plugins:stopped', { sessionId, message: uiText("플러그인의 페이지 이동을 차단했습니다.") });
     }
   });
   mainWindow.webContents.on('will-frame-navigate', details => {
@@ -418,8 +424,8 @@ else app.whenReady().then(async () => {
   };
   const focusWindow = window => { if (window.isMinimized()) window.restore(); if (!testMode) window.show(); window.focus(); };
   openDocument = ({ id, file, targetWindow } = {}) => windows.serializeOpen(async () => {
-    if (updates.blocksWork) throw new Error('앱 업데이트가 끝난 뒤 문서를 열어주세요.');
-    if (targetWindow && (codexOwner === targetWindow || chatOwner === targetWindow)) throw new Error('AI 응답이 끝난 뒤 문서를 열어주세요.');
+    if (updates.blocksWork) throw new Error(uiText("앱 업데이트가 끝난 뒤 문서를 열어주세요."));
+    if (targetWindow && (codexOwner === targetWindow || chatOwner === targetWindow)) throw new Error(uiText("AI 응답이 끝난 뒤 문서를 열어주세요."));
     const record = file ? await store.run(() => store.openOriginal(file)) : (await store.request('get', { type: 'documents', id })).content;
     const existing = windows.find(record._id);
     if (existing && existing !== targetWindow) { focusWindow(existing); return targetWindow ? null : record._id; }
@@ -430,12 +436,12 @@ else app.whenReady().then(async () => {
   handle('local:open-document', id => openDocument({ id, targetWindow: requestWindow() }));
   handle('local:open-document-file', file => openDocument({ file }));
   handle('local:open-workspace', () => windows.serializeOpen(async () => {
-    if (updates.blocksWork) throw new Error('앱 업데이트가 끝난 뒤 문서를 열어주세요.');
+    if (updates.blocksWork) throw new Error(uiText("앱 업데이트가 끝난 뒤 문서를 열어주세요."));
     mainWindow = windows.find(null) || await createWindow();
     focusWindow(mainWindow);
   }));
   if (!pendingFiles.length) mainWindow = await createWindow();
-  for (const file of pendingFiles.splice(0)) await openDocument({ file }).catch(error => dialog.showErrorBox('문서를 열 수 없습니다', error.message));
+  for (const file of pendingFiles.splice(0)) await openDocument({ file }).catch(error => dialog.showErrorBox(uiText("문서를 열 수 없습니다"), error.message));
   mainWindow ||= windows.all()[0] || await createWindow();
   if (app.isPackaged && !testMode) {
     const firstCheck = setTimeout(() => { void updates.check(); }, 3000);
@@ -445,7 +451,7 @@ else app.whenReady().then(async () => {
   }
 }).catch(error => {
   if (testMode) console.error(error);
-  else dialog.showErrorBox('Dockit Open을 시작할 수 없습니다', error.message);
+  else dialog.showErrorBox(uiText("Dockit Open을 시작할 수 없습니다"), error.message);
   app.quit();
 });
 app.on('window-all-closed', () => app.quit());

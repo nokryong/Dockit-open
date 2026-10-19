@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../../i18n";
 import {
   inputProps,
   newShadowDarkSm,
@@ -19,6 +20,7 @@ export default function LayerEtc({
   setting,
   isDarkMode
 }) {
+  useI18n();
   const [shadowColorPickerOpen, setShadowColorPickerOpen] = useState(false);
 
   // 투명도 계산
@@ -63,8 +65,7 @@ export default function LayerEtc({
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <Typography pretendard="SB" color="white-1">
-            그림자
-          </Typography>
+            {uiText("그림자")}</Typography>
           <Switch
             checked={shadowEnabled}
             onChange={(checked) => onUpdateStyle({ shadowEnabled: checked })}
@@ -85,8 +86,7 @@ export default function LayerEtc({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                X 위치
-              </Typography>
+                {uiText("X 위치")}</Typography>
               <Input
                 {...inputProps}
                 background={`${setting.theme}-1`}
@@ -111,8 +111,7 @@ export default function LayerEtc({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                Y 위치
-              </Typography>
+                {uiText("Y 위치")}</Typography>
               <Input
                 {...inputProps}
                 type="number"
@@ -137,8 +136,7 @@ export default function LayerEtc({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                흐림
-              </Typography>
+                {uiText("흐림")}</Typography>
               <Input
                 {...inputProps}
                 type="number"
@@ -163,8 +161,7 @@ export default function LayerEtc({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                확산
-              </Typography>
+                {uiText("확산")}</Typography>
               <Input
                 {...inputProps}
                 type="number"
@@ -182,8 +179,7 @@ export default function LayerEtc({
             {/* 그림자 색상 */}
             <div className="flex items-center justify-between">
               <Typography size="sm" color="white-1">
-                그림자 색
-              </Typography>
+                {uiText("그림자 색")}</Typography>
               <ColorPicker
                 open={shadowColorPickerOpen}
                 setOpen={setShadowColorPickerOpen}
@@ -211,8 +207,7 @@ export default function LayerEtc({
               }}
             >
               <Typography size="sm" className="flex-shrink-0" color="white-1">
-                그림자 투명도
-              </Typography>
+                {uiText("그림자 투명도")}</Typography>
               <Input
                 {...inputProps}
                 type="number"
@@ -230,8 +225,7 @@ export default function LayerEtc({
             {/* 내부/외부 그림자 */}
             <div className="flex items-center justify-between">
               <Typography size="sm" color="white-1">
-                내부 그림자
-              </Typography>
+                {uiText("내부 그림자")}</Typography>
               <Switch
                 checked={shadowInset}
                 onChange={(checked) => onUpdateStyle({ shadowInset: checked })}

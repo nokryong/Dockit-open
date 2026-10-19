@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n, translateMessage } from "../../LIB/i18n";
 
 import { useDocument } from "@/app/LIB/context/DocumentContext";
 import { useUser } from "@/app/LIB/context/UserContext";
@@ -104,6 +105,7 @@ const createImportReadinessWarnings = (preview) => {
 };
 
 function CodexDocumentWorkNotice({ theme }) {
+  useI18n();
   const { cancelResponse } = useCodex();
   const anchorRef = useRef(null);
   const overlayRef = useRef(null);
@@ -142,8 +144,8 @@ function CodexDocumentWorkNotice({ theme }) {
     {createPortal(
     <div ref={overlayRef} className="pointer-events-none fixed z-90 flex -translate-x-1/2 justify-center px-3 print:hidden" style={{ visibility: 'hidden' }}>
       <ToolbarSurface background="white-10" className="pointer-events-auto flex max-w-full items-center gap-3 rounded-4xl py-2 pr-2 pl-4" role="status">
-        <Typography size="sm" color={`${theme}-9`} className="min-w-0 break-keep">Codex 작업 중 · 문서 편집이 잠겨 있어요</Typography>
-        <Button size="sm" background="transparent" border={false} className="shrink-0" onClick={() => cancelResponse()}><Typography size="xs" className="underline">중단</Typography></Button>
+        <Typography size="sm" color={`${theme}-9`} className="min-w-0 break-keep">{uiText("Codex 작업 중 · 문서 편집이 잠겨 있어요")}</Typography>
+        <Button size="sm" background="transparent" border={false} className="shrink-0" onClick={() => cancelResponse()}><Typography size="xs" className="underline">{uiText("중단")}</Typography></Button>
       </ToolbarSurface>
     </div>,
     document.body
@@ -152,6 +154,7 @@ function CodexDocumentWorkNotice({ theme }) {
 }
 
 export default function WritePage() {
+  useI18n();
   const {
     document: currentDocument,
     saveDocument,
@@ -446,12 +449,12 @@ export default function WritePage() {
       )
         .then((saveResult) => {
           if (!saveResult) {
-            toast.warning(IMPORT_SOURCE_FILENAME_SAVE_WARNING);
+            toast.warning(translateMessage(IMPORT_SOURCE_FILENAME_SAVE_WARNING));
           }
         })
         .catch((error) => {
           console.error("Imported source file name save error:", error);
-          toast.warning(IMPORT_SOURCE_FILENAME_SAVE_WARNING);
+          toast.warning(translateMessage(IMPORT_SOURCE_FILENAME_SAVE_WARNING));
         });
     },
     [documentId, saveDocument]
@@ -491,7 +494,7 @@ export default function WritePage() {
             succeeded: false
           });
           saveSettled = true;
-          toast.danger(SAVE_FAILURE_MESSAGE);
+          toast.danger(translateMessage(SAVE_FAILURE_MESSAGE));
           return false;
         }
 
@@ -499,7 +502,7 @@ export default function WritePage() {
         saveSettled = true;
         setFocus(currentPos);
         lastSavedContent.current = savedContent;
-        toast.success("저장되었습니다!");
+        toast.success(uiText("저장되었습니다!"));
         return true;
       } catch (error) {
         if (!saveSettled) {
@@ -509,13 +512,13 @@ export default function WritePage() {
             succeeded: false
           });
         }
-        console.error("문서 저장 실패:", error);
-        toast.danger(SAVE_FAILURE_MESSAGE);
+        console.error(uiText("문서 저장 실패:"), error);
+        toast.danger(translateMessage(SAVE_FAILURE_MESSAGE));
         return false;
       }
     }
 
-    toast.info("문서 편집기가 준비되면 다시 시도해 주세요.");
+    toast.info(uiText("문서 편집기가 준비되면 다시 시도해 주세요."));
     return false;
   }, [
     beginContentSave,
@@ -532,7 +535,7 @@ export default function WritePage() {
 
   useEffect(() => registerLocalFlusher(async () => {
     if (!currentDocument?._id) return;
-    if (!await handleSave()) throw new Error('문서를 저장하지 못했습니다. 다시 저장한 뒤 시도해 주세요.');
+    if (!await handleSave()) throw new Error(uiText("문서를 저장하지 못했습니다. 다시 저장한 뒤 시도해 주세요."));
   }), [currentDocument?._id, handleSave]);
 
   const inspectPdfOutputPreflight = useCallback(() => {
@@ -554,7 +557,7 @@ export default function WritePage() {
 
     try {
       if (window.dockitLocal) {
-        if (!window.dockitLocal.print) throw new Error("인쇄 기능을 적용하려면 앱을 다시 실행해주세요.");
+        if (!window.dockitLocal.print) throw new Error(uiText("인쇄 기능을 적용하려면 앱을 다시 실행해주세요."));
         await window.dockitLocal.print({ title: currentDocument?.title || "Dockit Open" });
       } else {
         window.print();
@@ -562,7 +565,7 @@ export default function WritePage() {
       return true;
     } catch (error) {
       console.error("Print preview failed:", error);
-      toast.danger(error.message || "인쇄 미리 보기를 열 수 없습니다.");
+      toast.danger(translateMessage(error.message || uiText("인쇄 미리 보기를 열 수 없습니다.")));
       return false;
     } finally {
       printInFlightRef.current = false;
@@ -606,12 +609,12 @@ export default function WritePage() {
 
   const handleHwpxExport = useCallback(async () => {
     if (!editor || editor.isDestroyed || !editor.state) {
-      toast.info("문서 편집기가 준비되면 다시 시도해 주세요.");
+      toast.info(uiText("문서 편집기가 준비되면 다시 시도해 주세요."));
       return;
     }
 
     if (hwpxExportInFlightRef.current) {
-      toast.info("HWPX 내보내기를 진행 중입니다.");
+      toast.info(uiText("HWPX 내보내기를 진행 중입니다."));
       return;
     }
 
@@ -660,20 +663,20 @@ export default function WritePage() {
       setHwpxWarningDetailOpen(warningDetails.hasWarnings);
 
       if (notice.toastType === "warning") {
-        toast.warning(notice.message);
+        toast.warning(translateMessage(notice.message));
         return;
       }
 
       if (notice.toastType === "info") {
-        toast.info(notice.message);
+        toast.info(translateMessage(notice.message));
         return;
       }
 
-      toast.success(notice.message);
+      toast.success(translateMessage(notice.message));
     } catch (error) {
       console.error("HWPX v0 export error:", error);
       setHwpxWarningDetails(null);
-      toast.danger(HWPX_V0_EXPORT_ERROR_MESSAGE);
+      toast.danger(translateMessage(HWPX_V0_EXPORT_ERROR_MESSAGE));
     } finally {
       hwpxExportInFlightRef.current = false;
     }
@@ -681,12 +684,12 @@ export default function WritePage() {
 
   const handleDocxExport = useCallback(async () => {
     if (!editor || editor.isDestroyed || !editor.state) {
-      toast.info("문서 편집기가 준비되면 다시 시도해 주세요.");
+      toast.info(uiText("문서 편집기가 준비되면 다시 시도해 주세요."));
       return;
     }
 
     if (!startDOCXV0Export(docxExportInFlightRef)) {
-      toast.info("DOCX 내보내기를 진행 중입니다.");
+      toast.info(uiText("DOCX 내보내기를 진행 중입니다."));
       return;
     }
 
@@ -726,21 +729,21 @@ export default function WritePage() {
       setDocxWarningDetailOpen(warningDetails.hasWarnings);
 
       if (notice.toastType === "warning") {
-        toast.warning(notice.message);
+        toast.warning(translateMessage(notice.message));
         return;
       }
 
       if (notice.toastType === "info") {
-        toast.info(notice.message);
+        toast.info(translateMessage(notice.message));
         return;
       }
 
-      toast.success(notice.message);
+      toast.success(translateMessage(notice.message));
     } catch (error) {
       console.error("DOCX v0 export error:", error);
       setDocxWarningDetails(null);
       setDocxWarningDetailOpen(false);
-      toast.danger(DOCX_V0_EXPORT_ERROR_MESSAGE);
+      toast.danger(translateMessage(DOCX_V0_EXPORT_ERROR_MESSAGE));
     } finally {
       finishDOCXV0Export(docxExportInFlightRef);
     }
@@ -750,12 +753,12 @@ export default function WritePage() {
     const fileValidation = validateHWPXImportFile(file);
 
     if (!fileValidation.valid) {
-      toast.danger(fileValidation.message);
+      toast.danger(translateMessage(fileValidation.message));
       return;
     }
 
     if (!startHWPXImportDryRun(hwpxImportInFlightRef)) {
-      toast.info("HWPX 불러오기 dry-run을 진행 중입니다.");
+      toast.info(uiText("HWPX 불러오기 dry-run을 진행 중입니다."));
       return;
     }
 
@@ -801,7 +804,7 @@ export default function WritePage() {
       setHwpxImportPreviewOpen(false);
 
       if (!dryRun.preview.summary.canApply) {
-        toast.warning("HWPX dry-run 결과 적용할 수 없는 항목이 있습니다.");
+        toast.warning(uiText("HWPX dry-run 결과 적용할 수 없는 항목이 있습니다."));
         return;
       }
 
@@ -812,16 +815,16 @@ export default function WritePage() {
         dryRun.preview.summary.validationWarningCount;
 
       if (warningTotal > 0) {
-        toast.info(`HWPX dry-run 완료: 확인할 항목 ${warningTotal}개`);
+        toast.info(uiText("HWPX dry-run 완료: 확인할 항목 {0}개", warningTotal));
         return;
       }
 
-      toast.success("HWPX dry-run이 완료되었습니다.");
+      toast.success(uiText("HWPX dry-run이 완료되었습니다."));
     } catch (error) {
       console.error("HWPX import dry-run error:", error);
       resetHwpxImportFlow();
       toast.danger(
-        buildConversionFailureToastMessage(error?.conversionFailure) || HWPX_IMPORT_ERROR_MESSAGE
+        translateMessage(buildConversionFailureToastMessage(error?.conversionFailure) || HWPX_IMPORT_ERROR_MESSAGE)
       );
     } finally {
       finishHWPXImportDryRun(hwpxImportInFlightRef);
@@ -832,12 +835,12 @@ export default function WritePage() {
     const fileValidation = validateDOCXImportFile(file);
 
     if (!fileValidation.valid) {
-      toast.danger(fileValidation.message);
+      toast.danger(translateMessage(fileValidation.message));
       return;
     }
 
     if (!startDOCXImportDryRun(docxImportInFlightRef)) {
-      toast.info("DOCX 불러오기 dry-run을 진행 중입니다.");
+      toast.info(uiText("DOCX 불러오기 dry-run을 진행 중입니다."));
       return;
     }
 
@@ -883,7 +886,7 @@ export default function WritePage() {
       setDocxImportPreviewOpen(false);
 
       if (!dryRun.preview.summary.canApply) {
-        toast.warning("DOCX dry-run 결과 적용할 수 없는 항목이 있습니다.");
+        toast.warning(uiText("DOCX dry-run 결과 적용할 수 없는 항목이 있습니다."));
         return;
       }
 
@@ -893,16 +896,16 @@ export default function WritePage() {
         dryRun.preview.summary.validationWarningCount;
 
       if (warningTotal > 0) {
-        toast.info(`DOCX dry-run 완료: 확인할 항목 ${warningTotal}개`);
+        toast.info(uiText("DOCX dry-run 완료: 확인할 항목 {0}개", warningTotal));
         return;
       }
 
-      toast.success("DOCX dry-run이 완료되었습니다.");
+      toast.success(uiText("DOCX dry-run이 완료되었습니다."));
     } catch (error) {
       console.error("DOCX import dry-run error:", error);
       resetDocxImportFlow();
       toast.danger(
-        buildConversionFailureToastMessage(error?.conversionFailure) || DOCX_IMPORT_ERROR_MESSAGE
+        translateMessage(buildConversionFailureToastMessage(error?.conversionFailure) || DOCX_IMPORT_ERROR_MESSAGE)
       );
     } finally {
       finishDOCXImportDryRun(docxImportInFlightRef);
@@ -911,12 +914,12 @@ export default function WritePage() {
 
   const applyHwpxImportPreview = useCallback(() => {
     if (!hwpxImportPreview?.summary?.canApply) {
-      toast.danger("적용할 수 없는 HWPX dry-run 결과입니다.");
+      toast.danger(uiText("적용할 수 없는 HWPX dry-run 결과입니다."));
       return;
     }
 
     if (!editor || editor.isDestroyed || !editor.commands) {
-      toast.info("문서 편집기가 준비되면 다시 시도해 주세요.");
+      toast.info(uiText("문서 편집기가 준비되면 다시 시도해 주세요."));
       return;
     }
 
@@ -933,11 +936,11 @@ export default function WritePage() {
       const latestHtml = editor.getHTML();
       setContent(latestHtml);
       resetHwpxImportFlow();
-      toast.success("HWPX 내용을 현재 문서에 적용했습니다.");
+      toast.success(uiText("HWPX 내용을 현재 문서에 적용했습니다."));
       persistImportedSourceFileName(sourceFileName);
     } catch (error) {
       console.error("HWPX import apply error:", error);
-      toast.danger("HWPX 내용을 적용하지 못했습니다. 현재 문서는 유지됩니다.");
+      toast.danger(uiText("HWPX 내용을 적용하지 못했습니다. 현재 문서는 유지됩니다."));
     } finally {
       setHwpxImportApplying(false);
     }
@@ -955,12 +958,12 @@ export default function WritePage() {
     }
 
     if (!docxImportPreview?.summary?.canApply) {
-      toast.danger("적용할 수 없는 DOCX dry-run 결과입니다.");
+      toast.danger(uiText("적용할 수 없는 DOCX dry-run 결과입니다."));
       return;
     }
 
     if (!editor || editor.isDestroyed || !editor.commands) {
-      toast.info("문서 편집기가 준비되면 다시 시도해 주세요.");
+      toast.info(uiText("문서 편집기가 준비되면 다시 시도해 주세요."));
       return;
     }
 
@@ -977,11 +980,11 @@ export default function WritePage() {
       const latestHtml = editor.getHTML();
       setContent(latestHtml);
       resetDocxImportFlow();
-      toast.success("DOCX 내용을 현재 문서에 적용했습니다.");
+      toast.success(uiText("DOCX 내용을 현재 문서에 적용했습니다."));
       persistImportedSourceFileName(sourceFileName);
     } catch (error) {
       console.error("DOCX import apply error:", error);
-      toast.danger("DOCX 내용을 적용하지 못했습니다. 현재 문서는 유지됩니다.");
+      toast.danger(uiText("DOCX 내용을 적용하지 못했습니다. 현재 문서는 유지됩니다."));
     } finally {
       setDocxImportApplying(false);
     }
@@ -1039,7 +1042,7 @@ export default function WritePage() {
         if (event.key.toLowerCase() === "c") {
           event.preventDefault();
           editor?.commands.copyFormat();
-          toast.info("서식이 복사되었습니다.");
+          toast.info(uiText("서식이 복사되었습니다."));
         }
         // 서식 붙여넣기: Ctrl + Shift + V
         if (event.key.toLowerCase() === "v") {
@@ -1106,11 +1109,11 @@ export default function WritePage() {
         saveSettled = true;
 
         if (!res) {
-          toast.danger(SAVE_FAILURE_MESSAGE);
+          toast.danger(translateMessage(SAVE_FAILURE_MESSAGE));
           return false;
         }
 
-        toast.success("저장되었습니다!");
+        toast.success(uiText("저장되었습니다!"));
         return true;
       } catch (error) {
         if (!saveSettled) {
@@ -1120,8 +1123,8 @@ export default function WritePage() {
             succeeded: false
           });
         }
-        console.error("자동 저장 실패:", error);
-        toast.danger(SAVE_FAILURE_MESSAGE);
+        console.error(uiText("자동 저장 실패:"), error);
+        toast.danger(translateMessage(SAVE_FAILURE_MESSAGE));
         return false;
       }
     },
@@ -1163,7 +1166,7 @@ export default function WritePage() {
 
   useEffect(() => {
     if (error) {
-      toast.danger("잘못된 접근입니다.");
+      toast.danger(uiText("잘못된 접근입니다."));
       router.push("/docs");
     }
   }, [error, router]);
@@ -1418,8 +1421,8 @@ export default function WritePage() {
       <DocxWarningDetailModal
         open={docxImportPreviewOpen}
         details={docxImportWarningDetails}
-        title="DOCX 가져오기 상세"
-        description="현재 문서에 적용하기 전, 아래 항목이 어떻게 처리되는지 확인해 주세요."
+        title={uiText("DOCX 가져오기 상세")}
+        description={uiText("현재 문서에 적용하기 전, 아래 항목이 어떻게 처리되는지 확인해 주세요.")}
         onClose={() => setDocxImportPreviewOpen(false)}
       />
       <HwpxImportPreviewModal

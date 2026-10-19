@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useMemo, useLayoutEffect } from "react";
 import { useDataManagement } from "../hook/useDataManagement";
+import { normalizeLanguage, setLanguage } from "../i18n";
 
 import DEFAULT_SETTING from "../../../desktop/default-settings.json";
 
@@ -31,6 +32,7 @@ export function SettingProvider({ children }) {
 
     return {
       ...rawSetting,
+      language: normalizeLanguage(rawSetting.language),
       autoSaveDelay:
         Number(rawSetting.autoSaveDelay) || DEFAULT_SETTING.autoSaveDelay,
       workspaceWidth:
@@ -40,6 +42,10 @@ export function SettingProvider({ children }) {
       panelRight: parseValue(rawSetting.panelRight, DEFAULT_SETTING.panelRight)
     };
   }, [rawSetting]);
+
+  useLayoutEffect(() => {
+    setLanguage(setting?.language);
+  }, [setting?.language]);
 
   const value = useMemo(
     () => ({

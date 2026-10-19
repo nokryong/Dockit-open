@@ -1,3 +1,4 @@
+import { t as uiText, useI18n, translateMessage } from "../../i18n";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Divider, Input, Skeleton, Typography, toast, Div } from "sud-ui";
 import WidgetCard from "./WidgetCard";
@@ -53,7 +54,7 @@ const getPreviewStyle = (preset) => ({
 const buildDefaultStylePresets = ({ defaultLineHeight }) => [
   {
     key: "style-default-heading1",
-    title: "제목1",
+    title: uiText("제목1"),
     blockType: "heading",
     level: 1,
     fontSize: 24,
@@ -75,7 +76,7 @@ const buildDefaultStylePresets = ({ defaultLineHeight }) => [
   },
   {
     key: "style-default-heading2",
-    title: "제목2",
+    title: uiText("제목2"),
     blockType: "heading",
     level: 2,
     fontSize: 20,
@@ -97,7 +98,7 @@ const buildDefaultStylePresets = ({ defaultLineHeight }) => [
   },
   {
     key: "style-default-heading3",
-    title: "제목3",
+    title: uiText("제목3"),
     blockType: "heading",
     level: 3,
     fontSize: 16,
@@ -119,7 +120,7 @@ const buildDefaultStylePresets = ({ defaultLineHeight }) => [
   },
   {
     key: "style-default-body",
-    title: "본문",
+    title: uiText("본문"),
     blockType: "paragraph",
     level: null,
     fontSize: 12,
@@ -150,22 +151,21 @@ function StylePresetEditModal({
   isDarkMode,
   setting
 }) {
+  useI18n();
   return (
     <ModalFrame open={open} onClose={onClose} isDarkMode={isDarkMode}>
       <div className="flex flex-col gap-2">
         <Typography pretendard="SB" size="lg">
-          스타일 이름 변경
-        </Typography>
+          {uiText("스타일 이름 변경")}</Typography>
         <Typography size="sm" color="cool-gray-6">
-          스타일 이름만 수정합니다.
-        </Typography>
+          {uiText("스타일 이름만 수정합니다.")}</Typography>
         <Input
           {...inputProps}
           autoFocus
           value={editTitle}
           onChange={(event) => setEditTitle(event.target.value)}
           onEnter={onConfirm}
-          placeholder="예: 제목1"
+          placeholder={uiText("예: 제목1")}
           background={`${setting.theme}-1`}
         />
         <div className="flex justify-end gap-2 mt-2.5">
@@ -176,16 +176,14 @@ function StylePresetEditModal({
             onClick={onConfirm}
             disabled={!editTitle.trim()}
           >
-            저장
-          </ModalActionButton>
+            {uiText("저장")}</ModalActionButton>
           <ModalActionButton
             isDarkMode={isDarkMode}
             onClick={onClose}
             color="white-1"
             background="white-10"
           >
-            취소
-          </ModalActionButton>
+            {uiText("취소")}</ModalActionButton>
         </div>
       </div>
     </ModalFrame>
@@ -201,6 +199,7 @@ function SortablePresetItem({
   handleDeletePreset,
   handleOpenEditPreset
 }) {
+  useI18n();
   const {
     attributes,
     listeners,
@@ -300,7 +299,7 @@ function SortablePresetItem({
             handleDeletePreset(preset.key);
           }}
         >
-          <Typography size="xs">삭제</Typography>
+          <Typography size="xs">{uiText("삭제")}</Typography>
         </Button>
       </div>
     </Div>
@@ -308,6 +307,7 @@ function SortablePresetItem({
 }
 
 export default function StylePreset({ dragHandleProps }) {
+  useI18n();
   const { editor } = useEditor();
   const { docSetting } = useDocument();
   const { setting } = useSetting();
@@ -327,9 +327,7 @@ export default function StylePreset({ dragHandleProps }) {
     })
   );
 
-  const stylePresetList = useMemo(() => data?.stylePreset || [], [
-    data?.stylePreset
-  ]);
+  const stylePresetList = useMemo(() => data?.stylePreset || [], [data?.stylePreset]);
 
   const presetIds = useMemo(
     () => stylePresetList.map((preset) => preset.key),
@@ -372,14 +370,14 @@ export default function StylePreset({ dragHandleProps }) {
 
   const handleSaveCurrentBlockStyle = () => {
     if (!editor) {
-      toast.danger("에디터를 먼저 열어 주세요.");
+      toast.danger(uiText("에디터를 먼저 열어 주세요."));
       return;
     }
 
     const trimmedTitle = presetTitle.trim();
 
     if (!trimmedTitle) {
-      toast.danger("스타일 이름을 입력해 주세요.");
+      toast.danger(uiText("스타일 이름을 입력해 주세요."));
       return;
     }
 
@@ -389,7 +387,7 @@ export default function StylePreset({ dragHandleProps }) {
     });
 
     if (!snapshot) {
-      toast.danger("현재 블록 스타일을 읽을 수 없습니다.");
+      toast.danger(uiText("현재 블록 스타일을 읽을 수 없습니다."));
       return;
     }
 
@@ -426,21 +424,21 @@ export default function StylePreset({ dragHandleProps }) {
     });
 
     toast.success(
-      existingPreset ? "스타일을 덮어썼습니다." : "스타일을 저장했습니다."
+      translateMessage(existingPreset ? uiText("스타일을 덮어썼습니다.") : uiText("스타일을 저장했습니다."))
     );
     setPresetTitle("");
   };
 
   const handleApplyPreset = (preset) => {
     if (!editor) {
-      toast.danger("에디터를 먼저 열어 주세요.");
+      toast.danger(uiText("에디터를 먼저 열어 주세요."));
       return;
     }
 
     const applied = applyStylePresetToEditor(editor, preset);
 
     if (!applied) {
-      toast.danger("스타일 적용에 실패했습니다.");
+      toast.danger(uiText("스타일 적용에 실패했습니다."));
     }
   };
 
@@ -458,7 +456,7 @@ export default function StylePreset({ dragHandleProps }) {
       setEditTitle("");
     }
 
-    toast.info("스타일을 삭제했습니다.");
+    toast.info(uiText("스타일을 삭제했습니다."));
   };
 
   const handleOpenEditPreset = (preset) => {
@@ -486,7 +484,7 @@ export default function StylePreset({ dragHandleProps }) {
     );
 
     if (duplicatedPreset) {
-      toast.danger("같은 이름의 스타일이 이미 있습니다.");
+      toast.danger(uiText("같은 이름의 스타일이 이미 있습니다."));
       return;
     }
 
@@ -503,7 +501,7 @@ export default function StylePreset({ dragHandleProps }) {
       )
     }));
 
-    toast.success("스타일 이름을 변경했습니다.");
+    toast.success(uiText("스타일 이름을 변경했습니다."));
     handleCloseEditModal();
   };
 
@@ -533,7 +531,7 @@ export default function StylePreset({ dragHandleProps }) {
     <>
       <WidgetCard
         icon={MdStyle}
-        title="스타일"
+        title={uiText("스타일")}
         dragHandleProps={dragHandleProps}
         widgetType="stylePreset"
       >
@@ -546,7 +544,7 @@ export default function StylePreset({ dragHandleProps }) {
               {...inputProps}
               value={presetTitle}
               onChange={(event) => setPresetTitle(event.target.value)}
-              placeholder="예: 제목1"
+              placeholder={uiText("예: 제목1")}
               background={`${setting.theme}-1`}
               onEnter={handleSaveCurrentBlockStyle}
             />
@@ -566,18 +564,15 @@ export default function StylePreset({ dragHandleProps }) {
           </div>
 
           <Typography size="xs" color="neutral-7">
-            현재 블록 스타일을 저장합니다. 저장된 스타일은 행 전체를 눌러 바로
-            적용할 수 있습니다.
-          </Typography>
+            {uiText("현재 블록 스타일을 저장합니다. 저장된 스타일은 행 전체를 눌러 바로 적용할 수 있습니다.")}</Typography>
 
           <Divider style={{ margin: 0 }} />
 
           {stylePresetLoading ? (
-            <Skeleton active ariaLabel="스타일 불러오는 중" />
+            <Skeleton active ariaLabel={uiText("스타일 불러오는 중")} />
           ) : stylePresetList.length === 0 ? (
             <Typography size="sm" color="neutral-7">
-              저장된 스타일이 없습니다.
-            </Typography>
+              {uiText("저장된 스타일이 없습니다.")}</Typography>
           ) : (
             <DndContext
               sensors={sensors}

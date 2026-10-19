@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 let tooltipSequence = 0;
 
 const getPlainTextPreview = (documentNode, noteId) => {
@@ -9,7 +10,7 @@ const getPlainTextPreview = (documentNode, noteId) => {
     bodyText = node.textContent.replace(/\s+/g, " ").trim();
     return false;
   });
-  if (!bodyText) return "내용 없음";
+  if (!bodyText) return uiText("내용 없음");
   return bodyText.length > 200
     ? `${bodyText.slice(0, 199)}…`
     : bodyText;
@@ -35,7 +36,7 @@ export const scheduleNoteTooltip = ({
     tooltip.setAttribute("role", "tooltip");
     label.className = "dockit-note-reference-tooltip__label";
     preview.className = "dockit-note-reference-tooltip__preview";
-    label.textContent = `${kind === "endnote" ? "미주" : "각주"} ${number ?? "번호 없음"}`;
+    label.textContent = `${kind === "endnote" ? uiText("미주") : uiText("각주")} ${number ?? uiText("번호 없음")}`;
     preview.textContent = getPlainTextPreview(documentNode, noteId);
     tooltip.append(label, preview);
     ownerDocument.body.appendChild(tooltip);

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 import SmallButton from "../common/SmallButton";
@@ -6,20 +7,23 @@ import ChatMessage from "./ChatMessage";
 const PAGE_SIZE = 30;
 
 function HistoryHeader({ context }) {
+  useI18n();
   return context.hasOlder ? (
     <div className="flex justify-center pb-3">
-      <SmallButton onClick={context.loadOlder}>이전 대화 보기</SmallButton>
+      <SmallButton onClick={context.loadOlder}>{uiText("이전 대화 보기")}</SmallButton>
     </div>
   ) : null;
 }
 
 function ActivityFooter({ context }) {
+  useI18n();
   return context.footer;
 }
 
 const components = { Header: HistoryHeader, Footer: ActivityFooter };
 
 export default function ChatTranscript({ messages, theme, dark = false, children }) {
+  useI18n();
   const [first, setFirst] = useState(() => Math.max(0, messages.length - PAGE_SIZE));
   const [expanded, setExpanded] = useState(() => new Set());
   const [height, setHeight] = useState(350);
@@ -38,11 +42,11 @@ export default function ChatTranscript({ messages, theme, dark = false, children
     // Streaming changes an existing row, rather than the number of rows.
     if (atBottom.current) virtuoso.current?.autoscrollToBottom();
   }, [last?.text, last?.image, last?.activity]);
-  if (!messages.length) return <div aria-label="AI 대화" />;
+  if (!messages.length) return <div aria-label={uiText("AI 대화")} />;
   return (
     <Virtuoso
       ref={virtuoso}
-      aria-label="AI 대화"
+      aria-label={uiText("AI 대화")}
       className="w-full overflow-y-auto pt-3 text-[16px]"
       style={{ height, overflowAnchor: "none" }}
       data={data}

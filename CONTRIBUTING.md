@@ -49,7 +49,7 @@ npm run dev
 - 주변 코드의 스타일과 이름 규칙을 따릅니다.
 - 문서는 사용자 컴퓨터에만 저장합니다. 문서 내용이나 개인 정보를 외부로 보내는 기능은 사용자가 명확히 선택한 경우에만 동작해야 합니다.
 - 인증 정보는 OS 암호화 저장소로 보호하고, 설정 파일이나 로그에 남기지 않습니다.
-- 사용자에게 보이는 문구는 한국어로 작성합니다.
+- 사용자에게 보이는 문구는 한국어 원문을 `uiText`로 표시하고 `desktop/locales/en.json`에 영어 번역을 추가합니다. 문서 내용이나 사용자가 저장한 이름은 번역하지 않습니다.
 
 ## 플러그인
 
@@ -68,6 +68,6 @@ Thanks for helping with Dockit Open. Issues and pull requests in English are wel
 - Report bugs and ideas with the issue templates. Report security issues privately as described in [SECURITY.md](SECURITY.md).
 - Development requires Node.js 24 or later: `npm install`, then `npm run dev`.
 - Before opening a pull request, run `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run test:local`, and `npm run build` (plus `npm run test:desktop` for UI or Electron changes). After dependency changes, run `npm run licenses:refresh-evidence` and `npm run security:refresh-snapshot`.
-- Keep each pull request focused, explain what changed and why, and attach screenshots for UI changes. User-facing text in the app is Korean.
+- Keep each pull request focused, explain what changed and why, and attach screenshots for UI changes. The app supports Korean and English; wrap Korean interface text with `uiText` and add its translation to `desktop/locales/en.json`. Preserve document content and user-defined names.
 - Plugins are contributed to [dockit-plugins](https://github.com/nokryong/dockit-plugins), not here.
 - By contributing, you agree that your contribution is licensed under the [GNU AGPL v3.0](LICENSE).

@@ -13,6 +13,7 @@ files:
   - plugin-sdk/*.cjs
   - plugin-sdk/browser.js
   - desktop/default-settings.json
+  - desktop/locales/*.json
   - docs/codex/AGENTS.md
   - scripts/build-windows-print.cjs
   - native/windows-print/Program.cs

@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import { inflateSync } from "fflate";
 
 export const HWPX_IMPORT_MAX_BYTES = 20 * 1024 * 1024;
@@ -36,7 +37,7 @@ export const validateHWPXImportFile = (
     return {
       valid: false,
       code: "hwpx-import-file-missing",
-      message: "불러올 HWPX 파일을 선택해 주세요."
+      message: uiText("불러올 HWPX 파일을 선택해 주세요.")
     };
   }
 
@@ -44,7 +45,7 @@ export const validateHWPXImportFile = (
     return {
       valid: false,
       code: "hwpx-import-file-extension",
-      message: "HWPX 파일(.hwpx)만 불러올 수 있습니다."
+      message: uiText("HWPX 파일(.hwpx)만 불러올 수 있습니다.")
     };
   }
 
@@ -52,7 +53,7 @@ export const validateHWPXImportFile = (
     return {
       valid: false,
       code: "hwpx-import-file-empty",
-      message: "빈 HWPX 파일은 불러올 수 없습니다."
+      message: uiText("빈 HWPX 파일은 불러올 수 없습니다.")
     };
   }
 
@@ -60,14 +61,14 @@ export const validateHWPXImportFile = (
     return {
       valid: false,
       code: "hwpx-import-file-too-large",
-      message: `HWPX 파일은 최대 ${Math.floor(maxBytes / 1024 / 1024)}MB까지 불러올 수 있습니다.`
+      message: uiText("HWPX 파일은 최대 {0}MB까지 불러올 수 있습니다.", Math.floor(maxBytes / 1024 / 1024))
     };
   }
 
   return {
     valid: true,
     code: "hwpx-import-file-ok",
-    message: "HWPX 파일을 dry-run할 수 있습니다."
+    message: uiText("HWPX 파일을 dry-run할 수 있습니다.")
   };
 };
 
@@ -181,10 +182,10 @@ const collectIRFeatureFlags = (value, flags = {}) => {
 
 const toFeatureLabels = (flags) =>
   [
-    flags.hasTable ? "표" : null,
-    flags.hasImage ? "이미지" : null,
-    flags.hasLink ? "링크" : null,
-    flags.hasList ? "목록" : null
+    flags.hasTable ? uiText("표") : null,
+    flags.hasImage ? uiText("이미지") : null,
+    flags.hasLink ? uiText("링크") : null,
+    flags.hasList ? uiText("목록") : null
   ].filter(Boolean);
 
 export const createHWPXImportDryRunSummary = ({
@@ -259,9 +260,9 @@ export const getHWPXImportPreviewStatus = (summary = {}) => {
   if (!summary.canApply) {
     return Object.freeze({
       tone: "error",
-      title: "이 파일은 아직 불러올 수 없습니다",
+      title: uiText("이 파일은 아직 불러올 수 없습니다"),
       description:
-        "문서 구조를 Dockit 편집기 구조로 안전하게 바꾸지 못했습니다. 현재 문서는 변경되지 않습니다."
+        uiText("문서 구조를 Dockit 편집기 구조로 안전하게 바꾸지 못했습니다. 현재 문서는 변경되지 않습니다.")
     });
   }
 
@@ -274,15 +275,15 @@ export const getHWPXImportPreviewStatus = (summary = {}) => {
   if (warningTotal > 0) {
     return Object.freeze({
       tone: "warning",
-      title: "불러올 수 있습니다",
-      description: "일부 서식이 단순화될 수 있습니다. 적용 전 내용을 확인해 주세요."
+      title: uiText("불러올 수 있습니다"),
+      description: uiText("일부 서식이 단순화될 수 있습니다. 적용 전 내용을 확인해 주세요.")
     });
   }
 
   return Object.freeze({
     tone: "success",
-    title: "불러올 수 있습니다",
-    description: "현재 문서에 적용하기 전까지는 편집기 내용이 바뀌지 않습니다."
+    title: uiText("불러올 수 있습니다"),
+    description: uiText("현재 문서에 적용하기 전까지는 편집기 내용이 바뀌지 않습니다.")
   });
 };
 
@@ -319,7 +320,7 @@ export const classifyHWPXImportPreviewDisposition = (preview = {}) => {
     return Object.freeze({
       status: "parser-bug",
       canApply: false,
-      userLabel: "파서 점검이 필요합니다",
+      userLabel: uiText("파서 점검이 필요합니다"),
       reason: "parser-diagnostic"
     });
   }
@@ -328,7 +329,7 @@ export const classifyHWPXImportPreviewDisposition = (preview = {}) => {
     return Object.freeze({
       status: "blocked",
       canApply: false,
-      userLabel: "아직 불러올 수 없습니다",
+      userLabel: uiText("아직 불러올 수 없습니다"),
       reason: "blocking-issue"
     });
   }
@@ -337,7 +338,7 @@ export const classifyHWPXImportPreviewDisposition = (preview = {}) => {
     return Object.freeze({
       status: "unsupported-feature",
       canApply: true,
-      userLabel: "지원하지 않는 기능이 단순화됩니다",
+      userLabel: uiText("지원하지 않는 기능이 단순화됩니다"),
       reason: "unsupported-feature"
     });
   }
@@ -346,7 +347,7 @@ export const classifyHWPXImportPreviewDisposition = (preview = {}) => {
     return Object.freeze({
       status: "partial",
       canApply: true,
-      userLabel: "일부 서식이 단순화될 수 있습니다",
+      userLabel: uiText("일부 서식이 단순화될 수 있습니다"),
       reason: "warning-or-loss"
     });
   }
@@ -354,7 +355,7 @@ export const classifyHWPXImportPreviewDisposition = (preview = {}) => {
   return Object.freeze({
     status: "safe",
     canApply: true,
-    userLabel: "불러올 수 있습니다",
+    userLabel: uiText("불러올 수 있습니다"),
     reason: "no-issues"
   });
 };
@@ -381,7 +382,7 @@ export const classifyHWPXImportIssue = (issue = {}, source = "unknown") => {
       blocking: true,
       userVisible: true,
       developerDiagnostic: true,
-      userMessage: "이 항목 때문에 현재 파일은 아직 안전하게 적용할 수 없습니다."
+      userMessage: uiText("이 항목 때문에 현재 파일은 아직 안전하게 적용할 수 없습니다.")
     });
   }
 
@@ -391,7 +392,7 @@ export const classifyHWPXImportIssue = (issue = {}, source = "unknown") => {
       blocking: false,
       userVisible: true,
       developerDiagnostic: true,
-      userMessage: "원본 한글 문서의 일부 기능이 단순화될 수 있습니다."
+      userMessage: uiText("원본 한글 문서의 일부 기능이 단순화될 수 있습니다.")
     });
   }
 
@@ -401,7 +402,7 @@ export const classifyHWPXImportIssue = (issue = {}, source = "unknown") => {
       blocking: false,
       userVisible: true,
       developerDiagnostic: true,
-      userMessage: "Dockit 편집기 구조로 바꾸는 과정에서 일부 항목이 단순화되었습니다."
+      userMessage: uiText("Dockit 편집기 구조로 바꾸는 과정에서 일부 항목이 단순화되었습니다.")
     });
   }
 
@@ -411,7 +412,7 @@ export const classifyHWPXImportIssue = (issue = {}, source = "unknown") => {
       blocking: false,
       userVisible: false,
       developerDiagnostic: true,
-      userMessage: "적용은 가능하지만 schema 비교용 진단 정보입니다."
+      userMessage: uiText("적용은 가능하지만 schema 비교용 진단 정보입니다.")
     });
   }
 
@@ -420,7 +421,7 @@ export const classifyHWPXImportIssue = (issue = {}, source = "unknown") => {
     blocking: false,
     userVisible: true,
     developerDiagnostic: true,
-    userMessage: "한글 문서 분석 과정에서 확인할 항목이 있습니다."
+    userMessage: uiText("한글 문서 분석 과정에서 확인할 항목이 있습니다.")
   });
 };
 
@@ -445,28 +446,28 @@ export const createHWPXImportPreviewWarningGroups = (preview = {}) => {
   return Object.freeze(
     [
       createWarningGroup(
-        "적용을 막는 오류",
-        "이 항목이 있으면 현재 파일은 아직 안전하게 불러올 수 없습니다.",
+        uiText("적용을 막는 오류"),
+        uiText("이 항목이 있으면 현재 파일은 아직 안전하게 불러올 수 없습니다."),
         withClassification(validationErrors, "validation-error")
       ),
       createWarningGroup(
-        "한글 문서 분석 결과",
-        "파일 구조를 읽는 과정에서 확인이 필요한 항목입니다.",
+        uiText("한글 문서 분석 결과"),
+        uiText("파일 구조를 읽는 과정에서 확인이 필요한 항목입니다."),
         withClassification(importWarnings, "import")
       ),
       createWarningGroup(
-        "지원하지 않는 한글 기능",
-        "한글 문서의 일부 기능은 현재 Dockit에서 지원하지 않아 단순화될 수 있습니다.",
+        uiText("지원하지 않는 한글 기능"),
+        uiText("한글 문서의 일부 기능은 현재 Dockit에서 지원하지 않아 단순화될 수 있습니다."),
         withClassification(lossEntries, "loss")
       ),
       createWarningGroup(
-        "편집기 구조 변환 결과",
-        "Dockit 편집기 구조로 바꾸는 과정에서 일부 항목이 단순화되었습니다.",
+        uiText("편집기 구조 변환 결과"),
+        uiText("Dockit 편집기 구조로 바꾸는 과정에서 일부 항목이 단순화되었습니다."),
         withClassification(projectionWarnings, "projection")
       ),
       createWarningGroup(
-        "편집기 검증 참고 항목",
-        "적용은 가능하지만 현재 편집기 schema와 비교해 확인할 항목입니다.",
+        uiText("편집기 검증 참고 항목"),
+        uiText("적용은 가능하지만 현재 편집기 schema와 비교해 확인할 항목입니다."),
         withClassification(validationWarnings, "validation-warning")
       )
     ].filter((group) => group.items.length > 0)

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import { useEffect, useRef, useState } from "react";
 import Template from "./DrawerTemplate";
 import { Div, Menu, toast, Typography } from "sud-ui";
@@ -13,6 +14,7 @@ import {
 import { requestDocumentNavigation } from "@/app/LIB/utils/documentNavigationGuard";
 
 export default function TreeDrawer({ openTreeDrawer, setOpenTreeDrawer }) {
+  useI18n();
   const { user, userLoading } = useUser();
   const router = useRouter();
   const { folderTree, fetchFolderTree } = useFolderTree();
@@ -52,7 +54,7 @@ export default function TreeDrawer({ openTreeDrawer, setOpenTreeDrawer }) {
     if (!requestDocumentNavigation(destination)) return;
 
     if (existingTab) {
-      toast.info("이미 열린탭입니다.");
+      toast.info(uiText("이미 열린탭입니다."));
     }
 
     router.push(destination);
@@ -107,7 +109,7 @@ export default function TreeDrawer({ openTreeDrawer, setOpenTreeDrawer }) {
         ),
         onClick: () => { setSelectedFolderId(folder._id); if (!folder.childrenLoaded) fetchFolderTree(folder._id); },
         ...(!folder.childrenLoaded
-          ? { children: [{ key: `load-${folder._id}`, label: '불러오는 중…' }] }
+          ? { children: [{ key: `load-${folder._id}`, label: uiText("불러오는 중…") }] }
           : folder.children && folder.children.length > 0
           ? { children: buildMenuItems(folder.children) }
           : {})
@@ -137,8 +139,7 @@ export default function TreeDrawer({ openTreeDrawer, setOpenTreeDrawer }) {
       key: "home",
       label: (
         <Typography pretendard="SB" color="white-1">
-          홈
-        </Typography>
+          {uiText("홈")}</Typography>
       ),
       onClick: () => setSelectedFolderId(null)
     },
@@ -147,7 +148,7 @@ export default function TreeDrawer({ openTreeDrawer, setOpenTreeDrawer }) {
 
   return (
     <Template
-      title="폴더"
+      title={uiText("폴더")}
       open={openTreeDrawer}
       onClose={() => setOpenTreeDrawer(false)}
       content={

@@ -107,7 +107,7 @@ const root = path.join(__dirname, '..');
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].showInactive());
     await page.getByRole('button', { name: '설정', exact: true }).click();
     await expect(page.getByText('테마설정', { exact: true })).toBeVisible();
-    assert.equal(await page.getByRole('dialog').locator('select').count(), 0);
+    assert.equal(await page.getByRole('dialog').locator('select').count(), 1);
     await expect(page.getByRole('dialog').locator('button[aria-label^="테마 "]')).toHaveCount(26);
     await page.getByRole('dialog').locator('button[aria-label^="테마 "]').last().hover();
     await page.screenshot({ path: path.join(artifacts, 'settings.png'), fullPage: true, animations: 'disabled' });

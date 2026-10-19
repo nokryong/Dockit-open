@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import { forwardRef, isValidElement } from "react";
 import { Button, Divider, Div, Tooltip, Typography } from "sud-ui";
 import { withOverlayShadow } from "@/app/LIB/constant/uiProps";
@@ -29,6 +30,7 @@ export function ToolbarDivider({
   margin = "0 5px",
   style = {}
 }) {
+  useI18n();
   return (
     <Divider
       vertical
@@ -50,6 +52,7 @@ export const ToolbarSurface = forwardRef(function ToolbarSurface(
   },
   ref
 ) {
+  useI18n();
   return (
     <Div
       ref={ref}
@@ -82,12 +85,13 @@ export function ToolbarIconButton({
   color,
   ...buttonProps
 }) {
+  useI18n();
   const icon = resolveToolbarLabel(label, iconSize);
   const { "data-testid": testId, ...resolvedButtonProps } = buttonProps;
 
   const handleClick = () => {
     if (!skipEditorCheck && !hasEditorView(editor)) {
-      console.warn("에디터가 아직 준비되지 않아 명령을 취소합니다.");
+      console.warn(uiText("에디터가 아직 준비되지 않아 명령을 취소합니다."));
       return;
     }
 

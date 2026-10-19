@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 import {
   WARNING_CATALOG_DEFAULT_ENTRY,
   getWarningCatalogEntry,
@@ -31,22 +32,22 @@ export const DOCX_V0_WARNING_COPY = pickWarningCatalogEntries([
 const DOCX_V0_DEFAULT_WARNING_COPY = WARNING_CATALOG_DEFAULT_ENTRY;
 
 const BLOCK_TYPE_LABELS = Object.freeze({
-  paragraph: "문단",
+  get paragraph() { return uiText("문단"); },
   heading: "제목",
-  list: "목록",
-  table: "표",
+  get list() { return uiText("목록"); },
+  get table() { return uiText("표"); },
   object: "객체",
-  unsupported: "미지원 블록",
+  get unsupported() { return uiText("미지원 블록"); },
   section: "섹션",
-  document: "문서"
+  get document() { return uiText("문서"); }
 });
 
 const SEVERITY_LABELS = Object.freeze({
-  warning: "확인 필요",
-  blocked: "제한됨"
+  get warning() { return uiText("확인 필요"); },
+  get blocked() { return uiText("제한됨"); }
 });
 
-export const sanitizeDOCXV0FileName = (title, fallback = "문서") => {
+export const sanitizeDOCXV0FileName = (title, fallback = uiText("문서")) => {
   const baseName = `${title ?? ""}`.trim() || fallback;
   const sanitized = baseName
     .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")
@@ -68,7 +69,7 @@ export const createDOCXV0DownloadFileName = (title) => {
   const safeBase =
     withoutExtension && !RESERVED_WINDOWS_FILE_NAME.test(withoutExtension)
       ? withoutExtension
-      : "문서";
+      : uiText("문서");
 
   return `${safeBase}.docx`;
 };
@@ -165,20 +166,20 @@ export const buildDOCXV0ExportNotice = ({
   if (total <= 0) {
     return {
       toastType: "success",
-      message: "DOCX 파일을 다운로드했습니다."
+      message: uiText("DOCX 파일을 다운로드했습니다.")
     };
   }
 
   if (blockedCount > 0 || visiblePlaceholderCount > 0) {
     return {
       toastType: "warning",
-      message: `DOCX 파일을 다운로드했습니다. 일부 내용은 자리표시자나 단순화된 형태로 보일 수 있습니다. (${total}개 항목)`
+      message: uiText("DOCX 파일을 다운로드했습니다. 일부 내용은 자리표시자나 단순화된 형태로 보일 수 있습니다. ({0}개 항목)", total)
     };
   }
 
   return {
     toastType: "info",
-    message: `DOCX 파일을 다운로드했습니다. 일부 서식은 Word에서 단순화되어 보일 수 있습니다. (${total}개 항목)`
+    message: uiText("DOCX 파일을 다운로드했습니다. 일부 서식은 Word에서 단순화되어 보일 수 있습니다. ({0}개 항목)", total)
   };
 };
 
@@ -189,7 +190,7 @@ const createAffectedBlockDetail = (warning) => {
   const message = warning?.message || "";
 
   return Object.freeze({
-    label: blockId ? `블록 ${blockId}` : "문서 전체",
+    label: blockId ? uiText("블록 {0}", blockId) : uiText("문서 전체"),
     blockType,
     blockTypeLabel: BLOCK_TYPE_LABELS[blockType] || blockType,
     path,
@@ -199,7 +200,7 @@ const createAffectedBlockDetail = (warning) => {
 
 const createIrWarningDetail = (warning) =>
   Object.freeze({
-    label: warning?.blockId ? `블록 ${warning.blockId}` : "IR 변환",
+    label: warning?.blockId ? uiText("블록 {0}", warning.blockId) : uiText("IR 변환"),
     blockType: warning?.blockType || "document",
     blockTypeLabel:
       BLOCK_TYPE_LABELS[warning?.blockType] || warning?.blockType || "문서",

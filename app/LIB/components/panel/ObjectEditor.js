@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import WidgetCard from "./WidgetCard";
 import { TbEdit } from "react-icons/tb";
 import { useEditor } from "../../context/EditorContext";
@@ -11,6 +12,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import { useSetting } from "../../context/SettingContext";
 
 export default function ObjectEditor({ dragHandleProps }) {
+  useI18n();
   const { selectedObject, editor } = useEditor();
   const { isDarkMode } = useDarkMode();
   const { setting } = useSetting();
@@ -221,7 +223,7 @@ export default function ObjectEditor({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TbEdit}
-      title="편집기"
+      title={uiText("편집기")}
       dragHandleProps={dragHandleProps}
       widgetType="objectEditor"
     >
@@ -358,8 +360,7 @@ export default function ObjectEditor({ dragHandleProps }) {
             </div>
           ) : (
             <Typography color={"cool-gray-7"} size="sm">
-              편집할 객체를 선택하세요.
-            </Typography>
+              {uiText("편집할 객체를 선택하세요.")}</Typography>
           )}
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import { useDocument } from "@/app/LIB/context/DocumentContext";
 import { useSetting } from "@/app/LIB/context/SettingContext";
 import { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ export default function DocSettingModal({
   setDocSettingModalOpen,
   docSettingModalOpen
 }) {
+  useI18n();
   const {
     document,
     saveDocument,
@@ -157,16 +159,14 @@ export default function DocSettingModal({
           <div className="flex items-center gap-2">
             <SettingOutline size={25} />
             <Typography as="h1" pretendard="B" size="xl">
-              설정
-            </Typography>
+              {uiText("설정")}</Typography>
           </div>
           {/* 문서 설정 */}
 
           <>
             <div className="flex justify-center">
               <Typography as="h2" pretendard="B" size="lg">
-                문서 설정
-              </Typography>
+                {uiText("문서 설정")}</Typography>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -179,7 +179,7 @@ export default function DocSettingModal({
                   }}
                 >
                   <Input
-                    label="문서 가로"
+                    label={uiText("문서 가로")}
                     {...themedInputProps}
                     value={localDocSetting.pageWidth}
                     suffix="mm"
@@ -194,7 +194,7 @@ export default function DocSettingModal({
                   }}
                 >
                   <Input
-                    label="문서 세로"
+                    label={uiText("문서 세로")}
                     {...themedInputProps}
                     name="pageHeight"
                     suffix="mm"
@@ -214,7 +214,7 @@ export default function DocSettingModal({
                 }}
               >
                 <Input
-                  label="상단 여백"
+                  label={uiText("상단 여백")}
                   {...themedInputProps}
                   name="paddingTop"
                   suffix="mm"
@@ -230,7 +230,7 @@ export default function DocSettingModal({
                 }}
               >
                 <Input
-                  label="하단 여백"
+                  label={uiText("하단 여백")}
                   {...themedInputProps}
                   name="paddingBottom"
                   suffix="mm"
@@ -248,7 +248,7 @@ export default function DocSettingModal({
                 }}
               >
                 <Input
-                  label="왼쪽 여백"
+                  label={uiText("왼쪽 여백")}
                   {...themedInputProps}
                   name="paddingLeft"
                   suffix="mm"
@@ -264,7 +264,7 @@ export default function DocSettingModal({
                 }}
               >
                 <Input
-                  label="오른쪽 여백"
+                  label={uiText("오른쪽 여백")}
                   {...themedInputProps}
                   name="paddingRight"
                   suffix="mm"
@@ -279,11 +279,10 @@ export default function DocSettingModal({
           <div className="flex gap-4 w-full items-center justify-between">
             <div className="flex-shrink-0">
               <Typography as="p" size="sm" pretendard="B">
-                줄 간격
-              </Typography>
+                {uiText("줄 간격")}</Typography>
             </div>
             <Slider
-              label="줄 간격"
+              label={uiText("줄 간격")}
               value={localDocSetting.lineHeight * 100}
               onChange={(value) => handleChange("lineHeight", value / 100)}
               min={0}
@@ -305,15 +304,14 @@ export default function DocSettingModal({
             <div className="flex flex-col gap-2">
               <div className="flex justify-center">
                 <Typography as="h2" pretendard="B" size="lg">
-                  글머리 기호 설정
-                </Typography>
+                  {uiText("글머리 기호 설정")}</Typography>
               </div>
               {/* 제목 */}
               <div className="grid grid-cols-3 gap-2">
                 {[1, 2, 3, 4, 5, 6].map((n) => (
                   <div className="flex flex-col gap-2" key={n}>
                     <Typography as="p" size="sm" pretendard="B">
-                      제목 {n}(H{n})
+                      {uiText("제목 ")}{n}(H{n})
                     </Typography>
                     <div
                       className="flex flex-wrap gap-2"
@@ -322,7 +320,7 @@ export default function DocSettingModal({
                       <Select
                         {...themedSelectProps}
                         options={bulletOptions}
-                        placeholder="번호 스타일"
+                        placeholder={uiText("번호 스타일")}
                         onChange={(value) =>
                           handleBulletStyleChange(`h${n}`, value)
                         }
@@ -337,7 +335,7 @@ export default function DocSettingModal({
                 {Array.from({ length: 4 }).map((_, index) => (
                   <div className="flex flex-col gap-2" key={index}>
                     <Typography as="p" size="sm" pretendard="B">
-                      리스트 {index + 1}
+                      {uiText("리스트 ")}{index + 1}
                     </Typography>
                     <div
                       className="flex flex-wrap gap-2"
@@ -346,7 +344,7 @@ export default function DocSettingModal({
                       <Select
                         {...themedSelectProps}
                         options={listOptions}
-                        placeholder="스타일"
+                        placeholder={uiText("스타일")}
                         onChange={(value) =>
                           handleBulletStyleChange(`list-${index + 1}`, value)
                         }
@@ -360,7 +358,7 @@ export default function DocSettingModal({
                 {Array.from({ length: 4 }).map((_, index) => (
                   <div className="flex flex-col gap-2" key={index}>
                     <Typography as="p" size="sm" pretendard="B">
-                      번호 {index + 1}
+                      {uiText("번호 ")}{index + 1}
                     </Typography>
                     <div
                       className="flex flex-wrap gap-2"
@@ -369,7 +367,7 @@ export default function DocSettingModal({
                       <Select
                         {...themedSelectProps}
                         options={orderOptions}
-                        placeholder="스타일"
+                        placeholder={uiText("스타일")}
                         onChange={(value) =>
                           handleBulletStyleChange(
                             `order-list-${index + 1}`,
@@ -412,8 +410,7 @@ export default function DocSettingModal({
                 }
               }}
             >
-              저장
-            </Button>
+              {uiText("저장")}</Button>
             <Button
               onClick={() => {
                 setDocSettingModalOpen(false);
@@ -424,8 +421,7 @@ export default function DocSettingModal({
               color="white-1"
               background="white-10"
             >
-              취소
-            </Button>
+              {uiText("취소")}</Button>
           </div>
         </div>
       )}

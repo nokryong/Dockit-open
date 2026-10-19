@@ -146,13 +146,33 @@ const expect = baseExpect.configure({ timeout: 30000 });
     await capture(page, 'update-modal.png');
     await dialog.getByRole('button', { name: '취소', exact: true }).click();
     await expect(dialog).toBeHidden();
+    const savedBeforeLanguageChange = JSON.parse(await fs.readFile(file, 'utf8'));
+    const packagedEnglish = JSON.parse(await fs.readFile(path.join(packageRoot, 'desktop/locales/en.json'), 'utf8'));
+    assert.equal(packagedEnglish['설정'], 'Settings');
+    await page.getByRole('button', { name: '설정', exact: true }).click();
+    await page.locator('#interface-language').selectOption('en');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByLabel('Language', { exact: true })).toHaveValue('en');
+    await capture(page, 'settings-english.png');
+    await page.locator('.sud-drawer__close').click();
+    await expect(page.getByRole('combobox', { name: 'Font', exact: true })).toBeVisible();
+    const nativeFailure = await page.evaluate(async () => {
+      try { await window.dockitLocal.data('get', { type: 'documents', id: '../../invalid' }); }
+      catch (error) { return error.message; }
+      return '';
+    });
+    assert.ok(nativeFailure && !/[가-힣]/.test(nativeFailure), nativeFailure);
+    assert.equal(JSON.parse(await fs.readFile(file, 'utf8')).content, savedBeforeLanguageChange.content);
+    await expect.poll(async () => JSON.parse(await fs.readFile(path.join(home, '.dockit/config.json'), 'utf8')).setting.language).toBe('en');
     await fs.writeFile(path.join(artifacts, 'canvas-and-update.json'), JSON.stringify({ canvasChecks, print, updateState, dialogBounds }, null, 2));
     await stop();
     page = await launch([file]);
+    await expect(page.getByRole('button', { name: 'Settings', exact: true })).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('.tiptap-main-canvas')).toContainText('설치본 저장 확인');
     assert.equal(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length), 1);
     assert.deepEqual(errors, []);
-    console.log('PASS: packaged app, save/reopen, native file argument, licenses, renderer isolation, canvas scroll/zoom/print and update dialog');
+    console.log('PASS: packaged app, save/reopen, native file argument, licenses, renderer isolation, canvas scroll/zoom/print, update dialog and persistent English interface');
   } catch (error) {
     if (app) {
       const page = app.windows()[0];

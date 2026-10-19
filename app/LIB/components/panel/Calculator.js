@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Card, Typography, Button } from "sud-ui";
 import WidgetCard from "./WidgetCard";
 import { TbCalculator } from "react-icons/tb";
@@ -11,6 +12,7 @@ import {
 } from "../../constant/uiProps";
 
 export default function Calculator({ dragHandleProps }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
   const [display, setDisplay] = useState("0");
   const [firstOperand, setFirstOperand] = useState(null);
@@ -172,25 +174,25 @@ export default function Calculator({ dragHandleProps }) {
   const renderButton = (label, onClick, style = {}) => {
     const getAriaLabel = (label) => {
       const labels = {
-        C: "계산기 클리어",
-        "÷": "나누기",
-        "×": "곱하기",
-        "-": "빼기",
-        "+": "더하기",
-        "=": "계산 실행",
-        ".": "소수점",
-        0: "숫자 0",
-        1: "숫자 1",
-        2: "숫자 2",
-        3: "숫자 3",
-        4: "숫자 4",
-        5: "숫자 5",
-        6: "숫자 6",
-        7: "숫자 7",
-        8: "숫자 8",
-        9: "숫자 9"
+        C: uiText("계산기 클리어"),
+        "÷": uiText("나누기"),
+        "×": uiText("곱하기"),
+        "-": uiText("빼기"),
+        "+": uiText("더하기"),
+        "=": uiText("계산 실행"),
+        ".": uiText("소수점"),
+        0: uiText("숫자 0"),
+        1: uiText("숫자 1"),
+        2: uiText("숫자 2"),
+        3: uiText("숫자 3"),
+        4: uiText("숫자 4"),
+        5: uiText("숫자 5"),
+        6: uiText("숫자 6"),
+        7: uiText("숫자 7"),
+        8: uiText("숫자 8"),
+        9: uiText("숫자 9")
       };
-      return labels[label] || `버튼 ${label}`;
+      return labels[label] || uiText("버튼 {0}", label);
     };
 
     return (
@@ -242,7 +244,7 @@ export default function Calculator({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TbCalculator}
-      title="계산기"
+      title={uiText("계산기")}
       dragHandleProps={dragHandleProps}
       widgetType="calculator"
     >
@@ -256,7 +258,7 @@ export default function Calculator({ dragHandleProps }) {
         onMouseLeave={() => setIsFocused(false)}
         style={{ outline: "none" }}
         role="application"
-        aria-label="계산기"
+        aria-label={uiText("계산기")}
       >
         <Card
           shadow="none"
@@ -272,7 +274,7 @@ export default function Calculator({ dragHandleProps }) {
             className="flex justify-end h-[10%] items-center px-2"
             role="status"
             aria-live="polite"
-            aria-label={`계산 결과: ${display}`}
+            aria-label={uiText("계산 결과: {0}", display)}
           >
             {display}
           </Typography>

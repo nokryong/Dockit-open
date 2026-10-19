@@ -1,3 +1,4 @@
+import { t as uiText, useI18n, getDateLocale } from "../../i18n";
 import {
   CloudOutline,
   Cloudy,
@@ -24,6 +25,7 @@ const SAVE_STATUS_TONE_CLASS = {
 };
 
 export default function Footer({ scale, setScale, isMain }) {
+  const uiLanguage = useI18n();
   const { setFooterHeight, layoutMode } = useLayout();
   const { editor, editorMounted } = useEditor();
   const pathname = usePathname();
@@ -95,31 +97,32 @@ export default function Footer({ scale, setScale, isMain }) {
         selectedLength > 0
           ? {
               key: "selected",
-              label: `선택 ${selectedLength.toLocaleString()}자`
+              label: uiText("선택 {0}자", selectedLength.toLocaleString(getDateLocale()))
             }
           : null,
         currentLength > 0
           ? {
               key: "current",
-              label: `전체 ${currentLength.toLocaleString()}자`
+              label: uiText("전체 {0}자", currentLength.toLocaleString(getDateLocale()))
             }
           : null
       ].filter(Boolean)
     : [];
   const saveStatus = useMemo(() => {
+    void uiLanguage;
     if (!isDetailPage) return null;
 
     if (hasQueuedSave) {
       return {
         tone: "queued",
-        label: "저장 대기 중"
+        label: uiText("저장 대기 중")
       };
     }
 
     if (isSaving) {
       return {
         tone: "saving",
-        label: "저장 중"
+        label: uiText("저장 중")
       };
     }
 
@@ -128,7 +131,7 @@ export default function Footer({ scale, setScale, isMain }) {
     }
 
     const completedAt = Number.isFinite(lastSaveResult.completedAt)
-      ? new Date(lastSaveResult.completedAt).toLocaleTimeString("ko-KR", {
+      ? new Date(lastSaveResult.completedAt).toLocaleTimeString(getDateLocale(), {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit"
@@ -137,11 +140,11 @@ export default function Footer({ scale, setScale, isMain }) {
 
     return {
       tone: lastSaveResult.ok ? "saved" : "failed",
-      label: `${lastSaveResult.ok ? "저장 완료" : "저장 실패"}${
+      label: `${lastSaveResult.ok ? uiText("저장 완료") : uiText("저장 실패")}${
         completedAt ? ` (${completedAt})` : ""
       }`
     };
-  }, [hasQueuedSave, isDetailPage, isSaving, lastSaveResult]);
+  }, [hasQueuedSave, isDetailPage, isSaving, lastSaveResult, uiLanguage]);
 
   const findScrollParent = useCallback((element) => {
     let current = element?.parentElement || null;
@@ -349,9 +352,9 @@ export default function Footer({ scale, setScale, isMain }) {
             style={{ width: "180px" }}
           >
             {/* 날짜도 표시 */}
-            {now.toLocaleDateString()}
+            {now.toLocaleDateString(getDateLocale())}
             {" | "}
-            {now.toLocaleTimeString()}
+            {now.toLocaleTimeString(getDateLocale())}
           </Typography>
 
           {/* {!loading && weather && (
@@ -390,7 +393,7 @@ export default function Footer({ scale, setScale, isMain }) {
             ? "absolute left-1/2 -translate-x-1/2 whitespace-nowrap"
             : "order-last w-full text-center"}
         >
-          <Typography pretendard="SB" size="sm" color="black-8" title="Codex 남은 사용량">
+          <Typography pretendard="SB" size="sm" color="black-8" title={uiText("Codex 남은 사용량")}>
             Codex {codexRemaining === null ? "—" : `${codexRemaining}%`}
           </Typography>
         </div>

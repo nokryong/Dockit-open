@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
@@ -14,8 +15,8 @@ class WindowsPrintService {
   }
 
   async print(options = {}) {
-    if (this.printing) throw new Error('인쇄창이 이미 열려 있습니다.');
-    if (process.platform !== 'win32') throw new Error('Windows 인쇄 기능입니다.');
+    if (this.printing) throw new Error(uiText("인쇄창이 이미 열려 있습니다."));
+    if (process.platform !== 'win32') throw new Error(uiText("Windows 인쇄 기능입니다."));
     this.printing = true;
     const window = this.getWindow();
     let directory;
@@ -62,7 +63,7 @@ class WindowsPrintService {
         child.stderr.on('data', () => {});
         child.once('error', reject);
         child.once('close', code => {
-          if (failure || code !== 0) reject(failure || new Error('Windows 인쇄창을 열지 못했습니다.'));
+          if (failure || code !== 0) reject(failure || new Error(uiText("Windows 인쇄창을 열지 못했습니다.")));
           else resolve({ cancelled: completion === 'Canceled' });
         });
       });

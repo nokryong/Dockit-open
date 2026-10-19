@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 /**
  * Chart.js - Recharts 기반 차트 컴포넌트
  *
@@ -65,6 +66,7 @@ const Chart = React.forwardRef(
     },
     ref
   ) => {
+  useI18n();
     const { currentColors } = useDarkMode();
     const neutralStroke = currentColors.white[4];
     const fallbackSeriesColor = currentColors.white[6];
@@ -130,7 +132,7 @@ const Chart = React.forwardRef(
       const labelCounts = new Map();
       const series = headers.slice(1).map((header, index) => {
         const trimmedHeader = String(header ?? "").trim();
-        const baseLabel = trimmedHeader || `데이터 ${index + 1}`;
+        const baseLabel = trimmedHeader || uiText("데이터 {0}", index + 1);
         const nextCount = (labelCounts.get(baseLabel) || 0) + 1;
         labelCounts.set(baseLabel, nextCount);
 
@@ -190,7 +192,7 @@ const Chart = React.forwardRef(
         chartDataInfo.data.length === 0
       ) {
         return (
-          <Typography color="cool-gray-7">차트 데이터가 없습니다</Typography>
+          <Typography color="cool-gray-7">{uiText("차트 데이터가 없습니다")}</Typography>
         );
       }
 

@@ -1,3 +1,4 @@
+import { t as uiText, translateMessage } from "../i18n";
 import { Extension } from "@tiptap/core";
 import { Plugin, PluginKey, Selection } from "@tiptap/pm/state";
 import { toast } from "sud-ui";
@@ -27,10 +28,10 @@ const shouldGuardKeyDown = (event) =>
 
 const createOverflowMessage = (state) => {
   if (state?.kind === "group") {
-    return "병합된 표 행 묶음이 한 페이지보다 커질 수 없어 입력을 취소했습니다.";
+    return uiText("병합된 표 행 묶음이 한 페이지보다 커질 수 없어 입력을 취소했습니다.");
   }
 
-  return "표 행이 한 페이지보다 커질 수 없어 입력을 취소했습니다.";
+  return uiText("표 행이 한 페이지보다 커질 수 없어 입력을 취소했습니다.");
 };
 
 const restorePreviousDocument = (view, previousState) => {
@@ -123,7 +124,7 @@ const TableRowOverflowGuard = Extension.create({
             }
 
             lastNotifyAt = now;
-            toast.info(message);
+            toast.info(translateMessage(message));
           };
 
           const measureOverflowKeys = () =>
@@ -238,7 +239,7 @@ const TableRowOverflowGuard = Extension.create({
               }
 
               event.preventDefault();
-              toast.info(createOverflowMessage(overflowState));
+              toast.info(translateMessage(createOverflowMessage(overflowState)));
               return true;
             },
             keydown(view, event) {
@@ -256,7 +257,7 @@ const TableRowOverflowGuard = Extension.create({
               }
 
               event.preventDefault();
-              toast.info(createOverflowMessage(overflowState));
+              toast.info(translateMessage(createOverflowMessage(overflowState)));
               return true;
             }
           },
@@ -274,7 +275,7 @@ const TableRowOverflowGuard = Extension.create({
               return false;
             }
 
-            toast.info(createOverflowMessage(overflowState));
+            toast.info(translateMessage(createOverflowMessage(overflowState)));
             return true;
           }
         }

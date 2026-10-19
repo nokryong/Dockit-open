@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -14,6 +15,7 @@ export default function TitleEditor({
   editable = true,
   isInformation = false
 }) {
+  useI18n();
   const [isFocused, setIsFocused] = useState(false);
   const characters = Array.from(value || "");
   const showPreview = !isFocused && !isInformation && truncateAt > 0 && characters.length >= truncateAt;
@@ -28,7 +30,7 @@ export default function TitleEditor({
         codeBlock: false
       }),
       Placeholder.configure({
-        placeholder: placeholder || "제목을 입력하세요.",
+        placeholder: placeholder || uiText("제목을 입력하세요."),
         emptyEditorClass: "is-editor-empty"
       })
     ],

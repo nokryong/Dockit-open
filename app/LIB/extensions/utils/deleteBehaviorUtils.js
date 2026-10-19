@@ -1,19 +1,20 @@
+import { t as uiText } from "../../i18n";
 import { isTocTitleText } from "../../utils/captionUtils";
 import { isTocEntryNode } from "../../utils/editorContractUtils";
 
 export const DELETE_CONFIRM_TARGETS = {
-  table: { label: "표" },
-  image: { label: "이미지" },
-  shapeBlock: { label: "도형" },
-  chartBlock: { label: "차트" },
-  diagramBlock: { label: "다이어그램" },
-  tocItem: { label: "목차" },
-  captionTocItem: { label: "목차" }
+  table: { get label() { return uiText("표"); } },
+  image: { get label() { return uiText("이미지"); } },
+  shapeBlock: { get label() { return uiText("도형"); } },
+  chartBlock: { get label() { return uiText("차트"); } },
+  diagramBlock: { get label() { return uiText("다이어그램"); } },
+  tocItem: { get label() { return uiText("목차"); } },
+  captionTocItem: { get label() { return uiText("목차"); } }
 };
 
 export const DELETE_IMMEDIATE_TARGETS = {
-  codeBlock: { label: "코드 블록" },
-  blockquote: { label: "인용 블록" }
+  codeBlock: { get label() { return uiText("코드 블록"); } },
+  blockquote: { get label() { return uiText("인용 블록"); } }
 };
 
 export const EXCLUDED_ANCESTOR_TYPES = new Set([
@@ -116,7 +117,7 @@ export const buildTocDeleteTargetFromTitle = (doc, titleBlock) => {
   return {
     from: titleBlock.pos,
     to: lastCoveredPos,
-    label: "목차",
+    label: uiText("목차"),
     typeName: "tocSection"
   };
 };

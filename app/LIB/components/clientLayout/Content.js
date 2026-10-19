@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Div, Splitter } from "sud-ui";
 import { useLayout } from "../../context/LayoutContext";
 import PanelContainer from "./PanelContainer";
@@ -30,6 +31,7 @@ export default function Content({
   isMain,
   scale
 }) {
+  useI18n();
   const { layoutMode } = useLayout();
   const { isInBook } = useInBook();
   const { setting, setSetting } = useSetting();
@@ -97,7 +99,7 @@ export default function Content({
       start: <AiOutlineCaretLeft size={16} />,
       end: <AiOutlineCaretRight size={16} />
     },
-    collapseLabels: { collapse: "패널 접기", expand: "패널 펼치기" }
+    collapseLabels: { collapse: uiText("패널 접기"), expand: uiText("패널 펼치기") }
   };
 
   const [leftPanel, setLeftPanel] = useState(left);

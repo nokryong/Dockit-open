@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Div, Divider, Tag, Typography } from "sud-ui";
 import { shortcuts } from "../../constant/shortcut";
 import WidgetCard from "./WidgetCard";
@@ -16,6 +17,7 @@ import {
 } from "react-icons/tb";
 
 export default function Shortcut({ dragHandleProps }) {
+  useI18n();
   const { setting } = useSetting();
   const numberList = [
     <TbHexagonNumber1Filled key={1} size={20} />,
@@ -34,7 +36,7 @@ export default function Shortcut({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={MdKeyboardCommandKey}
-      title="단축키"
+      title={uiText("단축키")}
       dragHandleProps={dragHandleProps}
       widgetType="shortcut"
     >

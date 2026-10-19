@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 const assets = new Map();
 const normalizeFamily = value => value.trim().replace(/^(['"])(.*)\1$/, '$2');
 
@@ -5,11 +6,11 @@ async function readAsset(url, style = false) {
   if (!assets.has(url)) {
     const pending = (async () => {
       if (window.dockitLocal) {
-        if (!window.dockitLocal.readFontAsset) throw new Error('글꼴 기능을 적용하려면 앱을 다시 실행해주세요.');
+        if (!window.dockitLocal.readFontAsset) throw new Error(uiText("글꼴 기능을 적용하려면 앱을 다시 실행해주세요."));
         return window.dockitLocal.readFontAsset(url);
       }
       const response = await fetch(url);
-      if (!response.ok) throw new Error('글꼴을 불러오지 못했습니다.');
+      if (!response.ok) throw new Error(uiText("글꼴을 불러오지 못했습니다."));
       if (style) return { css: await response.text(), url: response.url };
       const blob = await response.blob();
       return { dataUrl: await new Promise((resolve, reject) => {

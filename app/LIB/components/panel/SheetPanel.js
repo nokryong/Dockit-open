@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import dynamic from "@/desktop/dynamic";
 import { useCallback, useRef, useState } from "react";
@@ -19,6 +20,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import { newShadowDarkSm, newShadowLightSm } from "../../constant/uiProps";
 
 export default function SheetPanel({ dragHandleProps }) {
+  useI18n();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
   const { headerHeight, footerHeight } = useLayout();
@@ -142,7 +144,7 @@ export default function SheetPanel({ dragHandleProps }) {
       });
 
       if (sheets.length === 0) {
-        setTimeout(() => toast.danger("유효한 시트 데이터가 없습니다."), 0);
+        setTimeout(() => toast.danger(uiText("유효한 시트 데이터가 없습니다.")), 0);
         return;
       }
 
@@ -151,12 +153,12 @@ export default function SheetPanel({ dragHandleProps }) {
 
       setTimeout(
         () =>
-          toast.success(`${sheets.length}개의 시트를 성공적으로 불러왔습니다.`),
+          toast.success(uiText("{0}개의 시트를 성공적으로 불러왔습니다.", sheets.length)),
         0
       );
     } catch (error) {
-      console.error("업로드 처리 중 오류:", error);
-      setTimeout(() => toast.danger("파일 업로드 중 오류가 발생했습니다."), 0);
+      console.error(uiText("업로드 처리 중 오류:"), error);
+      setTimeout(() => toast.danger(uiText("파일 업로드 중 오류가 발생했습니다.")), 0);
     } finally {
       e.target.value = "";
     }
@@ -170,7 +172,7 @@ export default function SheetPanel({ dragHandleProps }) {
       ]);
       const instance = workbookRef.current;
       if (!instance) {
-        setTimeout(() => toast.danger("시트 데이터를 가져올 수 없습니다."), 0);
+        setTimeout(() => toast.danger(uiText("시트 데이터를 가져올 수 없습니다.")), 0);
         return;
       }
 
@@ -178,7 +180,7 @@ export default function SheetPanel({ dragHandleProps }) {
       const allSheets = instance.getAllSheets();
 
       if (!allSheets?.length) {
-        setTimeout(() => toast.danger("내보낼 데이터가 없습니다."), 0);
+        setTimeout(() => toast.danger(uiText("내보낼 데이터가 없습니다.")), 0);
         return;
       }
 
@@ -310,17 +312,17 @@ export default function SheetPanel({ dragHandleProps }) {
       const buffer = await workbook.xlsx.writeBuffer();
       const timestamp = new Date().toISOString().slice(0, 10);
       saveAs(new Blob([buffer]), `dockit_sheet_${timestamp}.xlsx`);
-      setTimeout(() => toast.success("파일을 성공적으로 내보냈습니다."), 0);
+      setTimeout(() => toast.success(uiText("파일을 성공적으로 내보냈습니다.")), 0);
     } catch (error) {
-      console.error("내보내기 중 오류:", error);
-      setTimeout(() => toast.danger("파일 내보내기에 실패했습니다."), 0);
+      console.error(uiText("내보내기 중 오류:"), error);
+      setTimeout(() => toast.danger(uiText("파일 내보내기에 실패했습니다.")), 0);
     }
   }, []);
 
   return (
     <WidgetCard
       icon={TbFileSpreadsheet}
-      title="시트"
+      title={uiText("시트")}
       dragHandleProps={dragHandleProps}
       widgetType="sheetPanel"
       titleBtn={
@@ -338,7 +340,7 @@ export default function SheetPanel({ dragHandleProps }) {
             onClick={() => fileInputRef.current?.click()}
             background={setting.theme}
             color={`${setting.theme}-1`}
-            aria-label="엑셀 파일 업로드"
+            aria-label={uiText("엑셀 파일 업로드")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           />
@@ -348,7 +350,7 @@ export default function SheetPanel({ dragHandleProps }) {
             onClick={handleExport}
             background={setting.theme}
             color={`${setting.theme}-1`}
-            aria-label="엑셀 파일 다운로드"
+            aria-label={uiText("엑셀 파일 다운로드")}
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           />
@@ -362,6 +364,7 @@ export default function SheetPanel({ dragHandleProps }) {
         }}
       >
         <Workbook
+          lang={setting.language === "en" ? "en" : "ko"}
           key={key}
           ref={workbookRef}
           data={data}

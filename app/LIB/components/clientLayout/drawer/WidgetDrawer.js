@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../../i18n";
 import Template from "./DrawerTemplate";
 import { Div, Input, Typography } from "sud-ui";
 
@@ -50,6 +51,7 @@ export default function WidgetDrawer({
   openWidgetDrawer,
   setOpenWidgetDrawer,
 }) {
+  const uiLanguage = useI18n();
   const { left, right, toggle, setLeft, remove } = usePanels();
   const { widgets: pluginWidgets } = usePlugins();
   const { setting } = useSetting();
@@ -64,12 +66,13 @@ export default function WidgetDrawer({
 
   const widgetGroups = useMemo(
     () => {
+    void uiLanguage;
       const groups = WIDGET_DRAWER_GROUPS.map(attachWidgetIcons);
       const items = Object.entries(pluginWidgets).map(([id, widget]) => ({ id, title: widget.title, icon: getPluginIcon(widget.iconAsset || widget.icon) }));
-      if (items.length) groups.push({ id: 'plugins', title: '플러그인', icon: getPluginIcon('puzzle'), defaultExpanded: true, items });
+      if (items.length) groups.push({ id: 'plugins', title: uiText("플러그인"), icon: getPluginIcon('puzzle'), defaultExpanded: true, items });
       return groups;
     },
-    [pluginWidgets],
+    [pluginWidgets, uiLanguage],
   );
 
   const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -176,7 +179,7 @@ export default function WidgetDrawer({
     <Template
       open={openWidgetDrawer}
       onClose={() => setOpenWidgetDrawer(false)}
-      title="툴킷"
+      title={uiText("툴킷")}
       content={
         <div className="flex flex-col gap-5">
           <Input
@@ -185,15 +188,14 @@ export default function WidgetDrawer({
             value={searchTerm}
             background={`${setting.theme}-1`}
             onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="도구 검색"
+            placeholder={uiText("도구 검색")}
           />
 
           {activeWidgets.length > 0 && (
             <section className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <Typography pretendard="SB" size="md">
-                  현재 사용
-                </Typography>
+                  {uiText("현재 사용")}</Typography>
                 <Typography size="sm" color="cool-gray-7">
                   {activeWidgets.length}
                 </Typography>
@@ -210,8 +212,7 @@ export default function WidgetDrawer({
               className="rounded-lg border border-zinc-200/80 px-4 py-6 text-center dark:border-zinc-800"
             >
               <Typography className="text-pretty" size="sm" color="cool-gray-7">
-                일치하는 도구가 없습니다. 다른 이름으로 검색해 보세요.
-              </Typography>
+                {uiText("일치하는 도구가 없습니다. 다른 이름으로 검색해 보세요.")}</Typography>
             </div>
           ) : (
             filteredGroups.map((group) => {

@@ -21,7 +21,7 @@ afterEach(() => { for (const editor of editors.splice(0)) editor.destroy(); });
 it('all documented HTML examples load through the real document schema', () => {
   const guidance = fs.readFileSync('docs/codex/AGENTS.md', 'utf8');
   const editor = create();
-  const examples = [...guidance.matchAll(/```html\n([\s\S]*?)```/g)].map(match => match[1]);
+  const examples = [...guidance.matchAll(/```html\r?\n([\s\S]*?)```/g)].map(match => match[1]);
   expect(examples.length).toBeGreaterThanOrEqual(7);
   for (const content of examples) {
     const node = createNodeFromContent(content, editor.schema, { slice: false });

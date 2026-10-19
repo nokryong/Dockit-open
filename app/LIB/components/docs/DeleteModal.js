@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Input, Typography } from "sud-ui";
 import { useState, useEffect } from "react";
 import LoadingComponent from "../panel/commonComponent/LoadingComponent";
@@ -20,6 +21,7 @@ export default function DeleteModal({
   onDelete,
   isDarkMode
 }) {
+  useI18n();
   const { setting } = useSetting();
   // 모달이 열릴 때 상태를 캡처해서 저장
   const [capturedItems, setCapturedItems] = useState([]);
@@ -33,7 +35,7 @@ export default function DeleteModal({
   }, [modalOpen, selectedItems, selectedItem]);
 
   const isMultiple = capturedItems.length > 1;
-  const confirmText = isMultiple ? "삭제" : capturedItem?.title;
+  const confirmText = isMultiple ? uiText("삭제") : capturedItem?.title;
 
   return (
     <ModalFrame
@@ -45,19 +47,18 @@ export default function DeleteModal({
         <div className="flex flex-col" onClick={(e) => e.stopPropagation()}>
           <Typography pretendard="B" size="lg">
             {isMultiple
-              ? `${capturedItems.length}개 항목을 삭제하시겠습니까?`
-              : "정말 삭제하시겠습니까?"}
+              ? uiText("{0}개 항목을 삭제하시겠습니까?", capturedItems.length)
+              : uiText("정말 삭제하시겠습니까?")}
           </Typography>
           <br />
           <div className="flex flex-col">
             <Typography color={"volcano"} size="sm" pretendard="SB">
-              ※ 삭제된 컨텐츠는 복구가 불가능합니다.{" "}
+              {uiText("※ 삭제된 컨텐츠는 복구가 불가능합니다.")}{" "}
             </Typography>
             {isMultiple ? (
               <>
                 <Typography size="sm" className="mt-2">
-                  선택된 항목:
-                </Typography>
+                  {uiText("선택된 항목:")}</Typography>
                 <div
                   className="mt-2"
                   style={{ maxHeight: "100px", overflowY: "auto" }}
@@ -69,13 +70,11 @@ export default function DeleteModal({
                   ))}
                 </div>
                 <Typography size="sm" className="mt-2.5">
-                  삭제하려면 <b>삭제</b>를 입력해주세요.
-                </Typography>
+                  {uiText("삭제하려면 ")}<b>{uiText("삭제")}</b>{uiText("를 입력해주세요.")}</Typography>
               </>
             ) : (
               <Typography size="sm">
-                삭제하려면 <b>{capturedItem?.title}</b>를 입력해주세요.
-              </Typography>
+                {uiText("삭제하려면 ")}<b>{capturedItem?.title}</b>{uiText("를 입력해주세요.")}</Typography>
             )}
           </div>
           <Input
@@ -107,8 +106,7 @@ export default function DeleteModal({
               }}
               disabled={deleteInput !== confirmText}
             >
-              삭제
-            </ModalActionButton>
+              {uiText("삭제")}</ModalActionButton>
             <ModalActionButton
               isDarkMode={isDarkMode}
               onClick={() => {
@@ -118,8 +116,7 @@ export default function DeleteModal({
               color="white-1"
               background="white-10"
             >
-              취소
-            </ModalActionButton>
+              {uiText("취소")}</ModalActionButton>
           </div>
         </div>
       ) : (

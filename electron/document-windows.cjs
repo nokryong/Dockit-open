@@ -1,3 +1,4 @@
+const { t: uiText } = require('./i18n.cjs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 
@@ -9,7 +10,7 @@ class DocumentWindows {
     window.once('closed', () => {
       this.windows.delete(id);
       for (const pending of this.pendingSaves.values()) {
-        if (pending.waiting.has(id)) pending.fail(new Error('문서 저장 전에 창이 닫혔습니다.'));
+        if (pending.waiting.has(id)) pending.fail(new Error(uiText("문서 저장 전에 창이 닫혔습니다.")));
       }
     });
   }
@@ -46,7 +47,7 @@ class DocumentWindows {
     const id = randomUUID();
     return new Promise((resolve, reject) => {
       const finish = error => { clearTimeout(timer); this.pendingSaves.delete(id); error ? reject(error) : resolve(); };
-      const timer = setTimeout(() => finish(new Error('문서 저장 응답을 확인하지 못했습니다.')), 60_000);
+      const timer = setTimeout(() => finish(new Error(uiText("문서 저장 응답을 확인하지 못했습니다."))), 60_000);
       this.pendingSaves.set(id, { waiting: new Set(windows.map(window => window.webContents.id)), finish, fail: finish });
       for (const window of windows) window.webContents.send('local:prepare-save', id);
     });
@@ -54,7 +55,7 @@ class DocumentWindows {
   saved(window, id, result) {
     const pending = this.pendingSaves.get(id);
     if (!pending?.waiting.has(window.webContents.id)) return;
-    if (result?.ok !== true) { pending.fail(new Error(result?.message || '문서를 저장하지 못했습니다.')); return; }
+    if (result?.ok !== true) { pending.fail(new Error(result?.message || uiText("문서를 저장하지 못했습니다."))); return; }
     pending.waiting.delete(window.webContents.id);
     if (!pending.waiting.size) pending.finish();
   }

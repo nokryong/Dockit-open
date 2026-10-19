@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Button, Card, Input, Segmented, Typography } from "sud-ui";
 import WidgetCard from "./WidgetCard";
 import { useEditor } from "@/app/LIB/context/EditorContext";
@@ -14,6 +15,7 @@ import { useSetting } from "../../context/SettingContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 
 export default function HanjaPanel({ dragHandleProps }) {
+  useI18n();
   const { editor } = useEditor();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
@@ -228,14 +230,7 @@ export default function HanjaPanel({ dragHandleProps }) {
       endIndex,
       totalHeight: currentHeight
     };
-  }, [
-    virtualScroll,
-    containerHeight,
-    scrollTop,
-    filteredHanjaList,
-    itemHeight,
-    overscanCount
-  ]);
+  }, [virtualScroll, containerHeight, scrollTop, filteredHanjaList, itemHeight, overscanCount]);
 
   const renderChunk = useCallback(
     (chunk, rowIndex) => (
@@ -306,7 +301,7 @@ export default function HanjaPanel({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={Hanja}
-      title="한자"
+      title={uiText("한자")}
       dragHandleProps={dragHandleProps}
       widgetType="hanjaPanel"
     >
@@ -315,14 +310,14 @@ export default function HanjaPanel({ dragHandleProps }) {
           {...inputProps}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={"검색할 한자 또는 음독을 입력하세요"}
+          placeholder={uiText("검색할 한자 또는 음독을 입력하세요")}
           background={`${setting.theme}-1`}
         />
         <Segmented
           options={[
-            { value: "kor", label: "음독" },
-            { value: "hanja", label: "한자" },
-            { value: "meaning", label: "뜻" }
+            { value: "kor", label: uiText("음독") },
+            { value: "hanja", label: uiText("한자") },
+            { value: "meaning", label: uiText("뜻") }
           ]}
           size="sm"
           value={searchType}
@@ -336,8 +331,7 @@ export default function HanjaPanel({ dragHandleProps }) {
         {flatHanjaList.length === 0 && !searchTerm && (
           <div className="flex flex-col items-center justify-center p-5 text-gray-400">
             <Typography color={"cool-gray-7"} size="sm">
-              검색어를 입력하여 한자를 찾으세요.
-            </Typography>
+              {uiText("검색어를 입력하여 한자를 찾으세요.")}</Typography>
           </div>
         )}
         {selectedHanja && (
@@ -373,7 +367,7 @@ export default function HanjaPanel({ dragHandleProps }) {
                 color="white-1"
                 background="white-10"
               >
-                <Typography size="xs">삽입 </Typography>
+                <Typography size="xs">{uiText("삽입 ")}</Typography>
               </Button>
             </div>
           </Card>

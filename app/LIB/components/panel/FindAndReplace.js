@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Button, Input, Switch, toast, Typography } from "sud-ui";
 import WidgetCard from "./WidgetCard";
 import { TbChevronLeft, TbChevronRight, TbReplace } from "react-icons/tb";
@@ -186,6 +187,7 @@ const applyRegexReplacement = (result, template, fullText) =>
   });
 
 export default function FindAndReplace({ dragHandleProps }) {
+  useI18n();
   const { editor } = useEditor();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
@@ -260,7 +262,7 @@ export default function FindAndReplace({ dragHandleProps }) {
             behavior: "smooth"
           });
         } catch (error) {
-          console.error("찾기 결과 스크롤 오류:", error);
+          console.error(uiText("찾기 결과 스크롤 오류:"), error);
         }
       });
     },
@@ -291,9 +293,9 @@ export default function FindAndReplace({ dragHandleProps }) {
         activeSearchSignatureRef.current = "";
         setTotalCount(0);
         setCurrentCount(0);
-        setRegexError("정규식이 올바르지 않습니다.");
+        setRegexError(uiText("정규식이 올바르지 않습니다."));
         if (!suppressToast) {
-          toast.danger("정규식이 올바르지 않습니다.");
+          toast.danger(uiText("정규식이 올바르지 않습니다."));
         }
         return false;
       }
@@ -311,7 +313,7 @@ export default function FindAndReplace({ dragHandleProps }) {
         setTotalCount(0);
         setCurrentCount(0);
         if (!suppressToast) {
-          toast.danger("찾을 수 없습니다.");
+          toast.danger(uiText("찾을 수 없습니다."));
         }
         return false;
       }
@@ -425,7 +427,7 @@ export default function FindAndReplace({ dragHandleProps }) {
         .run();
     }
 
-    toast.success(`총 ${results.length}건이 변경되었습니다.`);
+    toast.success(uiText("총 {0}건이 변경되었습니다.", results.length));
     refreshSearch({
       preferredIndex: 0,
       suppressToast: true
@@ -456,7 +458,7 @@ export default function FindAndReplace({ dragHandleProps }) {
   return (
     <WidgetCard
       icon={TbReplace}
-      title="찾기 및 바꾸기"
+      title={uiText("찾기 및 바꾸기")}
       dragHandleProps={dragHandleProps}
       widgetType="findAndReplace"
       titleBtn={
@@ -472,21 +474,21 @@ export default function FindAndReplace({ dragHandleProps }) {
       <div className="w-full flex flex-col gap-2">
         <div className="flex gap-2 items-center flex-col">
           <Input
-            placeholder="찾을 내용을 입력하세요"
+            placeholder={uiText("찾을 내용을 입력하세요")}
             {...inputProps}
             value={findText}
             onChange={(event) => setFindText(event.target.value)}
             onKeyDown={handleFindInputKeyDown}
-            label="찾을 내용"
+            label={uiText("찾을 내용")}
             background={`${setting.theme}-1`}
           />
           {isReplace && (
             <Input
-              placeholder="바꿀 내용을 입력하세요"
+              placeholder={uiText("바꿀 내용을 입력하세요")}
               {...inputProps}
               value={replaceText}
               onChange={(event) => setReplaceText(event.target.value)}
-              label="바꿀 내용"
+              label={uiText("바꿀 내용")}
               background={`${setting.theme}-1`}
             />
           )}
@@ -503,7 +505,7 @@ export default function FindAndReplace({ dragHandleProps }) {
             }
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           >
-            <Typography size="xs">대소문자 구분</Typography>
+            <Typography size="xs">{uiText("대소문자 구분")}</Typography>
           </Button>
           <Button
             size="sm"
@@ -515,7 +517,7 @@ export default function FindAndReplace({ dragHandleProps }) {
             }
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           >
-            <Typography size="xs">단어 단위</Typography>
+            <Typography size="xs">{uiText("단어 단위")}</Typography>
           </Button>
           <Button
             size="sm"
@@ -527,7 +529,7 @@ export default function FindAndReplace({ dragHandleProps }) {
             }
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           >
-            <Typography size="xs">정규식</Typography>
+            <Typography size="xs">{uiText("정규식")}</Typography>
           </Button>
         </div>
 
@@ -571,7 +573,7 @@ export default function FindAndReplace({ dragHandleProps }) {
             border={false}
             {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
           >
-            <Typography size="sm">찾기</Typography>
+            <Typography size="sm">{uiText("찾기")}</Typography>
           </Button>
           {isReplace && (
             <>
@@ -584,7 +586,7 @@ export default function FindAndReplace({ dragHandleProps }) {
                 border={false}
                 {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
               >
-                <Typography size="sm">바꾸기</Typography>
+                <Typography size="sm">{uiText("바꾸기")}</Typography>
               </Button>
               <Button
                 size="sm"
@@ -595,7 +597,7 @@ export default function FindAndReplace({ dragHandleProps }) {
                 border={false}
                 {...(isDarkMode ? newShadowDarkSm : newShadowLightSm)}
               >
-                <Typography size="sm">모두 바꾸기</Typography>
+                <Typography size="sm">{uiText("모두 바꾸기")}</Typography>
               </Button>
             </>
           )}

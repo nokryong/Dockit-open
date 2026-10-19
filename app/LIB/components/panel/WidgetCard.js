@@ -1,3 +1,4 @@
+import { t as uiText, useI18n } from "../../i18n";
 import { Card, Div, Menu, Typography } from "sud-ui";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -17,6 +18,7 @@ export default function WidgetCard({
   footer,
   widgetType,
 }) {
+  useI18n();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
   const { remove } = usePanels();
@@ -58,12 +60,12 @@ export default function WidgetCard({
             onClick={(e) => e.stopPropagation()}
           >
             <Menu
-              aria-label="툴킷 메뉴"
+              aria-label={uiText("툴킷 메뉴")}
               expandType="popover"
               className="w-full [&_button]:w-full [&_button]:px-3! [&_button]:py-1.5! [&_button]:text-sm!"
               items={[{
                 key: "close",
-                label: "닫기",
+                label: uiText("닫기"),
                 onClick: () => {
                   remove(widgetType);
                   setContextMenu({ visible: false, x: 0, y: 0 });

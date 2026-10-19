@@ -1,4 +1,5 @@
 "use client";
+import { t as uiText, useI18n } from "../../i18n";
 
 import { useEffect } from "react";
 import { Typography } from "sud-ui";
@@ -11,6 +12,7 @@ export default function EditorBlockDeleteModal({
   onConfirm,
   onClose
 }) {
+  useI18n();
   const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function EditorBlockDeleteModal({
         className="flex flex-col"
         onClick={(event) => event.stopPropagation()}
       >
-        <Typography size="lg">{targetLabel || "블록"}을 삭제할까요?</Typography>
+        <Typography size="lg">{targetLabel || uiText("블록")}{uiText("을 삭제할까요?")}</Typography>
         <div className="flex justify-end gap-2 mt-5">
           <ModalActionButton
             isDarkMode={isDarkMode}
@@ -53,16 +55,14 @@ export default function EditorBlockDeleteModal({
             onClick={onConfirm}
             autoFocus
           >
-            삭제
-          </ModalActionButton>
+            {uiText("삭제")}</ModalActionButton>
           <ModalActionButton
             isDarkMode={isDarkMode}
             onClick={onClose}
             color="white-1"
             background="white-10"
           >
-            취소
-          </ModalActionButton>
+            {uiText("취소")}</ModalActionButton>
         </div>
       </div>
     </ModalFrame>

@@ -1,3 +1,4 @@
+import { t as uiText } from "../i18n";
 export const DOCX_IMPORT_MAX_BYTES = 50 * 1024 * 1024;
 
 export const DOCX_IMPORT_ERROR_MESSAGE =
@@ -19,7 +20,7 @@ export const validateDOCXImportFile = (
     return {
       valid: false,
       code: "docx-import-file-missing",
-      message: "불러올 DOCX 파일을 선택해 주세요."
+      message: uiText("불러올 DOCX 파일을 선택해 주세요.")
     };
   }
 
@@ -27,7 +28,7 @@ export const validateDOCXImportFile = (
     return {
       valid: false,
       code: "docx-import-file-extension",
-      message: "DOCX 파일(.docx)만 불러올 수 있습니다."
+      message: uiText("DOCX 파일(.docx)만 불러올 수 있습니다.")
     };
   }
 
@@ -35,7 +36,7 @@ export const validateDOCXImportFile = (
     return {
       valid: false,
       code: "docx-import-file-empty",
-      message: "빈 DOCX 파일은 불러올 수 없습니다."
+      message: uiText("빈 DOCX 파일은 불러올 수 없습니다.")
     };
   }
 
@@ -43,14 +44,14 @@ export const validateDOCXImportFile = (
     return {
       valid: false,
       code: "docx-import-file-too-large",
-      message: `DOCX 파일은 최대 ${Math.floor(maxBytes / 1024 / 1024)}MB까지 불러올 수 있습니다.`
+      message: uiText("DOCX 파일은 최대 {0}MB까지 불러올 수 있습니다.", Math.floor(maxBytes / 1024 / 1024))
     };
   }
 
   return {
     valid: true,
     code: "docx-import-file-ok",
-    message: "DOCX 파일을 dry-run할 수 있습니다."
+    message: uiText("DOCX 파일을 dry-run할 수 있습니다.")
   };
 };
 
@@ -156,10 +157,10 @@ const collectIRFeatureFlags = (value, flags = {}) => {
 
 const toFeatureLabels = (flags = {}) =>
   [
-    flags.hasTable ? "표" : null,
-    flags.hasImage ? "이미지" : null,
-    flags.hasLink ? "링크" : null,
-    flags.hasList ? "목록" : null
+    flags.hasTable ? uiText("표") : null,
+    flags.hasImage ? uiText("이미지") : null,
+    flags.hasLink ? uiText("링크") : null,
+    flags.hasList ? uiText("목록") : null
   ].filter(Boolean);
 
 export const createDOCXImportDryRunSummary = ({
