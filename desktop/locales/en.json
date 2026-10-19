@@ -1470,5 +1470,6 @@
   "선택한 모델에서 이 요청을 지원하지 않습니다.": "The selected model does not support this request.",
   "이 ChatGPT 연결에서 요청을 지원하지 않습니다.": "This ChatGPT connection does not support the request.",
   "ChatGPT 계정 인증을 확인하지 못했습니다. 연결 상태를 확인해주세요.": "Could not verify ChatGPT authentication. Check the connection.",
-  "ChatGPT 요금제 사용 권한을 확인해주세요.": "Check your permission to use the ChatGPT plan."
+  "ChatGPT 요금제 사용 권한을 확인해주세요.": "Check your permission to use the ChatGPT plan.",
+  "플러그인 언어 정보를 확인해주세요.": "Check the plugin language information."
 }

@@ -3,15 +3,24 @@
   const channel = 'dockit-plugin-v1';
   const pending = new Map();
   const themeListeners = new Set();
+  const languageListeners = new Set();
   const actionListeners = new Set();
   let serial = 0;
   let theme;
+  let language = 'ko';
+  const updateLanguage = value => {
+    const next = value === 'en' ? 'en' : 'ko';
+    document.documentElement.lang = next;
+    if (next === language) return;
+    language = next;
+    for (const listener of languageListeners) listener(language);
+  };
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
   const send = message => window.parent.postMessage({ channel, ...message }, '*');
   const request = (method, payload) => ready.then(() => new Promise((resolve, reject) => {
     const requestId = String(++serial);
-    const timer = ['credentials.configure', 'images.download'].includes(method) ? null : setTimeout(() => { pending.delete(requestId); reject(new Error('Dockit 응답 시간이 초과되었습니다.')); }, 45000);
+    const timer = ['credentials.configure', 'images.download'].includes(method) ? null : setTimeout(() => { pending.delete(requestId); reject(new Error(language === 'en' ? 'Dockit did not respond in time.' : 'Dockit 응답 시간이 초과되었습니다.')); }, 45000);
     pending.set(requestId, { resolve, reject, timer });
     send({ type: 'request', requestId, method, payload });
   }));
@@ -21,11 +30,14 @@
     if (event.source !== window.parent || event.data?.channel !== channel) return;
     const message = event.data;
     if (message.type === 'theme' || message.type === 'init') {
+      if (message.type === 'init') updateLanguage(message.language);
       theme = message.theme;
       document.documentElement.style.colorScheme = theme.isDarkMode ? 'dark' : 'light';
       document.documentElement.style.setProperty('--dockit-font', theme.fontFamily);
       resolveReady(theme);
       for (const listener of themeListeners) listener(theme);
+    } else if (message.type === 'language') {
+      updateLanguage(message.language);
     } else if (message.type === 'action') {
       for (const listener of actionListeners) listener(message.id);
     } else if (message.type === 'response') {
@@ -41,6 +53,8 @@
     version: 2,
     ready,
     get theme() { return theme; },
+    get language() { return language; },
+    onLanguageChange: callback => subscribe(languageListeners, callback),
     onThemeChange: callback => subscribe(themeListeners, callback),
     onAction: callback => subscribe(actionListeners, callback),
     setActions: actions => request('actions', actions),

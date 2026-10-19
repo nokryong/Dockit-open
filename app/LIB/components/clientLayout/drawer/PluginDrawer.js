@@ -9,6 +9,7 @@ import { usePlugins } from "../../../context/PluginContext";
 import { useSetting } from "../../../context/SettingContext";
 import { localBridge } from "../../../utils/localBridge";
 import { inputProps } from "../../../constant/uiProps";
+import { localizePlugin } from '../../../utils/pluginLocalization';
 
 export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) {
   useI18n();
@@ -107,7 +108,7 @@ export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) 
     <Modal open={installing} onClose={() => { if (!busy) setInstalling(false); }} onEsc={!busy} title={uiText("플러그인 설치")} ariaLabel={uiText("플러그인 설치")} width="min(420px, calc(100vw - 32px))">
       <form onSubmit={install} className="flex min-w-0 flex-col gap-2">
         <Input {...inputProps} size="sm" type="url" ariaLabel={uiText("GitHub 주소")} placeholder="https://github.com/nokryong/dockit-plugins" value={githubUrl} onChange={event => { setGithubUrl(event.target.value); setPreview(null); setSelectedFolder(null); }} disabled={busy} background={`${setting.theme}-1`} />
-        {preview?.plugins.length > 1 && <Select size="sm" aria-label={uiText("설치할 플러그인")} placeholder={uiText("플러그인 선택")} value={selectedFolder ?? ''} onChange={setSelectedFolder} disabled={busy} background={`${setting.theme}-1`} options={preview.plugins.map(plugin => ({ value: plugin.path, label: `${plugin.name} · ${plugin.publisher} · ${plugin.version}` }))} />}
+        {preview?.plugins.length > 1 && <Select size="sm" aria-label={uiText("설치할 플러그인")} placeholder={uiText("플러그인 선택")} value={selectedFolder ?? ''} onChange={setSelectedFolder} disabled={busy} background={`${setting.theme}-1`} options={preview.plugins.map(source => { const plugin = localizePlugin(source, setting.language); return { value: plugin.path, label: `${plugin.name} · ${plugin.publisher} · ${plugin.version}` }; })} />}
         <div className="flex justify-end gap-2">
           <SmallButton disabled={busy} onClick={() => setInstalling(false)}>{uiText("취소")}</SmallButton>
           <SmallButton type="submit" disabled={busy || !githubUrl.trim() || (preview?.plugins.length > 1 && selectedFolder === null)}>{busy ? uiText("설치 중…") : uiText("설치")}</SmallButton>

@@ -38,6 +38,9 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
   const theme = useMemo(() => ({ name: setting.theme, isDarkMode, colors: currentColors, fontFamily: setting.fontFamily || 'Pretendard' }), [setting.theme, setting.fontFamily, isDarkMode, currentColors]);
   const themeRef = useRef(theme);
   themeRef.current = theme;
+  const language = setting.language === 'en' ? 'en' : 'ko';
+  const languageRef = useRef(language);
+  languageRef.current = language;
 
   useEffect(() => {
     if (preview) return;
@@ -72,7 +75,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
       if (message.type === 'ready') {
         clearTimeout(timer);
         setReady(true); setError("");
-        post(frame, { type: 'init', theme: themeRef.current });
+        post(frame, { type: 'init', theme: themeRef.current, language: languageRef.current });
         return;
       }
       if (message.type === 'resize') {
@@ -121,6 +124,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
   }, [session]);
 
   useEffect(() => { post(frameRef.current, { type: 'theme', theme }); }, [theme, ready]);
+  useEffect(() => { post(frameRef.current, { type: 'language', language }); }, [language, ready]);
 
   return (
     <WidgetCard
@@ -134,7 +138,7 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
       {preview ? <div className="h-16" /> : <>
         {error && <div role="alert" className="flex flex-col items-start gap-2"><Typography size="sm">{translateMessage(error)}</Typography><SmallButton onClick={() => setAttempt(value => value + 1)}>{uiText("다시 시도")}</SmallButton></div>}
         {!ready && !error && <Typography size="sm">{uiText("불러오는 중…")}</Typography>}
-        {session && <iframe ref={frameRef} title={uiText("{0} 플러그인", widget.title)} src={session.url} sandbox="allow-scripts" referrerPolicy="no-referrer" onLoad={() => post(frameRef.current, { type: 'init', theme: themeRef.current })} className="block w-full border-0" style={{ height, display: error ? 'none' : undefined }} />}
+        {session && <iframe ref={frameRef} title={uiText("{0} 플러그인", widget.title)} src={session.url} sandbox="allow-scripts" referrerPolicy="no-referrer" onLoad={() => post(frameRef.current, { type: 'init', theme: themeRef.current, language: languageRef.current })} className="block w-full border-0" style={{ height, display: error ? 'none' : undefined }} />}
         {session && credentialPrompt && <PluginCredentialDialog key={`${session.sessionId}/${credentialPrompt.id}`} prompt={credentialPrompt} sessionId={session.sessionId} theme={setting.theme} onClose={closeCredentials} />}
         {session && imagePreview && <PluginImageDialog key={imagePreview.url} image={imagePreview} sessionId={session.sessionId} theme={setting.theme} isDarkMode={isDarkMode} onClose={() => setImagePreview(null)} />}
       </>}
