@@ -766,7 +766,7 @@ export default function ContentEditor({
     selectedObjectRef.current = selectedObject;
   }, [selectedObject]);
 
-  // 1. 선택 위치의 객체 정보 추출 (텍스트 입력 중에도 도형을 감지한다)
+  // #1. 선택 위치의 객체 정보를 추출하는 부분 (텍스트 입력 중에도 도형을 감지할 수 있게 함)
   const getObjectInfoFromSelection = useCallback(() => {
     if (!editor) return null;
     const { selection } = editor.state;
@@ -790,7 +790,7 @@ export default function ContentEditor({
         const node = selection.$from.node(depth);
         const name = node.type.name;
 
-        // 테이블과 shapeBlock을 부모로 감지한다.
+        // 테이블과 shapeBlock을 부모로 감지할 수 있게 함
         if (
           name === "table" ||
           name === "tableRow" ||
@@ -815,7 +815,7 @@ export default function ContentEditor({
     }
   }, [editor]);
 
-  // 2. 선택 변경 핸들러 (원클릭 동작)
+  // #2. 선택 변경을 처리하는 부분 (원클릭 동작)
   const handleSelectionUpdate = useCallback(() => {
     if (!editor) return;
 
@@ -872,7 +872,7 @@ export default function ContentEditor({
     setSelectedObject
   ]);
 
-  // 3. 더블 클릭 핸들러 (도형 선택 트리거)
+  // #3. 더블 클릭을 처리하는 부분 (도형 선택)
   const handleDoubleClick = useCallback(
     (event) => {
       if (!isEditable) {
@@ -1357,7 +1357,7 @@ export default function ContentEditor({
     };
   }, [viewPage]);
 
-  // 에디터 생명주기 관리
+  // #에디터 생명주기를 관리하는 부분
   useEffect(() => {
     // editor가 없거나 이미 파괴되었다면 중단, focus가 없을 때는 중단
     const editorView = getEditorViewSafely(editor);
@@ -1575,7 +1575,7 @@ export default function ContentEditor({
       });
   }, [editor, isEditable]);
 
-  // 외부 value 변경 시 동기화
+  // #외부 value가 바뀌면 동기화하는 부분
   // setContent가 React 노드 뷰를 flushSync로 그리므로 커밋 중에 실행하지 않고 마이크로태스크로 미룬다.
   // 새 value가 오거나 언마운트되면 대기 중인 동기화를 취소한다.
   useEffect(() => {
