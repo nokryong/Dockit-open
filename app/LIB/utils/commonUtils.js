@@ -3,7 +3,7 @@ export const formatTime = (time) => {
   const now = new Date();
   const target = new Date(time);
 
-  // 👇 KST(UTC+9)로 보정하기 위해 9시간을 더합니다.
+  // KST(UTC+9)로 보정하기 위해 9시간을 더한다.
   target.setHours(target.getHours() + 9);
 
   const diff = Math.floor((now - target) / 1000); // 초 단위 차이

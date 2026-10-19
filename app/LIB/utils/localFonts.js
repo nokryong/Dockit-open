@@ -33,9 +33,16 @@ export function registerLocalFontFaces(fonts, target = document) {
   // Native family names already work in CSS. Do not shadow their other weights
   // or any existing web-font family; aliases are only needed for individual faces.
   const nativeFamilies = new Set(fonts.map(font => font.family));
-  const css = fonts.filter(font => !nativeFamilies.has(font.value) && !existingFamilies.has(font.value))
-    .map(font => `@font-face{font-family:${quoteFontFamily(font.value)};src:local(${quoteFontFamily(font.postscriptName)}),local(${quoteFontFamily(font.label)});font-style:normal;font-weight:400;font-display:swap;}`)
-    .join('\n');
+  const css = fonts
+    .filter(
+      (font) =>
+        !nativeFamilies.has(font.value) && !existingFamilies.has(font.value)
+    )
+    .map(
+      (font) =>
+        `@font-face{font-family:${quoteFontFamily(font.value)};src:local(${quoteFontFamily(font.postscriptName)}),local(${quoteFontFamily(font.label)});font-style:normal;font-weight:400;font-display:swap;}`
+    )
+    .join("\n");
   let style = target.getElementById(STYLE_ID);
   if (!style) {
     style = target.createElement('style');

@@ -69,7 +69,7 @@ export default function TitleEditor({
     }
   }, [value, editor]);
 
-  // 👇 메모리 누수 방지를 위한 클린업 함수 추가
+  // 언마운트 때 정리해 메모리 누수를 막는다.
   useEffect(() => {
     return () => {
       if (editor) {

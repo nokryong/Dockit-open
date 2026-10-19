@@ -27,12 +27,57 @@ import { useDebounce } from "@/app/LIB/hook/useDebounce";
 import { useRouter } from "@/desktop/navigation";
 import DocumentLoadingAnimation from "@/app/LIB/components/docs/DocumentLoadingAnimation";
 import { fromEditorStateToIR } from "@/app/LIB/ir/fromProseMirror";
-import { DOCX_V0_EXPORT_ERROR_MESSAGE, DOCX_V0_MIME_TYPE, buildDOCXV0ExportNotice, createDOCXV0WarningDetails, createDOCXV0DownloadFileName, finishDOCXV0Export, isDOCXV0PackageBytes, startDOCXV0Export, summarizeDOCXV0Warnings } from "@/app/LIB/utils/docxExportButtonUtils";
-import { HWPX_V0_EXPORT_ERROR_MESSAGE, HWPX_V0_MIME_TYPE, buildHWPXV0ExportNotice, createHWPXV0WarningDetails, createHWPXV0DownloadFileName, createHWPXV0PageSettingsFromDocSetting, isHWPXV0PackageBytes } from "@/app/LIB/utils/hwpxExportButtonUtils";
-import { DOCX_IMPORT_MAX_BYTES, DOCX_IMPORT_ERROR_MESSAGE, applyDOCXImportPreviewToEditor, finishDOCXImportDryRun, runDOCXImportDryRun, startDOCXImportDryRun, validateDOCXImportFile } from "@/app/LIB/utils/docxImportButtonUtils";
-import { HWPX_IMPORT_MAX_BYTES, HWPX_IMPORT_ERROR_MESSAGE, applyHWPXImportPreviewToEditor, finishHWPXImportDryRun, runHWPXImportDryRun, startHWPXImportDryRun, validateHWPXImportFile } from "@/app/LIB/utils/hwpxImportButtonUtils";
+import {
+  DOCX_V0_EXPORT_ERROR_MESSAGE,
+  DOCX_V0_MIME_TYPE,
+  buildDOCXV0ExportNotice,
+  createDOCXV0WarningDetails,
+  createDOCXV0DownloadFileName,
+  finishDOCXV0Export,
+  isDOCXV0PackageBytes,
+  startDOCXV0Export,
+  summarizeDOCXV0Warnings
+} from "@/app/LIB/utils/docxExportButtonUtils";
+import {
+  HWPX_V0_EXPORT_ERROR_MESSAGE,
+  HWPX_V0_MIME_TYPE,
+  buildHWPXV0ExportNotice,
+  createHWPXV0WarningDetails,
+  createHWPXV0DownloadFileName,
+  createHWPXV0PageSettingsFromDocSetting,
+  isHWPXV0PackageBytes
+} from "@/app/LIB/utils/hwpxExportButtonUtils";
+import {
+  DOCX_IMPORT_MAX_BYTES,
+  DOCX_IMPORT_ERROR_MESSAGE,
+  applyDOCXImportPreviewToEditor,
+  finishDOCXImportDryRun,
+  runDOCXImportDryRun,
+  startDOCXImportDryRun,
+  validateDOCXImportFile
+} from "@/app/LIB/utils/docxImportButtonUtils";
+import {
+  HWPX_IMPORT_MAX_BYTES,
+  HWPX_IMPORT_ERROR_MESSAGE,
+  applyHWPXImportPreviewToEditor,
+  finishHWPXImportDryRun,
+  runHWPXImportDryRun,
+  startHWPXImportDryRun,
+  validateHWPXImportFile
+} from "@/app/LIB/utils/hwpxImportButtonUtils";
 import { classifyImportDryRunFailure, getBlockedWarningEntry } from "@/app/LIB/utils/classifyConversionError.js";
-import { appendDocumentOperationAttempt, appendDocumentOperationResult, createDocumentOperationContentCheckpoint, enqueueDocumentOperationResultRetry, flushDocumentOperationResultRetries, getDocumentOperationJournalCursor, readDocumentOperationJournal, resolveDocumentOperationContentCheckpoint, resolveDocumentOperationSaveOutcome, transitionDocumentOperationsThrough } from "@/app/LIB/utils/documentOperationJournal";
+import {
+  appendDocumentOperationAttempt,
+  appendDocumentOperationResult,
+  createDocumentOperationContentCheckpoint,
+  enqueueDocumentOperationResultRetry,
+  flushDocumentOperationResultRetries,
+  getDocumentOperationJournalCursor,
+  readDocumentOperationJournal,
+  resolveDocumentOperationContentCheckpoint,
+  resolveDocumentOperationSaveOutcome,
+  transitionDocumentOperationsThrough
+} from "@/app/LIB/utils/documentOperationJournal";
 import { createDocumentOperationNonce, getDocumentSemanticFingerprint } from "@/app/LIB/utils/documentOperationUtils";
 import { captureDocumentOperationRollbackSnapshot, removeDocumentOperationRollbackSnapshot } from "@/app/LIB/utils/documentOperationRollbackSnapshot";
 import { captureNotePersistenceSnapshot, NOTE_PERSISTENCE_ERROR_CODES } from "@/app/LIB/utils/notePersistenceGate";
@@ -470,7 +515,7 @@ export default function WritePage() {
         return false;
       }
       const savedContent = snapshot.html;
-      // ✨ 현재 에디터의 커서 위치(숫자)를 가져옵니다.
+      // 현재 에디터의 커서 위치(숫자)를 가져온다.
       const currentPos = editor.state.selection.anchor;
       const saveContext = beginContentSave(savedContent);
       let saveSettled = false;
@@ -481,7 +526,7 @@ export default function WritePage() {
           currentDocument._id,
           {
             content: savedContent,
-            focus: currentPos, // ✨ 'end' 대신 실제 숫자 위치 저장
+            focus: currentPos, // 'end' 대신 실제 위치를 저장한다.
             refreshThumbnail: true
           },
           true
@@ -1036,7 +1081,7 @@ export default function WritePage() {
         handleSave(); // 저장 함수 호출
       }
 
-      // ✨ [수정] 서식 복사/붙여넣기 단축키
+      // 서식 복사/붙여넣기 단축키
       if (isCtrlOrCmd && event.shiftKey) {
         // 서식 복사: Ctrl + Shift + C
         if (event.key.toLowerCase() === "c") {
@@ -1049,7 +1094,7 @@ export default function WritePage() {
           event.preventDefault();
           editor?.commands.pasteFormat();
         }
-      } // ✨ [추가] Ctrl+P 인쇄 단축키
+      } // Ctrl+P 인쇄 단축키
       if (isCtrlOrCmd && event.key.toLowerCase() === "p") {
         event.preventDefault(); // 브라우저의 기본 인쇄 동작을 막습니다.
         handlePrint();

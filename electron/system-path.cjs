@@ -7,7 +7,7 @@ async function resolveSystemPath(file, { platform = process.platform, realpath =
   for (const alias of ['/var', '/tmp']) {
     if (file !== alias && !file.startsWith(`${alias}/`)) continue;
     const expected = `/private${alias}`;
-    if (await realpath(alias) === expected) return expected + file.slice(alias.length);
+    if ((await realpath(alias)) === expected) return expected + file.slice(alias.length);
   }
   return file;
 }

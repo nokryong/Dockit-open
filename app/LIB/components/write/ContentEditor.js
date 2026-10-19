@@ -766,7 +766,7 @@ export default function ContentEditor({
     selectedObjectRef.current = selectedObject;
   }, [selectedObject]);
 
-  // ✨ 1. 객체 정보 추출 (텍스트 입력 중에도 도형 감지되도록 수정)
+  // 1. 선택 위치의 객체 정보 추출 (텍스트 입력 중에도 도형을 감지한다)
   const getObjectInfoFromSelection = useCallback(() => {
     if (!editor) return null;
     const { selection } = editor.state;
@@ -790,7 +790,7 @@ export default function ContentEditor({
         const node = selection.$from.node(depth);
         const name = node.type.name;
 
-        // 🌟 [수정됨] 테이블뿐만 아니라 shapeBlock도 부모로 감지
+        // 테이블과 shapeBlock을 부모로 감지한다.
         if (
           name === "table" ||
           name === "tableRow" ||
@@ -815,7 +815,7 @@ export default function ContentEditor({
     }
   }, [editor]);
 
-  // ✨ 2. 선택 변경 핸들러 (원클릭 동작)
+  // 2. 선택 변경 핸들러 (원클릭 동작)
   const handleSelectionUpdate = useCallback(() => {
     if (!editor) return;
 
@@ -872,7 +872,7 @@ export default function ContentEditor({
     setSelectedObject
   ]);
 
-  // ✨ 3. 더블 클릭 핸들러 (도형 선택 트리거)
+  // 3. 더블 클릭 핸들러 (도형 선택 트리거)
   const handleDoubleClick = useCallback(
     (event) => {
       if (!isEditable) {
@@ -1357,7 +1357,7 @@ export default function ContentEditor({
     };
   }, [viewPage]);
 
-  // ✨ 통합된 에디터 생명주기 관리
+  // 에디터 생명주기 관리
   useEffect(() => {
     // editor가 없거나 이미 파괴되었다면 중단, focus가 없을 때는 중단
     const editorView = getEditorViewSafely(editor);
@@ -1575,9 +1575,7 @@ export default function ContentEditor({
       });
   }, [editor, isEditable]);
 
-  // ✨ isEditable 상태 변경 시 즉시 반영 (이미 위에서 처리됨)
-
-  // ✨ 외부 value 변경 시 동기화
+  // 외부 value 변경 시 동기화
   // setContent가 React 노드 뷰를 flushSync로 그리므로 커밋 중에 실행하지 않고 마이크로태스크로 미룬다.
   // 새 value가 오거나 언마운트되면 대기 중인 동기화를 취소한다.
   useEffect(() => {
@@ -1742,7 +1740,8 @@ export default function ContentEditor({
                         )}
                         {segment.showMergedGroupBadge && (
                           <span className="tiptap-page-shell__segment-flag">
-                            {uiText("병합 행 묶음")}</span>
+                            {uiText("병합 행 묶음")}
+                          </span>
                         )}
                       </div>
                     ))}
@@ -1758,19 +1757,38 @@ export default function ContentEditor({
                       className={`dockit-footnote-screen-projection${segment.canonical ? "" : " dockit-footnote-screen-projection--continuation"}`}
                       data-footnote-id={segment.noteId}
                       data-footnote-fragment={segment.segmentIndex}
-                      data-footnote-canonical={segment.canonical ? "true" : "false"}
-                      title={segment.canonical ? undefined : uiText("각주 시작 위치로 이동")}
-                      onMouseDown={segment.canonical ? undefined : (event) => {
-                        if (event.button !== 0) return;
-                        event.preventDefault();
-                        focusCanonicalFootnoteBody(editor, segment.noteId);
-                      }}
+                      data-footnote-canonical={
+                        segment.canonical ? "true" : "false"
+                      }
+                      title={
+                        segment.canonical
+                          ? undefined
+                          : uiText("각주 시작 위치로 이동")
+                      }
+                      onMouseDown={
+                        segment.canonical
+                          ? undefined
+                          : (event) => {
+                              if (event.button !== 0) return;
+                              event.preventDefault();
+                              focusCanonicalFootnoteBody(
+                                editor,
+                                segment.noteId
+                              );
+                            }
+                      }
                       style={{
                         left: `${page.contentFrameLeft}px`,
                         width: `${page.contentFrameWidth}px`,
-                        bottom: `${page.contentFrameBottom + pageSegments
-                          .slice(segmentIndex + 1)
-                          .reduce((total, following) => total + following.height, 0)}px`,
+                        bottom: `${
+                          page.contentFrameBottom +
+                          pageSegments
+                            .slice(segmentIndex + 1)
+                            .reduce(
+                              (total, following) => total + following.height,
+                              0
+                            )
+                        }px`,
                         height: `${segment.height}px`
                       }}
                     >
@@ -1885,12 +1903,16 @@ export default function ContentEditor({
                 data-page-number-position={pageNumber}
                 data-page-number={page.pageNumber}
                 style={{
-                  top: `${page.pageNumber * paginationSegmentModel.pageMetrics.pageHeightPx - Math.max(
-                    0,
-                    getPageNumberBottomOffset(
-                      paginationSegmentModel.pageMetrics
+                  top: `${
+                    page.pageNumber *
+                      paginationSegmentModel.pageMetrics.pageHeightPx -
+                    Math.max(
+                      0,
+                      getPageNumberBottomOffset(
+                        paginationSegmentModel.pageMetrics
+                      )
                     )
-                  )}px`,
+                  }px`,
                   width: `${paginationSegmentModel.pageMetrics.width}px`,
                   paddingLeft: `${paginationSegmentModel.pageMetrics.padding.left}px`,
                   paddingRight: `${paginationSegmentModel.pageMetrics.padding.right}px`,
@@ -1908,12 +1930,14 @@ export default function ContentEditor({
         className={`relative z-10 tiptap-editor-flow-layer${shouldUsePaginationContentMirror ? " is-segment-mirrored" : ""}`}
         onMouseDownCapture={(event) => {
           if (event.button !== 0) return;
-          if (focusFootnoteContinuationAtPoint({
-            editor,
-            root: event.currentTarget.parentElement,
-            clientX: event.clientX,
-            clientY: event.clientY
-          })) {
+          if (
+            focusFootnoteContinuationAtPoint({
+              editor,
+              root: event.currentTarget.parentElement,
+              clientX: event.clientX,
+              clientY: event.clientY
+            })
+          ) {
             event.preventDefault();
             event.stopPropagation();
           }

@@ -94,20 +94,59 @@ export function CodexProvider({ children }) {
     finally { if (kind === 'chat') finishCodexDocument(); sending.current = false; }
   };
   const conversations = useChatConversations({ api: bridge(), account: connection.account?.id, setMessages, setError, run });
-  return <CodexContext.Provider value={{ ...conversations, connection: { ...connection, streaming: connection.streaming || Boolean(codexDocumentLock) }, models, messages, images, error, imageError, usageError, busy, loading,
-    reload: () => run(reload), refreshModels, refreshUsage,
-    signIn: () => run(async () => { const result = await bridge().signIn(); if (result.connected) setSetting(previous => ({ ...previous, aiProvider: 'codex' })); return result; }),
-    cancelSignIn: () => bridge().cancelSignIn().catch(setError),
-    signOut: () => run(() => bridge().signOut()),
-    selectModel: slug => run(() => bridge().selectModel(slug)),
-    selectReasoningEffort: effort => run(() => bridge().selectReasoningEffort(effort)),
-    selectServiceTier: tier => run(() => bridge().selectServiceTier(tier)),
-    clearHistory: (kind = 'chat') => run(async () => { await bridge().clearHistory(kind); (kind === 'image' ? setImages : setMessages)([]); }),
-    send: (text, attachments) => send(text, 'chat', undefined, attachments), generateImage: (text, reference) => send(text, 'image', reference),
-    cancelResponse: (kind = 'chat') => { cancelRequested.current = true; return bridge().cancelResponse(kind).catch(kind === 'image' ? setImageError : setError); },
-    copyImage: id => bridge().copyImage(id).catch(setImageError),
-    saveImage: id => bridge().saveImage(id).catch(setImageError)
-  }}>{children}</CodexContext.Provider>;
+  return (
+    <CodexContext.Provider
+      value={{
+        ...conversations,
+        connection: {
+          ...connection,
+          streaming: connection.streaming || Boolean(codexDocumentLock)
+        },
+        models,
+        messages,
+        images,
+        error,
+        imageError,
+        usageError,
+        busy,
+        loading,
+        reload: () => run(reload),
+        refreshModels,
+        refreshUsage,
+        signIn: () =>
+          run(async () => {
+            const result = await bridge().signIn();
+            if (result.connected)
+              setSetting((previous) => ({ ...previous, aiProvider: "codex" }));
+            return result;
+          }),
+        cancelSignIn: () => bridge().cancelSignIn().catch(setError),
+        signOut: () => run(() => bridge().signOut()),
+        selectModel: (slug) => run(() => bridge().selectModel(slug)),
+        selectReasoningEffort: (effort) =>
+          run(() => bridge().selectReasoningEffort(effort)),
+        selectServiceTier: (tier) =>
+          run(() => bridge().selectServiceTier(tier)),
+        clearHistory: (kind = "chat") =>
+          run(async () => {
+            await bridge().clearHistory(kind);
+            (kind === "image" ? setImages : setMessages)([]);
+          }),
+        send: (text, attachments) => send(text, "chat", undefined, attachments),
+        generateImage: (text, reference) => send(text, "image", reference),
+        cancelResponse: (kind = "chat") => {
+          cancelRequested.current = true;
+          return bridge()
+            .cancelResponse(kind)
+            .catch(kind === "image" ? setImageError : setError);
+        },
+        copyImage: (id) => bridge().copyImage(id).catch(setImageError),
+        saveImage: (id) => bridge().saveImage(id).catch(setImageError)
+      }}
+    >
+      {children}
+    </CodexContext.Provider>
+  );
 }
 export function useCodex() {
   const value = useContext(CodexContext);
