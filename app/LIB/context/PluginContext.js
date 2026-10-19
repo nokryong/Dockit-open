@@ -3,12 +3,16 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { localBridge } from "../utils/localBridge";
 import { usePanels } from "./PanelContext";
+import { useSetting } from './SettingContext';
+import { localizePlugin } from '../utils/pluginLocalization';
 
 const PluginContext = createContext(null);
 export const pluginWidgetId = (pluginId, widgetId) => `plugin:${pluginId}/${widgetId}`;
 
 export function PluginProvider({ children }) {
-  const [plugins, setPlugins] = useState([]);
+  const [rawPlugins, setPlugins] = useState([]);
+  const { setting } = useSetting();
+  const plugins = useMemo(() => rawPlugins.map(plugin => localizePlugin(plugin, setting.language)), [rawPlugins, setting.language]);
   const [warnings, setWarnings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

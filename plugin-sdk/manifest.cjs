@@ -37,7 +37,20 @@ function validateManifest(value) {
     if (!entry.endsWith('.html')) throw fail('툴킷의 시작 파일은 HTML이어야 합니다.');
     return { id: widget.id, title: widget.title, entry, icon: widget.icon === undefined ? icon : validateIcon(widget.icon, safePath) };
   });
-  return { manifestVersion: 1, sdkVersion: value.sdkVersion, id: value.id, name: value.name, publisher: value.publisher, version: value.version, description: value.description || '', icon, permissions: [...new Set(permissions)], widgets, ...validateCapabilities(value) };
+  let locales;
+  if (value.locales !== undefined) {
+    const invalid = () => { throw fail('플러그인 언어 정보를 확인해주세요.'); };
+    if (!object(value.locales) || Object.keys(value.locales).length > 20) invalid();
+    locales = Object.fromEntries(Object.entries(value.locales).map(([language, text]) => {
+      if (!/^[a-z]{2}(?:-[A-Z]{2})?$/.test(language) || !object(text) || Object.keys(text).some(key => !['name', 'description', 'widgets'].includes(key))) invalid();
+      for (const [field, maximum] of [['name', 120], ['description', 500]]) {
+        if (text[field] !== undefined && (typeof text[field] !== 'string' || text[field].length > maximum || (field === 'name' && !text[field].trim()))) invalid();
+      }
+      if (text.widgets !== undefined && (!object(text.widgets) || Object.entries(text.widgets).some(([id, title]) => !ids.has(id) || typeof title !== 'string' || !title.trim() || title.length > 80))) invalid();
+      return [language, { ...text, ...(text.widgets ? { widgets: { ...text.widgets } } : {}) }];
+    }));
+  }
+  return { manifestVersion: 1, sdkVersion: value.sdkVersion, id: value.id, name: value.name, publisher: value.publisher, version: value.version, description: value.description || '', icon, permissions: [...new Set(permissions)], widgets, ...(locales ? { locales } : {}), ...validateCapabilities(value) };
 }
 
 function readPackage(bytes) {

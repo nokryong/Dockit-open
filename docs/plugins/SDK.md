@@ -70,6 +70,24 @@ const unsubscribe = Dockit.onThemeChange(theme => {
 
 `Dockit.theme`은 현재 `{ name, isDarkMode, colors, fontFamily }`입니다. `colors`는 Dockit의 색상 팔레트입니다. `--dockit-font` CSS 변수와 `color-scheme`도 갱신합니다. 구독 함수는 해제 함수를 반환합니다.
 
+### 언어
+
+`await Dockit.ready` 이후 `Dockit.language`에서 앱 언어(`ko` 또는 `en`)를 읽고, `Dockit.onLanguageChange(language => ...)`로 변경을 구독합니다. 언어 변경은 플러그인을 다시 열지 않으며 `document.documentElement.lang`도 갱신합니다. 구독은 해제 함수를 반환합니다. 이전 호스트에서는 `Dockit.language ?? 'ko'`를 사용합니다.
+
+설치 목록과 툴킷 제목은 선택 사항인 manifest의 `locales`로 번역합니다. 누락된 문구는 기존 `name`, `description`, `widgets[].title`을 사용합니다. 위젯 키는 `widgets[].id`이며 ID, 권한, 저장 키는 바꾸지 않습니다.
+
+```json
+"locales": {
+  "en": {
+    "name": "Calendar",
+    "description": "Save and manage events by date.",
+    "widgets": { "calendar": "Calendar" }
+  }
+}
+```
+
+화면 문구와 날짜 표시를 바꾸되, 사용자가 입력한 일정·문서·검색 결과·파일 이름은 번역하거나 다시 저장하지 않습니다.
+
 본문 높이는 자동으로 호스트에 전달됩니다. 툴킷은 48~720px 높이로 표시하고, 긴 본문은 프레임 안에서 스크롤합니다. 높이가 반복해서 커지지 않도록 `body`에 `100vh`나 고정 최소 높이를 지정하지 마세요.
 
 ```js
