@@ -16,9 +16,13 @@ async function readGlobalGuidance(home) {
       const buffer = Buffer.alloc(32 * 1024);
       const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
       const text = new TextDecoder().decode(buffer.subarray(0, bytesRead), { stream: true }).trim();
-      if (text) return `Global user guidance (${path.join(home, name)}):\nApply these as the user's defaults; explicit user requests take precedence.\n\n${text}`;
-    } catch (error) { if (error.code !== 'ENOENT') throw error; }
-    finally { await handle?.close(); }
+      if (text)
+        return `Global user guidance (${path.join(home, name)}):\nApply these as the user's defaults; explicit user requests take precedence.\n\n${text}`;
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    } finally {
+      await handle?.close();
+    }
   }
   return '';
 }
@@ -28,19 +32,23 @@ async function sharedSkillRoots(home, userHome = os.homedir()) {
   for (const directory of [path.join(home, 'skills'), path.join(userHome, '.agents', 'skills')]) {
     try {
       if ((await fs.stat(directory)).isDirectory()) roots.push(await fs.realpath(directory));
-    } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
   }
   return [...new Set(roots)];
 }
 
 function skillReaderConfig(roots) {
-  return { 'mcp_servers.dockit_skills': {
-    command: process.execPath,
-    args: [path.join(__dirname, 'codex-skills-server.cjs'), ...roots],
-    env: { ELECTRON_RUN_AS_NODE: '1' },
-    startup_timeout_sec: 10,
-    enabled_tools: ['read_skill']
-  } };
+  return {
+    'mcp_servers.dockit_skills': {
+      command: process.execPath,
+      args: [path.join(__dirname, 'codex-skills-server.cjs'), ...roots],
+      env: { ELECTRON_RUN_AS_NODE: '1' },
+      startup_timeout_sec: 10,
+      enabled_tools: ['read_skill']
+    }
+  };
 }
 
 module.exports = { defaultCodexHome, readGlobalGuidance, sharedSkillRoots, skillReaderConfig };

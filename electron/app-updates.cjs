@@ -4,7 +4,17 @@ const { randomUUID } = require('node:crypto');
 const BUSY = new Set(['downloading', 'waiting', 'saving', 'installing']);
 
 class AppUpdates {
-  constructor({ updater, enabled, currentVersion, emit, waitForWork, flush, allowQuit, openRelease, saveTimeout = 60_000 }) {
+  constructor({
+    updater,
+    enabled,
+    currentVersion,
+    emit,
+    waitForWork,
+    flush,
+    allowQuit,
+    openRelease,
+    saveTimeout = 60_000
+  }) {
     Object.assign(this, { updater, enabled, emit, waitForWork, flush, allowQuit, openRelease, saveTimeout });
     this.state = { status: 'idle', currentVersion, version: null, percent: 0, manualDownload: Boolean(openRelease) };
     this.dismissed = new Set();
@@ -24,14 +34,23 @@ class AppUpdates {
     });
     // check/download errors also reject their promises. Installation errors are events only.
     updater.on('error', () => {
-      if (this.state.status === 'installing') this.fail(uiText("설치를 시작하지 못했습니다. 다시 시도해 주세요."));
+      if (this.state.status === 'installing') this.fail(uiText('설치를 시작하지 못했습니다. 다시 시도해 주세요.'));
     });
   }
 
-  get busy() { return BUSY.has(this.state.status); }
-  get blocksWork() { return ['waiting', 'saving', 'installing'].includes(this.state.status); }
-  snapshot() { return { ...this.state }; }
-  set(patch) { this.state = { ...this.state, ...patch }; this.emit(this.snapshot()); }
+  get busy() {
+    return BUSY.has(this.state.status);
+  }
+  get blocksWork() {
+    return ['waiting', 'saving', 'installing'].includes(this.state.status);
+  }
+  snapshot() {
+    return { ...this.state };
+  }
+  set(patch) {
+    this.state = { ...this.state, ...patch };
+    this.emit(this.snapshot());
+  }
 
   async check() {
     if (!this.enabled || this.checking || this.busy || ['available', 'error'].includes(this.state.status)) return;
@@ -45,7 +64,9 @@ class AppUpdates {
       }
     } catch {
       // Offline, missing releases and background check failures do not interrupt editing.
-    } finally { this.checking = false; }
+    } finally {
+      this.checking = false;
+    }
   }
 
   dismiss() {
@@ -56,7 +77,9 @@ class AppUpdates {
 
   install() {
     if (!this.enabled || this.job || !['available', 'error'].includes(this.state.status)) return this.job;
-    this.job = this.runInstall().finally(() => { this.job = null; });
+    this.job = this.runInstall().finally(() => {
+      this.job = null;
+    });
     return this.job;
   }
 
@@ -70,7 +93,7 @@ class AppUpdates {
       if (!this.downloaded) {
         this.set({ status: 'downloading', percent: 0, error: null });
         const files = await this.updater.downloadUpdate();
-        if (!files?.length) throw new Error(uiText("다운로드한 설치 파일을 찾지 못했습니다."));
+        if (!files?.length) throw new Error(uiText('다운로드한 설치 파일을 찾지 못했습니다.'));
         this.downloaded = true;
       }
       this.set({ status: 'waiting', percent: 100, error: null });
@@ -83,12 +106,12 @@ class AppUpdates {
       this.updater.quitAndInstall(false, true);
     } catch (error) {
       const message = this.openRelease
-        ? uiText("다운로드 페이지를 열지 못했습니다. 다시 시도해 주세요.")
+        ? uiText('다운로드 페이지를 열지 못했습니다. 다시 시도해 주세요.')
         : this.state.status === 'downloading'
-        ? uiText("다운로드하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.")
-        : this.state.status === 'installing'
-          ? uiText("설치를 시작하지 못했습니다. 다시 시도해 주세요.")
-          : error.message || uiText("문서를 저장하지 못했습니다. 다시 시도해 주세요.");
+          ? uiText('다운로드하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.')
+          : this.state.status === 'installing'
+            ? uiText('설치를 시작하지 못했습니다. 다시 시도해 주세요.')
+            : error.message || uiText('문서를 저장하지 못했습니다. 다시 시도해 주세요.');
       this.fail(message);
     }
   }
@@ -98,7 +121,7 @@ class AppUpdates {
       const id = randomUUID();
       const timer = setTimeout(() => {
         this.pendingSave = null;
-        reject(new Error(uiText("문서 저장을 확인하지 못했습니다. 다시 시도해 주세요.")));
+        reject(new Error(uiText('문서 저장을 확인하지 못했습니다. 다시 시도해 주세요.')));
       }, this.saveTimeout);
       this.pendingSave = { id, resolve, reject, timer };
       this.set({ status: 'saving', saveRequestId: id });
@@ -111,7 +134,12 @@ class AppUpdates {
     this.pendingSave = null;
     clearTimeout(pending.timer);
     if (result?.ok === true) pending.resolve();
-    else pending.reject(new Error(typeof result?.message === 'string' ? result.message.slice(0, 300) : uiText("문서를 저장하지 못했습니다.")));
+    else
+      pending.reject(
+        new Error(
+          typeof result?.message === 'string' ? result.message.slice(0, 300) : uiText('문서를 저장하지 못했습니다.')
+        )
+      );
   }
 
   fail(message) {

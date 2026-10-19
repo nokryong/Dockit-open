@@ -46,5 +46,4 @@ export const FormatPainter = Extension.create({
     };
   }
 
-  // 🗑️ onSelectionUpdate 부분을 완전히 제거합니다.
 });

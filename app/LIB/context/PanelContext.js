@@ -16,10 +16,10 @@ export function PanelProvider({ children }) {
   const {
     data, // 변수명 명확화를 위해 data 그대로 사용 (실제로는 panels 전체 객체)
     setData: setPanelsData,
-    saveData: savePanels, // ✅ 수동 저장을 위해 추가
+    saveData: savePanels, // 수동 저장
     loading,
-    isSaving, // ✅ 저장 중 상태 추가
-    error, // ✅ 에러 상태 추가
+    isSaving,
+    error,
   } = useDataManagement("panels", DEFAULT_PANELS, "dockit.panels.v1", 1000);
 
   // 2. 기존 코드 호환성을 위한 setLeft 어댑터

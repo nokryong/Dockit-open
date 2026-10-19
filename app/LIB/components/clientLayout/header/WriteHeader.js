@@ -9,7 +9,22 @@ import { HiMinus, HiPlus } from "react-icons/hi";
 import { GrDocumentConfig } from "react-icons/gr";
 import { useParams } from "@/desktop/navigation";
 
-import { PiListBulletsBold, PiListChecksBold, PiListNumbersBold, PiTableFill, PiTextAlignCenterBold, PiTextAlignJustifyBold, PiTextAlignLeftBold, PiTextAlignRightBold, PiTextBBold, PiTextIndentFill, PiTextItalicBold, PiTextOutdentFill, PiTextStrikethroughBold, PiTextUnderlineBold } from "react-icons/pi";
+import {
+  PiListBulletsBold,
+  PiListChecksBold,
+  PiListNumbersBold,
+  PiTableFill,
+  PiTextAlignCenterBold,
+  PiTextAlignJustifyBold,
+  PiTextAlignLeftBold,
+  PiTextAlignRightBold,
+  PiTextBBold,
+  PiTextIndentFill,
+  PiTextItalicBold,
+  PiTextOutdentFill,
+  PiTextStrikethroughBold,
+  PiTextUnderlineBold
+} from "react-icons/pi";
 import { MdFormatColorFill, MdFormatColorText } from "react-icons/md";
 import DocSettingModal from "./DocSettingModal";
 import { useDocumentFontOptions } from "@/app/LIB/hook/useDocumentFontOptions";
@@ -30,7 +45,15 @@ import { getToolbarPopoverStyle, ToolbarIconButton } from "@/app/LIB/components/
 import { collectHeadingEntries, createTocNodes } from "@/app/LIB/utils/tocUtils";
 import { createDockitDocumentSnapshot } from "@/app/LIB/utils/dktDocumentUtils";
 import { buildHeadingIdSyncTransaction } from "@/app/LIB/extensions/HeadingWithId";
-import { CAPTION_TOC_ITEM_TYPE, collectCaptionEntries, createCaptionTocNodes, getCaptionTargetConfig, isCaptionInsertionEnabled, normalizeCaptionTargetGroup, toggleCaptionForSelection } from "@/app/LIB/utils/captionUtils";
+import {
+  CAPTION_TOC_ITEM_TYPE,
+  collectCaptionEntries,
+  createCaptionTocNodes,
+  getCaptionTargetConfig,
+  isCaptionInsertionEnabled,
+  normalizeCaptionTargetGroup,
+  toggleCaptionForSelection
+} from "@/app/LIB/utils/captionUtils";
 
 const withToolbarTestId = (testId, child) =>
   testId ? (
@@ -291,7 +314,7 @@ export default function WriteHeader() {
 
   useEffect(() => {
     if (!editor) return;
-    // ✨ 툴바의 상태(폰트 크기, 글꼴)를 한번에 업데이트하는 함수
+    // 툴바의 상태(폰트 크기, 글꼴)를 한번에 업데이트한다.
     const updateToolbarState = () => {
       // 1. 현재 커서의 textStyle 속성을 한번에 가져옵니다.
       const attrs = editor.getAttributes("textStyle");
@@ -478,7 +501,7 @@ export default function WriteHeader() {
     }
   };
 
-  // [추가] 폰트 크기 변경 로직을 처리하는 함수
+  // 폰트 크기 변경을 처리한다.
   const handleFontSize = (size) => {
     if (!editor) return;
 
@@ -826,7 +849,7 @@ export default function WriteHeader() {
       <div
         className="flex items-center gap-px"
         onMouseDown={(event) => {
-          // [수정] 클릭된 요소의 태그 이름이 'INPUT'이 아닐 때만 기본 동작을 막습니다.
+          // 클릭한 요소가 INPUT이 아닐 때만 기본 동작을 막는다.
           if (event.target.tagName !== "INPUT") {
             event.preventDefault();
           }
@@ -1118,7 +1141,7 @@ export default function WriteHeader() {
             true
           )}
         </Popover>
-        {/* [추가] 들여쓰기 & 내어쓰기 버튼 */}
+        {/* 들여쓰기·내어쓰기 버튼 */}
         {renderBtn(
           editor,
           PiTextOutdentFill,

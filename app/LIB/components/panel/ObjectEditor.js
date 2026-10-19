@@ -134,7 +134,7 @@ export default function ObjectEditor({ dragHandleProps }) {
       // 1. 노드 속성 업데이트
       tr.setNodeMarkup(from, undefined, { ...node.attrs, ...updates });
 
-      // ✨ 핵심: 업데이트 직후 선택 영역이 안쪽 이미지로 튀지 않도록
+      // 업데이트 직후 선택 영역이 안쪽 이미지로 튀지 않도록
       // 현재 도형 위치(from)에 선택 영역을 강제로 다시 설정합니다.
       if (editor.state.selection instanceof NodeSelection) {
         tr.setSelection(NodeSelection.create(tr.doc, from));
