@@ -9,7 +9,7 @@ Dockit Open에 관심을 가져 주셔서 고맙습니다. 버그 제보, 기능
 
 - **버그**: [버그 제보](https://github.com/nokryong/Dockit-open/issues/new?template=bug_report.yml) 양식으로 남겨 주세요. 운영체제, 앱 버전, 재현 순서가 있으면 빨리 고칠 수 있습니다.
 - **제안**: [기능 제안](https://github.com/nokryong/Dockit-open/issues/new?template=feature_request.yml) 양식을 사용해 주세요.
-- **보안 문제**는 공개 이슈로 올리지 말고 [보안 정책](SECURITY.md)을 따라 주세요.
+- **보안 문제**는 공개 이슈로 올리지 말고 [보안 정책](SECURITY.ko.md)을 따라 주세요.
 - 문서 내용이 들어간 파일을 첨부할 때는 개인 정보를 지운 예시 파일을 사용해 주세요.
 
 ## 개발 환경
@@ -35,7 +35,7 @@ npm run dev
    npm run build
    ```
 
-   화면이나 Electron 동작을 바꿨다면 `npm run test:desktop`도 실행합니다. 검사 종류는 [TESTING.md](TESTING.md)에 있습니다.
+   화면이나 Electron 동작을 바꿨다면 `npm run test:desktop`도 실행합니다. 검사 종류는 [TESTING.ko.md](TESTING.ko.md)에 있습니다.
 4. 의존성을 추가하거나 바꿨다면 제3자 고지와 보안 스냅샷을 갱신합니다.
 
    ```sh

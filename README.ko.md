@@ -131,11 +131,11 @@ npm start                # 빌드한 앱 실행
 npm run package:desktop  # 현재 OS용 설치 파일을 release/에 생성 (업로드하지 않음)
 ```
 
-검사 방법은 [TESTING.md](TESTING.md), 설치 파일과 업데이트 운영은 [앱 업데이트](docs/desktop-updates.md)를 참고하세요.
+검사 방법은 [TESTING.ko.md](TESTING.ko.md), 설치 파일과 업데이트 운영은 [앱 업데이트](docs/desktop-updates.ko.md)를 참고하세요.
 
 ## 기여
 
-버그 제보, 제안, PR을 환영합니다. [기여 안내](CONTRIBUTING.ko.md)를 먼저 읽어 주세요. 보안 문제는 공개 이슈 대신 [보안 정책](SECURITY.md)에 따라 알려 주세요.
+버그 제보, 제안, PR을 환영합니다. [기여 안내](CONTRIBUTING.ko.md)를 먼저 읽어 주세요. 보안 문제는 공개 이슈 대신 [보안 정책](SECURITY.ko.md)에 따라 알려 주세요.
 
 ## 라이선스
 

@@ -1,34 +1,30 @@
-# 보안 정책
+# Security policy
 
-## 지원 버전
+English · [한국어](SECURITY.ko.md)
 
-보안 수정은 [최신 릴리즈](https://github.com/nokryong/Dockit-open/releases/latest)에 반영합니다. 이전 버전을 쓰고 있다면 최신 버전으로 업데이트해 주세요.
+## Supported versions
 
-## 취약점 제보
+Security fixes ship in the [latest release](https://github.com/nokryong/Dockit-open/releases/latest). If you use an older version, please update to the latest one.
 
-보안 문제는 **공개 이슈로 올리지 말아 주세요.** 저장소의 **Security → Report a vulnerability**에서 비공개로 제보해 주세요.
+## Reporting a vulnerability
 
-다음 내용이 있으면 확인이 빨라집니다.
+**Please do not report security issues in public issues.** Report them privately through **Security → Report a vulnerability** in this repository.
 
-- 영향을 받는 버전과 운영체제
-- 재현 순서나 예시 파일 (개인 정보가 없는 것)
-- 예상되는 영향 (예: 문서 내용 노출, 인증 정보 노출, 임의 코드 실행, 플러그인 격리 우회)
+Including the following helps us confirm the issue faster:
 
-제보를 확인하면 답변 드리고, 수정이 배포될 때까지 내용을 공개하지 않습니다. 수정 후에는 원하시면 제보자를 릴리즈 노트에 밝힙니다.
+- Affected version and operating system
+- Steps to reproduce or a sample file (without personal information)
+- Expected impact (for example, exposure of document content or credentials, arbitrary code execution, or escaping the plugin sandbox)
 
-## 범위
+We will reply once we have confirmed the report, and keep the details private until a fix is released. After the fix, we can credit you in the release notes if you wish.
 
-다음은 특히 관심 있게 보는 영역입니다.
+## Scope
 
-- 문서 폴더 밖의 파일 읽기·쓰기
-- ChatGPT·Codex 인증 정보, 플러그인 API Key 노출
-- 플러그인이 격리된 화면을 벗어나 앱이나 문서에 접근하는 문제
-- 업데이트 파일 검증 우회
+We are especially interested in:
 
-공식 저장소 밖에서 설치한 플러그인 자체의 동작은 해당 플러그인 작성자에게 알려 주세요.
+- Reading or writing files outside the documents folder
+- Exposure of ChatGPT or Codex credentials, or of plugin API keys
+- Plugins escaping their isolated frame to access the app or documents
+- Bypassing verification of update files
 
----
-
-## English
-
-Please do not report security issues in public issues. Use **Security → Report a vulnerability** in this repository to report privately. Include the affected version and OS, reproduction steps or a sample file without personal data, and the expected impact. Fixes ship in the latest release, and details stay private until a fix is released.
+For the behavior of a plugin installed from outside the official repository, please contact that plugin's author.
