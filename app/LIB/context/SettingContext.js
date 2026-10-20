@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useLayoutEffect } from "react";
 import { useDataManagement } from "../hook/useDataManagement";
-import { normalizeLanguage, setLanguage } from "../i18n";
+import { normalizeLanguagePreference, resolveLanguage, setLanguage } from "../i18n";
 
 import DEFAULT_SETTING from "../../../desktop/default-settings.json";
 
@@ -32,7 +32,7 @@ export function SettingProvider({ children }) {
 
     return {
       ...rawSetting,
-      language: normalizeLanguage(rawSetting.language),
+      language: normalizeLanguagePreference(rawSetting.language),
       autoSaveDelay:
         Number(rawSetting.autoSaveDelay) || DEFAULT_SETTING.autoSaveDelay,
       workspaceWidth:
@@ -44,7 +44,7 @@ export function SettingProvider({ children }) {
   }, [rawSetting]);
 
   useLayoutEffect(() => {
-    setLanguage(setting?.language);
+    setLanguage(resolveLanguage(setting?.language));
   }, [setting?.language]);
 
   const value = useMemo(

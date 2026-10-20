@@ -11,10 +11,10 @@ const root = path.join(__dirname, '..');
   await fs.mkdir(artifacts, { recursive: true });
   let app;
   const errors = [];
-  const launch = async () => {
+  const launch = async (lang = 'ko') => {
     const env = { ...process.env, DOCKIT_TEST_HOME: home };
     delete env.ELECTRON_RUN_AS_NODE;
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--test-mode'], env, timeout: 60000 });
+    app = await electron.launch({ executablePath: require('electron'), args: [`--lang=${lang}`, root, '--test-mode'], env, timeout: 60000 });
     const page = await app.firstWindow();
     page.setDefaultTimeout(30000);
     page.on('pageerror', error => errors.push(error.message));
@@ -24,7 +24,11 @@ const root = path.join(__dirname, '..');
   };
   try {
     let page = await launch();
+    // 기본값은 시스템 언어 사용
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ko');
+    assert.equal(JSON.parse(await fs.readFile(path.join(home, '.dockit', 'config.json'), 'utf8')).setting.language, 'system');
     await page.getByRole('button', { name: '설정', exact: true }).click();
+    await expect(page.locator('#interface-language')).toHaveValue('system');
     await page.locator('#interface-language').selectOption('en');
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('dialog').getByText('Use my ChatGPT plan', { exact: true })).toBeVisible();
@@ -80,8 +84,19 @@ const root = path.join(__dirname, '..');
       return '';
     });
     assert.ok(failure && !/[가-힣]/.test(failure), failure);
+    // 시스템 언어 사용 (한국어 외 시스템 언어는 영어)
+    await page.getByRole('button', { name: 'Settings', exact: true }).click();
+    await page.locator('#interface-language').selectOption('system');
+    await expect.poll(async () => JSON.parse(await fs.readFile(path.join(home, '.dockit', 'config.json'), 'utf8')).setting.language).toBe('system');
+    await app.close();
+    for (const [lang, expected] of [['en-US', 'en'], ['ja', 'en'], ['ko', 'ko']]) {
+      page = await launch(lang);
+      await expect(page.locator('html')).toHaveAttribute('lang', expected);
+      await expect(page.getByRole('button', { name: expected === 'ko' ? '설정' : 'Settings', exact: true })).toBeVisible();
+      await app.close();
+    }
     assert.deepEqual(errors, []);
-    console.log(JSON.stringify({ ok: true, languagePersists: true, documentPreserved: true, nativeError: failure, artifacts }));
+    console.log(JSON.stringify({ ok: true, languagePersists: true, systemLanguage: true, documentPreserved: true, nativeError: failure, artifacts }));
   } finally {
     await app?.close().catch(() => {});
   }

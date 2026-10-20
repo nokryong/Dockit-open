@@ -15,7 +15,7 @@ const actionIcons = { plus: TbPlus, minus: TbMinus, refresh: TbRefresh, key: TbK
 const post = (frame, value) => frame?.contentWindow?.postMessage({ channel: CHANNEL, ...value }, '*');
 
 export default function PluginWidget({ id, widget, dragHandleProps, preview = false }) {
-  useI18n();
+  const language = useI18n();
   const { setting } = useSetting();
   const { isDarkMode, currentColors } = useDarkMode();
   const frameRef = useRef(null);
@@ -46,7 +46,6 @@ export default function PluginWidget({ id, widget, dragHandleProps, preview = fa
   );
   const themeRef = useRef(theme);
   themeRef.current = theme;
-  const language = setting.language === 'en' ? 'en' : 'ko';
   const languageRef = useRef(language);
   languageRef.current = language;
 

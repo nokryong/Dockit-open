@@ -32,7 +32,7 @@ const fixture = path.join(root, 'tests/helpers/codex-electron-fixture.cjs');
     await server.listen();
     const env = { ...process.env, DOCKIT_TEST_HOME: home, DOCKIT_DEV_SERVER_URL: server.resolvedUrls.local[0] };
     delete env.ELECTRON_RUN_AS_NODE;
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--test-mode', '--dev'], env });
+    app = await electron.launch({ executablePath: require('electron'), args: ['--lang=ko', root, '--test-mode', '--dev'], env });
     await app.evaluate(({ app, clipboard, dialog, BrowserWindow }, fixture) => {
       const require = process.getBuiltinModule('module').createRequire(app.getAppPath() + '/package.json');
       require(fixture).install({ clipboard, dialog });

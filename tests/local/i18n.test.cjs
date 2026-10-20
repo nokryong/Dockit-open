@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const ts = require('typescript');
-const { t, setLanguage, normalizeLanguage } = require('../../electron/i18n.cjs');
+const { t, setLanguage, normalizeLanguage, resolveLanguage } = require('../../electron/i18n.cjs');
 const catalog = require('../../desktop/locales/en.json');
 const { LocalStore } = require('../../electron/local-store.cjs');
 const { safeFailure } = require('../../electron/chatgpt-client.cjs');
@@ -45,6 +45,21 @@ test('native translation defaults to Korean and interpolates without rewriting v
   assert.equal(t('Unknown {0}', 'value'), 'Unknown value');
   assert.equal(normalizeLanguage('fr'), 'ko');
   setLanguage('ko');
+});
+
+test('system language is the default and other system languages fall back to English', async () => {
+  const home = fs.mkdtempSync(path.join(os.tmpdir(), 'dockit-language-default-'));
+  const store = new LocalStore({ home });
+  await store.init();
+  assert.equal((await store.config()).setting.language, 'system');
+  assert.equal(resolveLanguage('system', 'ko'), 'ko');
+  assert.equal(resolveLanguage('system', 'ko-KR'), 'ko');
+  assert.equal(resolveLanguage('system', 'en-US'), 'en');
+  assert.equal(resolveLanguage('system', 'ja'), 'en');
+  assert.equal(resolveLanguage('system', ''), 'en');
+  assert.equal(resolveLanguage(undefined, 'ko'), 'ko');
+  assert.equal(resolveLanguage('ko', 'en-US'), 'ko');
+  assert.equal(resolveLanguage('en', 'ko'), 'en');
 });
 
 test('language settings persist while existing document contents remain unchanged', async () => {

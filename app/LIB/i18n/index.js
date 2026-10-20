@@ -5,6 +5,14 @@ const listeners = new Set();
 let language = "ko";
 
 export const normalizeLanguage = (value) => value === "en" ? "en" : "ko";
+// 언어 설정값 (ko, en 외에는 시스템 언어 사용)
+export const normalizeLanguagePreference = (value) => value === "ko" || value === "en" ? value : "system";
+// 실제 표시 언어 (시스템 언어가 한국어면 한국어, 그 외는 영어)
+export const resolveLanguage = (preference, systemLanguage = globalThis.navigator?.language) => {
+  const value = normalizeLanguagePreference(preference);
+  if (value !== "system") return value;
+  return String(systemLanguage || "").toLowerCase().startsWith("ko") ? "ko" : "en";
+};
 export const getLanguage = () => language;
 export const getDateLocale = () => language === "en" ? "en-US" : "ko-KR";
 

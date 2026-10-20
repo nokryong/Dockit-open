@@ -43,7 +43,7 @@ const { LocalStore, atomicJson } = require('../electron/local-store.cjs');
     await server.listen();
     const env = { ...process.env, DOCKIT_TEST_HOME: home, DOCKIT_DEV_SERVER_URL: 'http://127.0.0.1:53822' }; delete env.ELECTRON_RUN_AS_NODE;
     console.log('Starting isolated Electron fixture');
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--dev', '--test-mode', '--disable-gpu'], env, timeout: 30000 });
+    app = await electron.launch({ executablePath: require('electron'), args: ['--lang=ko', root, '--dev', '--test-mode', '--disable-gpu'], env, timeout: 30000 });
     console.log('Electron fixture ready');
     const workspace = watch(await app.firstWindow());
     await app.evaluate(({ app, clipboard, dialog, shell }, fixture) => {

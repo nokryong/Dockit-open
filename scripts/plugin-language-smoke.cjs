@@ -8,7 +8,7 @@ const { PluginStore } = require('../electron/plugin-store.cjs');
 const { packagePlugin } = require('../plugin-sdk/package.cjs');
 const expect = baseExpect.configure({ timeout: 30000 });
 const root = path.resolve(__dirname, '..');
-const pluginRoot = path.resolve(process.argv[2] || path.join(root, '../dockit-plugin-i18n-plugins'));
+const pluginRoot = path.resolve(process.argv[2] || path.join(root, '../dockit-plugins'));
 
 (async () => {
   const home = await fs.mkdtemp(path.join(os.tmpdir(), 'dockit-plugin-language-'));
@@ -47,7 +47,7 @@ const pluginRoot = path.resolve(process.argv[2] || path.join(root, '../dockit-pl
   let app;
   const errors = [];
   try {
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--test-mode', documentFile], env, timeout: 60000 });
+    app = await electron.launch({ executablePath: require('electron'), args: ['--lang=ko', root, '--test-mode', documentFile], env, timeout: 60000 });
     const page = await app.firstWindow();
     page.setDefaultTimeout(30000);
     page.on('pageerror', error => errors.push(error.message));

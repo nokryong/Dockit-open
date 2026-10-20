@@ -29,7 +29,7 @@ const repositoryUrl = process.env.DOCKIT_PLUGIN_TEST_URL || 'https://github.com/
   const launch = async () => {
     const env = { ...process.env, DOCKIT_TEST_HOME: home, DOCKIT_DEV_SERVER_URL: `http://127.0.0.1:${port}` };
     delete env.ELECTRON_RUN_AS_NODE;
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--dev', '--test-mode'], env, timeout: 60000 });
+    app = await electron.launch({ executablePath: require('electron'), args: ['--lang=ko', root, '--dev', '--test-mode'], env, timeout: 60000 });
     if (!process.env.DOCKIT_PLUGIN_TEST_URL) await app.evaluate((_, fixture) => {
       const originalFetch = globalThis.fetch;
       const commit = 'a'.repeat(40);
