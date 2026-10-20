@@ -20,7 +20,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import { newShadowDarkSm, newShadowLightSm } from "../../constant/uiProps";
 
 export default function SheetPanel({ dragHandleProps }) {
-  useI18n();
+  const language = useI18n();
   const { setting } = useSetting();
   const { isDarkMode } = useDarkMode();
   const { headerHeight, footerHeight } = useLayout();
@@ -364,7 +364,7 @@ export default function SheetPanel({ dragHandleProps }) {
         }}
       >
         <Workbook
-          lang={setting.language === "en" ? "en" : "ko"}
+          lang={language}
           key={key}
           ref={workbookRef}
           data={data}

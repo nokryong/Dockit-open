@@ -68,7 +68,7 @@ export default function SettingsDrawer({
             <label htmlFor="interface-language" className="font-semibold">{uiText("언어 / Language")}</label>
             <select
               id="interface-language"
-              value={setting.language || "ko"}
+              value={setting.language || "system"}
               onChange={async (event) => {
                 const language = event.target.value;
                 try { await saveSetting({ language }); }
@@ -76,6 +76,7 @@ export default function SettingsDrawer({
               }}
               className="w-full rounded-lg border border-current/20 bg-transparent px-3 py-2 text-sm"
             >
+              <option value="system">{uiText("시스템 언어 사용")}</option>
               <option value="ko">한국어</option>
               <option value="en">English</option>
             </select>

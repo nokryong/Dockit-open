@@ -17,7 +17,7 @@ const fixture = path.join(root, 'tests/helpers/codex-electron-fixture.cjs');
   }, { fixture, method, value });
   const launch = async () => {
     const env = { ...process.env, DOCKIT_TEST_HOME: home }; delete env.ELECTRON_RUN_AS_NODE;
-    app = await electron.launch({ executablePath: require('electron'), args: [root, '--test-mode'], env, timeout: 60000 });
+    app = await electron.launch({ executablePath: require('electron'), args: ['--lang=ko', root, '--test-mode'], env, timeout: 60000 });
     await app.evaluate(({ app, clipboard, dialog }, fixture) => {
       const require = process.getBuiltinModule('module').createRequire(app.getAppPath() + '/package.json');
       require(fixture).install({ clipboard, dialog });

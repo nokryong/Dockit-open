@@ -31,7 +31,7 @@ const { DocumentWindows, filesFromArguments } = require('./document-windows.cjs'
 const { Conversations } = require('./conversations.cjs');
 const { allowDocumentPermission } = require('./document-permissions.cjs');
 const { writeClipboardImage } = require('./image-clipboard.cjs');
-const { setLanguage } = require('./i18n.cjs');
+const { setLanguage, resolveLanguage } = require('./i18n.cjs');
 
 const testMode = process.argv.includes('--test-mode');
 let devOrigin = null;
@@ -134,7 +134,7 @@ else
         trash: file => shell.trashItem(file)
       });
       await store.init();
-      setLanguage((await store.config()).setting.language);
+      setLanguage(resolveLanguage((await store.config()).setting.language, app.getLocale()));
       const plugins = await registerPluginHost({
         root: store.root,
         handle,
@@ -481,7 +481,7 @@ else
         }
         const result = await store.request(action, args);
         if (args.type === 'setting' && ['create', 'update'].includes(action)) {
-          setLanguage((await store.config()).setting.language);
+          setLanguage(resolveLanguage((await store.config()).setting.language, app.getLocale()));
         }
         if (action === 'delete')
           for (const window of affected) {

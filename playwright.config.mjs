@@ -14,6 +14,7 @@ export default defineConfig({
   },
   reporter: [["list"]],
   use: {
+    locale: "ko-KR",
     trace: "retain-on-failure"
   },
   projects: [

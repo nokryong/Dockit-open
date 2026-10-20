@@ -40,7 +40,7 @@ const expect = baseExpect.configure({ timeout: 30000 });
   const launch = async (files = []) => {
     const env = { ...process.env, DOCKIT_TEST_HOME: home };
     delete env.ELECTRON_RUN_AS_NODE;
-    app = await electron.launch({ executablePath, args: ['--test-mode', ...files], env, timeout: 60000 });
+    app = await electron.launch({ executablePath, args: ['--lang=ko', '--test-mode', ...files], env, timeout: 60000 });
     assert.equal(await app.evaluate(({ app }) => app.isPackaged), true);
     const page = await app.firstWindow();
     page.on('pageerror', error => errors.push(error.message));

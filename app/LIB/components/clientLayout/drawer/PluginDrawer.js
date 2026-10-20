@@ -12,7 +12,7 @@ import { inputProps } from "../../../constant/uiProps";
 import { localizePlugin } from '../../../utils/pluginLocalization';
 
 export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) {
-  useI18n();
+  const language = useI18n();
   const { plugins, warnings, loading, error: loadError, refresh } = usePlugins();
   const { setting } = useSetting();
   const [busy, setBusy] = useState(false);
@@ -235,7 +235,7 @@ export default function PluginDrawer({ openPluginDrawer, setOpenPluginDrawer }) 
                   disabled={busy}
                   background={`${setting.theme}-1`}
                   options={preview.plugins.map((source) => {
-                    const plugin = localizePlugin(source, setting.language);
+                    const plugin = localizePlugin(source, language);
                     return {
                       value: plugin.path,
                       label: `${plugin.name} · ${plugin.publisher} · ${plugin.version}`
