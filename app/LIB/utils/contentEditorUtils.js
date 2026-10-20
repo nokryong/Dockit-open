@@ -1,3 +1,4 @@
+import { isTocTitleText } from "./captionUtils";
 import {
   isDoubleClickPanelObjectType,
   isTextEditBlockingObjectType,
@@ -166,3 +167,93 @@ export const shouldHideHoveredLinkPreview = ({
 
   return true;
 };
+
+const withAlpha = (color, alpha) => {
+  if (typeof color !== "string") return color;
+
+  const normalized = color.trim();
+
+  if (normalized.startsWith("#")) {
+    let hex = normalized.slice(1);
+
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map((char) => char + char)
+        .join("");
+    }
+
+    if (hex.length === 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+  }
+
+  if (normalized.startsWith("rgb(")) {
+    return normalized.replace("rgb(", "rgba(").replace(")", `, ${alpha})`);
+  }
+
+  return color;
+};
+
+const isTocTitleParagraph = (node) =>
+  node?.type?.name === "paragraph" && isTocTitleText(node.textContent);
+
+const resolveActivePageNumber = (paginationSegmentModel, position) => {
+  const pages = paginationSegmentModel?.pages || [];
+
+  if (pages.length === 0 || !Number.isFinite(position)) {
+    return 1;
+  }
+
+  const explicitMatch = pages.find((page) => {
+    if (!Number.isFinite(page.startPos) || !Number.isFinite(page.endPos)) {
+      return false;
+    }
+
+    return position >= page.startPos && position <= Math.max(page.startPos, page.endPos);
+  });
+
+  if (explicitMatch) {
+    return explicitMatch.pageNumber;
+  }
+
+  const closestPreviousPage = [...pages]
+    .reverse()
+    .find((page) => Number.isFinite(page.startPos) && page.startPos <= position);
+
+  return closestPreviousPage?.pageNumber || 1;
+};
+
+const resolveDeleteRangeFromObjectId = (doc, target) => {
+  if (!doc || !target?.objectId) {
+    return null;
+  }
+
+  let resolvedRange = null;
+
+  doc.descendants((node, pos) => {
+    if (resolvedRange) {
+      return false;
+    }
+
+    if (
+      node.type.name === target.typeName &&
+      node.attrs?.objectId === target.objectId
+    ) {
+      resolvedRange = {
+        from: pos,
+        to: pos + node.nodeSize
+      };
+      return false;
+    }
+
+    return true;
+  });
+
+  return resolvedRange;
+};
+
+export { withAlpha, isTocTitleParagraph, resolveActivePageNumber, resolveDeleteRangeFromObjectId };

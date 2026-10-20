@@ -15,45 +15,40 @@ import {
 import dynamic from "@/desktop/dynamic";
 
 import ExternalLinkPreviewPopover from "./ExternalLinkPreviewPopover";
+import FootnoteProjectionContent from "./FootnoteProjectionContent";
+import useContentEditorObjectSelection from "../../hook/useContentEditorObjectSelection";
+import useContentEditorHeadingStyles from "../../hook/useContentEditorHeadingStyles";
+import useContentEditorPrintFixups from "../../hook/useContentEditorPrintFixups";
 import { createExternalLinkPreview } from "../../utils/externalLinkPreviewUtils";
 import { migrateMathStrings } from "@tiptap/extension-mathematics";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Selection } from "@tiptap/pm/state";
-import { CellSelection } from "@tiptap/pm/tables";
 import { editorExtensions } from "@/app/LIB/constant/editorExtensions";
-import { useThrottle } from "../../hook/useThrottle";
 import { PaginationExtension } from "../../extensions/PaginationExtension";
 import DeleteBehaviorGuard from "../../extensions/DeleteBehaviorGuard";
 import TableRowOverflowGuard from "../../extensions/TableRowOverflowGuard";
 import CodexDocumentLock from '../../extensions/CodexDocumentLock';
 import { getEditorViewSafely } from "../../utils/editorViewUtils";
-import { getListMarkerStyles } from "../../utils/listMarkerStyleUtils";
 import { useSetting } from "../../context/SettingContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { buildPaginationPageSegmentModel } from "../../pagination/render/buildPaginationPageSegmentModel";
 import { createPaginationMirrorSnapshot } from "../../pagination/render/createPaginationMirrorSnapshot";
 import {
   focusCanonicalFootnoteBody,
-  focusFootnoteContinuationAtPoint,
-  mountCanonicalFootnoteBody,
-  mountFootnoteProjectionClone
+  focusFootnoteContinuationAtPoint
 } from "../../pagination/render/mountFootnoteProjectionClone";
-import { isTocTitleText } from "../../utils/captionUtils";
 import {
-  isDoubleClickPanelObjectType,
-  isPanelObjectType,
   isTocEntryNode,
   isTextEditBlockingObjectType
 } from "../../utils/editorContractUtils";
 import {
   getHoveredAnchorWithinEditor,
-  isReadOnlyObjectTarget,
-  isTextRangeSelection,
-  resolveSelectionObjectAction,
-  shouldHandleReadOnlyObjectPointer,
   shouldBlockTextEditing,
   shouldHideHoveredLinkPreview,
-  shouldCollapseTextSelectionOnMouseDown
+  withAlpha,
+  isTocTitleParagraph,
+  resolveActivePageNumber,
+  resolveDeleteRangeFromObjectId
 } from "../../utils/contentEditorUtils";
 import { getPageNumberBottomOffset } from "../../extensions/utils/paginationUtils";
 import {
@@ -73,108 +68,6 @@ const documentPlaceholderExtension = Placeholder.configure({
   placeholder: () => uiText("첫 문장을 입력해 문서를 시작하세요."),
   emptyEditorClass: "is-editor-empty"
 });
-
-const withAlpha = (color, alpha) => {
-  if (typeof color !== "string") return color;
-
-  const normalized = color.trim();
-
-  if (normalized.startsWith("#")) {
-    let hex = normalized.slice(1);
-
-    if (hex.length === 3) {
-      hex = hex
-        .split("")
-        .map((char) => char + char)
-        .join("");
-    }
-
-    if (hex.length === 6) {
-      const r = parseInt(hex.slice(0, 2), 16);
-      const g = parseInt(hex.slice(2, 4), 16);
-      const b = parseInt(hex.slice(4, 6), 16);
-      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
-  }
-
-  if (normalized.startsWith("rgb(")) {
-    return normalized.replace("rgb(", "rgba(").replace(")", `, ${alpha})`);
-  }
-
-  return color;
-};
-
-const isTocTitleParagraph = (node) =>
-  node?.type?.name === "paragraph" && isTocTitleText(node.textContent);
-
-const resolveActivePageNumber = (paginationSegmentModel, position) => {
-  const pages = paginationSegmentModel?.pages || [];
-
-  if (pages.length === 0 || !Number.isFinite(position)) {
-    return 1;
-  }
-
-  const explicitMatch = pages.find((page) => {
-    if (!Number.isFinite(page.startPos) || !Number.isFinite(page.endPos)) {
-      return false;
-    }
-
-    return position >= page.startPos && position <= Math.max(page.startPos, page.endPos);
-  });
-
-  if (explicitMatch) {
-    return explicitMatch.pageNumber;
-  }
-
-  const closestPreviousPage = [...pages]
-    .reverse()
-    .find((page) => Number.isFinite(page.startPos) && page.startPos <= position);
-
-  return closestPreviousPage?.pageNumber || 1;
-};
-
-const resolveDeleteRangeFromObjectId = (doc, target) => {
-  if (!doc || !target?.objectId) {
-    return null;
-  }
-
-  let resolvedRange = null;
-
-  doc.descendants((node, pos) => {
-    if (resolvedRange) {
-      return false;
-    }
-
-    if (
-      node.type.name === target.typeName &&
-      node.attrs?.objectId === target.objectId
-    ) {
-      resolvedRange = {
-        from: pos,
-        to: pos + node.nodeSize
-      };
-      return false;
-    }
-
-    return true;
-  });
-
-  return resolvedRange;
-};
-
-const FootnoteProjectionContent = ({ editor, projection }) => {
-  useI18n();
-  const hostRef = useRef(null);
-  useLayoutEffect(
-    () => (projection.canonical
-      ? mountCanonicalFootnoteBody(hostRef.current, projection, {
-          editorRoot: editor?.view?.dom
-        })
-      : mountFootnoteProjectionClone(hostRef.current, projection)),
-    [editor, projection]
-  );
-  return <div ref={hostRef} className="dockit-footnote-screen-projection__clip" />;
-};
 
 export default function ContentEditor({
   value,
@@ -419,6 +312,7 @@ export default function ContentEditor({
       selectedObjectRef.current = null;
       setSelectedObject(null);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setSelectedObject]
   );
 
@@ -753,358 +647,9 @@ export default function ContentEditor({
     paginationMirrorSnapshot?.outerHtml
   );
 
-  // 이전 선택 상태를 저장하여 불필요한 업데이트 방지
-  const lastSelectionRef = useRef(null);
+  const { selectedObjectRef, handleSelectionUpdate, handleDoubleClick, handleReadOnlyObjectPointerEvent, handleTextSelectionMouseDown } = useContentEditorObjectSelection(editor, isEditable, selectedObject, setSelectedObject, rememberTextSelection);
 
-  // selectedObject를 ref로 추적하여 콜백 의존성 순환 방지
-  const selectedObjectRef = useRef(selectedObject);
-  useEffect(() => {
-    selectedObjectRef.current = selectedObject;
-  }, [selectedObject]);
-
-  // 1. 객체 정보 추출 (텍스트 입력 중에도 도형 감지)
-  const getObjectInfoFromSelection = useCallback(() => {
-    if (!editor) return null;
-    const { selection } = editor.state;
-
-    // A. 노드 자체가 선택된 경우 (NodeSelection)
-    if (selection.node) {
-      const typeName = selection.node.type.name;
-      if (isPanelObjectType(typeName)) {
-        return {
-          node: selection.node,
-          from: selection.from,
-          to: selection.to,
-          type: typeName
-        };
-      }
-    }
-    // B. 텍스트 커서 상태일 때 (부모 확인: 테이블 OR 도형)
-    else {
-      let targetInfo = null;
-      for (let depth = selection.$from.depth; depth > 0; depth--) {
-        const node = selection.$from.node(depth);
-        const name = node.type.name;
-
-        // 테이블과 shapeBlock을 부모로 감지
-        if (
-          name === "table" ||
-          name === "tableRow" ||
-          name === "tableCell" ||
-          name === "tableHeader" ||
-          name === "table_row" ||
-          name === "table_cell" ||
-          name === "table_header" ||
-          name === "shapeBlock"
-        ) {
-          const pos = selection.$from.before(depth);
-          targetInfo = {
-            node: node,
-            from: pos,
-            to: pos + node.nodeSize,
-            type: name
-          };
-          break;
-        }
-      }
-      return targetInfo;
-    }
-  }, [editor]);
-
-  // 2. 선택 변경 핸들러 (원클릭 동작)
-  const handleSelectionUpdate = useCallback(() => {
-    if (!editor) return;
-
-    if (!isEditable) {
-      if (selectedObjectRef.current) {
-        selectedObjectRef.current = null;
-        setSelectedObject(null);
-      }
-      return;
-    }
-
-    const { selection } = editor.state;
-    const isCellSelection = selection instanceof CellSelection;
-    const hasTextRangeSelection = isTextRangeSelection({
-      isEmpty: selection.empty,
-      hasNodeSelection: Boolean(selection.node),
-      isCellSelection
-    });
-
-    if (!selection.node) {
-      rememberTextSelection(selection);
-    }
-
-    const selectionKey = `${selection.$from.pos}-${selection.$to.pos}`;
-
-    if (lastSelectionRef.current === selectionKey) return;
-    lastSelectionRef.current = selectionKey;
-
-    const targetInfo = getObjectInfoFromSelection();
-
-    const selectionAction = resolveSelectionObjectAction({
-      isEditable,
-      targetInfo,
-      hasTextRangeSelection,
-      activeElementTagName: document.activeElement?.tagName,
-      previousSelectedObject: selectedObjectRef.current
-    });
-
-    if (selectionAction.action === "keep") {
-      return;
-    }
-
-    if (selectionAction.action === "clear") {
-      setSelectedObject(null);
-      return;
-    }
-
-    setSelectedObject(selectionAction.value);
-  }, [
-    editor,
-    getObjectInfoFromSelection,
-    isEditable,
-    rememberTextSelection,
-    setSelectedObject
-  ]);
-
-  // 3. 더블 클릭 핸들러 (도형 선택 트리거)
-  const handleDoubleClick = useCallback(
-    (event) => {
-      if (!isEditable) {
-        return;
-      }
-
-      let targetInfo = getObjectInfoFromSelection();
-
-      // DOM 기반 폴백: selection으로 감지 안 될 때도 실제 더블클릭한 객체를 우선 잡습니다.
-      if (!targetInfo || !isDoubleClickPanelObjectType(targetInfo.type)) {
-        const target = event.target;
-        const editorView = getEditorViewSafely(editor);
-        const resolveNodeTargetInfoFromWrapper = (wrapperEl, typeName) => {
-          if (!wrapperEl || !editorView) {
-            return null;
-          }
-
-          try {
-            const pos = editorView.posAtDOM(wrapperEl, 0);
-            const $pos = editor.state.doc.resolve(pos);
-
-            for (let depth = $pos.depth; depth >= 0; depth -= 1) {
-              const node = $pos.node(depth);
-
-              if (node.type.name !== typeName) {
-                continue;
-              }
-
-              const from = depth > 0 ? $pos.before(depth) : pos;
-
-              return {
-                node,
-                from,
-                to: from + node.nodeSize,
-                type: typeName
-              };
-            }
-
-            const nodeAtPos = editor.state.doc.nodeAt(pos);
-
-            if (nodeAtPos && nodeAtPos.type.name === typeName) {
-              return {
-                node: nodeAtPos,
-                from: pos,
-                to: pos + nodeAtPos.nodeSize,
-                type: typeName
-              };
-            }
-          } catch (e) {
-            // posAtDOM 에러 무시
-          }
-
-          return null;
-        };
-
-        if (target instanceof Element && editorView) {
-          const imageEl =
-            target.closest(".lazy-image-container") || target.closest("img");
-
-          if (imageEl) {
-            targetInfo = resolveNodeTargetInfoFromWrapper(
-              imageEl.closest("[data-node-view-wrapper]"),
-              "image"
-            );
-          }
-
-          if (!targetInfo || targetInfo.type !== "image") {
-            const shapeEl =
-              target.closest(".shape-block-container") ||
-              target.closest('[data-type="shape-block"]');
-
-            if (shapeEl) {
-              targetInfo = resolveNodeTargetInfoFromWrapper(
-                shapeEl.closest("[data-node-view-wrapper]"),
-                "shapeBlock"
-              );
-            }
-          }
-        }
-      }
-
-      // 이미지 또는 도형일 때만 더블클릭으로 선택(툴바 토글)
-      if (targetInfo && isDoubleClickPanelObjectType(targetInfo.type)) {
-        // selectedObjectRef를 사용하여 의존성 순환 방지
-        const isSameObject =
-          selectedObjectRef.current &&
-          selectedObjectRef.current.from === targetInfo.from;
-
-        if (isSameObject) {
-          selectedObjectRef.current = null;
-          setSelectedObject(null);
-        } else {
-          // ref를 먼저 동기 업데이트하여 setNodeSelection이 트리거하는
-          // selectionUpdate에서 선택이 초기화되는 race condition 방지
-          selectedObjectRef.current = targetInfo;
-          setSelectedObject(targetInfo);
-          // NodeSelection을 설정하여 outline이 표시되도록 함
-          try {
-            editor.commands.setNodeSelection(targetInfo.from);
-          } catch (e) {
-            // NodeSelection 설정 실패 시 무시
-          }
-        }
-      }
-    },
-    [editor, getObjectInfoFromSelection, isEditable, setSelectedObject]
-  );
-
-  const handleReadOnlyObjectPointerEvent = useCallback(
-    (event) => {
-      const editorView = getEditorViewSafely(editor);
-      const editorDom = editorView?.dom;
-
-      if (isEditable || !editorDom) {
-        return;
-      }
-
-      const isTargetingReadOnlyObject = isReadOnlyObjectTarget(
-        event.target,
-        editorDom
-      );
-
-      if (
-        !shouldHandleReadOnlyObjectPointer({
-          isEditable,
-          hasEditorDom: Boolean(editorDom),
-          isTargetingReadOnlyObject
-        })
-      ) {
-        return;
-      }
-
-      event.stopPropagation();
-
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
-      }
-
-      if (selectedObjectRef.current) {
-        selectedObjectRef.current = null;
-        setSelectedObject(null);
-      }
-    },
-    [editor, isEditable, setSelectedObject]
-  );
-
-  const handleTextSelectionMouseDown = useCallback(
-    (event) => {
-      const editorView = getEditorViewSafely(editor);
-      const editorDom = editorView?.dom;
-
-      if (!editor || editor.isDestroyed || !editorView || !editorDom) {
-        return;
-      }
-
-      const clickResult = editorView.posAtCoords({
-        left: event.clientX,
-        top: event.clientY
-      });
-      const { selection } = editor.state;
-      const shouldCollapseSelection = shouldCollapseTextSelectionOnMouseDown({
-        isEditable,
-        hasEditorDom: Boolean(editorDom),
-        isPrimaryButton: event.button === 0,
-        hasModifierKey:
-          event.shiftKey || event.metaKey || event.ctrlKey || event.altKey,
-        selectionEmpty: selection.empty,
-        hasNodeSelection: Boolean(selection.node),
-        isCellSelection: selection instanceof CellSelection,
-        clickPos: clickResult?.pos,
-        selectionFrom: selection.from,
-        selectionTo: selection.to,
-        targetTagName: event.target?.tagName
-      });
-
-      if (!shouldCollapseSelection) {
-        return;
-      }
-
-      const docSize = editor.state.doc.content.size;
-      const clickPos = Math.max(0, Math.min(clickResult.pos, docSize));
-      const tr = editor.state.tr.setSelection(
-        Selection.near(editor.state.doc.resolve(clickPos))
-      );
-
-      editorView.dispatch(tr.scrollIntoView());
-      editorView.focus();
-      event.preventDefault();
-    },
-    [editor, isEditable]
-  );
-
-  const syncHeadingStyles = useCallback(() => {
-    const editorView = getEditorViewSafely(editor);
-
-    if (!editor || editor.isDestroyed || !editorView) {
-      return;
-    }
-
-    const editorElement = editorView.dom;
-
-    let styleElement = document.getElementById("dynamic-heading-styles");
-    if (!styleElement) {
-      styleElement = document.createElement("style");
-      styleElement.id = "dynamic-heading-styles";
-      document.head.appendChild(styleElement);
-    }
-
-    let allStyles = getListMarkerStyles(editorElement);
-
-    // 1. 헤딩 개별 처리
-    ["h1", "h2", "h3", "h4", "h5", "h6"].forEach((tagName) => {
-      const tagHeadings = editorElement.querySelectorAll(tagName);
-
-      tagHeadings.forEach((heading, index) => {
-        const span = heading.querySelector("span");
-        if (span) {
-          const computedStyle = window.getComputedStyle(span);
-
-          allStyles += `
-            .tiptap-container ${tagName}:nth-of-type(${index + 1})::before {
-              font-family: ${computedStyle.fontFamily} !important;
-              font-size: ${computedStyle.fontSize} !important;
-              font-weight: ${computedStyle.fontWeight} !important;
-              color: ${computedStyle.color} !important;
-            }
-          `;
-        }
-      });
-    });
-
-    styleElement.textContent = allStyles;
-  }, [editor]);
-
-  // throttle된 syncHeadingStyles
-  const throttledSyncHeadingStyles = useThrottle(syncHeadingStyles, 200);
+  const { syncHeadingStyles, throttledSyncHeadingStyles } = useContentEditorHeadingStyles(editor);
 
   useEffect(() => {
     if (!viewPage || !paginationSegmentModel || !isPaginationMirrorEnabled) {
@@ -1188,170 +733,7 @@ export default function ContentEditor({
     shouldUsePaginationContentMirror
   ]);
 
-  useEffect(() => {
-    if (typeof window === "undefined" || !viewPage) {
-      return undefined;
-    }
-
-    const restorePrintFixups = () => {
-      printInlineFixupsRef.current.forEach(({ element, style }) => {
-        if (!element?.isConnected) {
-          return;
-        }
-
-        if (style === null) {
-          element.removeAttribute("style");
-          return;
-        }
-
-        element.setAttribute("style", style);
-      });
-
-      printInlineFixupsRef.current = [];
-    };
-
-    const applyPrintFixups = () => {
-      restorePrintFixups();
-
-      const nextFixups = [];
-      const seen = new Set();
-      const rememberElement = (element) => {
-        if (!element || seen.has(element)) {
-          return;
-        }
-
-        seen.add(element);
-        nextFixups.push({
-          element,
-          style: element.getAttribute("style")
-        });
-      };
-
-      const setImportant = (element, property, value) => {
-        element.style.setProperty(property, value, "important");
-      };
-
-      const containerElement = editorContainerRef.current;
-      if (containerElement) {
-        let ancestorElement = containerElement.parentElement;
-
-        while (
-          ancestorElement &&
-          ancestorElement !== document.body &&
-          ancestorElement !== document.documentElement
-        ) {
-          rememberElement(ancestorElement);
-          setImportant(ancestorElement, "overflow", "visible");
-          setImportant(ancestorElement, "height", "auto");
-          setImportant(ancestorElement, "min-height", "0");
-          setImportant(ancestorElement, "max-height", "none");
-          ancestorElement = ancestorElement.parentElement;
-        }
-
-        containerElement
-          .querySelectorAll(".tiptap-page-shell-layer")
-          .forEach((element) => {
-            rememberElement(element);
-            setImportant(element, "display", "none");
-            setImportant(element, "visibility", "hidden");
-            setImportant(element, "height", "0");
-            setImportant(element, "min-height", "0");
-            setImportant(element, "max-height", "0");
-            setImportant(element, "overflow", "hidden");
-          });
-
-        containerElement.querySelectorAll(".page-gap").forEach((element) => {
-          rememberElement(element);
-          setImportant(element, "display", "none");
-          setImportant(element, "height", "0");
-          setImportant(element, "min-height", "0");
-          setImportant(element, "max-height", "0");
-          setImportant(element, "margin", "0");
-          setImportant(element, "padding", "0");
-          setImportant(element, "overflow", "hidden");
-        });
-
-        containerElement
-          .querySelectorAll(
-            ".tiptap-final-page-filler .page-footer-spacer, .tiptap-page-break-structure--final .page-footer-spacer"
-          )
-          .forEach((element) => {
-            rememberElement(element);
-            setImportant(element, "display", "block");
-            setImportant(element, "height", "var(--print-footer-height, 0px)");
-            setImportant(
-              element,
-              "min-height",
-              "var(--print-footer-height, 0px)"
-            );
-            setImportant(
-              element,
-              "max-height",
-              "var(--print-footer-height, 0px)"
-            );
-            setImportant(
-              element,
-              "margin-top",
-              "calc(var(--print-footer-height, 0px) * -1)"
-            );
-            setImportant(element, "margin-right", "0");
-            setImportant(element, "margin-bottom", "0");
-            setImportant(element, "margin-left", "0");
-            setImportant(element, "padding", "0");
-            setImportant(element, "overflow", "visible");
-          });
-      }
-
-      document.querySelectorAll("#header, .app-layout-footer").forEach((element) => {
-        rememberElement(element);
-        setImportant(element, "display", "none");
-        setImportant(element, "visibility", "hidden");
-        setImportant(element, "height", "0");
-        setImportant(element, "min-height", "0");
-        setImportant(element, "max-height", "0");
-        setImportant(element, "overflow", "hidden");
-      });
-
-      printInlineFixupsRef.current = nextFixups;
-    };
-
-    const handleBeforePrint = () => {
-      applyPrintFixups();
-    };
-    const handleAfterPrint = () => {
-      restorePrintFixups();
-    };
-    const mediaQueryList = window.matchMedia("print");
-    const handleMediaChange = (event) => {
-      if (event.matches) {
-        applyPrintFixups();
-        return;
-      }
-
-      restorePrintFixups();
-    };
-
-    window.addEventListener("beforeprint", handleBeforePrint);
-    window.addEventListener("afterprint", handleAfterPrint);
-
-    if (typeof mediaQueryList.addEventListener === "function") {
-      mediaQueryList.addEventListener("change", handleMediaChange);
-    } else if (typeof mediaQueryList.addListener === "function") {
-      mediaQueryList.addListener(handleMediaChange);
-    }
-
-    return () => {
-      restorePrintFixups();
-      window.removeEventListener("beforeprint", handleBeforePrint);
-      window.removeEventListener("afterprint", handleAfterPrint);
-
-      if (typeof mediaQueryList.removeEventListener === "function") {
-        mediaQueryList.removeEventListener("change", handleMediaChange);
-      } else if (typeof mediaQueryList.removeListener === "function") {
-        mediaQueryList.removeListener(handleMediaChange);
-      }
-    };
-  }, [viewPage]);
+  useContentEditorPrintFixups(viewPage, editorContainerRef, printInlineFixupsRef);
 
   // 에디터 생명주기 관리
   useEffect(() => {
@@ -1497,6 +879,7 @@ export default function ContentEditor({
     isEditable,
     scheduleHideHoveredLinkPreview,
     setSelectedObject,
+    selectedObjectRef,
     showHoveredLinkPreview
   ]);
 
