@@ -112,7 +112,7 @@ Codex CLI를 설치한 뒤(`npm install -g @openai/codex`) 설정에서 **CLI로
 | 달력 | 날짜별 일정을 저장합니다. |
 | 음악 플레이어 | 내 음악 폴더를 골라 그 안의 곡을 재생합니다. |
 
-플러그인은 격리된 화면에서 실행되며, 문서 파일이나 로그인 정보에 접근할 수 없습니다. 직접 만들려면 [Plugin SDK v2](docs/plugins/SDK.md)와 [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk)를 참고하세요. 공식 저장소에 등록하려면 [기여 안내](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.md)를 따라 PR을 보냅니다. 다른 공개 GitHub 저장소의 플러그인도 설치할 수 있지만, 공식 저장소의 검토를 거치지 않았다는 점에 유의하세요.
+플러그인은 격리된 화면에서 실행되며, 문서 파일이나 로그인 정보에 접근할 수 없습니다. 직접 만들려면 [Plugin SDK v2](docs/plugins/SDK.ko.md)와 [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk)를 참고하세요. 공식 저장소에 등록하려면 [기여 안내](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.ko.md)를 따라 PR을 보냅니다. 다른 공개 GitHub 저장소의 플러그인도 설치할 수 있지만, 공식 저장소의 검토를 거치지 않았다는 점에 유의하세요.
 
 ## 직접 빌드하기
 
@@ -135,7 +135,7 @@ npm run package:desktop  # 현재 OS용 설치 파일을 release/에 생성 (업
 
 ## 기여
 
-버그 제보, 제안, PR을 환영합니다. [기여 안내](CONTRIBUTING.md)를 먼저 읽어 주세요. 보안 문제는 공개 이슈 대신 [보안 정책](SECURITY.md)에 따라 알려 주세요.
+버그 제보, 제안, PR을 환영합니다. [기여 안내](CONTRIBUTING.ko.md)를 먼저 읽어 주세요. 보안 문제는 공개 이슈 대신 [보안 정책](SECURITY.md)에 따라 알려 주세요.
 
 ## 라이선스
 

@@ -114,7 +114,7 @@ Enter the [official plugin repository](https://github.com/nokryong/dockit-plugin
 | Calendar | Keep events by date. |
 | Music Player | Play the songs in a music folder you choose. |
 
-Plugins run in an isolated frame and cannot access your document files or sign-in data. To build one, see the [Plugin SDK v2](docs/plugins/SDK.md) (Korean) and [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk). To list a plugin in the official repository, open a pull request following its [contribution guide](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.md). You can also install plugins from other public GitHub repositories, but those are not reviewed by the official repository.
+Plugins run in an isolated frame and cannot access your document files or sign-in data. To build one, see the [Plugin SDK v2](docs/plugins/SDK.md) and [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk). To list a plugin in the official repository, open a pull request following its [contribution guide](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.md). You can also install plugins from other public GitHub repositories, but those are not reviewed by the official repository.
 
 ## Build from source
 
