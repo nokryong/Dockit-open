@@ -30,4 +30,4 @@ const count = await Dockit.storage.get('count');
 await Dockit.storage.set('count', (count ?? 0) + 1);
 ```
 
-See the [SDK guide](docs/SDK.md) (in Korean) for the full specification, and the [official plugins](https://github.com/nokryong/dockit-plugins) for working examples.
+See the [SDK guide](docs/SDK.md) for the full specification, and the [official plugins](https://github.com/nokryong/dockit-plugins) for working examples.
