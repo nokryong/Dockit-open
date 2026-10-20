@@ -1,26 +1,28 @@
 # Dockit Plugin SDK
 
-Dockit 플러그인의 브라우저 API, 패키지 규격 검사와 ZIP 생성 도구입니다.
+English · [한국어](README.ko.md)
 
-## 설치
+The browser API, package validation and ZIP packaging tool for Dockit plugins.
+
+## Install
 
 ```sh
 npm install --save-dev github:nokryong/dockit-plugin-sdk
 ```
 
-## 패키징
+## Packaging
 
-빌드된 HTML·JavaScript·CSS와 `manifest.json`을 같은 폴더에 넣습니다.
+Put your built HTML, JavaScript and CSS in one folder together with `manifest.json`.
 
 ```sh
 npx dockit-plugin-pack ./dist ./my-plugin-0.1.0.zip
 ```
 
-ZIP은 로컬 패키지 검사에 사용할 수 있습니다. 배포할 때는 빌드된 파일과 `manifest.json`을 공개 저장소의 `plugins/<이름>/` 폴더에 넣습니다. Dockit Open의 **플러그인 → 플러그인 설치**에서 저장소 주소를 입력하고 플러그인을 선택합니다. 개별 폴더의 GitHub 주소도 사용할 수 있습니다.
+You can use the ZIP to check the package locally. To publish, put the built files and `manifest.json` in a `plugins/<name>/` folder of a public repository. In Dockit Open, open **Plugins → Install plugin**, enter the repository address and choose the plugin. The GitHub address of a single plugin folder also works.
 
-## 브라우저 API
+## Browser API
 
-Dockit이 툴킷을 열 때 `window.Dockit`을 제공합니다. 플러그인에서 브리지를 직접 삽입할 필요가 없습니다.
+Dockit provides `window.Dockit` when it opens a toolkit, so plugins do not need to include the bridge themselves.
 
 ```js
 const theme = await Dockit.ready;
@@ -28,4 +30,4 @@ const count = await Dockit.storage.get('count');
 await Dockit.storage.set('count', (count ?? 0) + 1);
 ```
 
-자세한 규격은 [SDK 가이드](docs/SDK.md), 실행 예제는 [공식 플러그인](https://github.com/nokryong/dockit-plugins)을 참고하세요.
+See the [SDK guide](docs/SDK.md) (in Korean) for the full specification, and the [official plugins](https://github.com/nokryong/dockit-plugins) for working examples.
