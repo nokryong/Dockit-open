@@ -7,9 +7,9 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: b8288d0f9cf7c2b299a343761c44cd0eb7041bccbc21295d3d0c51e0b6a8eefa
-Included non-dev lock entries: 469
-Unique third-party package name/version pairs: 455
+package-lock.json SHA-256: 7e2387cb8ae53ccae8dbc487c2a473c468c0591cc83a9c9ff684f2aae145af9b
+Included non-dev lock entries: 466
+Unique third-party package name/version pairs: 454
 Owner-controlled lock entries excluded from this notice: 1
 Fallback/missing-evidence records: 0
 
@@ -1110,7 +1110,7 @@ comma-separated-tokens@2.0.3
   Author: Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)
   Included files: license (d9c32f07344cb9c8160725e998daa6a4bf5760ff6508ee645e0f192a06e929cb)
 
-commander@7.2.0
+commander@15.0.0
   License: MIT
   Source: https://github.com/tj/commander.js
   Evidence: collected
@@ -1118,7 +1118,7 @@ commander@7.2.0
   Author: TJ Holowaychuk <tj@vision-media.ca>
   Included files: LICENSE (4cc9c2af4eb0056cd4d2297b7404819e3816b4c44b7f8012c42d5fd671d783d3)
 
-commander@8.3.0
+commander@7.2.0
   License: MIT
   Source: https://github.com/tj/commander.js
   Evidence: collected
@@ -2055,14 +2055,7 @@ jszip@3.10.1
   Author: Stuart Knightley <stuart@stuartk.com>
   Included files: LICENSE.markdown (602ef1d5d3db1b23ada0b61d4230ef336012de7bc3b773d565f2b27a2757f51d)
 
-katex@0.16.47
-  License: MIT
-  Source: https://github.com/KaTeX/KaTeX
-  Evidence: collected
-  Lockfile instances: 3
-  Included files: LICENSE (d3c8c167dfa0a8a7f2ace9fc23ddfb89e609adc13b113e958bede249592b852d)
-
-katex@0.18.2
+katex@0.18.10
   License: MIT
   Source: https://github.com/KaTeX/KaTeX
   Evidence: collected

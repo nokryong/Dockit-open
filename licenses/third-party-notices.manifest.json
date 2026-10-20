@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "lockfileSha256": "b8288d0f9cf7c2b299a343761c44cd0eb7041bccbc21295d3d0c51e0b6a8eefa",
+  "lockfileSha256": "7e2387cb8ae53ccae8dbc487c2a473c468c0591cc83a9c9ff684f2aae145af9b",
   "packages": [
     {
       "lockPath": "node_modules/@antfu/install-pkg",
@@ -3306,9 +3306,9 @@
     {
       "lockPath": "node_modules/commander",
       "name": "commander",
-      "version": "8.3.0",
-      "resolved": "https://registry.npmjs.org/commander/-/commander-8.3.0.tgz",
-      "integrity": "sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==",
+      "version": "15.0.0",
+      "resolved": "https://registry.npmjs.org/commander/-/commander-15.0.0.tgz",
+      "integrity": "sha512-z67u4ZhzCL/Tydu1lJARtEZYWbWaN7oYLHbsuzocr6y4N6WZAagG3RQ4FW61V1/0+jImpj293XfrcYnd1qxtPg==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",
@@ -6010,9 +6010,9 @@
     {
       "lockPath": "node_modules/katex",
       "name": "katex",
-      "version": "0.18.2",
-      "resolved": "https://registry.npmjs.org/katex/-/katex-0.18.2.tgz",
-      "integrity": "sha512-3snve4y0SXTMequLim1FMiPvLGElySam0blN5xQZBqEY3lOJz1TnuaaiugnBZBqHzlSAGmFTYL7MCQkORuLKCA==",
+      "version": "0.18.10",
+      "resolved": "https://registry.npmjs.org/katex/-/katex-0.18.10.tgz",
+      "integrity": "sha512-/B6p9eY9DX7aHBfpkHdpirDTZ5QH9xTwL9y837PWuzuv41O5jFdqNQwVQEQsimY0/iVNkwBY4+4hMfhQ7d4Dbw==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",
@@ -7015,28 +7015,6 @@
       ]
     },
     {
-      "lockPath": "node_modules/mermaid/node_modules/katex",
-      "name": "katex",
-      "version": "0.16.47",
-      "resolved": "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz",
-      "integrity": "sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==",
-      "optional": false,
-      "ownerControlled": false,
-      "ownerNote": "",
-      "license": "MIT",
-      "selectedLicense": "",
-      "licenseEvidence": "",
-      "source": "https://github.com/KaTeX/KaTeX",
-      "author": "",
-      "evidenceStatus": "collected",
-      "noticeFiles": [
-        {
-          "name": "LICENSE",
-          "sha256": "d3c8c167dfa0a8a7f2ace9fc23ddfb89e609adc13b113e958bede249592b852d"
-        }
-      ]
-    },
-    {
       "lockPath": "node_modules/micromark",
       "name": "micromark",
       "version": "4.0.2",
@@ -7253,28 +7231,6 @@
         {
           "name": "license",
           "sha256": "0e99f2710dd25758c759e0578c135dfebc0cf8abb3f5f2b9ae7bec06912b44aa"
-        }
-      ]
-    },
-    {
-      "lockPath": "node_modules/micromark-extension-math/node_modules/katex",
-      "name": "katex",
-      "version": "0.16.47",
-      "resolved": "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz",
-      "integrity": "sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==",
-      "optional": false,
-      "ownerControlled": false,
-      "ownerNote": "",
-      "license": "MIT",
-      "selectedLicense": "",
-      "licenseEvidence": "",
-      "source": "https://github.com/KaTeX/KaTeX",
-      "author": "",
-      "evidenceStatus": "collected",
-      "noticeFiles": [
-        {
-          "name": "LICENSE",
-          "sha256": "d3c8c167dfa0a8a7f2ace9fc23ddfb89e609adc13b113e958bede249592b852d"
         }
       ]
     },
@@ -8768,28 +8724,6 @@
       "author": "Junyoung Choi <fluke8259@gmail.com> (https://rokt33r.github.io)",
       "evidenceStatus": "collected",
       "noticeFiles": []
-    },
-    {
-      "lockPath": "node_modules/rehype-katex/node_modules/katex",
-      "name": "katex",
-      "version": "0.16.47",
-      "resolved": "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz",
-      "integrity": "sha512-Eeo8Ys1doU1z+x8AZsPpQu+p/QcZBI5PeOo7QGQdy2x2m0MU/hYagBbGOmXwr5KVbEfVuWv9LpnQWeehogurjg==",
-      "optional": false,
-      "ownerControlled": false,
-      "ownerNote": "",
-      "license": "MIT",
-      "selectedLicense": "",
-      "licenseEvidence": "",
-      "source": "https://github.com/KaTeX/KaTeX",
-      "author": "",
-      "evidenceStatus": "collected",
-      "noticeFiles": [
-        {
-          "name": "LICENSE",
-          "sha256": "d3c8c167dfa0a8a7f2ace9fc23ddfb89e609adc13b113e958bede249592b852d"
-        }
-      ]
     },
     {
       "lockPath": "node_modules/remark-gfm",
