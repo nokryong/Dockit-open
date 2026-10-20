@@ -61,6 +61,20 @@ async function readJson(file, fallback) {
   }
 }
 
+// 파일 교체 (Windows 백신·검색 색인이 방금 쓴 파일을 잠깐 열고 있으면 EPERM이 나므로 최대 5초 재시도)
+async function replaceFile(from, to) {
+  const deadline = Date.now() + 5000;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fs.rename(from, to);
+    } catch (error) {
+      if (process.platform !== 'win32' || !['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || Date.now() > deadline)
+        throw error;
+      await new Promise(resolve => setTimeout(resolve, Math.min(attempt * 20, 200)));
+    }
+  }
+}
+
 async function atomicJson(file, value, { exclusive = false } = {}) {
   const raw = JSON.stringify(value, null, 2) + '\n';
   if (Buffer.byteLength(raw) > MAX_BYTES) throw fail(uiText('저장할 데이터가 너무 큽니다.'));
@@ -77,7 +91,7 @@ async function atomicJson(file, value, { exclusive = false } = {}) {
       // 다른 쓰기가 대상을 먼저 만들면 link 실패 (덮어쓰지 않음)
       await fs.link(temporary, file);
       await fs.unlink(temporary);
-    } else await fs.rename(temporary, file);
+    } else await replaceFile(temporary, file);
     return hash(raw);
   } finally {
     await fs.unlink(temporary).catch(error => {
