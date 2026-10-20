@@ -4,7 +4,7 @@ import { Code, PhotoOutline, Print } from "sud-icons";
 import { AiFillSave } from "react-icons/ai";
 import { useEditor } from "@/app/LIB/context/EditorContext";
 import { Button, ColorPicker, Divider, Input, Div, Popover, Select, Tooltip, Typography, Upload, toast } from "sud-ui";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { GrDocumentConfig } from "react-icons/gr";
 import { useParams } from "@/desktop/navigation";
@@ -28,6 +28,8 @@ import {
 import { MdFormatColorFill, MdFormatColorText } from "react-icons/md";
 import DocSettingModal from "./DocSettingModal";
 import { useDocumentFontOptions } from "@/app/LIB/hook/useDocumentFontOptions";
+import useWriteHeaderToolbarStateSync from "@/app/LIB/hook/useWriteHeaderToolbarStateSync";
+import useWriteHeaderSelection from "@/app/LIB/hook/useWriteHeaderSelection";
 import { unquoteFontFamily } from "@/app/LIB/utils/localFonts";
 import { LuSubscript, LuSuperscript } from "react-icons/lu";
 import { findParentNode } from "@tiptap/core";
@@ -50,7 +52,6 @@ import {
   collectCaptionEntries,
   createCaptionTocNodes,
   getCaptionTargetConfig,
-  isCaptionInsertionEnabled,
   normalizeCaptionTargetGroup,
   toggleCaptionForSelection
 } from "@/app/LIB/utils/captionUtils";
@@ -312,194 +313,24 @@ export default function WriteHeader() {
   // Input의 실제 DOM 요소를 참조하기 위한 ref
   const fontSizeInputRef = useRef(null);
 
-  useEffect(() => {
-    if (!editor) return;
-    // 툴바 상태(폰트 크기, 글꼴) 한번에 업데이트
-    const updateToolbarState = () => {
-      // 1. 현재 커서의 textStyle 속성을 한번에 가져옵니다.
-      const attrs = editor.getAttributes("textStyle");
+  useWriteHeaderToolbarStateSync(
+    editor,
+    setCurrentFontSize,
+    setFont,
+    setInlineTagColor,
+    setCaptionButtonEnabled
+  );
 
-      // 2. 폰트 크기 상태를 업데이트합니다.
-      const fontSize = attrs?.fontSize;
-      if (fontSize) {
-        setCurrentFontSize(parseInt(fontSize, 10));
-      } else {
-        const paraAttrs = editor.getAttributes("paragraph");
-        setCurrentFontSize(
-          paraAttrs?.fontSize ? parseInt(paraAttrs.fontSize, 10) : 12
-        );
-      }
-
-      // 3. 폰트 패밀리(글꼴) 상태를 업데이트합니다.
-      const diagram = editor.state.selection.node;
-      const fontFamily = diagram?.type.name === "diagramBlock"
-        ? diagram.attrs.fontFamily || "sans-serif"
-        : attrs?.fontFamily;
-      if (fontFamily) {
-        setFont(fontFamily);
-      } else {
-        setFont("PretendardMedium"); // 기본값
-      }
-
-      const inlineTagAttrs = editor.getAttributes("inlineTag");
-
-      if (inlineTagAttrs?.color) {
-        setInlineTagColor(inlineTagAttrs.color);
-      }
-
-      setCaptionButtonEnabled(isCaptionInsertionEnabled(editor));
-    };
-
-    // 4. 에디터의 내용이나 선택 영역이 변경될 때마다 툴바 상태를 업데이트합니다.
-    editor.on("transaction", updateToolbarState);
-    editor.on("selectionUpdate", updateToolbarState);
-
-    // 5. 컴포넌트가 처음 로드될 때 초기 상태를 설정합니다.
-    updateToolbarState();
-
-    // 6. 컴포넌트가 사라질 때 이벤트 리스너를 정리합니다.
-    return () => {
-      editor.off("transaction", updateToolbarState);
-      editor.off("selectionUpdate", updateToolbarState);
-    };
-  }, [editor]); // 의존성 배열은 그대로 [editor] 입니다.
-
-  // Input의 실제 input 요소에 포커스 이벤트 리스너 추가
-  useEffect(() => {
-    if (!fontSizeInputRef.current) return;
-
-    // Input 컴포넌트 내부의 실제 input 요소 찾기
-    const findInputElement = (element) => {
-      if (!element) return null;
-      if (element.tagName === "INPUT") return element;
-      return element.querySelector("input");
-    };
-
-    const inputElement = findInputElement(fontSizeInputRef.current);
-    if (!inputElement) return;
-
-    // 포커스 이벤트 리스너 추가
-    const handleFocus = () => {
-      // Input에 포커스가 가기 전에 에디터 선택 상태 저장
-      if (editor) {
-        const { from, to } = editor.state.selection;
-        if (from !== to) {
-          savedSelectionRef.current = { from, to };
-        }
-      }
-    };
-
-    // mousedown 이벤트로도 처리 (포커스보다 먼저 실행)
-    const handleMouseDown = () => {
-      if (editor) {
-        const { from, to } = editor.state.selection;
-        if (from !== to) {
-          savedSelectionRef.current = { from, to };
-        }
-        // CellSelection도 저장
-        if (editor.state.selection instanceof CellSelection) {
-          savedCellSelectionRef.current = editor.state.selection;
-        }
-      }
-    };
-
-    inputElement.addEventListener("mousedown", handleMouseDown, true);
-    inputElement.addEventListener("focus", handleFocus, true);
-
-    return () => {
-      inputElement.removeEventListener("mousedown", handleMouseDown, true);
-      inputElement.removeEventListener("focus", handleFocus, true);
-    };
-  }, [editor, fontSizeInputRef]);
-
-  // CellSelection이 활성화된 경우 현재 또는 저장된 선택 영역에 textStyle mark를 적용
-  const applyTextStyleToSelection = (attrs) => {
-    const editorView = getEditorViewSafely(editor);
-
-    if (!editor || !editorView) return false;
-
-    const { state } = editor;
-    const { schema } = state;
-    const markType = schema.marks.textStyle;
-    if (!markType) return false;
-
-    // 현재 선택이 CellSelection이거나 저장된 CellSelection이 있는 경우 처리
-    const cellSel =
-      state.selection instanceof CellSelection
-        ? state.selection
-        : savedCellSelectionRef.current;
-
-    if (!cellSel) return false;
-
-    const tr = state.tr;
-
-    cellSel.forEachCell((cellNode, cellPos) => {
-      const from = cellPos + 1;
-      const to = cellPos + cellNode.nodeSize - 1;
-
-      state.doc.nodesBetween(from, to, (node, pos) => {
-        if (!node.isText) return;
-
-        const nodeFrom = Math.max(pos, from);
-        const nodeTo = Math.min(pos + node.nodeSize, to);
-
-        // 기존 textStyle mark의 속성을 보존하면서 새 속성 병합
-        const existingMark = node.marks.find((m) => m.type === markType);
-        const existingAttrs = existingMark ? { ...existingMark.attrs } : {};
-        const newMark = markType.create({ ...existingAttrs, ...attrs });
-
-        tr.addMark(nodeFrom, nodeTo, newMark);
-      });
-    });
-
-    editorView.dispatch(tr);
-    savedCellSelectionRef.current = null;
-    return true;
-  };
-
-  // CellSelection이 활성화된 경우 현재 또는 저장된 선택 영역에 textAlign을 적용
-  const applyTextAlignToSelection = (alignment) => {
-    const editorView = getEditorViewSafely(editor);
-
-    if (!editor || !editorView) return false;
-
-    const { state } = editor;
-
-    const cellSel =
-      state.selection instanceof CellSelection
-        ? state.selection
-        : savedCellSelectionRef.current;
-
-    if (!cellSel) return false;
-
-    const tr = state.tr;
-    const alignTypes = ["paragraph", "heading"];
-
-    cellSel.forEachCell((cellNode, cellPos) => {
-      const from = cellPos + 1;
-      const to = cellPos + cellNode.nodeSize - 1;
-
-      state.doc.nodesBetween(from, to, (node, pos) => {
-        if (alignTypes.includes(node.type.name)) {
-          tr.setNodeMarkup(pos, undefined, {
-            ...node.attrs,
-            textAlign: alignment
-          });
-        }
-      });
-    });
-
-    editorView.dispatch(tr);
-    savedCellSelectionRef.current = null;
-    return true;
-  };
-
-  // CellSelection을 저장하는 헬퍼 (툴바 인터랙션 전에 호출)
-  const saveCellSelection = () => {
-    if (editor && editor.state.selection instanceof CellSelection) {
-      savedCellSelectionRef.current = editor.state.selection;
-    }
-  };
+  const {
+    applyTextStyleToSelection,
+    applyTextAlignToSelection,
+    saveCellSelection
+  } = useWriteHeaderSelection(
+    editor,
+    fontSizeInputRef,
+    savedSelectionRef,
+    savedCellSelectionRef
+  );
 
   // 폰트 크기 변경 처리
   const handleFontSize = (size) => {
