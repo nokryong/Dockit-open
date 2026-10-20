@@ -3,140 +3,142 @@
 </p>
 
 <p align="center">
-  로그인 없이 내 컴퓨터에서 쓰는 문서 편집기
+  A document editor that runs on your own computer, no account required
 </p>
 
 <p align="center">
-  <a href="README.en.md">English</a> ·
-  <a href="https://github.com/nokryong/Dockit-open/releases">다운로드</a> ·
-  <a href="https://github.com/nokryong/dockit-plugins">플러그인</a>
+  <a href="README.ko.md">한국어</a> ·
+  <a href="https://github.com/nokryong/Dockit-open/releases">Download</a> ·
+  <a href="https://github.com/nokryong/dockit-plugins">Plugins</a>
 </p>
 
-![문서 편집 화면: 왼쪽 목차, 가운데 문서, 오른쪽 ChatGPT](docs/images/overview.png)
+![Editing a document with the table of contents on the left and ChatGPT on the right](docs/images/overview.png)
 
-Dockit Open은 Windows·macOS·Linux에서 동작하는 오픈소스 문서 편집기입니다. 계정이나 서버 없이 문서를 내 컴퓨터에 저장하고, 필요할 때 ChatGPT나 Codex CLI를 연결해 문서 작업을 도울 수 있습니다.
+Dockit Open is an open-source document editor for Windows, macOS, and Linux. Your documents stay on your computer without an account or a server, and you can optionally connect ChatGPT or the Codex CLI to help with your writing.
 
-## 주요 기능
+The interface supports Korean and English. By default it follows your system language and falls back to English. You can change it in Settings → Language.
 
-- **페이지 단위 문서 편집**: 표, 수식(LaTeX), 이미지, 차트, Mermaid 도식, 각주·미주, 목차를 지원합니다.
-- **한글·워드 파일**: HWPX와 DOCX를 가져오고 내보냅니다.
-- **로컬 저장**: 문서는 `.dkt` 파일로 내 컴퓨터에 저장됩니다. 삭제한 문서는 OS 휴지통으로 갑니다.
-- **툴킷**: ChatGPT, 특수문자, 한자, LaTeX, 목차, 스타일, 단축키, 차트, 편집기, 시트, 메모장, 계산기, 타이머를 문서 옆에 띄워 씁니다.
-- **AI 연결(선택)**: ChatGPT 계정이나 Codex CLI를 연결해 대화하고 문서 작업을 맡깁니다. API 키나 별도 서버가 필요 없습니다.
-- **플러그인**: GitHub 주소로 플러그인을 설치하고 업데이트합니다.
+## Features
 
-![툴킷 선택 창](docs/images/toolkits.png)
+- **Paged document editing** with tables, LaTeX math, images, charts, Mermaid diagrams, footnotes and endnotes, and a table of contents.
+- **HWPX and DOCX**: import and export Hangul (HWPX) and Word (DOCX) files.
+- **Local storage**: documents are saved as `.dkt` files on your computer. Deleted documents go to the OS trash.
+- **Toolkits** docked beside the document: ChatGPT, special characters, Hanja, LaTeX, table of contents, styles, shortcuts, charts, object editor, sheets, notes, calculator, and timer.
+- **Optional AI**: connect your ChatGPT account or the Codex CLI to chat and delegate document work. No API key or extra server is needed.
+- **Plugins**: install and update plugins from a GitHub address.
 
-표를 선택하면 차트 툴킷에서 바로 차트를 만들어 문서에 넣을 수 있습니다.
+![Toolkit picker](docs/images/toolkits.png)
 
-![표를 선택해 차트 툴킷으로 만든 차트](docs/images/charts.png)
+Select a table and the Chart toolkit turns it into a chart you can insert into the document.
 
-## 다운로드와 설치
+![A chart made from a table with the Chart toolkit](docs/images/charts.png)
 
-[Releases](https://github.com/nokryong/Dockit-open/releases)에서 운영체제에 맞는 파일을 받습니다.
+## Download and install
 
-| 운영체제 | 파일 |
+Get the file for your operating system from [Releases](https://github.com/nokryong/Dockit-open/releases).
+
+| OS | File |
 |---|---|
-| Windows | `.exe` 설치 파일 |
+| Windows | `.exe` installer |
 | macOS | `.dmg` |
 | Linux | `.AppImage` |
 
-설치 파일은 유료 코드 서명 없이 배포합니다. 처음 실행할 때 보안 경고가 나오면 다음과 같이 엽니다.
+The installers are not code-signed. If you see a security warning on first launch:
 
-- **Windows**: "Windows의 PC 보호" 창에서 **추가 정보 → 실행**을 누릅니다.
-- **macOS**: 앱을 처음 열 때 차단되면 **시스템 설정 → 개인정보 보호 및 보안**에서 **그래도 열기**를 누릅니다.
-- **Linux**: 파일에 실행 권한을 준 뒤(`chmod +x Dockit*.AppImage`) 실행합니다.
+- **Windows**: in "Windows protected your PC", choose **More info → Run anyway**.
+- **macOS**: if the app is blocked, open **System Settings → Privacy & Security** and choose **Open Anyway**.
+- **Linux**: make the file executable (`chmod +x Dockit*.AppImage`) and run it.
 
-### 업데이트
+### Updates
 
-앱은 시작할 때와 이후 6시간마다 새 버전을 확인합니다.
+The app checks for a new version shortly after launch and every six hours.
 
-- **Windows·Linux**: 새 버전 안내에서 **설치**를 누르면 내려받은 뒤, 열린 문서를 저장하고 다시 시작합니다.
-- **macOS**: 서명이 없어 자동 설치를 지원하지 않습니다. 새 버전 안내의 **다운로드**로 릴리즈 페이지를 열어 직접 교체합니다.
+- **Windows and Linux**: choose **Install** in the update notice. The app downloads the update, saves open documents, and restarts.
+- **macOS**: automatic installation needs code signing, so the notice opens the release page instead. Download the new version and replace the app.
 
-## 문서와 데이터 저장 위치
+## Where your data lives
 
-![홈 화면: 폴더와 문서 목록](docs/images/home.png)
+![Home screen with folders and documents](docs/images/home.png)
 
-모든 데이터는 사용자 홈의 `.dockit` 폴더에 저장됩니다.
+Everything is stored in the `.dockit` folder in your home directory.
 
-| 위치 | 내용 |
+| Location | Contents |
 |---|---|
-| `.dockit/Documents/` | `.dkt` 문서와 폴더 (설정에서 다른 폴더로 바꿀 수 있습니다) |
-| `.dockit/backups/` | 문서의 직전 저장본 |
-| `.dockit/config.json` | 설정, 테마, 패널 배치 |
-| `.dockit/memos/`, `.dockit/characters/`, `.dockit/styles/` | 메모, 특수문자 즐겨찾기, 사용자 스타일 |
-| `.dockit/plugins/`, `.dockit/plugin-data/` | 설치한 플러그인과 플러그인 데이터 |
-| `.dockit/ai/`, `.dockit/codex/` | 암호화된 AI 연결 정보와 대화 기록 |
+| `.dockit/Documents/` | `.dkt` documents and folders (you can choose another folder in Settings) |
+| `.dockit/backups/` | The previous saved copy of each document |
+| `.dockit/config.json` | Settings, theme, and panel layout |
+| `.dockit/memos/`, `.dockit/characters/`, `.dockit/styles/` | Notes, favorite characters, and custom styles |
+| `.dockit/plugins/`, `.dockit/plugin-data/` | Installed plugins and their data |
+| `.dockit/ai/`, `.dockit/codex/` | Encrypted AI connection data and chat history |
 
-문서 폴더 경로를 바꿔도 기존 문서를 옮기거나 지우지 않습니다.
+Changing the documents folder does not move or delete existing documents.
 
-## AI 연결
+## AI connections
 
-AI 연결은 선택 사항입니다. 연결하지 않아도 모든 편집 기능을 쓸 수 있습니다.
+AI is optional. Every editing feature works without it.
 
-![ChatGPT 툴킷으로 문서와 도식을 작성하는 화면](docs/images/chatgpt.png)
+![Writing a document and a diagram with the ChatGPT toolkit](docs/images/chatgpt.png)
 
 ### ChatGPT
 
-설정 맨 위의 **Continue with ChatGPT**를 누르고, 기본 브라우저에서 로그인한 뒤 요금제 사용을 허용합니다. ChatGPT 툴킷에서 계정에 허용된 모델을 골라 대화합니다.
+Choose **Continue with ChatGPT** at the top of Settings, sign in with your default browser, and allow plan usage. Then pick a model your account can use in the ChatGPT toolkit.
 
-- 대화에는 연결한 ChatGPT 요금제 또는 크레딧이 쓰입니다. 한도는 **사용량 관리**에서 확인합니다.
-- 대화 기록은 내 컴퓨터에 저장됩니다. 메시지를 보낼 때 현재 대화 내용만 OpenAI로 전송하며, 문서 파일을 자동으로 보내지 않습니다.
-- 인증 정보는 OS 암호화로 보호합니다.
-- 지원 범위와 계정 조건은 [OpenAI 공식 문서](https://developers.openai.com/siwc/token-sharing-open-source)를 따릅니다. 이 연결 방식에서는 이미지 생성은 지원되지 않습니다.
+- Chats use your connected ChatGPT plan or credits. See limits under **사용량 관리** (Manage usage).
+- Chat history stays on your computer. Only the current conversation is sent to OpenAI when you send a message; document files are never sent automatically.
+- Credentials are protected with OS encryption.
+- Availability and account requirements follow [OpenAI's documentation](https://developers.openai.com/siwc/token-sharing-open-source). Image generation is not supported through this connection.
 
 ### Codex CLI
 
-Codex CLI를 설치한 뒤(`npm install -g @openai/codex`) 설정에서 **CLI로 로그인하기**를 누릅니다. 로그인하면 ChatGPT 툴킷 오른쪽 위의 **Chat/Codex** 스위치로 Codex 대화로 바꿀 수 있습니다.
+Install the Codex CLI (`npm install -g @openai/codex`) and choose **CLI로 로그인하기** (Sign in with CLI) in Settings. After signing in, switch the ChatGPT toolkit to Codex with the **Chat/Codex** toggle in its top-right corner.
 
-![설정 화면: ChatGPT·Codex CLI 연결과 테마](docs/images/settings.png)
+![Settings: ChatGPT and Codex CLI connections and themes](docs/images/settings.png)
 
-- Codex는 사용자가 지시하면 열린 문서를 직접 고칠 수 있습니다. 작업하는 동안에는 문서 편집이 잠깁니다.
-- Codex의 전역 `AGENTS.md`와 개인 스킬을 함께 사용합니다.
-- CLI 인증은 `.dockit/codex/`에 따로 저장하며, 기본 `~/.codex` 로그인과는 별개입니다. `.dockit/codex/auth.json`은 공유하지 마세요.
+- When you ask, Codex can edit the open document directly. Editing is locked while it works.
+- Your global Codex `AGENTS.md` and personal skills are used as well.
+- CLI credentials are stored separately in `.dockit/codex/`, independent of your default `~/.codex` sign-in. Do not share `.dockit/codex/auth.json`.
 
-## 플러그인
+## Plugins
 
-상단의 **플러그인 → 플러그인 설치**에 GitHub 저장소나 플러그인 폴더 주소를 입력합니다. 설치한 플러그인은 **툴킷 → 플러그인**에서 엽니다. 새 버전이 나오면 플러그인 관리에서 **업데이트**를 누르며, 저장한 데이터와 API Key는 유지됩니다.
+Choose **플러그인 → 플러그인 설치** (Plugins → Install plugin) and enter a GitHub repository or plugin folder address. Open installed plugins from **툴킷 → 플러그인** (Toolkits → Plugins). When a new version is available, choose **업데이트** (Update) in the plugin manager; saved data and API keys are kept.
 
-![플러그인 관리 창](docs/images/plugins.png)
+![Plugin manager](docs/images/plugins.png)
 
-[공식 플러그인 저장소](https://github.com/nokryong/dockit-plugins) 주소를 넣으면 다음 플러그인을 골라 설치할 수 있습니다.
+Enter the [official plugin repository](https://github.com/nokryong/dockit-plugins) to choose from:
 
-| 플러그인 | 설명 |
+| Plugin | Description |
 |---|---|
-| 주사위 | 주사위를 추가하고 굴립니다. |
-| 이미지 검색 | Pixabay 이미지를 검색하고 내려받습니다. (본인의 Pixabay API Key 필요) |
-| 우리말 사전 | 우리말샘에서 단어와 뜻을 찾습니다. |
-| 달력 | 날짜별 일정을 저장합니다. |
-| 음악 플레이어 | 내 음악 폴더를 골라 그 안의 곡을 재생합니다. |
+| Dice | Add dice and roll them. |
+| Image Search | Search and download Pixabay images (requires your own Pixabay API key). |
+| Korean Dictionary (우리말 사전) | Look up words in Urimalsaem. |
+| Calendar | Keep events by date. |
+| Music Player | Play the songs in a music folder you choose. |
 
-플러그인은 격리된 화면에서 실행되며, 문서 파일이나 로그인 정보에 접근할 수 없습니다. 직접 만들려면 [Plugin SDK v2](docs/plugins/SDK.md)와 [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk)를 참고하세요. 공식 저장소에 등록하려면 [기여 안내](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.md)를 따라 PR을 보냅니다. 다른 공개 GitHub 저장소의 플러그인도 설치할 수 있지만, 공식 저장소의 검토를 거치지 않았다는 점에 유의하세요.
+Plugins run in an isolated frame and cannot access your document files or sign-in data. To build one, see the [Plugin SDK v2](docs/plugins/SDK.md) (Korean) and [dockit-plugin-sdk](https://github.com/nokryong/dockit-plugin-sdk). To list a plugin in the official repository, open a pull request following its [contribution guide](https://github.com/nokryong/dockit-plugins/blob/main/CONTRIBUTING.md). You can also install plugins from other public GitHub repositories, but those are not reviewed by the official repository.
 
-## 직접 빌드하기
+## Build from source
 
-Node.js 24 이상이 필요합니다. 별도 데이터베이스나 환경 변수는 필요하지 않습니다.
+Requires Node.js 24 or later. No database or environment variables are needed.
 
 ```sh
 npm install
 npm run dev
 ```
 
-`npm run dev`는 개발 서버와 앱을 함께 실행하며, UI 코드를 저장하면 바로 반영됩니다. Electron 메인 프로세스 코드를 고쳤다면 다시 실행합니다.
+`npm run dev` starts the dev server and the app together and reloads UI changes on save. Restart it after changing Electron main-process code.
 
 ```sh
-npm run build            # 화면 빌드
-npm start                # 빌드한 앱 실행
-npm run package:desktop  # 현재 OS용 설치 파일을 release/에 생성 (업로드하지 않음)
+npm run build            # build the UI
+npm start                # run the built app
+npm run package:desktop  # create installers for the current OS in release/ (no upload)
 ```
 
-검사 방법은 [TESTING.md](TESTING.md), 설치 파일과 업데이트 운영은 [앱 업데이트](docs/desktop-updates.md)를 참고하세요.
+See [TESTING.md](TESTING.md) for checks and [docs/desktop-updates.md](docs/desktop-updates.md) for packaging and updates (both in Korean).
 
-## 기여
+## Contributing
 
-버그 제보, 제안, PR을 환영합니다. [기여 안내](CONTRIBUTING.md)를 먼저 읽어 주세요. 보안 문제는 공개 이슈 대신 [보안 정책](SECURITY.md)에 따라 알려 주세요.
+Bug reports, ideas, and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first. Report security issues privately as described in [SECURITY.md](SECURITY.md), not in public issues.
 
-## 라이선스
+## License
 
-Dockit Open은 [GNU AGPL v3.0](LICENSE)으로 배포합니다. 제3자 구성요소의 고지와 라이선스 전문은 [THIRD_PARTY_NOTICES.txt](public/THIRD_PARTY_NOTICES.txt)에 있습니다. 코드 블록 글꼴 Intel One Mono는 [SIL Open Font License 1.1](public/fonts/IntelOneMono-OFL.txt)을 따릅니다.
+Dockit Open is released under the [GNU AGPL v3.0](LICENSE). Third-party notices and license texts are in [THIRD_PARTY_NOTICES.txt](public/THIRD_PARTY_NOTICES.txt). The Intel One Mono code font is licensed under the [SIL Open Font License 1.1](public/fonts/IntelOneMono-OFL.txt).
