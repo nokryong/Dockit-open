@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "lockfileSha256": "b869010cf2e7cf4fbd22d78c12acc247aa24746521d284cc3da1dc47140d9ffe",
+  "lockfileSha256": "b8288d0f9cf7c2b299a343761c44cd0eb7041bccbc21295d3d0c51e0b6a8eefa",
   "packages": [
     {
       "lockPath": "node_modules/@antfu/install-pkg",
@@ -374,9 +374,9 @@
     {
       "lockPath": "node_modules/@fortune-sheet/core/node_modules/uuid",
       "name": "uuid",
-      "version": "8.3.2",
-      "resolved": "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz",
-      "integrity": "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==",
+      "version": "11.1.1",
+      "resolved": "https://registry.npmjs.org/uuid/-/uuid-11.1.1.tgz",
+      "integrity": "sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",
@@ -4964,9 +4964,9 @@
     {
       "lockPath": "node_modules/exceljs/node_modules/uuid",
       "name": "uuid",
-      "version": "8.3.2",
-      "resolved": "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz",
-      "integrity": "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==",
+      "version": "11.1.1",
+      "resolved": "https://registry.npmjs.org/uuid/-/uuid-11.1.1.tgz",
+      "integrity": "sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==",
       "optional": false,
       "ownerControlled": false,
       "ownerNote": "",

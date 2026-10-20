@@ -7,7 +7,7 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: b869010cf2e7cf4fbd22d78c12acc247aa24746521d284cc3da1dc47140d9ffe
+package-lock.json SHA-256: b8288d0f9cf7c2b299a343761c44cd0eb7041bccbc21295d3d0c51e0b6a8eefa
 Included non-dev lock entries: 469
 Unique third-party package name/version pairs: 455
 Owner-controlled lock entries excluded from this notice: 1
@@ -3438,18 +3438,18 @@ utrie@1.0.2
   Author: Niklas von Hertzen <niklasvh@gmail.com> (https://hertzen.com)
   Included files: LICENSE (8b00952cd8d0f5cbbefb13576778e1185dc963943151353d90c4e14a5a4caf40)
 
+uuid@11.1.1
+  License: MIT
+  Source: https://github.com/uuidjs/uuid
+  Evidence: collected
+  Lockfile instances: 2
+  Included files: LICENSE.md (19f9e00b8c981751ab9b00c64c5d573976c192cbfba0937d8ab48777d38bbf9b)
+
 uuid@14.0.1
   License: MIT
   Source: https://github.com/uuidjs/uuid
   Evidence: collected
   Lockfile instances: 1
-  Included files: LICENSE.md (19f9e00b8c981751ab9b00c64c5d573976c192cbfba0937d8ab48777d38bbf9b)
-
-uuid@8.3.2
-  License: MIT
-  Source: https://github.com/uuidjs/uuid
-  Evidence: collected
-  Lockfile instances: 2
   Included files: LICENSE.md (19f9e00b8c981751ab9b00c64c5d573976c192cbfba0937d8ab48777d38bbf9b)
 
 vfile-location@5.0.3
