@@ -30,4 +30,4 @@ const count = await Dockit.storage.get('count');
 await Dockit.storage.set('count', (count ?? 0) + 1);
 ```
 
-자세한 규격은 [SDK 가이드](docs/SDK.ko.md), 실행 예제는 [공식 플러그인](https://github.com/nokryong/dockit-plugins)을 참고하세요.
+자세한 규격은 [SDK 가이드](https://github.com/nokryong/dockit-plugin-sdk/blob/main/docs/SDK.ko.md), 실행 예제는 [공식 플러그인](https://github.com/nokryong/dockit-plugins)을 참고하세요.

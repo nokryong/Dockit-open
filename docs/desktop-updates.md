@@ -1,38 +1,40 @@
-# 앱 업데이트
+# App updates
 
-배포 앱은 시작 3초 후와 이후 6시간마다 `nokryong/Dockit-open`의 새 릴리즈를 확인합니다. 새 버전이 있으면 sud-ui Modal에서 설치 여부를 선택합니다. 취소한 버전은 해당 실행 중 다시 안내하지 않습니다.
+English · [한국어](desktop-updates.ko.md)
 
-Windows와 Linux에서는 설치를 누르면 다운로드 진행률을 표시합니다. 다운로드가 끝나면 진행 중인 AI 작업을 기다린 후 열린 문서와 로컬 설정을 저장하고 설치·재시작합니다. 저장 실패나 응답 시간 초과 시 설치하지 않고 재시도를 제공합니다. 일반 종료 시 자동 설치는 꺼져 있습니다.
+The released app checks `nokryong/Dockit-open` for a new release 3 seconds after starting and every 6 hours after that. When a new version is available, a sud-ui modal asks whether to install it. A version the user dismisses is not offered again during that run.
 
-macOS는 배포 인증서 없이 제공하므로 새 버전 알림의 **다운로드** 버튼으로 GitHub 릴리즈 페이지를 엽니다. 다운로드한 앱은 직접 교체하며, 이 버튼으로 문서를 저장하거나 앱을 종료하지 않습니다.
+On Windows and Linux, choosing Install shows the download progress. When the download finishes, the app waits for any AI work in progress, saves open documents and local settings, then installs and restarts. If saving fails or times out, it does not install and offers a retry. Automatic installation on a normal quit is turned off.
 
-## UI 확인
+macOS builds are distributed without a signing certificate, so the **Download** button in the update notice opens the GitHub release page. The user replaces the app manually; this button neither saves documents nor quits the app.
 
-`npm run dev`로 실행한 앱에서 `Ctrl+Shift+U` (macOS: `Cmd+Shift+U`)를 누르면 같은 모달을 미리 볼 수 있습니다. 설치를 누르면 진행률 → 저장 → 재시작 안내를 재현하고 닫힙니다. macOS의 다운로드 미리보기는 버튼을 누르면 닫힙니다. 이 미리보기는 파일 저장, 다운로드, 설치, 앱 종료를 실행하지 않습니다. 단축키를 다시 누르면 처음부터 볼 수 있습니다.
+## Previewing the UI
 
-모달: `app/LIB/components/updates/AppUpdateModal.js`
+In an app started with `npm run dev`, press `Ctrl+Shift+U` (macOS: `Cmd+Shift+U`) to preview the same modal. Choosing Install plays the progress → saving → restart steps and then closes. On macOS, the download preview closes when you press the button. The preview never saves files, downloads, installs or quits the app. Press the shortcut again to start over.
 
-## 배포 준비
+Modal: `app/LIB/components/updates/AppUpdateModal.js`
 
-`npm run package:desktop`은 현재 OS의 설치 파일과 업데이트 메타데이터를 `release/`에 만듭니다. `--publish never`로 업로드하지 않습니다. Windows는 NSIS, macOS는 DMG와 ZIP, Linux는 AppImage입니다. 소스·개인 데이터 전체를 패키지에 넣지 않도록 포함할 파일을 `electron-builder.yml`에 지정했습니다.
+## Preparing a release
 
-실제 배포 시에는 공개 GitHub 릴리즈에 해당 OS/아키텍처의 설치 파일, 블록맵과 `latest*.yml`을 함께 올려야 합니다. 버전은 `package.json`에서 올립니다. 유료 배포 서명 없이 배포하며 Windows·macOS에서 설치 또는 실행 시 보안 경고가 표시될 수 있습니다. macOS 자동 설치는 배포 서명을 도입한 뒤 별도로 활성화합니다. 업데이트 저장소용 토큰을 앱에 넣지 않습니다.
+`npm run package:desktop` creates the installer and update metadata for the current OS in `release/`. It uses `--publish never`, so nothing is uploaded. Windows uses NSIS, macOS uses DMG and ZIP, and Linux uses AppImage. The files to include are listed in `electron-builder.yml` so that the full source and personal data never end up in the package.
 
-패치 버전은 `0`부터 `9`까지 사용합니다. `0.1.9 → 0.2.0`, `0.2.9 → 0.3.0`처럼 패치가 `9`이면 다음 릴리즈에서 마이너를 올리고 패치를 `0`으로 시작합니다. 마이너도 `9`이면 `0.9.9 → 1.0.0`처럼 메이저를 올립니다. `package-lock.json`의 앱 버전도 함께 맞춥니다.
+For a real release, upload the installers, blockmaps and `latest*.yml` for each OS and architecture to a public GitHub release. Bump the version in `package.json`. Releases are not code-signed, so Windows and macOS may show security warnings during installation or launch. Automatic installation on macOS will be enabled separately once code signing is in place. No token for the update repository is included in the app.
 
-배포 전 Windows·Linux에서는 설치한 앱으로 문서 저장 후 업데이트·재시작까지, macOS에서는 새 버전 다운로드와 앱 교체 후 재실행을 확인합니다.
+Patch versions run from `0` to `9`. When the patch is `9`, the next release bumps the minor version and resets the patch to `0`, as in `0.1.9 → 0.2.0` and `0.2.9 → 0.3.0`. When the minor version is also `9`, bump the major version, as in `0.9.9 → 1.0.0`. Keep the app version in `package-lock.json` in sync.
 
-## 설치본 검사
+Before a release, check on Windows and Linux that an installed app saves a document and then updates and restarts, and on macOS that you can download the new version, replace the app and relaunch it.
+
+## Checking the installed app
 
 ```sh
 npm run package:desktop
 npm run test:packaged
 ```
 
-`test:packaged`는 임시 사용자 폴더에서 빌드된 앱의 문서 열기·저장·재열기와 `.dkt` 실행 인자를 확인합니다. 사용자 문서나 실행 중인 앱을 사용하지 않습니다.
+`test:packaged` checks, in a temporary user folder, that the built app opens, saves and reopens documents and accepts `.dkt` launch arguments. It never uses your documents or a running app.
 
-Windows에서는 `npm run test:update-download`로 생성된 설치 파일을 로컬 HTTP 서버에서 내려받아 진행률과 체크섬 검증, 저장 후 설치 전달 순서, 재시작 인자를 확인합니다. 손상된 다운로드도 차단하는지 검사합니다. 설치 프로세스 실행은 대체하므로 실제 OS 설치·재시작 검증과는 별개입니다.
+On Windows, `npm run test:update-download` downloads the generated installer from a local HTTP server and checks the progress, checksum verification, the order of saving before handing off to the installer, and the restart arguments. It also checks that a corrupted download is blocked. The installer process itself is replaced, so this is separate from verifying a real OS installation and restart.
 
-CI의 `update-install-smoke.cjs`는 임시 Windows VM에 실제 NSIS 설치본을 설치하고, 이전 버전으로 설정한 설치본에서 업데이트합니다. 열린 문서 저장, 설치 파일 교체, 자동 재시작, 문서 재열기를 확인합니다. 파일 연결과 레지스트리가 변경되므로 GitHub에서 제공하는 일회용 Windows 실행기에서만 실행할 수 있습니다.
+In CI, `update-install-smoke.cjs` installs the real NSIS installer on a temporary Windows VM and updates from an installation set to an older version. It checks saving the open document, replacing the installed files, the automatic restart and reopening the document. It changes file associations and the registry, so it runs only on GitHub's disposable Windows runners.
 
-GitHub Actions의 **Desktop package check**를 수동 실행하거나 `codex/release-check-*` 검증 브랜치에 푸시하면 Windows·macOS·Linux에서 패키징과 설치본 검사를 수행하고 결과를 Actions 아티팩트로 보관합니다. 릴리즈를 발행하지 않습니다. 서명 인증서를 연결하기 전 결과는 배포용 서명 검증을 대신하지 않습니다.
+Running the **Desktop package check** in GitHub Actions manually, or pushing to a `codex/release-check-*` branch, packages and checks the installed app on Windows, macOS and Linux and keeps the results as Actions artifacts. It does not publish a release. Until a signing certificate is connected, these results do not replace signature verification for distribution.

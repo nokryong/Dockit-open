@@ -83,14 +83,14 @@ AI is optional. Every editing feature works without it.
 
 Choose **Continue with ChatGPT** at the top of Settings, sign in with your default browser, and allow plan usage. Then pick a model your account can use in the ChatGPT toolkit.
 
-- Chats use your connected ChatGPT plan or credits. See limits under **사용량 관리** (Manage usage).
+- Chats use your connected ChatGPT plan or credits. See limits under **Manage usage**.
 - Chat history stays on your computer. Only the current conversation is sent to OpenAI when you send a message; document files are never sent automatically.
 - Credentials are protected with OS encryption.
 - Availability and account requirements follow [OpenAI's documentation](https://developers.openai.com/siwc/token-sharing-open-source). Image generation is not supported through this connection.
 
 ### Codex CLI
 
-Install the Codex CLI (`npm install -g @openai/codex`) and choose **CLI로 로그인하기** (Sign in with CLI) in Settings. After signing in, switch the ChatGPT toolkit to Codex with the **Chat/Codex** toggle in its top-right corner.
+Install the Codex CLI (`npm install -g @openai/codex`) and choose **Sign in with CLI** in Settings. After signing in, switch the ChatGPT toolkit to Codex with the **Chat/Codex** toggle in its top-right corner.
 
 ![Settings: ChatGPT and Codex CLI connections and themes](docs/images/settings.png)
 
@@ -100,7 +100,7 @@ Install the Codex CLI (`npm install -g @openai/codex`) and choose **CLI로 로�
 
 ## Plugins
 
-Choose **플러그인 → 플러그인 설치** (Plugins → Install plugin) and enter a GitHub repository or plugin folder address. Open installed plugins from **툴킷 → 플러그인** (Toolkits → Plugins). When a new version is available, choose **업데이트** (Update) in the plugin manager; saved data and API keys are kept.
+Choose **Plugins → Install plugin** and enter a GitHub repository or plugin folder address. Open installed plugins from **Toolkits → Plugins**. When a new version is available, choose **Update** in the plugin manager; saved data and API keys are kept.
 
 ![Plugin manager](docs/images/plugins.png)
 
@@ -133,7 +133,7 @@ npm start                # run the built app
 npm run package:desktop  # create installers for the current OS in release/ (no upload)
 ```
 
-See [TESTING.md](TESTING.md) for checks and [docs/desktop-updates.md](docs/desktop-updates.md) for packaging and updates (both in Korean).
+See [TESTING.md](TESTING.md) for checks and [docs/desktop-updates.md](docs/desktop-updates.md) for packaging and updates.
 
 ## Contributing
 
