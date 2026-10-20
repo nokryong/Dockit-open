@@ -75,8 +75,16 @@ const expect = baseExpect.configure({ timeout: 30000 });
     });
     await app.evaluate(async ({ BrowserWindow, app }, filename) => {
       const require = process.getBuiltinModule('node:module').createRequire(app.getAppPath() + '/package.json');
-      const image = await BrowserWindow.getAllWindows()[0].webContents.capturePage(undefined, { stayHidden: true, stayAwake: true });
-      await require('node:fs/promises').writeFile(filename, image.toPNG());
+      // 캡처 재시도 (Xvfb에서 창을 띄운 직후에는 화면 프레임이 없어 UnknownVizError가 날 수 있음)
+      for (let attempt = 1; ; attempt++) {
+        try {
+          const image = await BrowserWindow.getAllWindows()[0].webContents.capturePage(undefined, { stayHidden: true, stayAwake: true });
+          return await require('node:fs/promises').writeFile(filename, image.toPNG());
+        } catch (error) {
+          if (attempt >= 5) throw error;
+          await new Promise(resolve => setTimeout(resolve, attempt * 200));
+        }
+      }
     }, path.join(artifacts, name));
   };
   try {

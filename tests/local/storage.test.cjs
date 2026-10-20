@@ -122,6 +122,21 @@ test('an atomic replacement failure preserves the existing file and removes its 
   assert.equal((await fs.readdir(home)).filter(file => file.endsWith('.tmp')).length, 0);
 });
 
+test('an atomic replacement retries while Windows briefly holds the target', { skip: process.platform !== 'win32' }, async t => {
+  const { home } = await fixture(t);
+  const target = path.join(home, 'atomic.json'); await atomicJson(target, { value: 'old' });
+  const rename = fs.rename;
+  let failures = 2;
+  fs.rename = async (...args) => {
+    if (failures-- > 0) throw Object.assign(new Error('busy'), { code: 'EPERM' });
+    return rename(...args);
+  };
+  try { await atomicJson(target, { value: 'new' }); }
+  finally { fs.rename = rename; }
+  assert.deepEqual(JSON.parse(await fs.readFile(target, 'utf8')), { value: 'new' });
+  assert.equal((await fs.readdir(home)).filter(file => file.endsWith('.tmp')).length, 0);
+});
+
 test('startup lists only the current folder and leaves unrelated descendants unread', async t => {
   const { store, documents } = await fixture(t);
   const nested = path.join(documents, 'projects', 'node_modules', 'package');
