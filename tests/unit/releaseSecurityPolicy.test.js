@@ -16,6 +16,26 @@ const advisory = {
 };
 
 describe("production audit policy", () => {
+  it.each([
+    undefined,
+    null,
+    {},
+    { message: "network timeout", error: { summary: "", detail: "" } },
+    { error: { code: "ENOAUDIT" }, vulnerabilities: {} },
+    { vulnerabilities: null },
+    { vulnerabilities: [] },
+    { vulnerabilities: "unavailable" }
+  ])("rejects failed or malformed audit responses: %j", (audit) => {
+    expect(() => normalizeAudit(audit)).toThrow(/invalid vulnerability report/);
+  });
+
+  it("accepts an empty successful vulnerability report", () => {
+    expect(normalizeAudit({ vulnerabilities: {} })).toEqual({
+      critical: [],
+      high: []
+    });
+  });
+
   it("resolves advisory ids through npm audit dependency-chain records", () => {
     const findings = normalizeAudit({
       vulnerabilities: {

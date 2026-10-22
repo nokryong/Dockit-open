@@ -16,7 +16,17 @@ const sortFinding = (finding) => ({
 });
 
 export function normalizeAudit(audit) {
-  const vulnerabilities = audit?.vulnerabilities || {};
+  if (
+    !audit ||
+    typeof audit !== "object" ||
+    audit.error ||
+    !audit.vulnerabilities ||
+    typeof audit.vulnerabilities !== "object" ||
+    Array.isArray(audit.vulnerabilities)
+  ) {
+    throw new Error("npm audit failed or returned an invalid vulnerability report.");
+  }
+  const vulnerabilities = audit.vulnerabilities;
   const memo = new Map();
 
   function advisoryIds(name, trail = new Set()) {
