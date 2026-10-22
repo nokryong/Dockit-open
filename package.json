@@ -1,11 +1,11 @@
 {
   "name": "dockit-open",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "로컬 문서 편집기 Dockit Open",
   "author": "nokryong",
   "license": "AGPL-3.0-only",
   "engines": {
-    "node": ">=24"
+    "node": ">=24.22.1 <25 || >=26.12.1 <27"
   },
   "repository": { "type": "git", "url": "https://github.com/nokryong/Dockit-open.git" },
   "private": true,
@@ -110,7 +110,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/parser": "^8.53.0",
-    "electron": "44.7.2",
+    "electron": "44.9.3",
     "electron-builder": "26.17.0",
     "eslint": "^9",
     "eslint-plugin-react": "^7.37.5",
