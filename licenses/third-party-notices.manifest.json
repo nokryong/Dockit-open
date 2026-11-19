@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "lockfileSha256": "01907165b50e85153aba479f39dab67d6aa595355bb5fcb55c1a5d6c7988efd2",
+  "lockfileSha256": "e4a08b73dc5b9fffb5f3c6e6056012baa470c6fe22a8e552d4c6b3072ee0ea55",
   "packages": [
     {
       "lockPath": "node_modules/@antfu/install-pkg",
