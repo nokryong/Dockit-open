@@ -1,0 +1,103 @@
+name: Publish Dockit Open 0.2.5
+on:
+  push:
+    branches: [codex/publish-dockit-v0.2.5]
+jobs:
+  publish:
+    if: github.repository == 'nokryong/Dockit-open' && github.ref == 'refs/heads/codex/publish-dockit-v0.2.5'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: nokryong/Dockit-open
+      BUILD_RUN: '44484812337'
+      SOURCE_SHA: 'bcfd472e87259ac96ca078eb9b9fce3e43775d66'
+      TAG: v0.2.5
+    steps:
+      - name: Verify and publish the pinned build
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$BUILD_RUN" =~ ^[0-9]+$ && "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          repo="repos/$GH_REPO"
+          [[ "$(gh api "$repo/git/ref/heads/main" --jq .object.sha)" == "$SOURCE_SHA" ]]
+          gh api "$repo/actions/runs/$BUILD_RUN" | jq -e --arg sha "$SOURCE_SHA" --arg repo "$GH_REPO" '
+            .head_sha == $sha and .head_repository.full_name == $repo and
+            .event == "push" and .status == "completed" and .conclusion == "success" and
+            .path == ".github/workflows/desktop-check.yml" and .name == "Desktop package check" and
+            (.head_branch | startswith("codex/release-check-"))' >/dev/null
+          gh api --paginate --slurp "$repo/actions/runs/$BUILD_RUN/jobs?filter=latest&per_page=100" | jq -e '
+            [.[].jobs[] | select(.status == "completed" and .conclusion == "success") | .name] | sort ==
+            ["package (macos-latest)", "package (ubuntu-latest)", "package (windows-latest)"]' >/dev/null
+
+          no_release() {
+            gh api --paginate --slurp "$repo/releases?per_page=100" | jq -e --arg tag "$TAG"               'all(.[][]; .tag_name != $tag)' >/dev/null
+            gh api "$repo/git/matching-refs/tags/$TAG" | jq -e --arg ref "refs/tags/$TAG"               'all(.[]; .ref != $ref)' >/dev/null
+          }
+          no_release
+          gh api --paginate --slurp "$repo/actions/runs/$BUILD_RUN/artifacts?per_page=100" | jq -e '
+            [.[].artifacts[] | select(.name | startswith("dockit-"))] as $items |
+            ($items | length) == 3 and all($items[]; .expired == false) and
+            ([ $items[].name | split("-")[1] ] | sort) == ["Linux","Windows","macOS"]' >/dev/null
+          mkdir artifacts assets
+          gh run download "$BUILD_RUN" --pattern 'dockit-*' --dir artifacts
+          python3 - <<'PY'
+          import base64, hashlib, json, pathlib, re, shutil
+          version = '0.2.5'
+          maczip = f'Dockit-Open-{version}-arm64-mac.zip'
+          dmg = f'Dockit-Open-{version}-arm64.dmg'
+          exe = f'Dockit-Open-Setup-{version}.exe'
+          app = f'Dockit-Open-{version}.AppImage'
+          manifests = {'latest.yml': [exe], 'latest-mac.yml': [maczip, dmg], 'latest-linux.yml': [app]}
+          expected = set(manifests) | {maczip, dmg, exe, app, maczip+'.blockmap', dmg+'.blockmap', exe+'.blockmap'}
+          files = {}
+          for path in pathlib.Path('artifacts').glob('*/*'):
+              if not path.is_file() or path.is_symlink() or path.name in files or path.stat().st_size == 0:
+                  raise SystemExit(f'Unexpected or duplicate file: {path}')
+              files[path.name] = path
+          assert set(files) == expected, (set(files) - expected, expected - set(files))
+          for name, primary in manifests.items():
+              content = files[name].read_text()
+              pairs = dict(re.findall(r'^(version|path|sha512): (\S+)$', content, re.M))
+              rows = re.findall(r'^  - url: ([-.A-Za-z0-9]+)\n    sha512: ([A-Za-z0-9+/=]+)\n    size: ([0-9]+)$', content, re.M)
+              entries = {filename: {'sha512': digest, 'size': int(size)} for filename, digest, size in rows}
+              doc = pairs
+              assert doc.get('version') == version
+              assert len(rows) == len(entries) and set(entries) == set(primary), name
+              for filename, entry in entries.items():
+                  path = files[filename]
+                  with path.open('rb') as f:
+                      sha = base64.b64encode(hashlib.file_digest(f, 'sha512').digest()).decode()
+                  assert entry['sha512'] == sha and entry['size'] == path.stat().st_size, filename
+              assert doc['path'] in primary and doc['sha512'] == entries[doc['path']]['sha512'], name
+          digests = {}
+          for name, path in files.items():
+              with path.open('rb') as f:
+                  digests[name] = 'sha256:' + hashlib.file_digest(f, 'sha256').hexdigest()
+              shutil.move(path, pathlib.Path('assets') / name)
+          pathlib.Path('expected.json').write_text(json.dumps(digests))
+          PY
+          [[ "$(gh api "$repo/git/ref/heads/main" --jq .object.sha)" == "$SOURCE_SHA" ]]
+          no_release
+          cat > notes.md <<'NOTES'
+          Tiptap을 3.32.3으로 맞추고 Happy DOM을 21.0.4로 업데이트했습니다. 한글, 서식, 링크, 목록, 인용, 표를 포함한 서버 문서 변환을 검증했습니다. Vite를 6.4.5로 올렸고, 보안 감사가 실패하거나 잘못된 응답을 돌려주면 통과로 처리하지 않도록 했습니다.
+
+          Windows·macOS(Apple Silicon)·Linux 패키징과 앱 실행 검증을 통과했습니다. Windows 설치와 업데이트 후 재시작도 확인했습니다. 설치 파일은 기존과 같이 미서명이며, macOS 업데이트는 직접 다운로드해 교체합니다.
+
+          Updated Tiptap to 3.32.3, Happy DOM to 21.0.4, and Vite to 6.4.5. Added a server-side document conversion regression test and made audit failures fail closed. Windows, macOS (Apple Silicon), and Linux packaging and smoke checks passed, including Windows installation and update restart. Installers are unsigned; macOS updates are manual.
+          NOTES
+          id="$(gh api -X POST "$repo/releases" -f tag_name="$TAG" -f target_commitish="$SOURCE_SHA"             -f name='Dockit Open 0.2.5' -f body="$(cat notes.md)"             -F draft=true --jq .id)"
+          [[ "$id" =~ ^[0-9]+$ ]]
+          gh release upload "$TAG" assets/*
+          gh api "$repo/releases/$id" | jq -e --arg tag "$TAG" --arg sha "$SOURCE_SHA"             '.draft and .tag_name == $tag and .target_commitish == $sha' >/dev/null
+          gh api --paginate --slurp "$repo/releases/$id/assets?per_page=100" | jq -e --slurpfile expected expected.json '
+            [ .[][] ] as $assets | ($assets | length) == ($expected[0] | length) and
+            all($assets[]; .state == "uploaded" and (.name as $name | .digest == $expected[0][$name])) and
+            ([$assets[].name] | unique | length) == ($expected[0] | length)' >/dev/null
+          [[ "$(gh api "$repo/git/ref/heads/main" --jq .object.sha)" == "$SOURCE_SHA" ]]
+          gh api -X PATCH "$repo/releases/$id" -F draft=false -f make_latest=true | jq -e --arg tag "$TAG"             '.draft == false and .tag_name == $tag' >/dev/null
+          ref="$(gh api "$repo/git/ref/tags/$TAG")"
+          [[ "$(jq -r .object.type <<<"$ref")" == commit && "$(jq -r .object.sha <<<"$ref")" == "$SOURCE_SHA" ]]
