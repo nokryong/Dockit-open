@@ -7,7 +7,7 @@ Dockit Open is licensed under AGPL-3.0-only; see the accompanying LICENSE. The l
 sud-icons is owned by the Dockit product owner and is intentionally excluded from this third-party notice.
 If this summary conflicts with an included license text, the included license text controls for that component.
 
-package-lock.json SHA-256: 0760b72b13dac79202c1f6c8060e00b3e97409a84ffb535b3ad90fc2b54ab1a9
+package-lock.json SHA-256: 01907165b50e85153aba479f39dab67d6aa595355bb5fcb55c1a5d6c7988efd2
 Included non-dev lock entries: 466
 Unique third-party package name/version pairs: 454
 Owner-controlled lock entries excluded from this notice: 1
@@ -225,266 +225,266 @@ PACKAGE INDEX
   Author: Fabian Hiller
   Included files: LICENSE (9cf2166507311f427e083ef7671da566949391cb745789abcff8bd43ac26d1f1)
 
-@tiptap/core@3.32.0
+@tiptap/core@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-blockquote@3.32.0
+@tiptap/extension-blockquote@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bold@3.32.0
+@tiptap/extension-bold@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bubble-menu@3.32.0
+@tiptap/extension-bubble-menu@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-bullet-list@3.32.0
+@tiptap/extension-bullet-list@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-code-block@3.32.0
+@tiptap/extension-code-block@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-code@3.32.0
+@tiptap/extension-code@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-document@3.32.0
+@tiptap/extension-document@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-dropcursor@3.32.0
+@tiptap/extension-dropcursor@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-floating-menu@3.32.0
+@tiptap/extension-floating-menu@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-gapcursor@3.32.0
+@tiptap/extension-gapcursor@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-hard-break@3.32.0
+@tiptap/extension-hard-break@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-heading@3.32.0
+@tiptap/extension-heading@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-highlight@3.32.0
+@tiptap/extension-highlight@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-horizontal-rule@3.32.0
+@tiptap/extension-horizontal-rule@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-image@3.32.0
+@tiptap/extension-image@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-italic@3.32.0
+@tiptap/extension-italic@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-link@3.32.0
+@tiptap/extension-link@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list-item@3.32.0
+@tiptap/extension-list-item@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list-keymap@3.32.0
+@tiptap/extension-list-keymap@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-list@3.32.0
+@tiptap/extension-list@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-mathematics@3.32.0
+@tiptap/extension-mathematics@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-ordered-list@3.32.0
+@tiptap/extension-ordered-list@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-paragraph@3.32.0
+@tiptap/extension-paragraph@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-placeholder@3.32.0
+@tiptap/extension-placeholder@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-strike@3.32.0
+@tiptap/extension-strike@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-subscript@3.32.0
+@tiptap/extension-subscript@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-superscript@3.32.0
+@tiptap/extension-superscript@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-table@3.32.0
+@tiptap/extension-table@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text-align@3.32.0
+@tiptap/extension-text-align@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text-style@3.32.0
+@tiptap/extension-text-style@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-text@3.32.0
+@tiptap/extension-text@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extension-underline@3.32.0
+@tiptap/extension-underline@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/extensions@3.32.0
+@tiptap/extensions@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/html@3.32.0
+@tiptap/html@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/pm@3.32.0
+@tiptap/pm@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f), THIRD_PARTY_LICENSES.md (16644057cce82165b1db5d07fd8ec51dab79ec19d908006efbff74877561d256)
 
-@tiptap/react@3.32.0
+@tiptap/react@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
   Lockfile instances: 1
   Included files: LICENSE.md (06728620f4eea8e736fd63c6e7785afe7e2f5e5a4db467eaf806be0afced896f)
 
-@tiptap/starter-kit@3.32.0
+@tiptap/starter-kit@3.32.3
   License: MIT
   Source: https://github.com/ueberdosis/tiptap
   Evidence: collected
@@ -1768,7 +1768,7 @@ hachure-fill@0.5.2
   Author: Preet Shihn
   Included files: LICENSE (d3de97fbfe541d80b7e8d0c9c5ddc55d3d6b65acd2208b46235e5b0b10bbe920)
 
-happy-dom@20.10.6
+happy-dom@21.0.4
   License: MIT
   Source: https://github.com/capricorn86/happy-dom
   Evidence: collected
