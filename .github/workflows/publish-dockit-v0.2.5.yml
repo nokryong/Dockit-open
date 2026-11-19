@@ -37,6 +37,7 @@ jobs:
             gh api --paginate --slurp "$repo/releases?per_page=100" | jq -e --arg tag "$TAG"               'all(.[][]; .tag_name != $tag)' >/dev/null
             gh api "$repo/git/matching-refs/tags/$TAG" | jq -e --arg ref "refs/tags/$TAG"               'all(.[]; .ref != $ref)' >/dev/null
           }
+          echo "Verified build and three platform jobs"
           no_release
           gh api --paginate --slurp "$repo/actions/runs/$BUILD_RUN/artifacts?per_page=100" | jq -e '
             [.[].artifacts[] | select(.name | startswith("dockit-"))] as $items |
@@ -46,6 +47,7 @@ jobs:
           gh run download "$BUILD_RUN" --pattern 'dockit-*' --dir artifacts
           python3 - <<'PY'
           import base64, hashlib, json, pathlib, re, shutil
+          from urllib.parse import unquote
           version = '0.2.5'
           maczip = f'Dockit-Open-{version}-arm64-mac.zip'
           dmg = f'Dockit-Open-{version}-arm64.dmg'
@@ -53,12 +55,31 @@ jobs:
           app = f'Dockit-Open-{version}.AppImage'
           manifests = {'latest.yml': [exe], 'latest-mac.yml': [maczip, dmg], 'latest-linux.yml': [app]}
           expected = set(manifests) | {maczip, dmg, exe, app, maczip+'.blockmap', dmg+'.blockmap', exe+'.blockmap'}
+          aliases = {
+              f'Dockit Open-{version}-arm64-mac.zip': maczip,
+              f'Dockit Open-{version}-arm64.dmg': dmg,
+              f'Dockit Open Setup {version}.exe': exe,
+              f'Dockit Open-{version}.AppImage': app,
+          }
+          for old, new in list(aliases.items()):
+              if new != app:
+                  aliases[old + '.blockmap'] = new + '.blockmap'
           files = {}
           for path in pathlib.Path('artifacts').glob('*/*'):
-              if not path.is_file() or path.is_symlink() or path.name in files or path.stat().st_size == 0:
+              name = aliases.get(path.name, path.name)
+              if not path.is_file() or path.is_symlink() or name in files or path.stat().st_size == 0:
                   raise SystemExit(f'Unexpected or duplicate file: {path}')
-              files[path.name] = path
+              files[name] = path
           assert set(files) == expected, (set(files) - expected, expected - set(files))
+          for manifest in manifests:
+              path = files[manifest]
+              src = path.read_text()
+              def canonicalize(match):
+                  key, value = match.groups()
+                  value = unquote(value.strip().strip("'\""))
+                  return key + aliases.get(value, value)
+              contents = re.sub(r'^(  - url: |path: )(.+)$', canonicalize, src, flags=re.M)
+              path.write_text(contents)
           for name, primary in manifests.items():
               content = files[name].read_text()
               pairs = dict(re.findall(r'^(version|path|sha512): (\S+)$', content, re.M))
@@ -80,6 +101,7 @@ jobs:
               shutil.move(path, pathlib.Path('assets') / name)
           pathlib.Path('expected.json').write_text(json.dumps(digests))
           PY
+          echo "Verified all 10 assets and updater manifests"
           [[ "$(gh api "$repo/git/ref/heads/main" --jq .object.sha)" == "$SOURCE_SHA" ]]
           no_release
           cat > notes.md <<'NOTES'
